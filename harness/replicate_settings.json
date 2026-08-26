@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ssh dirac-bei:*)",
+      "Bash(scp:*)",
+      "Bash(git:*)",
+      "Bash(ls:*)", "Bash(cat:*)", "Bash(head:*)", "Bash(tail:*)", "Bash(grep:*)",
+      "Bash(find:*)", "Bash(wc:*)", "Bash(awk:*)", "Bash(sed:*)", "Bash(sort:*)",
+      "Bash(python3:*)", "Bash(mkdir:*)", "Bash(cp:*)", "Bash(mv:*)", "Bash(diff:*)",
+      "Bash(sha256sum:*)", "Bash(shasum:*)", "Bash(echo:*)", "Bash(date:*)",
+      "Read", "Write", "Edit", "Glob", "Grep", "TodoWrite", "WebSearch", "WebFetch"
+    ],
+    "deny": [
+      "Bash(rm -rf /*)",
+      "Bash(ssh dirac-bei:*rm -rf*)"
+    ]
+  }
+}
