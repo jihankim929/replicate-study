@@ -573,3 +573,49 @@ Bei's home. Charter §4's "reading or writing outside your workspace is prohibit
 is, on this cluster, **enforced as a rule and audited for traces — not prevented**. Genuinely
 preventing it needs separate accounts or containers. Flagged for the PI; not a smoke blocker,
 since whether a replicate respects a rule it could break is itself observable.
+
+## LOG-2026-08-26-21 — Verification provisionally good; launch machinery complete and gated
+Read the running job rather than waiting, per PI instruction.
+
+**p58 leg COMPLETE and agreeing.** Final absolute loading **36.958 ± 0.600** against the
+reference **36.841 ± 0.183** — a difference of 0.117, i.e. **0.19 σ** combined. All four pinned
+header facts present on both legs: `RASPA 2.0.37`, `CutOff VDW : 12.800000`, `All potentials
+are unshifted`, `tailcorrection: no` × 4,560 pairs.
+
+**p65 leg early but bracketing the reference.** Instantaneous samples of 62.875 and 65.750
+mol/uc convert (at 3.8020 cm³/cm³ per mol/uc, from the reference pair) to **239.05** and
+**249.98** cm³/cm³ — the reference **244.012 ± 1.228** sits between them. Sample-to-sample
+spread at this stage is ~5 %, so a single snapshot cannot distinguish 244 from 250; what it
+can do is rule out "tracking somewhere else entirely", and it does. **Provisionally good.**
+
+**Launch machinery built and dry-run**; the campaign is not launched.
+- `replicate_prompt.md` — **one arm-neutral bootstrap file**, identical for both replicates,
+  verified clean against every deny-list and mentioning no appendix, gate or audit file. The
+  charter each was provisioned with is the entire treatment; any difference in the prompt would
+  confound it.
+- `launch_sessions.sh` — GNU `screen` (tmux is not installed here), model pinned
+  `claude-opus-5`, scoped permission allowlist rather than blanket approval.
+- `restart_watch.sh` — cap 3, never resets the workspace, never moves the deadline, mirrors
+  every restart into the replicate's `INBOX.md`. **Guarded by `harness/.launched`** so it
+  cannot fire before the campaign starts.
+- `poll.sh` — one operational poll: harvest → compute meter → token meter → watchdog → fleet
+  → escalations.
+
+**Two metering gaps closed before launch, both of which would have made the budget decorative:**
+1. **Compute was self-reported.** `usage.json` trusted whatever the replicate wrote, so the
+   340 CPU-h cap was unenforced. `meter_compute.sh` now takes `resources_used.cput` from
+   `qstat -f` — PBS is authoritative, and a replicate that under-reports does not thereby get a
+   bigger budget.
+2. **Finished jobs vanish from `qstat`.** A poller reading only `qstat` loses the burn of every
+   job that completed between polls — at the measured 338× run-cost spread, most of it.
+   `harvest_cput.sh` keeps a jobid → last-seen-cput snapshot and banks a job's final cput when
+   it leaves the queue.
+
+Cluster Python is **3.6.8**: no `subprocess.capture_output`, no walrus, no f-string `=`.
+Two scripts were written against 3.7+ and failed immediately; both rewritten. Noted because
+every future cluster-side script has the same constraint.
+
+**Launch is gated, not scheduled.** The confirm-and-launch chain waits for the job to exit,
+computes WC = N(65) − N(5.8) with propagated error, and compares to **207.17 ± 1.24**. It
+launches **only** on agreement within 3 σ combined; a disagreement stops and reports and
+launches nothing.

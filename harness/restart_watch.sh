@@ -7,6 +7,11 @@
 # counters and running jobs all survive, and the deadline does not move.
 set -uo pipefail
 cd "$(dirname "$0")/.."
+MARKER=harness/.launched
+if [ ! -f "$MARKER" ]; then
+  echo "  campaign not launched yet (no $MARKER) -- restart watcher idle"
+  exit 0
+fi
 MAX_RESTARTS=3
 STALE_MIN=30
 LEDGER=harness/restarts.jsonl
