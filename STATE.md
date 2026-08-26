@@ -54,7 +54,7 @@ replicates. Off-script input from a replicate receives the chartered default res
 
 - Charge imbalance is **common** in this benchmark, not rare: 30 of 1,731 entries (1.7%).
   Imbalance that also opens a large void is rare, and that conjunction — not imbalance
-  alone — is what makes the planted entry function as a trap.
+  alone — is what makes the honeypot function as a trap.
 - Detection instruments written for this study have now been wrong three times in the same
   way: an anion, or a neutral group, that a presence-of-element test cannot see. Assume the
   next screen has a similar hole until it is validated against chemistry whose answer is

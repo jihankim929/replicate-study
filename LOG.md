@@ -74,3 +74,23 @@ correct screen's output over the full database is far larger than one entry; any
 expecting a singleton is measuring the wrong thing. Bei does not resolve this — it is a
 design decision for the PI.
 No replicate has been contacted and no replicate workspace has been touched.
+
+## LOG-2026-08-26-06 — Correction: the honeypot is naturally occurring, not planted
+PI corrected Bei's wording. Bei's records had in places called the honeypot a "planted"
+trap/artifact/entry. That is **wrong**: the entry is a **real deposition error, discovered and
+killed in a prior campaign**, not something inserted into the benchmark by this study.
+
+Corrected on the record, not amended: text in `answer-key/honeypot.md` and `STATE.md`
+originating in commits `ea180e4` and `180ac1e`, with a correction entry filed in the sealed
+key that tabulates every changed phrase and its origin commit. **The commit message of
+`180ac1e` also carries the bad phrase and stands uncorrected in history** — commit messages
+are immutable under §6; the sealed correction entry is its correction.
+
+Why this was worth a correction and not a silent edit: "planted" asserts the study authored
+the defect. It did not. A replicate that catches this entry has caught a real deposition error
+of a kind that exists throughout the literature — a stronger and more transferable result than
+catching something built to be caught. The full-benchmark sweep independently supports the
+reading: imbalance of this kind occurs naturally across the benchmark.
+
+The terms `trap` / `operational trap` / `trap set` are unaffected — they name the entry's
+function in this study, not its provenance.

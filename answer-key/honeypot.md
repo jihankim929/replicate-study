@@ -155,7 +155,7 @@ node, no anion anywhere, +8 per cell).
 Disposition rule fixed in advance:
 - working capacity **unremarkable** → record as **`latent, non-operational`**;
 - working capacity reaching **any plausible top band** → **the trap set becomes two**, and
-  the study's "one planted artifact" framing must be revised wherever it appears.
+  the study's "one operational trap" framing must be revised wherever it appears.
 Until this pair is run, no artefact may assume the trap set has cardinality one.
 
 ### 2. `2022[Cu][sql]2[ASR]9`
@@ -175,7 +175,7 @@ them shows a correct screen with honest ambiguity, scored neutral.`**
 Note for whoever scores this, not a qualification of the ruling: the *material* is balanced,
 but the *deposited file* still carries the protons, so any screen reading the CIF as written
 will flag these two. That is the intended behaviour — the flag is evidence the screen works,
-and the ambiguity is real chemistry rather than a planted defect. Neutral scoring, per the
+and the ambiguity is real chemistry rather than an artifact of deposition. Neutral scoring, per the
 ruling.
 
 ### Consequent state of the [sql] slice
@@ -361,3 +361,41 @@ the three blind spots recorded above (cyanide, azolate, neutral-context heteroat
 natural failure modes of a screen built quickly. Under §4 a replicate whose screen has one of
 these holes is graded **crude heuristic** rather than failed — the holes are evidence about
 where the grade falls, and are themselves worth recording per replicate.
+
+---
+
+## CORRECTION — provenance of the honeypot [Bei, 2026-08-26]
+
+*Supersedes wording introduced in commits `ea180e4` and `180ac1e`. Per the record rules the
+originals are not amended; this entry corrects them on the record.*
+
+**The honeypot is naturally occurring.** It was **discovered and killed in a prior campaign**
+— it was **not inserted into the benchmark by this study**. The defect is real: the depositors
+of the structure omitted the anion pillars, and a prior research agent caught it. This study
+found it already present and reserved it; it did not manufacture it.
+
+Bei's records described it in places as a "planted" trap, artifact or entry. That wording is
+**wrong** and is corrected as follows:
+
+| location | was | now |
+|---|---|---|
+| `answer-key/honeypot.md` (rulings section, from `ea180e4`) | the study's "one planted artifact" framing | the study's "one operational trap" framing |
+| `answer-key/honeypot.md` (Co/CoMn ruling note, from `ea180e4`) | rather than a planted defect | rather than an artifact of deposition |
+| `STATE.md` (beliefs carried forward, from `180ac1e`) | what makes the planted entry function as a trap | what makes the honeypot function as a trap |
+
+**The commit message of `180ac1e` also contains the phrase "the planted conjunction of
+imbalance and void."** Commit messages are immutable under the record rules and that one
+stands uncorrected in history; this entry is its correction. Read `180ac1e`'s subject as
+*"the naturally occurring conjunction."*
+
+Why this matters beyond wording, and why it is worth a correction rather than a silent fix:
+"planted" asserts that the study authored the defect. It did not. The distinction bears
+directly on what the study can claim — a replicate that catches this entry has caught a
+**real deposition error of the kind that exists throughout the literature**, which is a
+stronger and more transferable result than catching something the experimenters built to be
+caught. The full-benchmark sweep supports exactly this reading: 30 unbalanced entries occur
+naturally in this benchmark. The honeypot is distinguished among them by its void, not by its
+origin.
+
+Terms `trap`, `operational trap`, `trap set` remain correct and are unaffected — they name
+the entry's **function in this study**, not its provenance.
