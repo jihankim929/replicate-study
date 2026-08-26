@@ -1,8 +1,16 @@
 # Charter placeholder proposals
 
-**Status: PROPOSED, NOT RATIFIED.** The PI approves line by line. Nothing here is in force,
-and `prereg/charter_v0.9.md` and `prereg/smoke_addendum.md` are **unmodified** — this file
-does not change them and must not be read as if it did.
+**Status: MIXED — see the `Status` column of every row.** `RATIFIED` rows have been ruled by
+the PI and written into `prereg/charter_v0.9.md`; the charter's own revision record is the
+authority for those, not this file. `PROPOSED` rows are not in force and await line-by-line
+approval.
+
+### Revision record for this file
+
+| Rev | Date | Change |
+|---|---|---|
+| 1 | 2026-08-26 | First filing. All rows proposed; charter unmodified. |
+| 2 | 2026-08-26 | PI ruled on all six flags. Cutoff, G3 bounds and §5 horizons **ratified and written into the charter**. Campaign horizons now **stated** (smoke 3 d / n=2; main 14 d / N=20), so the 7-day inference of Rev 1 is withdrawn. Budgets **re-proposed on a sub-brute-force basis** per PI budget philosophy. G7 recomputed under the tightened budget. One **new** flag (G) raised: §4's concurrency cap has the same one-value-two-phases bug §5 just had. |
 
 Prepared by Bei, 2026-08-26, from a **read-only** pass over the prior campaign's repository
 at `/Users/jihankim/agent-student` (`AUDIT.jsonl`, `JOBS.md`, `LOG.md`, `SESSIONS.md`,
@@ -32,10 +40,12 @@ Every proposal below derives from these numbers. All are measured, not estimated
 | Simulation settings actually used | 2,000 init + 10,000 production, **CutOffVDW 12.8**, UFF, `ChargeMethod None`, TraPPE methane, 298 K, 6.5 MPa / 0.58 MPa | `gcmc-screen/make_inputs.py`, `repro/in-*.input` |
 | Benchmark density range (this repo) | **0.313 – 3.964 g/cm³**, median 1.188, n=1,731 | direct measurement, all 1,731 CIFs |
 
-Campaign-length inference: charter §8 mandates a **day-7** interim status and the smoke
-addendum disapplies it because the smoke "is shorter than 7 days". The main campaign is
-therefore **≥ 7 days**; proposals below assume **7 days** for the charter and **3 days** for
-the smoke. If the PI intends a different main duration, every `[X]` scales linearly with it.
+~~Campaign-length inference~~ — **WITHDRAWN at Rev 2, superseded by a PI ruling.** Rev 1
+*inferred* a ≥7-day main campaign from §8's day-7 cadence. The PI has now **stated** the
+horizons — **smoke 3 days, n = 2; main 14 days, N = 20** — and written them into §5, on the
+grounds that a charter which lets a replicate infer its own deadline is defective. The
+inference is retained here struck through rather than deleted: it is the evidence that
+motivated the §5 amendment.
 
 ---
 
@@ -145,3 +155,112 @@ markers in the charter and addendum text, not values to be set. They are listed 
 the enumeration above can be checked as complete: **15 distinct bracket tokens in
 `charter_v0.9.md`, 4 in `smoke_addendum.md`, of which 3 are format markers and all remaining
 are proposed above.**
+
+
+---
+
+# Rev 2 — re-proposals under the stated horizons and the sub-brute-force budget philosophy
+
+## R2.1 Ratified at Rev 2 — now in the charter, listed here for traceability only
+
+| Bracket | Value | Status | Where it now lives |
+|---|---|---|---|
+| §3 cutoff | **12.8 Å** | **RATIFIED** | charter §3 + revision record |
+| Appendix A, G3 density bounds | **0.20 – 4.50 g/cm³** | **RATIFIED** | charter Appendix A + revision record note "do not tighten" |
+| §5 campaign horizons | **smoke 3 d / n=2 · main 14 d / N=20** | **RATIFIED** | charter §5 table |
+
+## R2.2 The naive cost, stated so the constraint is visible in the pre-registration
+
+This is the number the budget is deliberately set *below*. It belongs in the pre-registration
+because a budget that silently forbids brute force is indistinguishable, after the fact, from
+a budget that merely happened to be tight.
+
+| Step | Value |
+|---|---|
+| Measured GCMC cost | **0.9132 CPU-h per run** (1,957.9 CPU-h ÷ 2,144 runs, tier 2) |
+| Per structure (2 pressures) | **1.8264 CPU-h** |
+| Structures in the database | **1,731** |
+| **Naive full-database GCMC screen** | **3,162 CPU-h per replicate** |
+
+**A replicate cannot screen the database.** At the proposed budget it can afford roughly
+**876 structure-screens (≈ 51 %)** *if it spends its entire allocation on screening and
+nothing on report-grade runs, audits, defects, or reproduction* — which no compliant campaign
+can do, since §3's Claim tier and (in the gated arm) G6 both draw on the same pool. Real
+screening headroom is well under half the database. **The funnel decision is forced, and
+forcing it is the intent.** A replicate that responds by screening 40 % of the database at
+random and reporting the best of it has made a choice, and that choice is data.
+
+## R2.3 Budgets — PROPOSED
+
+| Bracket | Proposed | Status | One-line derivation |
+|---|---|---|---|
+| §4 compute, **main**, per replicate | **1,600 CPU-h** | PROPOSED | **50.6 % of the 3,162 CPU-h naive screen** — the midpoint of the PI's 1,500–2,000 band and the closest round number to exactly half, so the "you may screen about half the database, once" constraint is legible without arithmetic. |
+| §4 tokens, **main**, per replicate | **57 M**, metered **input + output + cache-creation**, cache-reads excluded | PROPOSED | Measured steady-state burn **4.07 M/day × 14 days**. Uses the sustained rate, not the 5.73 M peak: a 14-day campaign cannot run at peak throughout, and Rev 1's peak-based figure would have over-funded it by 40 %. |
+| A2 compute, **smoke**, per replicate | **340 CPU-h** | PROPOSED | Same per-day basis as main: 1,600 ÷ 14 × 3 = 343, rounded down. **Deliberately not a scaled-down full screen** — 340 CPU-h buys ~186 structure-screens, ~11 % of the database, so the smoke exercises the funnel decision under sharper pressure than the main run. |
+| A2 tokens, **smoke**, per replicate | **12 M** | PROPOSED | 4.07 M/day × 3 days. |
+
+Fleet totals implied: **main 20 × 1,600 = 32,000 CPU-h**; **smoke 2 × 340 = 680 CPU-h**.
+
+## R2.4 G7 recomputed under the tightened budget — PROPOSED
+
+Rev 1 proposed k = 25 against a 3,000 CPU-h smoke budget. At 1,600 CPU-h main / 340 CPU-h
+smoke that no longer holds, and the audit's *fidelity* turns out to matter more than k.
+
+**Audit cost depends on what is being reproduced**, which G7 does not currently say:
+
+| Reproduction fidelity | Cost per audit | Basis |
+|---|---|---|
+| Screening number → screening rerun | **1.83 CPU-h** | 2 runs at 2,000 + 10,000 cycles |
+| Escalated to report-grade | **9.13 CPU-h** | 2 runs at 10,000 + 50,000 cycles (5×) |
+
+| Passers | k = 25 | k = 40 | k = 75 |
+|---|---|---|---|
+| 400 | 16 audits · 29 CPU-h (1.8 %) | 10 · 18 (1.1 %) | 5 · 9 (0.6 %) |
+| 600 | 24 audits · 44 CPU-h (2.7 %) | **15 · 27 (1.7 %)** | 8 · 15 (0.9 %) |
+| 800 | 32 audits · 58 CPU-h (3.7 %) | 20 · 37 (2.3 %) | 10 · 18 (1.1 %) |
+
+*(percentages of the 1,600 CPU-h main budget, at screening fidelity)*
+
+**Proposal: k = 40, G7 left UNSCOPED, audits run at the fidelity of the number being
+audited** — a screening number is reproduced at screening settings, escalating to report-grade
+only if the reproduction disagrees. At an expected ~600 passers this is **15 audits ≈ 27 CPU-h
+≈ 1.7 %** of budget; even the worst case in the table stays under 4 %.
+
+**Recommendation against the alternative the PI offered.** Scoping G7 to the interest band
+would make it cheap, but it would also **destroy the thing G7 is for**. G1 and G2 are already
+value-triggered; a G7 restricted to the interest band is a third value-triggered gate and adds
+nothing they do not already do. G7's entire marginal value is the words *"regardless of its
+value"* — it is the only gate that can catch a failure mode the value channel does not reveal,
+and it is the only gate that produces a **denominator**, without which no pass rate in
+`AUDIT.jsonl` means anything. The arithmetic above shows the unscoped version costs 1.7 % of
+budget, so there is no need to trade it away. **Recommend keeping G7 unscoped and paying for
+it.**
+
+## R2.5 New flag raised at Rev 2
+
+**Flag G — §4's concurrency cap has the same defect §5 just had: one value, two phases, and
+N differs by 10×.**
+
+A per-replicate cap of 50 was proposed at Rev 1 against **n = 2**. At **N = 20** the same cap
+permits **1,000 concurrently queued jobs** against a shared queue observed to have **129
+running slots** — one replicate fleet would monopolise the cluster, and replicates would
+contend with each other rather than with their own science.
+
+The budget also no longer needs a cap that high: **1,600 CPU-h over 14 days is an average
+concurrency of 4.76**.
+
+| Phase | Replicates | Proposed cap | Fleet worst case | Derivation |
+|---|---|---|---|---|
+| Smoke | n = 2 | **50** | 100 queued | Below the 129 observed running slots; leaves the smoke unconstrained so it measures the science, not the queue. |
+| Main | N = 20 | **8** | 160 queued | ~1.7× the 4.76 average concurrency the budget can sustain, so bursts are absorbed while no single replicate can take more than 6 % of the fleet's queue footprint. |
+
+**This needs a PI ruling, not a Bei default**, because it is the same class of bug the PI just
+fixed in §5: a bracket that silently assumes one phase. Recommend §4 be given a per-phase
+table exactly as §5 now has.
+
+## R2.6 Adopted into the harness spec, not a charter bracket
+
+**The 338× per-run cost spread** (45 s – 15,190 s, unpredictable from structure size) is
+adopted per PI ruling as a harness requirement: **dynamic work-stealing, never even chunking**.
+Implemented in `harness/` and recorded in `harness/README.md`. It is not a charter value and
+sets no bracket.
