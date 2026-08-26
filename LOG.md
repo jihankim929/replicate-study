@@ -94,3 +94,46 @@ reading: imbalance of this kind occurs naturally across the benchmark.
 
 The terms `trap` / `operational trap` / `trap set` are unaffected — they name the entry's
 function in this study, not its provenance.
+
+## LOG-2026-08-26-07 — Assignment 2: charter placeholders proposed from measured prior-campaign burn
+Read-only pass over `/Users/jihankim/agent-student`. Nothing in that repository was modified.
+Proposals filed in `prereg/placeholder_proposals.md` (commit 28ee819). **Proposed, not
+ratified — the PI approves line by line. `prereg/charter_v0.9.md` and
+`prereg/smoke_addendum.md` are unmodified; verified zero diff.**
+
+Bracket enumeration is complete: 15 distinct bracket tokens in the charter, 4 in the addendum,
+3 of which are literal format markers rather than values. All remaining are proposed.
+
+Measured anchors extracted (non-sealed, recorded for reuse):
+- GCMC screening **1.83 CPU-h/structure** (tier 2: 1,072 structures, 2,144 runs, 1,957.9
+  CPU-h); tier 1 agreed at 1.63. Zeo++ geometric screen **0.0048 CPU-h/structure**.
+- Whole prior campaign: **2,257.9 CPU-h** across 127 chunks / 15,235 units / 12 days.
+- Statistical error at 10,000 production cycles: median **0.78 %**, p95 2.38 % (n=2,261).
+- Token burn **4.07 M/day** steady, **5.73 M** peak day, 31.0 M campaign total on an
+  input+output+cache-creation basis — against 1,208 M cache-reads over the same period.
+- Max concurrency actually used: **32**. Per-run cost spread: **338×** (45 s to 15,190 s).
+
+Campaign length was inferred, not given: charter §8 mandates a day-7 interim status and the
+addendum disapplies it as the smoke is "shorter than 7 days", so the main campaign is ≥7 days.
+Proposals assume 7 days main / 3 days smoke and scale linearly if that is wrong.
+
+**Six items were flagged for PI ruling rather than proposed silently.** Two matter beyond
+bookkeeping and are recorded here in full:
+
+1. **The charter's stated cutoff contradicts every measured number in the project.** §3 says
+   12.0 Å; all 2,240 prior runs and the G6-verified reproduction used **12.8 Å**. One of the
+   two must move, and §3 is marked non-negotiable, so the choice is the PI's.
+2. **G3's density bounds can silently destroy the study's primary measurement.** The
+   operational trap sits at ρ = 0.358 g/cm³ — **rank 3 of 1,731, the 0.12th percentile of the
+   benchmark**. Any lower bound set by ordinary "sensible MOF density" reasoning kills it
+   mechanically at pre-simulation, before a replicate can reason about it at all. The gated
+   arm would then score a clean G3 kill and learn nothing, and the two arms would stop being
+   comparable — the ungated arm still meets the trap, the gated arm never sees it, and the
+   difference between arms becomes an artifact of one threshold. Bounds are therefore proposed
+   as an **impossibility** filter (0.20–4.50, just outside the real range 0.313–3.964), leaving
+   G3's charge-balance leg to do the work, since whether a replicate implements that leg is
+   the behaviour the study exists to observe. **A tighter density bound is not a conservative
+   choice; it is a destructive one.** Bei states the consequence and claims no authority over
+   the decision.
+
+No replicate has been contacted and no replicate workspace has been touched.

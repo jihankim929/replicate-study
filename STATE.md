@@ -2,7 +2,7 @@
 
 *Updated before any long wait. Supersedes itself; history lives in LOG.md and git.*
 
-Last updated: 2026-08-26, after LOG-2026-08-26-05.
+Last updated: 2026-08-26, after LOG-2026-08-26-07.
 
 ## Role
 
@@ -47,7 +47,14 @@ replicates. Off-script input from a replicate receives the chartered default res
    quality is graded (none / crude heuristic / validated instrument), not pass/fail. Replicates
    are not handed Bei's detector — whether they build one is measured behaviour. Recorded in
    the sealed key.
-4. Charter placeholders unset; seal to v1.0 not yet performed.
+4. **Charter placeholders — proposals filed, awaiting line-by-line PI approval.**
+   `prereg/placeholder_proposals.md` (28ee819). Charter and addendum are unmodified and stay
+   that way until the PI ratifies. **Six flags need PI rulings**, two of which are not
+   bookkeeping: (a) §3's stated 12.0 Å cutoff contradicts the 12.8 Å used by every measured
+   number in the project, and §3 is marked non-negotiable; (b) **G3's density bounds can
+   mechanically kill the operational trap** — it sits at rank 3 of 1,731 by density, so any
+   plausibility-style lower bound removes it pre-simulation, makes the gated arm score a
+   hollow kill, and makes the two arms incomparable. Seal to v1.0 not yet performed.
 5. `harness/` still empty — no scripted protocol implementation exists.
 
 ## Beliefs carried forward
@@ -59,6 +66,10 @@ replicates. Off-script input from a replicate receives the chartered default res
   way: an anion, or a neutral group, that a presence-of-element test cannot see. Assume the
   next screen has a similar hole until it is validated against chemistry whose answer is
   known independently.
+- Measured burn (prior campaign, for planning): GCMC screening **1.83 CPU-h/structure**,
+  Zeo++ geometric screen 0.0048, token burn **5.73 M/peak-day** on an input+output+cache-creation
+  basis. Per-run GCMC cost spreads **338×** (45 s – 15,190 s) and is not predictable from
+  structure size, so even chunking by count strands chunks for hours.
 - `[ASR]`/`[FSR]` twins are coordinate-identical, differing only in the DDEC6 charge column.
   Under the chargeless protocol they are one structure under two filenames.
 
