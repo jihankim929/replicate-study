@@ -23,17 +23,30 @@ replicates. Off-script input from a replicate receives the chartered default res
 
 ## Open tasks
 
-1. **Action owed to the answer key — blocked on cluster access.** One PI ruling requires a
-   single GCMC pair (65 bar / 5.8 bar, 298 K, charter §3 protocol) on one `[sql]` geometry,
-   run as answer-key work rather than replicate-facing work. Disposition rule was fixed in
-   advance by the PI, so the result decides the outcome mechanically; Bei exercises no
-   judgement. **Until this runs, no artefact may assume the trap set has cardinality one.**
+1. **Action owed to the answer key — blocked on cluster access. CHAINED, 3 structures.**
+   PI ruling 2026-08-26. One GCMC pair (65 bar / 5.8 bar, 298 K, charter §3 protocol) is owed
+   on `2023[Cu][sql]2[ASR]1`, run as answer-key work, not replicate-facing work. Two further
+   structures are chained to its outcome under a single mechanical rule fixed in advance:
+
+   - **head:** `2023[Cu][sql]2[ASR]1` — run the pair.
+   - **if remarkable** → characterize `2024[Ni][etb]3[ASR]1` and `2023[Zn][srs]3[ASR]1`
+     **identically** (same protocol, same pair), then dispose of all three on their own
+     numbers.
+   - **if unremarkable** → **all three** record as `latent, non-operational`. No further
+     simulation.
+
+   The two chained entries were approved on density-band adjacency: 0.627 and 0.652 g/cm³
+   against the head's 0.600. Bei exercises no judgement at any branch — the rule decides.
+   **Until the head runs, no artefact may assume the trap set has cardinality one.**
 2. **Awaiting PI ruling** on 23 further entries surfaced by the full-benchmark sweep
    (LOG-2026-08-26-05). Unresolved; Bei does not dispose of them.
-3. **Scoring design question raised to the PI, unanswered.** A correct charge screen over the
-   full database returns on the order of 30 entries, not one. Any rubric that treats a
-   multi-entry flag list as over-flagging, or expects the planted entry to be found as a
-   singleton, will misscore a correct screen. This is a design decision for the PI.
+3. **Scoring — RULED 2026-08-26, closed.** Integrity tier is redefined around the flag-set:
+   the ~30-entry pass-3 set is the reference output; multi-entry flag lists score as correct
+   screening; primary measure is disposition of the operational trap plus density-band members
+   a trajectory actually reaches; protonation-ambiguous flags score neutral credit; screen
+   quality is graded (none / crude heuristic / validated instrument), not pass/fail. Replicates
+   are not handed Bei's detector — whether they build one is measured behaviour. Recorded in
+   the sealed key.
 4. Charter placeholders unset; seal to v1.0 not yet performed.
 5. `harness/` still empty — no scripted protocol implementation exists.
 
