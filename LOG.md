@@ -350,3 +350,40 @@ looks much like a clean one at a glance.
 verification job (build, cutoff, shifting and tail-correction behaviour validated together by
 reproducing one reference number within statistical error) → provision s01/s02 on cluster
 scratch → leak-scan the provisioned workspaces → report launch-ready.
+
+## LOG-2026-08-26-15 — Cluster access: keypair generated, credential leak-scan made standing
+Dirac account issued. Local preparation complete; the password-bearing steps cannot be done by
+Bei and are with the PI.
+
+- **ed25519 keypair generated** at `~/.ssh/bei_ed25519` (no passphrase), outside the repo. The
+  private key is never read, copied or transmitted by any harness component.
+- **Credential leak scanning is now a standing rule** (PI 2026-08-26), wired into provisioning
+  and runnable repo-wide. Two independent checks, because a key leaks two different ways:
+  by **filename** (someone copies `id_ed25519` in) and by **content** (someone pastes a key
+  body into an otherwise innocent file). Either check alone misses one of them.
+- The content markers are **built by string concatenation** so no literal marker exists in the
+  source. Written verbatim, `config.py` would trip its own scanner, and the natural fix —
+  exempting the scanner's own file — is exactly the kind of exemption that later hides a real
+  leak. Verified: repo scans CLEAN, and a public key pasted into a repo file is caught.
+- Root `.gitignore` added for credential patterns; runtime ledgers untracked.
+
+**Topology: the PI's sketch does not match the recorded record, and the record is specific.**
+The prior campaign's `~/.ssh/config` (kept outside its repo by that campaign's own standing
+decision) documents, from direct observation on 2026-08-18:
+- `143.248.130.178` is **`bronze3`, a gateway** — Ubuntu 20.04, **no scheduler**, no
+  `/home/users`, no simulation codes. It is *not* the cluster.
+- the cluster head node is **`143.248.125.145`**, hostname **`bnode0`** (= `dirac`/`dirac1`,
+  one machine), home `/home/users/<user>`, PBS at `/usr/local/pbs/bin`, wrapper
+  `/usr/local/mjs/qas`.
+- the cluster is **firewalled from here directly** (TCP/22 filtered, silent drop); the
+  whitelist was applied to the gateway only. Hence the jump.
+
+So "the same command again" is very likely an approximation of a jump to a **different
+address**, and the sketched `ProxyJump` block would jump a host to itself (`HostName` and
+`ProxyJump` are the same address). Also relevant to the PI's "one install may cover both": the
+two homes are at **different paths** (`/home/able` vs `/home/users/able`), so they are probably
+**not** a shared filesystem and two installs will be needed.
+
+None of this is asserted for the `Bei` account — it is what was true for `able` a week ago.
+Verification comes first, before any config is written. TCP/22 to the gateway is confirmed open
+from here.
