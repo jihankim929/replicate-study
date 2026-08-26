@@ -3,3 +3,8 @@ __pycache__/
 watchdog.jsonl
 escalations.jsonl
 escalation_queue.jsonl
+
+# Per-replicate divergence collector output. Deliberately NOT committed: it carries the same
+# quantities the A/B panel publishes, but under the real replicate ids, so committing it would
+# unblind the panel from inside the repo.
+.divergence_raw/
