@@ -21,7 +21,16 @@ Candidate structures are limited to the provided database; structural modificati
 
 ## 3. Fixed simulation protocol (not negotiable)
 
-- GCMC via **RASPA 2.0.37**, built from source per the pinned build recipe into `$HOME/RASPA/Research/simulations` (binary `$RASPA_DIR/bin/simulate`); TraPPE united-atom methane; UFF framework parameters; framework rigid; no framework partial charges (chargeless protocol).
+- GCMC via **RASPA 2.0.37** (upstream tag `v2.0.37`, commit `4467e14c375c2e02f3839ffc63c14edf0bbde0a2`), built from source per the pinned build recipe into `$HOME/RASPA/Research/simulations` (binary `$RASPA_DIR/bin/simulate`); TraPPE united-atom methane; framework rigid; no framework partial charges (chargeless protocol).
+- **UFF framework parameters, pinned by content.** RASPA does **not** ship a `UFF` force field; the one this protocol uses is a local three-file set installed at `$RASPA_DIR/share/raspa/forcefield/UFF/`, pinned by SHA-256:
+
+  | file | sha256 |
+  |---|---|
+  | `force_field.def` | `7af262e06d52dc8adac53dc530ab2a4d7f228240d2b727da9efe0886f9d9b4a9` |
+  | `force_field_mixing_rules.def` | `0ed430e444a1a5850f2383fc3a8686dda39b4f0445f8deba93eac713147e4fb5` |
+  | `pseudo_atoms.def` | `7bc0d1b7eaec4ea4878a8c37f824eae1a8ec2f60f8ea458af70ce5ff7f737676` |
+
+  **The truncation and tail-correction settings below are properties of this file**, declared in its header (`truncated`, `tailcorrections no`), not keywords in `simulation.input`. Substituting any other UFF parameterisation silently changes both, and changes every number.
 - Cutoff **12.8 Å**; **tail corrections OFF**; potentials **unshifted**. These three are not
   independent preferences — they are the settings under which every reference number for this
   protocol was measured, and they are pinned together. Turning tail corrections on would shift
@@ -150,6 +159,7 @@ Amendments to this document before seal. Append-only.
 | 2026-08-26 | §4 | `[30]` min interactive → **30 min** | PI |
 | 2026-08-26 | Appendix A | Note added: gate thresholds are calibrated to §3; a §3 change requires recalibration | PI |
 | 2026-08-26 | §1, §4 | `[workspace path]` → reference to `workspace_root` in `WORKSPACE.json` | Bei (mechanical) |
+| 2026-08-26 | §3 | RASPA pinned to upstream tag + commit; **UFF force field pinned by SHA-256** (RASPA ships none) | Bei (mechanical: records what the reference numbers were actually produced with) |
 
 ## Note on the G3 density bounds
 

@@ -306,3 +306,55 @@ ordinary words**. "Smoke" and "Main" are innocuous; the disclosure lived in the 
 appeared *as a comparison*. No vocabulary deny-list could have caught it. A structural check
 (`leak_phase_disclosure`) was added alongside the word list, and **both are now standing
 pre-launch steps**. The next leak should be expected to have a shape neither check knows.
+
+## Rev 12 — 2026-08-26 — §3: RASPA pinned to tag+commit, and UFF pinned by content hash
+
+**Authority:** Bei, mechanical — this records what the reference numbers were actually produced
+with. It sets no new policy and changes no value; it closes two provenance gaps that the first
+real run on the cluster exposed.
+
+### Gap 1 — "RASPA 2.0.37" did not identify a source revision
+
+Cloning `iRASPA/RASPA2` gives HEAD, which reports **2.0.50**. The version string lives in
+`src/output.c` and moves with the tree, so "2.0.37" is a *label emitted by the binary*, not a
+coordinate anyone could check out. Now pinned to tag **`v2.0.37`**, commit
+**`4467e14c375c2e02f3839ffc63c14edf0bbde0a2`**, and verified in the built library before use
+(`libraspa2.so` → `RASPA 2.0.37`).
+
+Had this gone unnoticed, every number in the study would have come from a 13-release-newer
+binary while the charter, the logs and the output headers all said 2.0.37 — and nothing would
+have looked wrong.
+
+### Gap 2 — "UFF framework parameters" named a force field RASPA does not ship
+
+The first verification run failed with `ReturnPseudoAtomNumber: Error!!!! :CH4_sp3` and
+`'force_field_mixing_rules.def' file not found`. Cause: **RASPA 2.0.37 ships 23 force fields
+and none of them is UFF.** The UFF used by every reference number in this project is a **local
+three-file set** living in `/home/molsim_share/`, byte-identical in both shared copies, now
+installed into the pinned build and recorded by SHA-256 in §3.
+
+**This is the most consequential of the provenance gaps, because that file is where two
+already-ratified protocol settings actually live.** Its header reads:
+
+```
+# general rule for shifted vs truncated
+truncated
+# general rule tailcorrections
+no
+```
+
+So `unshifted` and `tail corrections off` — pinned in §3 at Rev 8 on the evidence of the
+archived output headers — are **not** `simulation.input` keywords at all. They are properties of
+this force-field file. That is why the prior campaign never set them explicitly, and it means a
+different UFF parameterisation would change both **silently**, while `simulation.input` and the
+charter continued to read exactly the same.
+
+Pinning UFF by content hash is therefore what makes the Rev 8 ratification enforceable rather
+than aspirational.
+
+### How both were caught
+
+Neither was caught by reading. Both were caught by **running the protocol and checking the
+output rather than the exit status** — RASPA exits 0 on fatal input errors, a trap the prior
+campaign documented, and the verification script judged success on a non-empty expected output
+file instead. The same pattern as the leak scans: check the artefact, not the intention.
