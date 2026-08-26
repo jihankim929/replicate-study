@@ -734,3 +734,59 @@ success:**
    exit-0 trap and the locale-dependent checksum: **check the artefact, not the intention.**
 
 From here: daily digest, interrupting only for failures.
+
+## LOG-2026-08-26-25 — FINAL VERIFICATION PASSED; launch failed three ways, all fixed, both replicates now running instrumented
+
+**Final verification — PASS.**
+
+| | reproduced | reference | |
+|---|---|---|---|
+| p65 | 243.4905 ± 0.6843 | 244.0117 ± 1.2275 | |
+| p58 | 36.9578 ± 0.5996 | 36.8405 ± 0.1830 | |
+| **WC** | **206.5327 ± 0.9098** | **207.1700 ± 1.2400** | **−0.308 %, 0.41 σ** |
+
+Gate was 3 σ. Both output headers carry all four pinned facts. Build lineage, cutoff, shifting
+and tail-correction behaviour are validated together, as the consolidated design intended.
+
+**The launch, however, failed three separate ways — and every one of them looked like success.**
+
+1. **A malformed deny rule blocked both replicates for 40 minutes.**
+   `Bash(ssh dirac-bei:*rm -rf*)` is invalid (`:*` must be last), which raised an interactive
+   Settings Warning. In a detached screen with no input, both agents sat on that dialog doing
+   nothing. Fixed to valid syntax and validated by running the settings file for real
+   (`SETTINGS_OK` returned, no dialog).
+
+2. **The heartbeat was proving the wrong thing.** It was touched unconditionally every five
+   minutes by the wrapper, so throughout those 40 blocked minutes the watchdog reported a
+   perfectly healthy replicate. **A liveness signal that does not depend on the agent doing
+   anything is not a liveness signal.** It now advances only when the agent's transcript has
+   actually grown.
+
+3. **Both replicates were running with transcript saving silently disabled.** Launched from
+   inside another Claude Code session, they inherited `CLAUDE_CODE_CHILD_SESSION`, which turns
+   transcripts off. The agents worked correctly and left **no record** — defeating token
+   metering, the transcript audit and the new progress heartbeat in one stroke, which for a
+   study whose output *is* the record is the worst available failure. All inherited `CLAUDE*`
+   markers are now stripped before launch.
+
+**Two further bugs found while verifying the fixes:**
+- **`screen -ls` exits non-zero even when sessions exist**, so under `set -o pipefail` the
+  launcher's `screen -ls | grep -q` reported "no session" every time. It passed by hand only
+  because an interactive shell has no `pipefail`. Now captured before matching.
+- **The token meter was pointed at the wrong directory** (derived from the remote workspace
+  path instead of the session's local cwd) and **`escalate.py` could not read a remote
+  workspace at all** — so a replicate could have filed escalations for three days and nothing
+  would ever have read them. Fixed; `escalate_remote.sh` bridges the tested router to the
+  cluster.
+
+**Launch verification is no longer "did screen start".** It now waits for the agent to write a
+transcript and fails loudly with a screen capture if none appears in 120 s. That is the same
+lesson for the fourth time — RASPA exiting 0 on fatal input, `sha256sum -c` succeeding in
+Korean, a launcher printing success over an error, and now a healthy heartbeat over a blocked
+agent: **check the artefact, not the intention.**
+
+**State at 15:30 KST:** both replicates running, screen `4283.rep-s01` / `4410.rep-s02`,
+transcripts recording, heartbeats 0 min old, restart counters 0/3. First metering pass:
+s01 **72,252** tokens, s02 **50,683** of 12 M each; compute 0 CPU-h (no jobs submitted yet).
+Transcript audit: 11 tool calls each, **0 out-of-scope findings**. Escalation queue empty.
+Self-test 49/49.

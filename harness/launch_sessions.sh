@@ -46,7 +46,7 @@ Your workspace_root is: $WS"
     continue
   fi
 
-  if screen -ls 2>/dev/null | grep -q "$SESSION"; then
+  if printf '%s' "$(screen -ls 2>/dev/null || true)" | grep -q "$SESSION"; then
     echo "  $REP: session already running, skipping"
     continue
   fi
@@ -56,14 +56,34 @@ Your workspace_root is: $WS"
   # collide on one file in the repo root.
   ( cd "$CWD" && screen -dmS "$SESSION" -L \
       "$ROOT/harness/session_loop.sh" "$REP" "$WS" "$MODEL" "$DEADLINE" )
-  sleep 2
-  if screen -ls 2>/dev/null | grep -q "$SESSION"; then
-    echo "  $REP: launched in screen session '$SESSION' (loop log: $LOG)"
+  UP=0
+  for i in $(seq 1 10); do
+    sleep 1
+    if printf '%s' "$(screen -ls 2>/dev/null || true)" | grep -q "$SESSION"; then UP=1; break; fi
+  done
+  if [ "$UP" -eq 0 ]; then
+    echo "  $REP: LAUNCH FAILED -- no screen session '$SESSION'"; FAILED=1; continue
+  fi
+  # A live screen session proves nothing: the first launch sat blocked on an interactive
+  # settings dialog for 40 minutes with the session "up". Proof of life is the agent WRITING
+  # A TRANSCRIPT. Wait for one, and fail loudly if it never appears.
+  TDIR="$HOME/.claude/projects/$(echo "$CWD" | sed 's|/|-|g')"
+  OK=0
+  for i in $(seq 1 30); do
+    if ls "$TDIR"/*.jsonl >/dev/null 2>&1; then OK=1; break; fi
+    sleep 4
+  done
+  if [ "$OK" -eq 1 ]; then
+    B=$(cat "$TDIR"/*.jsonl 2>/dev/null | wc -c | tr -d " ")
+    echo "  $REP: launched and WORKING (screen '$SESSION', transcript $B bytes)"
   else
-    echo "  $REP: LAUNCH FAILED -- no screen session '$SESSION'"; FAILED=1
+    echo "  $REP: LAUNCH FAILED -- session up but no transcript after 120s (blocked on a prompt?)"
+    screen -S "$SESSION" -X hardcopy "/tmp/stuck_$REP.txt" 2>/dev/null
+    echo "       screen contents captured to /tmp/stuck_$REP.txt"
+    FAILED=1
   fi
 done
 
 echo
-echo "sessions:"; screen -ls 2>/dev/null | grep -E 'rep-s0' || echo "  (none)"
+echo "sessions:"; printf '%s\n' "$(screen -ls 2>/dev/null || true)" | grep -E 'rep-s0' || echo "  (none)"
 exit $FAILED

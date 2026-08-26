@@ -9,9 +9,21 @@ for REP in s01 s02; do
   ./harness/meter_compute.sh "$REP" 2>/dev/null || echo "  [meter-compute] $REP unreachable"
 done
 for REP in s01 s02; do
-  SD="$HOME/.claude/projects/-home1-users-Bei-ws-$REP"
-  [ -d "$SD" ] && python3 harness/meter_tokens.py --session-dir "$SD" \
-      --remote-ws "/home1/users/Bei/ws/$REP" 2>/dev/null || echo "  [meter-tokens] $REP: no session transcripts yet"
+  # Transcript dir is keyed on the session's LOCAL cwd, not the remote workspace. The first
+  # version derived it from the remote path and therefore silently metered nothing.
+  CWD="$PWD/harness/sessions/$REP"
+  SD="$HOME/.claude/projects/$(printf '%s' "$CWD" | sed 's|/|-|g')"
+  if [ -d "$SD" ]; then
+    python3 harness/meter_tokens.py --session-dir "$SD" --remote-ws "/home1/users/Bei/ws/$REP" 2>/dev/null \
+      || echo "  [meter-tokens] $REP: metering failed"
+  else
+    echo "  [meter-tokens] $REP: no session transcripts yet ($SD)"
+  fi
+done
+echo "  --- replicate escalations ---"
+for REP in s01 s02; do
+  ./harness/escalate_remote.sh "$REP" 2>/dev/null | sed "s/^/  /" \
+    || echo "  [escalate] $REP: could not read workspace"
 done
 for REP in s01 s02; do
   ssh -o BatchMode=yes -o ConnectTimeout=25 dirac-bei "cat /home1/users/Bei/ws/$REP/usage.json 2>/dev/null" \

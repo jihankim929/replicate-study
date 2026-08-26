@@ -19,11 +19,31 @@ NUDGE="Continue your campaign. Check INBOX.md for any notices, bring STATE.md up
 
 cd "$CWD" || exit 1
 
-# Heartbeat: touched every 5 minutes for as long as this loop lives, so a long turn is not
-# mistaken for a dead session by the watchdog's 30-minute staleness threshold.
-( while true; do
-    ssh -o BatchMode=yes -o ConnectTimeout=20 dirac-bei "touch $WS/heartbeat" >/dev/null 2>&1
-    sleep 300
+# Strip every inherited Claude Code environment marker.
+#
+# These sessions are started from inside another Claude Code session, and a child inherits
+# markers such as CLAUDE_CODE_CHILD_SESSION which TURN TRANSCRIPT SAVING OFF. That silently
+# defeats token metering, the transcript audit and the progress heartbeat all at once -- the
+# agent works perfectly and leaves no record, which is the worst possible failure for a study
+# whose output is the record.
+for v in $(env | sed -n 's/^\(CLAUDE[A-Za-z0-9_]*\)=.*/\1/p'); do unset "$v"; done
+
+# Heartbeat: a PROGRESS signal, not a liveness signal.
+#
+# The first version touched the heartbeat unconditionally every 5 minutes, which proved only
+# that this wrapper was alive. Both replicates then sat blocked on an interactive dialog for
+# 40 minutes while reporting a perfectly healthy heartbeat. The heartbeat now advances only
+# when the agent's transcript has actually grown -- i.e. when the agent did something.
+TDIR="$HOME/.claude/projects/$(echo "$CWD" | sed 's|/|-|g')"
+ssh -o BatchMode=yes -o ConnectTimeout=20 dirac-bei "touch $WS/heartbeat" >/dev/null 2>&1
+( LAST=""
+  while true; do
+    SZ=$(cat "$TDIR"/*.jsonl 2>/dev/null | wc -c | tr -d " ")
+    if [ "$SZ" != "$LAST" ] && [ -n "$SZ" ] && [ "$SZ" != "0" ]; then
+      ssh -o BatchMode=yes -o ConnectTimeout=20 dirac-bei "touch $WS/heartbeat" >/dev/null 2>&1
+      LAST="$SZ"
+    fi
+    sleep 120
   done ) &
 HB=$!
 trap 'kill $HB 2>/dev/null' EXIT

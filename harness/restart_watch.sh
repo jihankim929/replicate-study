@@ -19,7 +19,7 @@ DRY="${1:-}"
 
 for REP in s01 s02; do
   WS="/home1/users/Bei/ws/$REP"; SESSION="rep-$REP"
-  ALIVE=$(screen -ls 2>/dev/null | grep -c "$SESSION" || true)
+  ALIVE=$(printf '%s' "$(screen -ls 2>/dev/null || true)" | grep -c "$SESSION" || true)
   AGE=$(ssh -o BatchMode=yes -o ConnectTimeout=20 dirac-bei \
         "test -f $WS/heartbeat && echo \$(( ( \$(date +%s) - \$(stat -c %Y $WS/heartbeat) ) / 60 )) || echo 99999" 2>/dev/null)
   AGE=${AGE:-99999}

@@ -1,0 +1,2 @@
+{"replicate": "s01", "day": "2026-08-26", "input_tokens": 42, "output_tokens": 9077, "cache_creation_input_tokens": 63133, "cache_read_input_tokens": 899580, "billable": 72252}
+{"replicate": "s02", "day": "2026-08-26", "input_tokens": 38, "output_tokens": 5387, "cache_creation_input_tokens": 45258, "cache_read_input_tokens": 730854, "billable": 50683}
