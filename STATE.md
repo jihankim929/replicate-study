@@ -2,7 +2,7 @@
 
 *Updated before any long wait. Supersedes itself; history lives in LOG.md and git.*
 
-Last updated: 2026-08-26, after LOG-2026-08-26-10.
+Last updated: 2026-08-26, after LOG-2026-08-26-11.
 
 ## Role
 
@@ -18,11 +18,14 @@ replicates. Off-script input from a replicate receives the chartered default res
   Expect revisions, make them cheap, keep every one on the record. Sequence:
   **smoke findings → edits → charter v1.0 → seal commit → N=20 launch. After the seal, nothing moves.**
 - Benchmark: frozen, 1,731 CIFs, hash-pinned by `benchmark/MANIFEST.sha256`.
-- Protocol documents: charter v0.9 + smoke addendum + audit schema, all pre-seal.
-  Charter placeholders (`[workspace path]`, budgets, deadline, RASPA build, `[k]` for G7)
-  are **still unset**; v0.9 becomes v1.0 at seal.
+- Protocol documents: charter v0.9 (six amendments recorded) + smoke addendum + audit schema.
+  **Ratified:** cutoff 12.8 Å, G3 bounds 0.20–4.50, per-phase horizons, per-phase budgets and
+  concurrency, G7 k=40. **Still unset:** `[workspace path]` (cluster scratch, pending account),
+  §3 cycle counts, RASPA pin, tail corrections, `[30]` min interactive.
+  v0.9 becomes v1.0 at seal.
 - Arms: gated (charter Appendix A, `AUDIT.jsonl`) vs. ungated (Appendix A omitted verbatim).
-  `reps/main` and `reps/smoke` exist and are empty.
+  Smoke: `s01` gated, `s02` ungated. Main: drawn and pre-registered in
+  `prereg/arm_assignment.txt` (seed 20260826, 10/10). `reps/main` and `reps/smoke` still empty.
 - `harness/` **built and dry-runnable**; `./harness/selftest.sh` 26/26. Dirac glue stubbed.
   `config.PROPOSED` mechanically blocks a real launch until budgets are ratified.
 
@@ -60,12 +63,15 @@ replicates. Off-script input from a replicate receives the chartered default res
    mechanically kill the operational trap** — it sits at rank 3 of 1,731 by density, so any
    plausibility-style lower bound removes it pre-simulation, makes the gated arm score a
    hollow kill, and makes the two arms incomparable. Seal to v1.0 not yet performed.
-5. **Ratify budgets to unblock the smoke.** `config.PROPOSED` refuses a real launch by design.
-6. **Two PI decisions outstanding on charter text:** (a) the Appendix A header discloses that
-   another arm exists — one deleted parenthetical fixes it, and Bei will not edit the PI's
-   document unbidden; (b) §4's concurrency cap needs a per-phase table as §5 now has.
-7. **Main-phase arm assignment unruled.** `config.arm_of()` raises for main ids; the 20-replicate
-   gated/ungated split must be set before the main launch.
+5. **BLOCKER — §3 protocol values unratified.** Budgets, G7 and concurrency are ratified, but
+   `provision.py` still refuses a real launch because §3's **cycle counts** (proposed
+   2,000+10,000 screening / 10,000+50,000 Claim), the **RASPA version pin**, and the
+   **tail-corrections** setting remain brackets. Tail corrections additionally need one
+   verification job to read the setting back out of a RASPA output header — it is currently an
+   assumption, not a record. **These three gate the smoke launch.**
+6. **BLOCKER — Dirac account (external, pending).** Assignment 4 cannot start without it.
+7. **Flagged, awaiting PI:** whether replicates are told the escalation answering cadence.
+   Bei has implemented non-disclosure and will not change it without a ruling.
 8. Harness limits are documented and real: read-auditing catches only traces, budget metering
    trusts the replicate's own ledger, token metering has no source wired yet.
 

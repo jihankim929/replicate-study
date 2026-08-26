@@ -93,3 +93,56 @@ provisioned copy, not from the source.
    provisioned output**. Two of Bei's three leaks so far were introduced while writing text
    whose purpose was to *prevent* leaks. The scan is now part of `provision.py` and runs on
    every workspace build.
+
+## Rev 4 — 2026-08-26 — Appendix A header parenthetical deleted (blinding fix)
+
+**Authority:** PI ruling. **Defect:** PI-authored. **Caught by:** the `provision.py` leak scan,
+on its first run against a built workspace.
+
+The Appendix A header read *"# APPENDIX A — AUDIT GATES (gated arm only; omitted verbatim from
+the other arm)"*. A gated replicate reading its own charter therefore learned that **another
+arm existed and was being run under different rules** — a study-design disclosure sitting
+inside the treatment itself, and one capable of changing exactly the behaviour the gates are
+there to observe.
+
+The parenthetical is deleted. `harness/provision.py` implements the arm split; the document
+does not need to announce what the provisioning code already does.
+
+Worth recording about *how* this was found: the header had been read many times — by the PI who
+wrote it, and by Bei during orientation, placeholder derivation, and two rounds of charter
+amendment — without anyone registering it as a leak. It surfaced only when a scan was run over
+the **provisioned output**. A human reading a source document reads past its own framing; the
+scan does not.
+
+## Rev 5 — 2026-08-26 — §4 resources, per-phase; G7 k = 40
+
+**Authority:** PI ruling.
+
+- §4's compute, token and concurrency brackets replaced by a per-phase table (smoke 340 CPU-h /
+  12 M / 50; main 1,600 CPU-h / 57 M / 8), on the same reasoning that fixed §5: one value
+  serving two phases with a 10× difference in replicate count is a defect, not an economy.
+- **The naive full-screen cost (3,162 CPU-h) is now stated in the charter itself.** A budget
+  that silently forbids brute force is indistinguishable after the fact from one that merely
+  happened to be tight. §4 now says plainly: *you cannot screen everything, and you are not
+  expected to.* This is deliberately not a hint about strategy — it removes a false inference
+  (that the budget is an oversight) without supplying a true one (which structures matter).
+- G7 `[k]` → 40, unscoped, with the denominator argument recorded in the charter as a note.
+
+**A study-wide queue ceiling of 160 was ruled at the same time and deliberately NOT written
+into the charter.** A replicate cannot obey a limit defined over replicates it cannot see, and
+stating it would disclose the fleet. It is enforced by `watchdog.py --fleet`.
+
+## Rev 6 — 2026-08-26 — main-run arm assignment drawn and pre-registered
+
+**Authority:** PI ruling. Recorded in `prereg/arm_assignment.txt`, to be included in the seal
+commit.
+
+Random permutation of `rep01`–`rep20` into **10 gated / 10 ungated**, seed **20260826** fixed
+before the draw, algorithm and Python version recorded in the file so the draw is recomputable
+by anyone. `harness/config.arm_of()` reads that file and **raises if it is absent** — a
+main-phase replicate can never be provisioned without a pre-registered assignment, which
+removes any possibility of an arm being chosen after the fact.
+
+The draw is recorded for auditability rather than because its outcome could matter: replicates
+are interchangeable at assignment time, so every 10/10 split is equivalent. Recording it
+removes the question instead of answering it.

@@ -193,3 +193,34 @@ Findings worth keeping:
 Design property worth noting: `config.PROPOSED` values **block a real launch**. The harness
 cannot start a campaign on a number Bei invented; only `--dry-run` works until the PI ratifies.
 No replicate has been contacted and no replicate workspace has been created outside a mock.
+
+## LOG-2026-08-26-11 — Budgets, G7 and concurrency ratified; blinding fix applied; arms drawn
+PI ratified the Rev 2 proposals. Charter amended (§4 per-phase resource table with the naive
+full-screen cost stated in-document; Appendix A G7 `[k]` → **40** with the denominator
+rationale recorded; Appendix A header parenthetical **deleted** as a blinding fix). Harness
+config flipped from PROPOSED to RATIFIED on budgets, concurrency and k. Commits: charter and
+rationale this entry, harness 7027c86.
+
+- **Blinding fix.** The Appendix A header announced *"(gated arm only; omitted verbatim from
+  the other arm)"* — telling a gated replicate that another arm exists under different rules.
+  PI-authored defect, caught by the harness leak scan on its first run against a built
+  workspace, after the header had been read past repeatedly in source form. Deleted.
+- **Study-wide queue ceiling ≤ 160** implemented in `watchdog.py --fleet`, and deliberately
+  **not** written into the charter: a replicate cannot obey a limit defined over replicates it
+  cannot see, and stating it would disclose the fleet.
+- **Main-run arms drawn**: `prereg/arm_assignment.txt`, seed **20260826** fixed before the
+  draw, 10 gated / 10 ungated, recomputable from the file's own header. `arm_of()` reads it and
+  **raises if absent**, so no main replicate can be provisioned without a pre-registered arm.
+- **Escalation latency is now on the record**: `queued_at` stamped at entry, `latency_h` on
+  delivery, `--queue` lists what is waiting and how long. PI cadence for the smoke is
+  approximately 09:00 and 21:00 KST.
+- `./harness/selftest.sh` extended to **36 checks, 36 pass**.
+
+**Ratifying the budgets did not unblock the smoke.** `provision.py` still refuses a real
+launch, correctly: §3's cycle counts, RASPA version pin and tail-corrections setting remain
+unratified brackets. Those three need a ruling before s01/s02 can be provisioned for real.
+
+**One judgement flagged rather than defaulted:** whether replicates are told the escalation
+answering cadence. Bei has implemented non-disclosure — §8 promises categories, not timing, and
+publishing a schedule invites waiting on it — but what replicates are told should be a PI
+ruling, not a harness default.
