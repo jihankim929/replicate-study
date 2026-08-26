@@ -135,6 +135,13 @@ ruling rather than a Bei default. Main-run policy is revisited with the smoke fi
 
 Stated because a monitoring component that overstates its reach is worse than none.
 
+0. **The watchdog is polled, not inline — overshoot between polls is possible.** It detects a
+   breach and holds the queue; it cannot prevent a replicate from crossing 100 % between two
+   polls. The full-loop dry run makes this visible on purpose: the mock `s02` reaches **135 %**
+   of its compute budget before the first poll sees it. Charter §4's hard stop is therefore
+   enforced as *"stop on detection"*, not as an inline barrier. Poll frequency is the control,
+   and it should be set against the largest plausible single-poll burn — at the measured 338×
+   run-cost spread, a single long chunk can move usage a long way between polls.
 1. **Read-auditing is partial.** `watchdog.audit_isolation()` catches escapes that leave a
    trace: symlinks, git remotes, sealed content, absolute paths in files. It **cannot** detect a
    read that left no artifact. Genuine read-auditing needs OS-level mediation — a read-only bind
@@ -161,6 +168,20 @@ Stated because a monitoring component that overstates its reach is worse than no
    pre-registered assignment.
 
 ---
+
+## Full-loop dry run
+
+```bash
+./harness/dryrun_loop.sh [workdir]
+```
+
+Provision → mock replicates run 3 days → watchdog → fleet ceiling → escalations (including a
+PI answer delivered against a queued item) → collect. No cluster, no agent, no real budget.
+`harness/mock_replicate.py` supplies the replicate side; its science is inert by construction —
+it reproduces only what the harness must react to.
+
+The mock `s02` deliberately overspends, so the run exercises the 75 % warning, the 100 % hard
+stop, the queue hold, and the polling-overshoot limit above in one pass.
 
 ## Everything is dry-runnable
 

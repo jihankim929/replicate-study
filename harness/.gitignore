@@ -2,3 +2,4 @@ __pycache__/
 .seen-*
 watchdog.jsonl
 escalations.jsonl
+escalation_queue.jsonl

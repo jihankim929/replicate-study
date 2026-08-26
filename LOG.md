@@ -224,3 +224,28 @@ unratified brackets. Those three need a ruling before s01/s02 can be provisioned
 answering cadence. Bei has implemented non-disclosure — §8 promises categories, not timing, and
 publishing a schedule invites waiting on it — but what replicates are told should be a PI
 ruling, not a harness default.
+
+## LOG-2026-08-26-12 — Full harness loop dry-run end to end; one enforcement limit exposed
+Assignment 4's cluster steps are blocked on the Dirac account, but its third item — dry-run the
+full loop with a mock replicate — does not need it, so it was done now to de-risk the rest.
+`harness/dryrun_loop.sh` + `harness/mock_replicate.py`.
+
+The loop runs clean: provision both arms → mock replicates work 3 days under git → watchdog →
+fleet ceiling → escalations, including a PI answer delivered against a queued item with latency
+recorded → collect. Verified by inspecting **what the replicate saw**, not just harness output:
+`s02`'s INBOX correctly received the hard-stop notice and the 75% token warning, and `s01`
+received the chartered `scientific` sentence and nothing more.
+
+**One real enforcement limit exposed, and deliberately left visible in the dry run.** The mock
+`s02` reached **135 % of its compute budget** before the first watchdog poll saw it. The
+watchdog is **polled, not inline**: it detects a breach and holds the queue, but cannot prevent
+a replicate crossing 100 % between two polls. Charter §4's hard stop is therefore enforced as
+*"stop on detection"*, not as a barrier. Poll frequency is the only control, and it should be
+set against the largest plausible single-poll burn — at the measured 338× run-cost spread, one
+long chunk can move usage a long way between polls. Recorded in `harness/README.md` as limit 0;
+**the mock is left overspending on purpose so the limit stays visible rather than being tuned
+away.**
+
+Not a defect to fix silently: an inline barrier would require the harness to sit between the
+replicate and the scheduler, which is a larger design change than the smoke needs. Flagged for
+the PI to decide after the smoke.
