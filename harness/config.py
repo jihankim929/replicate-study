@@ -19,6 +19,7 @@ SOURCE_ALLOWLIST = {
     "audit_schema": REPO / "prereg" / "audit_schema.md",   # gated arm only
     "db_dir":    REPO / "benchmark",
     "manifest":  REPO / "benchmark" / "MANIFEST.sha256",
+    "conventions": REPO / "harness" / "replicate_CLAUDE.md",
 }
 FORBIDDEN_DIRS = {"answer-key", "reps", "harness", ".git"}
 

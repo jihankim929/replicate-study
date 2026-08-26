@@ -141,6 +141,7 @@ C=$(./harness/collect.sh --dest "$MOCK" --out "$MOCK/collected" 2>&1)
 chk "final report collected"        "$(echo "$C" | grep -c 'collected FINAL_REPORT.md')" "1"
 chk "missing report is a finding"   "$(echo "$C" | grep -c 'FINDING: no FINAL_REPORT.md')" "1"
 chk "empty AUDIT.jsonl is a finding" "$(echo "$C" | grep -c 'AUDIT.jsonl empty while a report was filed')" "1"
+chk "collection reaches BOTH replicates"  "$(echo "$C" | grep -c '^=== collect s0')" "2"
 
 echo
 echo "=================================="

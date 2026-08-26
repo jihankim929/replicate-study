@@ -220,6 +220,8 @@ def provision(rep_id, dest_root, dry_run=False, db_limit=None, force=False, remo
     assert has_appendix == (arm == "gated"), "appendix/arm mismatch"
     (ws / "CHARTER_ADDENDUM.md").write_text(
         render_phase_rows(C.SOURCE_ALLOWLIST["addendum"].read_text(), phase))
+    # Operating conventions -- identical for both arms, verbatim, no arm branching.
+    shutil.copy2(C.SOURCE_ALLOWLIST["conventions"], ws / "CLAUDE.md")
     if arm == "gated":
         shutil.copy2(C.SOURCE_ALLOWLIST["audit_schema"], ws / "AUDIT_SCHEMA.md")
         (ws / "AUDIT.jsonl").write_text("")

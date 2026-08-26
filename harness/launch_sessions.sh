@@ -24,6 +24,10 @@ for REP in s01 s02; do
   # attribution guesswork -- which is exactly the number the main-run budget is priced from.
   CWD="$PWD/harness/sessions/$REP"
   mkdir -p "$CWD"
+  # Claude Code loads CLAUDE.md from its LOCAL cwd (and parents), not from the remote
+  # workspace. The workspace copy is the governed record; this copy is the one that actually
+  # reaches the model. Both are byte-identical and both arms get the same file.
+  cp harness/replicate_CLAUDE.md "$CWD/CLAUDE.md"
   PROMPT="$(cat harness/replicate_prompt.md)
 Your workspace_root is: $WS"
   printf '%s' "$PROMPT" > "harness/sessions/$REP.prompt"

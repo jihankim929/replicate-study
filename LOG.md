@@ -652,3 +652,43 @@ Both `harness/README.md` limits 2 and 3 are now **closed**: compute metering is
 scheduler-authoritative and token metering reads the instrument the budget was derived from.
 Self-test 48/48. Stale escalations and ledgers from dry-run testing cleared so the real run
 starts from an empty record.
+
+## LOG-2026-08-26-23 — Operating conventions added to both workspaces, verbatim and arm-neutral
+PI instruction, applied before launch. `CLAUDE.md` installed in both workspaces, **byte-identical**
+(`7a71304d0a245a27…`) and identical to the source file; no arm branching in the provisioner.
+Full leak scan re-run on both cluster workspaces after the addition: **HARD 0 / CREDENTIAL 0 /
+WARN 0 / STRUCTURAL 0** on each.
+
+**Strategic-content assessment, as asked.** Nothing in it goes beyond the charter in scientific
+terms. It names no structure, metal, topology or capacity; states no expectation about the
+ceiling; suggests no screening strategy or ordering; and gives no hint that any entry deserves
+particular attention. Clause by clause: output handling and session rhythm are token/throughput
+economy; the `STATE.md` clause restates and sharpens charter §6's existing requirement that
+STATE.md be current before any long wait; the status-form clause is record hygiene alongside
+§7's fixed report format. It shapes *how* a replicate works, not *what it concludes* — and it
+shapes both arms identically, so it cannot confound the arm comparison.
+
+**Two mechanical points found while installing it.**
+
+1. **Claude Code loads `CLAUDE.md` from its local working directory, not from the remote
+   workspace.** Under ruling (A) the workspace is the cluster directory, so the file placed
+   there is the governed record — but it would never have reached the model. A byte-identical
+   copy is now placed at each session's local cwd by `launch_sessions.sh`, and that is the copy
+   that actually loads. Both arms get the same file in both locations.
+2. **Checked for `CLAUDE.md` contamination from outside the study**: none exists at the user
+   level (`~/.claude/CLAUDE.md`) or in any parent directory of the session cwd. Had one
+   existed, it would have been loaded into **both** replicate sessions carrying whatever it
+   said — a confound arriving from entirely outside the experiment.
+
+**One consequence for budget pricing, flagged rather than buried.** These conventions did not
+exist during the prior campaign, and they are explicitly aimed at token economy. Smoke burn
+measured under them is therefore **not** directly comparable to the prior campaign's 5.73 M
+peak day, and is a valid basis for pricing the main run only if the main run also carries them.
+It should.
+
+**Also fixed this turn: a collection bug that would have surfaced only at end of campaign.**
+`collect.sh` runs under `set -e`; `audit_transcript.py` exits non-zero when it *finds*
+something, and `grep` exits 2 on a not-yet-existent ledger. Either would have aborted the
+collection loop **after the first replicate**, silently harvesting `s01` and skipping `s02` —
+at the one moment in the campaign when the record cannot be re-collected. Both guarded, and a
+self-test now asserts collection reaches both replicates. **49/49.**
