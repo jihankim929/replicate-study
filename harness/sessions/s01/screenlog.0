@@ -1,0 +1,17 @@
+7[r8[?25h[?25l[?2004h[?1004h[?2031h[>0q[c
+[38;5;220m────────────────────────────────────────────────────────────────────────────────[39m
+[3G[38;5;220m[1mSettings[12GWarning[22m[39m
+
+[3G/Users/jihankim/replicate-study/harness/replicate_settings.json
+[3G[38;5;246m└[5G[39mpermissions.deny:[23G[38;5;246mInvalid[31Gpermission[42Grule[47G"Bash(ssh[57Gdirac-bei:*rm[71G-rf*)"[39m
+[5G[38;5;246mwas[9Gskipped:[18GThe[22G:*[25Gpattern[33Gmust[38Gbe[41Gat[44Gthe[48Gend.[53GMove[58G:*[61Gto[64Gthe[68Gend[72Gfor[39m
+[5G[38;5;246mprefix[12Gmatching,[22Gor[25Guse[29G*[31Gfor[35Gwildcard[44Gmatching[39m
+
+[3G[38;5;246mThe[7Gvalues[14Glisted[21Gabove[27Gwere[32Gskipped;[41Gthe[45Grest[50Gof[53Gthe[57Gfile[62Gis[65Gin[68Geffect.[39m
+
+[3G[38;5;153m❯[5G[38;5;246m1.[8G[38;5;153mContinue[39m
+[5G[38;5;246m2.[8G[39mFix[12Gwith[17GClaude
+[5G[38;5;246m3.[8G[39mExit[13Gand[17Gfix[21Gmanually
+
+[3G[38;5;246m[3mEnter[9Gto[12Gconfirm[20G·[22GEsc[26Gto[29Gcancel[23m[39m
+[2C[5A

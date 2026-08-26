@@ -11,13 +11,15 @@
 set -uo pipefail
 cd "$(dirname "$0")/.."
 MODEL="claude-opus-5"
+ROOT="$PWD"
+FAILED=0
 DRY=""
 [ "${1:-}" = "--dry-run" ] && DRY=1
 
 for REP in s01 s02; do
   WS="/home1/users/Bei/ws/$REP"
   SESSION="rep-$REP"
-  LOG="harness/sessions/$REP.log"
+  LOG="harness/sessions/$REP.loop.log"
   # Each session gets its OWN local working directory, so Claude Code writes its transcripts
   # to a distinct ~/.claude/projects/<encoded-cwd>/ per replicate. Sharing one cwd would put
   # both replicates' usage records in the same directory and make per-session token
@@ -40,17 +42,28 @@ Your workspace_root is: $WS"
     echo "  local cwd: $CWD"
     echo "  transcripts: ~/.claude/projects/$(echo "$CWD" | sed 's|/|-|g')/"
     echo "  prompt bytes: $(printf '%s' "$PROMPT" | wc -c | tr -d ' ')"
+    echo "  loop: session_loop.sh re-invokes with --continue until the deadline"
     continue
   fi
 
-  if screen -ls | grep -q "$SESSION"; then
+  if screen -ls 2>/dev/null | grep -q "$SESSION"; then
     echo "  $REP: session already running, skipping"
     continue
   fi
-  screen -dmS "$SESSION" -L -Logfile "$LOG" \
-    bash -lc "cd '$CWD' && exec claude --model '$MODEL' --settings '$PWD/harness/replicate_settings.json' \"\$(cat '$PWD/harness/sessions/$REP.prompt')\""
-  echo "  $REP: launched in screen session '$SESSION' (log: $LOG)"
+  DEADLINE=$(python3 -c "import json;from datetime import datetime;print(int(datetime.fromisoformat(json.load(open('/dev/stdin'))['deadline_kst']).timestamp()))" < <(ssh -o BatchMode=yes -o ConnectTimeout=20 dirac-bei "cat $WS/WORKSPACE.json"))
+  # macOS ships screen 4.00.03 (2006), which has no -Logfile. Start screen FROM the session
+  # directory instead, so its `-L` log (screenlog.0) lands there and the two replicates do not
+  # collide on one file in the repo root.
+  ( cd "$CWD" && screen -dmS "$SESSION" -L \
+      "$ROOT/harness/session_loop.sh" "$REP" "$WS" "$MODEL" "$DEADLINE" )
+  sleep 2
+  if screen -ls 2>/dev/null | grep -q "$SESSION"; then
+    echo "  $REP: launched in screen session '$SESSION' (loop log: $LOG)"
+  else
+    echo "  $REP: LAUNCH FAILED -- no screen session '$SESSION'"; FAILED=1
+  fi
 done
 
 echo
-echo "sessions:"; screen -ls 2>/dev/null | grep -E 'rep-s0|Sockets' || echo "  (none)"
+echo "sessions:"; screen -ls 2>/dev/null | grep -E 'rep-s0' || echo "  (none)"
+exit $FAILED

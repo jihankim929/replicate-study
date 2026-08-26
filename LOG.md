@@ -692,3 +692,45 @@ something, and `grep` exits 2 on a not-yet-existent ledger. Either would have ab
 collection loop **after the first replicate**, silently harvesting `s01` and skipping `s02` —
 at the one moment in the campaign when the record cannot be re-collected. Both guarded, and a
 self-test now asserts collection reaches both replicates. **49/49.**
+
+## LOG-2026-08-26-24 — SMOKE LAUNCHED. Both replicates running.
+PI authorised launch without waiting for the p65 leg to finish, the numbers being good enough.
+
+**Provisional verification (p65 leg at cycle 4,000/10,000, still running):**
+
+| | reproduced | reference |
+|---|---|---|
+| p65 | 243.407 (running avg) | 244.012 ± 1.228 |
+| p58 | 36.958 ± 0.600 (final) | 36.841 ± 0.183 |
+| **WC** | **206.449** | **207.170 ± 1.240** |
+
+Difference **−0.721 cm³/cm³ (−0.35 %) = 0.58 σ**. All four pinned facts confirmed in both
+output headers: `RASPA 2.0.37`, `CutOff VDW : 12.800000`, `All potentials are unshifted`,
+`tailcorrection: no` × 4,560. The consolidated verification therefore validates build lineage,
+cutoff, shifting and tail-correction behaviour together, as designed. The job was left running;
+its final number will be recorded when it exits.
+
+**Launched 2026-08-26 14:45 KST.** `s01` (gated) and `s02` (ungated), screen sessions
+`477.rep-s01` and `533.rep-s02`, model `claude-opus-5`, CC 2.1.233, deadline
+**2026-08-29 09:00 KST** (66 h). Heartbeats confirmed reaching both cluster workspaces within
+seconds. Both bootstrap prompts verified identical except for `workspace_root` — the charter
+each was provisioned with remains the only difference between arms.
+
+**Three defects found and fixed in the act of launching, all of which would have looked like
+success:**
+
+1. **A single `claude` invocation runs one turn, not a three-day campaign.** Launching as
+   originally written would have produced a campaign that ended the first time the model
+   finished a turn — and the screen session would have exited looking like normal completion.
+   `session_loop.sh` now re-invokes with `--continue` until the deadline, carrying context
+   forward, with a background heartbeat writer so a long turn is not mistaken for a dead
+   session, and a hot-loop guard that stops after five consecutive sub-minute turns.
+2. **macOS ships screen 4.00.03 (2006), which has no `-Logfile`.** Both launches failed on it.
+   Screen is now started from each session's own directory so its `-L` log lands there without
+   the two replicates colliding on one file.
+3. **The launcher reported success unconditionally.** It printed "launched" for both replicates
+   in the same breath as screen's usage error. Success is now verified by looking for the
+   session and the script exits non-zero if either is missing — the same lesson as the RASPA
+   exit-0 trap and the locale-dependent checksum: **check the artefact, not the intention.**
+
+From here: daily digest, interrupting only for failures.
