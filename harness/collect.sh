@@ -49,6 +49,14 @@ for WS in "$DEST"/s0*; do
     fi
   fi
   python3 harness/watchdog.py "$WS" --dry-run --json > "$D/final-watchdog.json" 2>/dev/null || true
+  # charter section 4: reading/writing outside the workspace is prohibited AND AUDITED.
+  # Audited from the local side, where the transcript is the evidence.
+  python3 harness/audit_transcript.py "$REP" --json > "$D/transcript-audit.json" 2>/dev/null
+  N=$(python3 -c "import json;print(len(json.load(open('$D/transcript-audit.json'))['findings']))" 2>/dev/null || echo "?")
+  echo "  transcript audit: $N out-of-scope access finding(s)"
+  # measured burn, for pricing the main run
+  grep "\"replicate\": \"$REP\"" harness/token_daily.jsonl > "$D/token-daily.jsonl" 2>/dev/null
+  echo "  daily token ledger: $(wc -l < "$D/token-daily.jsonl" 2>/dev/null | tr -d ' ') day(s)"
 done
 echo
 echo "collected into $OUT"

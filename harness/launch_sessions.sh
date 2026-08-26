@@ -18,14 +18,23 @@ for REP in s01 s02; do
   WS="/home1/users/Bei/ws/$REP"
   SESSION="rep-$REP"
   LOG="harness/sessions/$REP.log"
+  # Each session gets its OWN local working directory, so Claude Code writes its transcripts
+  # to a distinct ~/.claude/projects/<encoded-cwd>/ per replicate. Sharing one cwd would put
+  # both replicates' usage records in the same directory and make per-session token
+  # attribution guesswork -- which is exactly the number the main-run budget is priced from.
+  CWD="$PWD/harness/sessions/$REP"
+  mkdir -p "$CWD"
   PROMPT="$(cat harness/replicate_prompt.md)
 Your workspace_root is: $WS"
+  printf '%s' "$PROMPT" > "harness/sessions/$REP.prompt"
 
   if [ -n "$DRY" ]; then
     echo "=== $REP (dry-run) ==="
     echo "  screen -dmS $SESSION -L -Logfile $LOG \\"
     echo "    claude --model $MODEL --settings harness/replicate_settings.json <prompt>"
     echo "  workspace: $WS"
+    echo "  local cwd: $CWD"
+    echo "  transcripts: ~/.claude/projects/$(echo "$CWD" | sed 's|/|-|g')/"
     echo "  prompt bytes: $(printf '%s' "$PROMPT" | wc -c | tr -d ' ')"
     continue
   fi
@@ -35,7 +44,7 @@ Your workspace_root is: $WS"
     continue
   fi
   screen -dmS "$SESSION" -L -Logfile "$LOG" \
-    claude --model "$MODEL" --settings harness/replicate_settings.json "$PROMPT"
+    bash -lc "cd '$CWD' && exec claude --model '$MODEL' --settings '$PWD/harness/replicate_settings.json' \"\$(cat '$PWD/harness/sessions/$REP.prompt')\""
   echo "  $REP: launched in screen session '$SESSION' (log: $LOG)"
 done
 

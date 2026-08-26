@@ -14,6 +14,33 @@ from pathlib import Path
 FIELDS = ("input_tokens", "output_tokens", "cache_creation_input_tokens")
 
 
+def per_day(session_dir: Path) -> dict:
+    """Per-calendar-day usage, for pricing the main run from measured smoke burn.
+
+    A campaign total cannot price a 14-day run: the prior campaign averaged 2.8 M/day across
+    11 days but peaked at 5.73 M, and the difference decides whether a budget binds. Daily
+    resolution is the thing that makes the smoke's burn usable as a forecast.
+    """
+    days = {}
+    for f in sorted(glob.glob(str(session_dir / "*.jsonl"))):
+        for line in open(f, errors="replace"):
+            try:
+                d = json.loads(line)
+            except Exception:
+                continue
+            u = (d.get("message") or {}).get("usage") or d.get("usage")
+            if not isinstance(u, dict):
+                continue
+            day = (d.get("timestamp") or "")[:10] or "unknown"
+            e = days.setdefault(day, {f2: 0 for f2 in FIELDS})
+            e.setdefault("cache_read_input_tokens", 0)
+            for k in list(e):
+                e[k] += u.get(k) or 0
+    for day, e in days.items():
+        e["billable"] = sum(e[f2] for f2 in FIELDS)
+    return days
+
+
 def count(session_dir: Path) -> dict:
     total = {f: 0 for f in FIELDS}
     total["cache_read_input_tokens"] = 0
@@ -41,7 +68,33 @@ def main():
     ap.add_argument("--dry-run", action="store_true")
     a = ap.parse_args()
 
-    t = count(Path(os.path.expanduser(a.session_dir)))
+    sd = Path(os.path.expanduser(a.session_dir))
+    t = count(sd)
+    # daily ledger -- append-only, one line per (replicate, day), rewritten in place per day
+    rep = a.remote_ws.rstrip("/").split("/")[-1]
+    days = per_day(sd)
+    led = Path(__file__).parent / "token_daily.jsonl"
+    existing = []
+    if led.exists():
+        for line in open(led):
+            try:
+                r = json.loads(line)
+            except Exception:
+                continue
+            if not (r.get("replicate") == rep and r.get("day") in days):
+                existing.append(r)
+    with open(led, "w") as fh:
+        for r in existing:
+            fh.write(json.dumps(r) + "\n")
+        for day in sorted(days):
+            fh.write(json.dumps({"replicate": rep, "day": day, **days[day]}) + "\n")
+    print(f"[meter] {rep} daily burn:")
+    for day in sorted(days):
+        d0 = days[day]
+        print(f"    {day}  billable={d0['billable']:>12,}  "
+              f"(in={d0['input_tokens']:,} out={d0['output_tokens']:,} "
+              f"cc={d0['cache_creation_input_tokens']:,})  "
+              f"cache_read={d0['cache_read_input_tokens']:,}")
     print(f"[meter] billable={t['billable']:,} "
           f"(in={t['input_tokens']:,} out={t['output_tokens']:,} "
           f"cache_create={t['cache_creation_input_tokens']:,}) "

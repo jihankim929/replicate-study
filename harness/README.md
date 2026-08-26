@@ -67,6 +67,11 @@ Run `./harness/selftest.sh` before any launch. **46 checks, all must pass.**
 | | every escalation and response logged to `escalations.jsonl` | §6 |
 | `launch.sh` | provisions both smoke replicates, verifies, prints an arm/charter-hash registry | §5 phase table, Appendix A |
 | `collect.sh` | harvests the record; **absence of a final report is a finding, not an error** | §5 "mandatory at end, whatever state you are in" |
+| | runs the local-side transcript audit for out-of-scope filesystem access | §4 "prohibited and audited" |
+| | exports the per-day token ledger for main-run budget pricing | study governance |
+| `audit_transcript.py` | flags tool calls touching the sealed key, the study repo, another replicate's workspace, or another user's home | §4 |
+| `meter_tokens.py` | per-session **per-day** billable burn → `token_daily.jsonl` | §4 |
+| `meter_compute.sh` / `harvest_cput.sh` | CPU-hours from PBS `resources_used.cput`, including jobs that left the queue | §4 |
 | | checks git history for amend/rebase | §6 "Never amend or rebase history" |
 | | flags an empty `AUDIT.jsonl` alongside a filed report | Appendix A closing clause |
 | `dirac.py` | PBS glue — `qas` not `qsub`, node group mandatory, `qhold` not `qdel` | cluster facts, prior campaign |
@@ -188,13 +193,16 @@ Stated because a monitoring component that overstates its reach is worse than no
    mount, or an audit subsystem. Until then §4's "reading ... outside your workspace is
    prohibited and audited" is enforced for *writing* and for *traces of reading*, not for
    reading as such.
-2. **Budget metering trusts the replicate's ledger.** `usage.json` is written by the job
-   wrapper. Once the cluster account lands this should be reconciled against `tracejob`
-   `resources_used.cput`, which is authoritative. Until then a replicate that under-reports is
-   not caught.
-3. **Token metering has no source yet.** The basis is fixed (input + output + cache-creation,
-   cache-reads excluded) but nothing populates it. It needs wiring to whatever meters the
-   replicate's sessions.
+2. ~~Budget metering trusts the replicate's ledger.~~ **CLOSED.** `meter_compute.sh` takes
+   `resources_used.cput` from `qstat -f`, and `harvest_cput.sh` banks a job's final cput when it
+   leaves the queue — without which every job finishing between polls would be invisible.
+3. ~~Token metering has no source yet.~~ **CLOSED.** `meter_tokens.py` reads Claude Code's own
+   per-message `usage` records — the same source the 12 M budget was derived from — and writes a
+   per-replicate, per-day ledger.
+3b. **The transcript audit sees the record, not the filesystem.** It catches out-of-scope access
+   that a replicate performed *through its session*, which is how a Claude Code agent acts. It
+   cannot see an access made outside the session, and it is not a substitute for isolation that
+   this cluster cannot provide.
 4. **All Dirac glue is stubbed.** Every function in `dirac.py` prints what it would do and
    returns `DIRAC-STUB`. Nothing pretends to have succeeded.
 5. **Budgets, G7 and concurrency are ratified** (2026-08-26) and now sit in `config.RATIFIED`

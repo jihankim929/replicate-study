@@ -619,3 +619,36 @@ every future cluster-side script has the same constraint.
 computes WC = N(65) − N(5.8) with propagated error, and compares to **207.17 ± 1.24**. It
 launches **only** on agreement within 3 σ combined; a disagreement stops and reports and
 launches nothing.
+
+## LOG-2026-08-26-22 — Daily token ledger and local-side transcript audit added; (A) ratified
+PI ruling: workspace **is** the cluster directory (reading (A)); the same-user limit is accepted
+as framed — enforced as a rule, audited for traces, not prevented.
+
+**Per-day token accounting** (`meter_tokens.py` → `harness/token_daily.jsonl`), so smoke burn
+can price the main-run API budget. A campaign total cannot do that job: the prior campaign
+averaged 2.8 M/day over 11 days but **peaked at 5.73 M**, and which of those a 14-day budget is
+built on decides whether it binds. Validated by replaying the prior campaign's transcripts — it
+reproduces the 31.0 M total and every daily figure exactly.
+
+**A fix the requirement exposed.** Both sessions would have launched from the same working
+directory, so Claude Code would have written both replicates' transcripts into **one**
+`~/.claude/projects/` directory — making per-session attribution guesswork, which is precisely
+the number the main-run budget is to be priced from. Each session now launches from its own
+local cwd, giving each replicate a distinct transcript directory.
+
+**Local-side transcript audit** (`audit_transcript.py`), extending collection per the ruling.
+It reads every tool call the replicate made and flags any touching the sealed answer key, the
+study repository, the prior campaign's repository, **another replicate's workspace**, another
+user's cluster home, or the shared workspace root. Self-tested against a synthetic transcript:
+passes a legitimate own-workspace read, catches all three violations planted in it.
+
+Why this is the right side to audit from: on this cluster the boundary cannot be *prevented*,
+and the filesystem keeps no record of a read. **Claude Code's transcript does** — it records the
+Bash command text and every file path. The evidence for §4 lives locally even when the cluster
+retains none. Stated limit: it audits the record, not the filesystem, so an access made outside
+the session is invisible to it. That is not a substitute for isolation this cluster cannot give.
+
+Both `harness/README.md` limits 2 and 3 are now **closed**: compute metering is
+scheduler-authoritative and token metering reads the instrument the budget was derived from.
+Self-test 48/48. Stale escalations and ledgers from dry-run testing cleared so the real run
+starts from an empty record.
