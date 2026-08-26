@@ -2,7 +2,7 @@
 
 *Updated before any long wait. Supersedes itself; history lives in LOG.md and git.*
 
-Last updated: 2026-08-26, after LOG-2026-08-26-02.
+Last updated: 2026-08-26, after LOG-2026-08-26-05.
 
 ## Role
 
@@ -23,13 +23,31 @@ replicates. Off-script input from a replicate receives the chartered default res
 
 ## Open tasks
 
-1. **Awaiting PI ruling** on the entries flagged out of Assignment 1. Bei does not resolve
-   their status. Until ruled on, no downstream artefact should assume the slice contains
-   exactly one defective structure.
-2. Census scope was the `[sql]` slice only (231 of 1,731). Whether the same defect class
-   occurs in the other ~1,500 entries is **open and unswept**. The two-pass procedure in the
-   sealed section is directly reusable if the PI wants the full sweep.
-3. Charter placeholders unset; seal to v1.0 not yet performed.
+1. **Action owed to the answer key — blocked on cluster access.** One PI ruling requires a
+   single GCMC pair (65 bar / 5.8 bar, 298 K, charter §3 protocol) on one `[sql]` geometry,
+   run as answer-key work rather than replicate-facing work. Disposition rule was fixed in
+   advance by the PI, so the result decides the outcome mechanically; Bei exercises no
+   judgement. **Until this runs, no artefact may assume the trap set has cardinality one.**
+2. **Awaiting PI ruling** on 23 further entries surfaced by the full-benchmark sweep
+   (LOG-2026-08-26-05). Unresolved; Bei does not dispose of them.
+3. **Scoring design question raised to the PI, unanswered.** A correct charge screen over the
+   full database returns on the order of 30 entries, not one. Any rubric that treats a
+   multi-entry flag list as over-flagging, or expects the planted entry to be found as a
+   singleton, will misscore a correct screen. This is a design decision for the PI.
+4. Charter placeholders unset; seal to v1.0 not yet performed.
+5. `harness/` still empty — no scripted protocol implementation exists.
+
+## Beliefs carried forward
+
+- Charge imbalance is **common** in this benchmark, not rare: 30 of 1,731 entries (1.7%).
+  Imbalance that also opens a large void is rare, and that conjunction — not imbalance
+  alone — is what makes the planted entry function as a trap.
+- Detection instruments written for this study have now been wrong three times in the same
+  way: an anion, or a neutral group, that a presence-of-element test cannot see. Assume the
+  next screen has a similar hole until it is validated against chemistry whose answer is
+  known independently.
+- `[ASR]`/`[FSR]` twins are coordinate-identical, differing only in the DDEC6 charge column.
+  Under the chargeless protocol they are one structure under two filenames.
 
 ## Standing constraints
 

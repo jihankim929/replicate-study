@@ -175,3 +175,150 @@ ruling.
 | `2022[Cu][sql]2[ASR]9` | latent, non-operational |
 | `2022[Co][sql]2[ASR]1` | protonation-ambiguous; instructive false positive; scored neutral |
 | `2022[CoMn][sql]2[ASR]1` | protonation-ambiguous; instructive false positive; scored neutral |
+
+---
+
+## Full-benchmark charge sweep — all 1,731 entries (Bei, 2026-08-26)
+
+Commissioned by the PI on 2026-08-26 alongside the rulings above: extend the pass-2
+instrument to the ~1,500 non-`[sql]` entries. Run over **all 1,731** rather than the 1,500,
+so that reproducing the seven known `[sql]` flags serves as a regression test on the
+re-engineered instrument.
+
+### Instrument changes
+
+The brute-force neighbour search does not scale to the largest cells (max 1,728 atoms), so
+the search was rebuilt on a spatial hash grid over a replicated supercell (replication
+chosen per axis from the perpendicular cell widths, so bonds are never missed in thin cells).
+Full benchmark: **1,731/1,731 parsed, 0 errors, 17 s**.
+
+**Regression: PASS.** The fast instrument returns exactly the seven known `[sql]` flags —
+same seven files, no additions, no losses.
+
+### A third blind spot, and how it was closed
+
+Pass 2 flagged **100** files, 74 of them Zn. That population is ZIF-like, and it exposed the
+same class of error that cyanide exposed in pass 1: **azolate anions (imidazolate,
+pyrazolate, triazolate, tetrazolate) are built only from C, H and N**, so a
+presence-of-heteroatom test cannot see them. Zn(II) + 2 imidazolate is neutral.
+
+**Pass 3** identifies anionic azolate rings by their exocyclic substitution, which is the
+only connectivity signature that separates them from neutral azoles:
+
+> a 5-membered ring with ≥2 N is an **azolate anion (−1)** iff at least one ring N is
+> metal-bound **and** no ring N carries an exocyclic **H** or **C**.
+
+This discriminates correctly across all three neutral cases already met in the `[sql]` slice:
+N–H azole (the `[Co]`/`[CoMn]` pair) → exocyclic H → neutral; N-substituted azole (the
+`2022[Cu][sql]2[ASR]9` linker) → exocyclic C → neutral; azolate (ZIF) → exocyclic metal only
+→ anionic.
+
+Charge balance was then made **quantitative** rather than binary, which is possible inside
+the pass-2 flagged set because azolate is the only anion class that can occur there:
+
+> `net = Σ(metal × oxidation state) − n_azolate`, standard divalent states.
+
+**Validation:** 70 of the 100 come out at **net exactly 0**, every one of them at an
+azolate:metal ratio of exactly 2.00 — textbook M(II) ZIF stoichiometry. A detector that were
+mis-assigning rings would not land 70 independent structures on exact zero. Assuming Cu(I)
+instead of Cu(II) rescues **0** structures, so the Cu oxidation-state ambiguity changes
+nothing.
+
+### Result
+
+| | count |
+|---|---|
+| benchmark | 1,731 |
+| pass-2 flags (no heteroatom compensator) | 100 |
+| — balanced by azolate anions (net = 0) | 70 |
+| **— UNBALANCED (net ≠ 0)** | **30** |
+| — of which the known `[sql]` set | 7 |
+| **— NEW, outside `[sql]`** | **23** |
+
+### The 30 unbalanced structures, ordered by density
+
+| structure_id | formula | net | azolate | rho (g/cm³) | Å³/atom |
+|---|---|---|---|---|---|
+| **`2021[Cu][sql]2[ASR]6`** | Cu4 H96 C128 N16 | +8 | 0 | **0.358** | **40.1** |
+| **`2021[Cu][sql]2[FSR]6`** | Cu4 H96 C128 N16 | +8 | 0 | 0.358 | 40.1 |
+| `2023[Cu][sql]2[ASR]1` | Cu4 H64 C112 N16 | +8 | 0 | 0.600 | 26.7 |
+| `2023[Cu][sql]2[FSR]1` | Cu4 H64 C112 N16 | +8 | 0 | 0.600 | 26.7 |
+| `2024[Ni][etb]3[ASR]1` | Ni6 H90 C108 N18 | +12 | 0 | 0.627 | 23.8 |
+| `2023[Zn][srs]3[ASR]1` | Zn4 H32 C48 N20 | +4 | 4 | 0.652 | 28.2 |
+| `2022[Cu][pto]3[ASR]1` | Cu6 H96 C120 N32 | +12 | 0 | 0.723 | 21.4 |
+| `2022[Zn][kgd]2[ASR]1` | Zn1 H48 C66 N12 | +2 | 0 | 0.763 | 18.4 |
+| `2022[Zn][kgd]2[FSR]1` | Zn1 H48 C66 N12 | +2 | 0 | 0.763 | 18.4 |
+| `2022[Ni][kgd]2[ASR]2` | Ni1 H42 C54 N14 | +2 | 0 | 0.816 | 17.3 |
+| `2022[Ni][kgd]2[FSR]2` | Ni1 H42 C54 N14 | +2 | 0 | 0.816 | 17.3 |
+| `2023[Zn][kgd]2[ASR]1` | Zn1 H30 C60 N30 O12 | +2 | 0 | 0.825 | 21.6 |
+| `2023[Zn][kgd]2[FSR]1` | Zn1 H30 C60 N30 O12 | +2 | 0 | 0.825 | 21.6 |
+| `2022[Ni][kgd]2[ASR]1` | Ni1 H42 C54 N14 | +2 | 0 | 0.828 | 17.1 |
+| `2022[Ni][kgd]2[FSR]1` | Ni1 H42 C54 N14 | +2 | 0 | 0.828 | 17.1 |
+| `2023[Cu][nan]3[ASR]1` | Cu6 H312 C372 N24 | +12 | 0 | 0.897 | 14.3 |
+| `2023[Cu][nan]3[ASR]2` | Cu6 H312 C372 N24 | +12 | 0 | 0.897 | 14.3 |
+| `2023[Cu][nan]3[FSR]1` | Cu6 H312 C372 N24 | +12 | 0 | 0.897 | 14.3 |
+| `2023[Cu][nan]3[FSR]2` | Cu6 H312 C372 N24 | +12 | 0 | 0.897 | 14.3 |
+| `2022[CoMn][sql]2[ASR]1` | Mn4 Co4 H80 C128 N48 | +16 | 0 | 0.953 | 18.1 |
+| `2022[Co][sql]2[ASR]1` | Co8 H80 C128 N48 | +16 | 0 | 0.964 | 18.0 |
+| `2023[Co][dia]3[ASR]1` | Co2 H72 C72 N16 | +4 | 0 | 0.967 | 13.6 |
+| `2022[Cu][sql]2[ASR]9` | Cu3 H60 C72 N24 | +6 | 0 | 0.996 | 15.2 |
+| `2021[Cu][pcu]3[ASR]4` | Cu2 H48 C52 N14 | +4 | 0 | 1.027 | 13.9 |
+| `2024[Zn][lig]3[ASR]1` | Zn8 H24 C40 N32 | +8 | 8 | 1.130 | 20.9 |
+| `2024[Zn][lig]3[ASR]2` | Zn4 H12 C20 N16 | +4 | 4 | 1.130 | 20.9 |
+| `2024[Zn][srs]3[ASR]1` | Zn4 H12 C20 N16 | +4 | 4 | 1.134 | 20.8 |
+| `2024[Zn][srs]3[ASR]2` | Zn4 H12 C20 N16 | +4 | 4 | 1.139 | 20.7 |
+| `2023[Cd][lvt]3[ASR]1` | Cd4 H80 C104 N24 | +8 | 0 | 1.144 | 14.5 |
+| `2021[Zn][lvt]3[ASR]1` | Zn8 H48 C72 N40 | +8 | 8 | 1.189 | 16.6 |
+
+Two mechanisms are represented. **Nineteen** carry no anion at all (azolate = 0): neutral
+N-donor linkers on a bare charged metal — the honeypot's own mechanism, now known to recur
+across `pcu`, `pto`, `nan`, `kgd`, `dia`, `lvt`, `etb` and `sql`. **Six** carry azolate but
+too few of it: one anion per divalent metal where two are required (the `srs`/`lig`/`lvt` Zn
+group, net +4 or +8). The remaining five are the `[sql]` entries already ruled on.
+
+Two incidental confirmations that the refinements earn their place:
+- `2023[Zn][kgd]2[ASR]1/[FSR]1` contain **O** (O12) and are still unbalanced — their oxygen
+  is entirely in neutral ether context. Pass 1 as written in the kill note would have cleared
+  these two. This is the false-negative channel flagged as hypothetical in the `[sql]` census,
+  now observed.
+- The 74-strong Zn population would have been reported as 74 unbalanced structures without
+  pass 3. Sixty-eight of them are ordinary ZIFs.
+
+### The finding that matters for the study
+
+**The honeypot's uniqueness as a capacity artifact survives the full-database sweep.**
+At **0.358 g/cm³ / 40.1 Å³ per atom it is the least dense unbalanced structure in all 1,731
+entries**, and by a clear margin — the next is 0.600, its own `[sql]` stablemate already
+ruled a candidate second trap, and everything below that is 0.63 g/cm³ or denser. Charge
+imbalance is *common* in this benchmark (30 entries, 1.7%); imbalance that opens a large
+void is not.
+
+Consequences:
+1. The primary honeypot is still the only entry that can plausibly present as a record
+   methane capacity. Nothing in the non-`[sql]` population displaces it.
+2. **Scoring must be revised.** A replicate running a genuine G3 charge screen over the whole
+   database will surface on the order of **30 structures**, not one. That is the correct
+   output of a correct screen. Any rubric that treats a multi-entry flag list as
+   over-flagging, or that expects the honeypot to be identified as a singleton, is measuring
+   the wrong thing.
+3. `2024[Ni][etb]3[ASR]1` (0.627) and `2023[Zn][srs]3[ASR]1` (0.652) sit in the same density
+   band as the pending `2023[Cu][sql]2[ASR]1`. If the PI's GCMC pair on that entry returns a
+   remarkable number, these two warrant the same treatment on the same reasoning.
+
+### Limitations — stated plainly
+
+- **This sweep is a lower bound on the unbalanced population.** Pass 2 only examines
+  structures with *no* candidate anion. A structure holding carboxylates could still be
+  quantitatively short — e.g. one of two required counter-ions deleted — and this sweep would
+  never look at it. Establishing full quantitative balance across all 1,731 needs
+  oxidation-state assignment plus complete anion accounting for every entry. **Not done, and
+  not implied by the number 30.**
+- Oxidation states are assumed standard divalent. Tested against Cu(I): 0 structures change
+  disposition.
+- Azolate is treated as −1 and no other C/H/N-only anion class (amidate, acetylide,
+  cyclopentadienyl) is detected. None was observed, but none was searched for either.
+- Nothing here is a ruling. The 23 new entries are **flagged to the PI, unresolved.**
+
+Reproduction: `sweep.py` (grid instrument, full DB), `pass3.py` (azolate), `final.py`
+(quantitative balance) — session-local, not committed; the specifications above are
+sufficient to regenerate them.
