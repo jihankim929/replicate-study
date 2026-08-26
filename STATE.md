@@ -2,7 +2,7 @@
 
 *Updated before any long wait. Supersedes itself; history lives in LOG.md and git.*
 
-Last updated: 2026-08-26, after LOG-2026-08-26-07.
+Last updated: 2026-08-26, after LOG-2026-08-26-10.
 
 ## Role
 
@@ -12,14 +12,19 @@ replicates. Off-script input from a replicate receives the chartered default res
 
 ## Study state
 
-- Phase: **pre-launch**. No replicate has been launched or contacted.
+- Phase: **pre-launch, harness ready, budgets unratified.** No replicate launched or contacted.
+- **Standing frame (PI, 2026-08-26): the smoke test exists to change the main run.** Charter
+  v0.9, all placeholder values, the harness and the scoring assumptions are **provisional**.
+  Expect revisions, make them cheap, keep every one on the record. Sequence:
+  **smoke findings → edits → charter v1.0 → seal commit → N=20 launch. After the seal, nothing moves.**
 - Benchmark: frozen, 1,731 CIFs, hash-pinned by `benchmark/MANIFEST.sha256`.
 - Protocol documents: charter v0.9 + smoke addendum + audit schema, all pre-seal.
   Charter placeholders (`[workspace path]`, budgets, deadline, RASPA build, `[k]` for G7)
   are **still unset**; v0.9 becomes v1.0 at seal.
 - Arms: gated (charter Appendix A, `AUDIT.jsonl`) vs. ungated (Appendix A omitted verbatim).
   `reps/main` and `reps/smoke` exist and are empty.
-- `harness/` is empty — no scripted protocol implementation exists yet.
+- `harness/` **built and dry-runnable**; `./harness/selftest.sh` 26/26. Dirac glue stubbed.
+  `config.PROPOSED` mechanically blocks a real launch until budgets are ratified.
 
 ## Open tasks
 
@@ -55,9 +60,19 @@ replicates. Off-script input from a replicate receives the chartered default res
    mechanically kill the operational trap** — it sits at rank 3 of 1,731 by density, so any
    plausibility-style lower bound removes it pre-simulation, makes the gated arm score a
    hollow kill, and makes the two arms incomparable. Seal to v1.0 not yet performed.
-5. `harness/` still empty — no scripted protocol implementation exists.
+5. **Ratify budgets to unblock the smoke.** `config.PROPOSED` refuses a real launch by design.
+6. **Two PI decisions outstanding on charter text:** (a) the Appendix A header discloses that
+   another arm exists — one deleted parenthetical fixes it, and Bei will not edit the PI's
+   document unbidden; (b) §4's concurrency cap needs a per-phase table as §5 now has.
+7. **Main-phase arm assignment unruled.** `config.arm_of()` raises for main ids; the 20-replicate
+   gated/ungated split must be set before the main launch.
+8. Harness limits are documented and real: read-auditing catches only traces, budget metering
+   trusts the replicate's own ledger, token metering has no source wired yet.
 
 ## Beliefs carried forward
+
+- **Review the provisioned output, never the source.** Two of three leaks so far were written
+  by Bei into text whose purpose was preventing leaks, and both were invisible in the source.
 
 - Charge imbalance is **common** in this benchmark, not rare: 30 of 1,731 entries (1.7%).
   Imbalance that also opens a large void is rare, and that conjunction — not imbalance

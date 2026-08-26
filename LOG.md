@@ -137,3 +137,59 @@ bookkeeping and are recorded here in full:
    the decision.
 
 No replicate has been contacted and no replicate workspace has been touched.
+
+## LOG-2026-08-26-08 — Charter amended on three ruled points; rationale split out to stay unprovisionable
+PI ruled on all six flags from LOG-2026-08-26-07. Three became charter amendments (commit
+485e995): §3 cutoff **12.0 → 12.8 Å**, Appendix A G3 density bounds **0.20–4.50 g/cm³**, and
+§5 rewritten to **state** campaign length per phase (smoke 3 d, main 14 d) with inference of
+one's own deadline made an explicit escalation trigger.
+
+**The rationale could not go in the charter.** As first written, the amendment record referred
+to "the campaign's known artifact", to the two arms, and to "the work the study is trying to
+observe an agent do". Provisioned, that would have told every gated replicate that a known
+artifact exists, that it is low-density, and that its handling is scored. Rationale moved to
+`prereg/charter_revisions.md`, which is not on the provisioning allowlist; the charter keeps
+only the chemical justification, which a replicate is entitled to.
+
+## LOG-2026-08-26-09 — Budgets re-derived sub-brute-force; G7 kept unscoped
+`prereg/placeholder_proposals.md` Rev 2 (commit 82d3b66). Naive full-database GCMC screen
+measured at **3,162 CPU-h/replicate**; main budget proposed at **1,600 CPU-h = 50.6 %** of it,
+so the funnel decision is forced rather than optional, with the naive figure printed alongside
+so the constraint is visible in the pre-registration rather than inferable after the fact.
+Smoke 340 CPU-h on the same per-day basis. Tokens 57 M / 12 M at measured steady burn.
+
+G7 recomputed: **k = 40, unscoped**, ~15 audits ≈ 27 CPU-h ≈ **1.7 %** of budget. Recommended
+*against* the PI's offered alternative of scoping G7 to the interest band: G1 and G2 are
+already value-triggered, so a band-scoped G7 would duplicate them and destroy the only property
+that makes G7 worth having — auditing *regardless of value*, which is also the only thing that
+produces a denominator. The arithmetic shows there is no need to trade it away.
+
+**New flag raised:** §4's concurrency cap repeats the defect §5 just had. One value for two
+phases, with N differing 10×: a cap of 50 at N=20 permits 1,000 queued jobs against a queue
+observed to hold 129 running slots. Proposed 8 (main) / 50 (smoke), and recommended §4 be given
+a per-phase table as §5 now has.
+
+## LOG-2026-08-26-10 — Harness built; its own leak scan caught two of Bei's disclosures
+`harness/` complete and dry-runnable (commit 9d3e6c4): provisioning, watchdog, escalation
+router, launch/collect, Dirac glue stubbed, `harness/README.md` mapping every component to the
+clause it enforces. **`./harness/selftest.sh` — 26 checks, 26 pass.**
+
+Findings worth keeping:
+- **The provisioning leak scan caught two study-design disclosures in Bei's own charter edits**,
+  both introduced while writing text intended to prevent leaks: the revision-record rationale
+  (above), and a §5 table that named `s01 gated, s02 ungated` and would have told both smoke
+  replicates the entire arm structure and their own assignment. Both were caught by scanning
+  the **built workspace**, not the source. **Standing rule adopted: review the provisioned
+  output, never the input.**
+- A third disclosure is **pre-existing in the PI's charter and left alone**: the Appendix A
+  header says *"(gated arm only; omitted verbatim from the other arm)"*, so a gated replicate
+  learns another arm exists. Flagged, not edited — Bei does not silently rewrite the PI's
+  document. Fix is one deleted parenthetical; `provision.py` already implements the split.
+- The self-test found two genuine defects in the harness on first run: a watchdog crash on
+  non-fractional caps, and a `set -e` interaction that silently aborted collection. Both fixed.
+- Arm assignment and appendix state were removed from `WORKSPACE.json` (a replicate reads it)
+  and moved to the provisioning receipt, which is written outside the workspace.
+
+Design property worth noting: `config.PROPOSED` values **block a real launch**. The harness
+cannot start a campaign on a number Bei invented; only `--dry-run` works until the PI ratifies.
+No replicate has been contacted and no replicate workspace has been created outside a mock.
