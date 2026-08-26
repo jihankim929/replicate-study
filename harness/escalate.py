@@ -30,6 +30,7 @@ import config as C
 KST = timezone(timedelta(hours=9))
 ESC_RE = re.compile(r"\[ESC:\s*([A-Za-z]+)\s*/\s*(.+?)\s*\]", re.S)
 LEDGER = Path(__file__).parent / "escalations.jsonl"
+QUEUE = Path(__file__).parent / "escalation_queue.jsonl"
 
 MALFORMED_REPLY = (
     "Malformed escalation. The fixed format is `[ESC: category / one-line question]` and the "
@@ -69,7 +70,13 @@ def process(ws_path, dry_run=False):
             continue
         r = route(cat, q)
         stamp = datetime.now(KST).isoformat()
-        rec = {"ts": stamp, "replicate": meta["replicate_id"], "phase": meta["phase"],
+        # queued_at is stamped at ENTRY, so response latency is on the record whether or not
+        # anyone answers promptly. PI ruling 2026-08-26: queued items are answered at
+        # approximately 09:00 and 21:00 KST daily during the smoke.
+        rec = {"ts": stamp, "queued_at": stamp if r["reply"] is None else None,
+               "answered_at": stamp if r["reply"] is not None else None,
+               "latency_h": 0.0 if r["reply"] is not None else None,
+               "replicate": meta["replicate_id"], "phase": meta["phase"],
                "raw": raw, "question": q, **r}
         results.append(rec)
         seen.add(key)
@@ -94,6 +101,10 @@ def process(ws_path, dry_run=False):
         with open(LEDGER, "a") as fh:
             for rec in results:
                 fh.write(json.dumps(rec) + "\n")
+        with open(QUEUE, "a") as fh:
+            for rec in results:
+                if rec["reply"] is None and rec["valid"]:
+                    fh.write(json.dumps(rec) + "\n")
 
     print(f"[escalate] {meta['replicate_id']}: {len(results)} new escalation(s)")
     for r in results:
@@ -104,9 +115,66 @@ def process(ws_path, dry_run=False):
     return results
 
 
+def answer(ws_path, question_substr, text, dry_run=False):
+    """Deliver a human-authored answer to a QUEUED escalation and close out its latency.
+
+    Bei does not author these. It transports them and records how long they took.
+    """
+    ws = Path(ws_path).resolve()
+    meta = json.loads((ws / "WORKSPACE.json").read_text())
+    pending = [json.loads(l) for l in QUEUE.read_text().splitlines()] if QUEUE.exists() else []
+    hits = [r for r in pending
+            if r["replicate"] == meta["replicate_id"] and question_substr.lower() in r["question"].lower()]
+    if not hits:
+        raise SystemExit(f"no queued escalation for {meta['replicate_id']} matching {question_substr!r}")
+    rec = hits[-1]
+    now = datetime.now(KST)
+    latency = (now - datetime.fromisoformat(rec["queued_at"])).total_seconds() / 3600
+    block = (f"\n## {now.isoformat()} — escalation response\n\n"
+             f"> {rec['raw']}\n\n{text}\n")
+    out = {**rec, "answered_at": now.isoformat(), "latency_h": round(latency, 2),
+           "reply": text, "disposition": "answered"}
+    if dry_run:
+        print(f"[escalate] (dry-run) would answer {rec['category']} after {latency:.2f} h")
+        print("    " + block.strip().replace("\n", "\n    "))
+    else:
+        with open(ws / "INBOX.md", "a") as fh:
+            fh.write(block)
+        with open(LEDGER, "a") as fh:
+            fh.write(json.dumps(out) + "\n")
+        remaining = [r for r in pending if r is not rec]
+        QUEUE.write_text("".join(json.dumps(r) + "\n" for r in remaining))
+    print(f"[escalate] answered {rec['category']} for {meta['replicate_id']}; "
+          f"latency {latency:.2f} h")
+    return out
+
+
+def show_queue():
+    pending = [json.loads(l) for l in QUEUE.read_text().splitlines()] if QUEUE.exists() else []
+    now = datetime.now(KST)
+    print(f"[escalate] {len(pending)} awaiting a human answer "
+          f"(cadence: {', '.join(C.RATIFIED['escalation_answer_times_kst'])} KST)")
+    for r in pending:
+        age = (now - datetime.fromisoformat(r["queued_at"])).total_seconds() / 3600
+        print(f"    {r['replicate']:<5} {r['category']:<9} waiting {age:6.2f} h  {r['question'][:56]}")
+    return pending
+
+
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
-    ap.add_argument("workspace")
+    ap.add_argument("workspace", nargs="?")
     ap.add_argument("--dry-run", action="store_true")
+    ap.add_argument("--queue", action="store_true", help="list escalations awaiting a human answer")
+    ap.add_argument("--answer", metavar="SUBSTR", help="deliver an answer to a queued escalation")
+    ap.add_argument("--text", help="the answer text (required with --answer)")
     a = ap.parse_args()
-    process(a.workspace, a.dry_run)
+    if a.queue:
+        show_queue()
+    elif a.answer:
+        if not (a.workspace and a.text):
+            ap.error("--answer needs a workspace and --text")
+        answer(a.workspace, a.answer, a.text, a.dry_run)
+    else:
+        if not a.workspace:
+            ap.error("workspace is required")
+        process(a.workspace, a.dry_run)

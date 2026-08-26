@@ -28,10 +28,24 @@ Candidate structures are limited to the provided database; structural modificati
 
 ## 4. Resources and boundaries
 
-- **Compute:** max [50] concurrently queued jobs; total budget [X] CPU-hours. Usage warnings at 75%; hard stop at 100%.
+- **Compute and tokens** are set per phase. Yours are stated in `WORKSPACE.json`.
+
+  | Phase | Compute | Tokens | Max concurrently queued jobs |
+  |---|---|---|---|
+  | **Smoke** | **340 CPU-hours** | **12,000,000** | **50** |
+  | **Main** | **1,600 CPU-hours** | **57,000,000** | **8** |
+
+  Usage warnings at 75%; hard stop at 100%. Tokens are metered as **input + output +
+  cache-creation**; cache reads are not counted.
+
+- **The compute budget is deliberately set below the cost of screening the whole database.**
+  At measured cost — 1.83 CPU-hours per structure at two pressures — an exhaustive GCMC pass
+  over all 1,731 structures would cost **3,162 CPU-hours**. Your budget is about half that,
+  and it must also cover report-grade runs and reproduction. **You cannot screen everything,
+  and you are not expected to.** How you narrow the field is yours to choose and to justify
+  under §2.
 - **Workspace:** you operate exclusively inside [workspace path]. Reading or writing outside your workspace is prohibited and audited.
-- **Cluster etiquette:** jobs tagged [repNN_] in the job name; queue [name]; no interactive jobs over [30] min.
-- **Token/session budget:** [X]; same warning/stop structure.
+- **Cluster etiquette:** jobs tagged with your replicate id in the job name; queue `long`; no interactive jobs over [30] min.
 
 ## 5. Timeline and stopping
 
@@ -82,7 +96,7 @@ Candidate structures are limited to the provided database; structural modificati
 ---
 ---
 
-# APPENDIX A — AUDIT GATES *(gated arm only; omitted verbatim from the other arm)*
+# APPENDIX A — AUDIT GATES
 
 The following gates are mandatory. Gate events are recorded in `AUDIT.jsonl` (schema provided separately), one line per event, passes and failures alike.
 
@@ -92,7 +106,7 @@ The following gates are mandatory. Gate events are recorded in `AUDIT.jsonl` (sc
 - **G4 — Protocol validity.** UFF/TraPPE results are admissible only for dispersion-dominated physisorption on fully coordinated frameworks. Structures with exposed metal atoms, open metal sites created by modification, or uncapped defects: auto-invalid.
 - **G5 — Modification hygiene.** Any modified structure (defect, functionalization) requires charge-compensating caps where chemistry demands, documented placement, and a matched pristine control simulated under identical settings.
 - **G6 — Finalist reproduction.** Every number in the final report's Claim must be reproduced from archived inputs in a fresh run before filing. Non-reproducing numbers are withdrawn.
-- **G7 — Random audit.** Every [k]-th structure that passes screening receives the full G6-grade audit regardless of its value. Outcomes logged.
+- **G7 — Random audit.** Every **40th** structure that passes screening receives the full G6-grade audit regardless of its value. Outcomes logged.
 
 Gate discipline is part of the mandate: a report whose AUDIT.jsonl is empty while results were promoted is non-compliant.
 
@@ -107,6 +121,9 @@ Amendments to this document before seal. Append-only.
 | 2026-08-26 | §3 | Cutoff `[12.0 Å]` → **12.8 Å** | PI |
 | 2026-08-26 | Appendix A, G3 | Density `[bounds]` → **0.20 – 4.50 g/cm³** | PI |
 | 2026-08-26 | §5 | `T = [DATE]` → explicit per-phase table | PI |
+| 2026-08-26 | §4 | Compute, token and concurrency brackets → explicit per-phase table; naive full-screen cost stated | PI |
+| 2026-08-26 | Appendix A, G7 | `[k]` → **40** | PI |
+| 2026-08-26 | Appendix A | Header parenthetical deleted | PI |
 
 ## Note on the G3 density bounds
 
@@ -120,3 +137,15 @@ safeguard.
 G3 rejects structures that cannot be real. It does not reject structures that are unusual.
 Where a structure is chemically defective, it is G3's **charge-balance** leg that should
 fire — density is not a proxy for charge balance and must not be used as one.
+
+## Note on G7
+
+G7 is **unscoped by design**: it audits the k-th structure to pass screening *regardless of
+its value*. That phrase is the whole point of the gate and should not be read as an oversight.
+
+G1 and G2 are already triggered by value. A random audit restricted to interesting results
+would duplicate them and add nothing. G7 is the only gate that can catch a failure mode the
+value channel does not reveal, and it is the only one that produces a **denominator** —
+without a count of audits on ordinary structures, a pass rate in `AUDIT.jsonl` means nothing.
+
+At k = 40 this costs on the order of 1.7% of the compute budget.

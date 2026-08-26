@@ -103,6 +103,30 @@ def audit_isolation(ws: Path, repo: Path) -> list:
     return problems
 
 
+def fleet_check(dest_root: Path) -> dict:
+    """Study-wide queue ceiling (PI ruling 2026-08-26).
+
+    Independent of, and additional to, the per-replicate cap: the study must never crowd the
+    shared queue however individual replicates behave. Queue `long` was observed with 129
+    running slots, shared with other users; the ceiling is 160 QUEUED across the whole study.
+
+    Deliberately NOT a charter clause. A replicate cannot obey a limit defined over other
+    replicates it cannot see, and stating it in the charter would disclose the fleet. It binds
+    the harness, which is the only party that can enforce it.
+    """
+    root = Path(dest_root).resolve()
+    per, total = {}, 0
+    for wsj in sorted(root.glob("*/WORKSPACE.json")):
+        ws = wsj.parent
+        n = _read_usage(ws)["queued_jobs"]
+        per[ws.name] = n
+        total += n
+    cap = C.RATIFIED["fleet_max_queued_jobs"]
+    return {"total_queued": total, "cap": cap, "per_replicate": per,
+            "level": "breach" if total > cap else "ok",
+            "headroom": cap - total}
+
+
 def notify(ws: Path, lines: list, dry_run: bool):
     stamp = datetime.now(KST).isoformat()
     block = f"\n## {stamp} — harness notice\n\n" + "\n".join(f"- {l}" for l in lines) + "\n"
@@ -182,9 +206,25 @@ def _fmt(r):
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
-    ap.add_argument("workspace")
+    ap.add_argument("workspace", nargs="?")
     ap.add_argument("--repo", default=str(C.REPO))
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--json", action="store_true")
+    ap.add_argument("--fleet", metavar="DEST_ROOT",
+                    help="study-wide queue ceiling check across every workspace under DEST_ROOT")
     a = ap.parse_args()
+    if a.fleet:
+        f = fleet_check(Path(a.fleet))
+        if a.json:
+            print(json.dumps(f, indent=2))
+        else:
+            print(f"[fleet] queued {f['total_queued']} / {f['cap']}  "
+                  f"headroom {f['headroom']}  {f['level'].upper()}")
+            for k, v in sorted(f["per_replicate"].items()):
+                print(f"    {k:<6} {v}")
+            if f["level"] == "breach":
+                print("    !! study-wide ceiling breached -- hold submissions before adding more")
+        sys.exit(1 if f["level"] == "breach" else 0)
+    if not a.workspace:
+        ap.error("workspace is required unless --fleet is given")
     run(a.workspace, a.repo, a.dry_run, json_out=a.json)

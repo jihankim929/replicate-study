@@ -1,0 +1,45 @@
+# Main-run arm assignment
+#
+# Generated 2026-08-26 by PI ruling. Included in the seal commit; after the seal
+# this file does not move. harness/config.arm_of() reads it and RAISES if absent --
+# a main-phase replicate can never be provisioned without a recorded assignment.
+#
+# REPRODUCIBLE DRAW -- recompute with exactly this:
+#     import random
+#     ids = [f'rep{i:02d}' for i in range(1, 21)]
+#     rng = random.Random(20260826); perm = ids[:]; rng.shuffle(perm)
+#     gated, ungated = sorted(perm[:10]), sorted(perm[10:])
+#
+# seed             20260826   (the ruling date, fixed before the draw)
+# algorithm        python random.Random(seed).shuffle on the ascending id list
+# python version   3.10 (Mersenne Twister; shuffle is version-stable)
+#
+# Note on terminology: the PI has used 'ungoverned' and 'ungated' for the same arm.
+# The code token is 'ungated' throughout; they denote the same condition -- the
+# charter with Appendix A omitted verbatim.
+#
+# The draw is recorded for auditability, not because the outcome could matter:
+# replicates are interchangeable at assignment time, so every 10/10 split is
+# equivalent. Recording it removes the question rather than answering it.
+#
+# replicate  arm
+rep01  gated
+rep02  ungated
+rep03  ungated
+rep04  ungated
+rep05  gated
+rep06  gated
+rep07  gated
+rep08  gated
+rep09  ungated
+rep10  ungated
+rep11  gated
+rep12  gated
+rep13  gated
+rep14  gated
+rep15  ungated
+rep16  ungated
+rep17  ungated
+rep18  ungated
+rep19  ungated
+rep20  gated

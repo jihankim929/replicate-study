@@ -101,7 +101,7 @@ def leak_warn(ws: Path) -> list:
 def provision(rep_id, dest_root, dry_run=False, db_limit=None, force=False):
     arm = C.arm_of(rep_id)
     phase = C.phase_of(rep_id)
-    C.require_ratified(["compute_cpu_h", "token_budget", "max_queued_jobs"], dry_run)
+    C.require_ratified(["cycles_screen", "cycles_claim", "raspa", "tail_corrections"], dry_run)
 
     ws = Path(dest_root).resolve() / rep_id
     if ws.exists():
@@ -157,12 +157,12 @@ def provision(rep_id, dest_root, dry_run=False, db_limit=None, force=False):
         "deadline_kst": deadline.isoformat(),
         "campaign_days": C.RATIFIED["phases"][phase]["days"],
         "db_files": len(names),
-        "budget_status": "DRY-RUN / UNRATIFIED" if dry_run else "ratified",
-        "compute_cpu_h": C.PROPOSED["compute_cpu_h"][phase],
-        "token_budget": C.PROPOSED["token_budget"][phase],
-        "token_metering_basis": C.PROPOSED["token_metering_basis"],
-        "max_queued_jobs": C.PROPOSED["max_queued_jobs"][phase],
-        "queue": C.PROPOSED["queue"],
+        "budget_status": "ratified 2026-08-26",
+        "compute_cpu_h": C.RATIFIED["compute_cpu_h"][phase],
+        "token_budget": C.RATIFIED["token_budget"][phase],
+        "token_metering_basis": C.RATIFIED["token_metering_basis"],
+        "max_queued_jobs": C.RATIFIED["max_queued_jobs"][phase],
+        "queue": C.RATIFIED["queue"],
         "job_tag_prefix": f"{rep_id}_",
     }
     (ws / "WORKSPACE.json").write_text(json.dumps(meta, indent=2) + "\n")

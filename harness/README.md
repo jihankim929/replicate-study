@@ -6,7 +6,24 @@ either mechanises a clause the charter already states, or reports a fact. None o
 judgement over a replicate's science, and the one place discretion could creep in — the
 escalation router — is deliberately built so that it cannot.
 
-Run `./harness/selftest.sh` before any launch. **26 checks, all must pass.**
+## Permanent invariant
+
+> **Review the provisioned output, never the input.**
+
+A replicate-facing document is not judged by what it says but by **what a replicate could infer
+from it**. That inference is invisible in the source and visible in the built workspace, so
+every check that matters runs against the built workspace.
+
+This is not advice. It is the rule that caught all three leaks found so far, **two of which
+were written by Bei into text whose stated purpose was preventing leaks**, and one of which
+was a header in the charter that had been read many times without anyone noticing it announced
+the study's own arm structure.
+
+**The leak scan is a MANDATORY PRE-LAUNCH STEP for every phase** — smoke, main, and any
+re-provision after a charter edit. It is not a one-time clearance. Any edit to a
+replicate-facing document invalidates the previous scan.
+
+Run `./harness/selftest.sh` before any launch. **36 checks, all must pass.**
 
 ---
 
@@ -23,11 +40,13 @@ Run `./harness/selftest.sh` before any launch. **26 checks, all must pass.**
 | | leak scan of the built workspace, hard-fail + warn lists | see *Leak control* below |
 | | seeds `LOG.md`, `STATE.md`, `JOBS.md` | §6 record-keeping |
 | `watchdog.py` | usage warning at **75 %**, hard stop at **100 %**, compute and tokens alike | §4 |
+| | **study-wide queue ceiling: ≤ 160 queued across all replicates** (`--fleet`) | harness-only, see below |
 | | hard stop **holds** the queue, never deletes jobs | §4 + §6 (evidence must survive) |
 | | queued-job cap | §4 cluster etiquette |
 | | workspace isolation audit: symlink escapes, git remotes, sealed material, paths back | §4 "prohibited and audited" |
 | | liveness + `STATE.md` staleness, **reported not punished** | §6 "updated before any long wait" |
 | `escalate.py` | the §8 category table, transcribed verbatim into `config.ESC_TABLE` | §8 |
+| | stamps `queued_at` at entry and `latency_h` on answer, so response latency is on the record | §6 |
 | | `scientific` → the exact chartered sentence, auto-replied | §8 |
 | | `infra` → queued for repair; `charter` → queued for the PI | §8 (see *Why two are queued*) |
 | | malformed → the format returned, never a guess at intent | §8 "There is no other channel" |
@@ -38,6 +57,7 @@ Run `./harness/selftest.sh` before any launch. **26 checks, all must pass.**
 | | flags an empty `AUDIT.jsonl` alongside a filed report | Appendix A closing clause |
 | `dirac.py` | PBS glue — `qas` not `qsub`, node group mandatory, `qhold` not `qdel` | cluster facts, prior campaign |
 | `config.py` | refuses to launch on **unratified** placeholder values | study governance |
+| | main-run arms read from `prereg/arm_assignment.txt`; **absence is an error, never a default** | pre-registration |
 
 ---
 
@@ -71,18 +91,45 @@ Two-list scan, run against the **built workspace**, not the source:
 - **WARN** (`config.LEAK_DENY_WARN`) — printed, provisioning continues. These sit in documents
   Bei does not own; auto-editing the PI's charter would be worse than reporting it.
 
-**One WARN is currently outstanding and needs a PI decision.** The Appendix A header reads
-*"(gated arm only; omitted verbatim from the other arm)"*, so a gated replicate reading its own
-charter learns that another arm exists under different rules. Suggested fix: drop the
-parenthetical — `provision.py` already implements the arm split, so the instruction does not
-need to live in the replicate-facing text. Rationale and the full leak history are in
-`prereg/charter_revisions.md`.
+**No WARN is currently outstanding.** The last one — the Appendix A header reading *"(gated arm
+only; omitted verbatim from the other arm)"*, which told a gated replicate that another arm
+existed under different rules — was fixed by PI ruling on 2026-08-26. The parenthetical is
+deleted; `provision.py` implements the split, and the document no longer announces it. Full
+leak history in `prereg/charter_revisions.md`.
 
 Why this scan exists at all: **two of the three leaks found so far were introduced by Bei while
 writing text whose purpose was to prevent leaks**, and both were caught by scanning the built
 workspace rather than by reading the source. Review the output, not the input.
 
 ---
+
+## Study-wide queue ceiling
+
+`watchdog.py --fleet <dest_root>` sums `queued_jobs` across every workspace and enforces
+**≤ 160 queued study-wide**, exiting non-zero on breach. Queue `long` was observed with 129
+running slots shared with other users; the per-replicate cap alone cannot prevent 20 replicates
+from crowding it.
+
+**Deliberately not a charter clause.** A replicate cannot obey a limit defined over other
+replicates it cannot see, and stating it in the charter would disclose the fleet. It binds the
+harness, which is the only party positioned to enforce it.
+
+## Escalation cadence
+
+Queued `infra` and `charter` items are answered by the PI at approximately **09:00 and 21:00
+KST daily** during the smoke. The router stamps `queued_at` on entry and `latency_h` on
+delivery, so the cadence is measured rather than assumed.
+
+```bash
+python3 harness/escalate.py --queue                       # what is waiting, and how long
+python3 harness/escalate.py <ws> --answer SUBSTR --text "..."   # deliver a PI answer
+```
+
+**The cadence is not disclosed to replicates.** Charter §8 promises categories, not timing, and
+tells replicates to "plan accordingly"; publishing a schedule would invite them to wait on it.
+The inbox notice says only *"Queued. No response should be assumed pending; continue working."*
+**Flagged for the PI** — this is a judgement about what replicates are told, and it should be a
+ruling rather than a Bei default. Main-run policy is revisited with the smoke findings.
 
 ## Limits — what this harness does not do
 
@@ -103,10 +150,15 @@ Stated because a monitoring component that overstates its reach is worse than no
    replicate's sessions.
 4. **All Dirac glue is stubbed.** Every function in `dirac.py` prints what it would do and
    returns `DIRAC-STUB`. Nothing pretends to have succeeded.
-5. **Main-phase arms are unassigned.** `config.RATIFIED["arms"]` covers `s01`/`s02` only;
-   `arm_of()` raises for main-phase ids. The 20-replicate split is not yet ruled.
-6. **Budgets are unratified.** `config.PROPOSED` values block a real launch by design. The
-   smoke cannot start until the PI ratifies them.
+5. **Budgets, G7 and concurrency are ratified** (2026-08-26) and now sit in `config.RATIFIED`
+   and in the charter. **The §3 protocol values are NOT**: cycle counts, the RASPA version pin,
+   and tail corrections remain in `config.PROPOSED`, so `provision.py` still refuses a real
+   launch. This is correct — those brackets are genuinely unset — but it means **ratifying the
+   budgets did not by itself unblock the smoke.**
+6. **Main-run arms are drawn and recorded** in `prereg/arm_assignment.txt` (seed 20260826,
+   10 gated / 10 ungated, reproducible from the file's own header). `arm_of()` reads it and
+   raises if it is absent, so a main-phase replicate can never be provisioned without a
+   pre-registered assignment.
 
 ---
 

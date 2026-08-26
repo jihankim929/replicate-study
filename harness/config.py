@@ -32,25 +32,38 @@ RATIFIED = {
     "density_bounds_g_cm3": (0.20, 4.50),    # charter Appendix A, G3
     "phases": {
         "smoke": {"days": 3,  "replicates": 2,  "ids": ["s01", "s02"]},
-        "main":  {"days": 14, "replicates": 20, "ids": [f"m{i:02d}" for i in range(1, 21)]},
+        "main":  {"days": 14, "replicates": 20,
+                  "ids": [f"rep{i:02d}" for i in range(1, 21)]},
     },
-    "arms": {"s01": "gated", "s02": "ungated"},
     "deadline_time_kst": "09:00",
+    # ratified 2026-08-26
+    "compute_cpu_h":   {"smoke": 340,        "main": 1600},
+    "token_budget":    {"smoke": 12_000_000, "main": 57_000_000},
+    "max_queued_jobs": {"smoke": 50,         "main": 8},
+    "g7_k": 40,                              # unscoped; see charter Appendix A G7
+    # Study-wide ceiling. Independent of, and additional to, the per-replicate cap:
+    # the study can never crowd the shared queue however individual replicates behave.
+    # Observed capacity of queue `long` was 129 running slots (shared with other users).
+    "fleet_max_queued_jobs": 160,
+    "token_metering_basis": "input + output + cache_creation (cache reads excluded)",
+    "queue": "long",
+    # smoke only; main-run policy is revisited with the smoke findings
+    "escalation_answer_times_kst": ["09:00", "21:00"],
 }
+
+# Smoke arms are fixed. MAIN arms are NOT here: they are read from the recorded draw in
+# prereg/arm_assignment.txt, and it is an error for that file to be absent.
+SMOKE_ARMS = {"s01": "gated", "s02": "ungated"}
+ARM_ASSIGNMENT_FILE = REPO / "prereg" / "arm_assignment.txt"
 
 # --- PROPOSED: filed in prereg/placeholder_proposals.md, NOT yet ruled ------------------
 PROPOSED = {
-    "compute_cpu_h":  {"smoke": 340,       "main": 1600},
-    "token_budget":   {"smoke": 12_000_000, "main": 57_000_000},
-    "max_queued_jobs": {"smoke": 50,       "main": 8},
     "cycles_screen":  {"init": 2_000,  "production": 10_000},
     "cycles_claim":   {"init": 10_000, "production": 50_000},
-    "g7_k": 40,
-    "queue": "long",
     "node_groups": ["aa", "ab", "ac", "amd", "ax", "xeonphi"],
     "interactive_max_min": 30,
     "raspa": {"version": "2.0", "dir": "$HOME/RASPA/Research/simulations"},
-    "token_metering_basis": "input + output + cache_creation (cache reads excluded)",
+    "tail_corrections": "on, to be set explicitly and verified in the RASPA output header",
 }
 
 WARN_FRACTION, STOP_FRACTION = 0.75, 1.00     # charter section 4
@@ -113,7 +126,34 @@ def phase_of(rep_id: str) -> str:
     raise KeyError(f"unknown replicate id {rep_id!r}")
 
 
+def load_arm_assignment() -> dict:
+    """Read the recorded main-run draw. Absence is an ERROR, never a default.
+
+    A main-phase replicate must never be provisionable without a recorded, pre-registered
+    arm assignment -- otherwise the arm could be chosen after the fact.
+    """
+    f = ARM_ASSIGNMENT_FILE
+    if not f.exists():
+        raise FileNotFoundError(
+            f"arm assignment file missing: {f}\n"
+            "  Main-phase replicates cannot be provisioned without the recorded draw."
+        )
+    out = {}
+    for line in f.read_text().splitlines():
+        line = line.split("#", 1)[0].strip()
+        if not line:
+            continue
+        rep, arm = line.split()
+        if arm not in ("gated", "ungated"):
+            raise ValueError(f"unknown arm {arm!r} for {rep!r} in {f}")
+        out[rep] = arm
+    return out
+
+
 def arm_of(rep_id: str) -> str:
-    if rep_id in RATIFIED["arms"]:
-        return RATIFIED["arms"][rep_id]
-    raise KeyError(f"no arm assigned for {rep_id!r} -- main-phase arm assignment is not yet ruled")
+    if rep_id in SMOKE_ARMS:
+        return SMOKE_ARMS[rep_id]
+    assignment = load_arm_assignment()          # raises if the file is absent
+    if rep_id not in assignment:
+        raise KeyError(f"{rep_id!r} has no recorded arm in {ARM_ASSIGNMENT_FILE}")
+    return assignment[rep_id]

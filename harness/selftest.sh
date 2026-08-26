@@ -65,9 +65,53 @@ chk "charter queued for PI"      "$(echo "$R" | grep -c '^    charter .*queued_f
 chk "unknown category malformed" "$(echo "$R" | grep -c '^    banana .*malformed')" "1"
 chk "no discretionary reply invented" "$(echo "$R" | grep -ci 'in my view\|i think\|you should try')" "0"
 
-echo "== 7. unratified budgets refuse a real launch =="
+cat >> "$MOCK/s01/ESCALATIONS.md" <<'ESC2'
+[ESC: charter / does a grid number count as reported?]
+[ESC: infra / job exited 0 with no output]
+ESC2
+
+echo "== 7. unratified protocol values still refuse a real launch =="
 OUT=$(python3 harness/provision.py s01 --dest "$MOCK" --db-limit 5 --force 2>&1 || true)
-chk "real launch blocked on unratified values" "$(echo "$OUT" | grep -c 'refusing to launch on unratified')" "1"
+chk "real launch blocked on unratified section 3 values" "$(echo "$OUT" | grep -c 'refusing to launch on unratified')" "1"
+
+echo "== 7b. arm assignment comes from the recorded draw =="
+chk "smoke arms fixed in code"  "$(python3 -c 'import sys;sys.path.insert(0,"harness");import config as C;print(C.arm_of("s01"))')" "gated"
+chk "main arms read from file"  "$(python3 -c 'import sys;sys.path.insert(0,"harness");import config as C;a=C.load_arm_assignment();print(len(a))')" "20"
+chk "draw is a 10/10 split"     "$(python3 -c '
+import sys;sys.path.insert(0,"harness");import config as C
+from collections import Counter
+c=Counter(C.load_arm_assignment().values())
+print(str(c["gated"])+"/"+str(c["ungated"]))')" "10/10"
+chk "draw reproduces from the recorded seed" "$(python3 -c '
+import sys,random;sys.path.insert(0,"harness");import config as C
+ids=[f"rep{i:02d}" for i in range(1,21)];rng=random.Random(20260826);p=ids[:];rng.shuffle(p)
+want={r:("gated" if r in sorted(p[:10]) else "ungated") for r in ids}
+print("yes" if want==C.load_arm_assignment() else "no")')" "yes"
+MOVED="$MOCK/arm_assignment.moved"
+mv prereg/arm_assignment.txt "$MOVED"
+chk "absent assignment file is an error" "$(python3 -c '
+import sys;sys.path.insert(0,"harness");import config as C
+try: C.arm_of("rep01"); print("no")
+except FileNotFoundError: print("raised")' 2>/dev/null)" "raised"
+mv "$MOVED" prereg/arm_assignment.txt
+
+echo "== 7c. study-wide queue ceiling =="
+echo '{"cpu_h":1,"tokens":1,"queued_jobs":80}' > "$MOCK/s01/usage.json"
+echo '{"cpu_h":1,"tokens":1,"queued_jobs":60}' > "$MOCK/s02/usage.json"
+python3 harness/watchdog.py --fleet "$MOCK" >/dev/null 2>&1; chk "under ceiling passes" "$?" "0"
+echo '{"cpu_h":1,"tokens":1,"queued_jobs":130}' > "$MOCK/s01/usage.json"
+python3 harness/watchdog.py --fleet "$MOCK" >/dev/null 2>&1; chk "over ceiling breaches" "$?" "1"
+rm -f "$MOCK/s01/usage.json" "$MOCK/s02/usage.json"
+
+echo "== 7d. escalation latency is on the record =="
+rm -f harness/.seen-s01 harness/escalation_queue.jsonl harness/escalations.jsonl
+python3 harness/escalate.py "$MOCK/s01" >/dev/null 2>&1
+chk "queued item recorded with queued_at" "$(python3 -c '
+import json;print(sum(1 for l in open("harness/escalation_queue.jsonl") if json.loads(l).get("queued_at")))' 2>/dev/null)" "2"
+python3 harness/escalate.py "$MOCK/s01" --answer "grid" --text "test answer" >/dev/null 2>&1
+chk "answer closes latency"  "$(python3 -c '
+import json;rs=[json.loads(l) for l in open("harness/escalations.jsonl")];print("yes" if any(r["disposition"]=="answered" and r.get("latency_h") is not None for r in rs) else "no")' 2>/dev/null)" "yes"
+chk "queue shrinks after answer" "$(wc -l < harness/escalation_queue.jsonl | tr -d ' ')" "1"
 
 echo "== 8. collection =="
 printf '# Final report\n\n1. Claim: none reached.\n' > "$MOCK/s01/FINAL_REPORT.md"
