@@ -1,0 +1,10 @@
+# credentials never enter this repo (PI standing rule, 2026-08-26)
+id_*
+*ed25519*
+*_rsa
+*_ecdsa
+authorized_keys*
+known_hosts*
+*.pem
+*.ppk
+.ssh/

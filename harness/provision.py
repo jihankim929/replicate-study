@@ -75,6 +75,37 @@ def split_charter(text: str, arm: str) -> str:
     return body.rstrip() + "\n"
 
 
+def credential_scan(root: Path) -> list:
+    """Credentials must never reach a workspace or the repository (PI standing rule).
+
+    Two independent checks, because a key leaks two different ways: by FILENAME (someone
+    copies id_ed25519 in) or by CONTENT (someone pastes a key body into an innocent file).
+    A filename check alone misses the paste; a content check alone misses an empty or
+    unreadable key file that is still a key file.
+    """
+    import fnmatch
+    hits = []
+    for p in root.rglob("*"):
+        rel = p.relative_to(root)
+        if ".git" in rel.parts or "__pycache__" in rel.parts:
+            continue          # build artefacts; gitignored and never provisioned
+        for pat in C.CREDENTIAL_FILENAME_PATTERNS:
+            if fnmatch.fnmatch(p.name, pat):
+                hits.append(f"CREDENTIAL FILENAME: {rel} (matches {pat})")
+                break
+        if not p.is_file() or p.suffix == ".cif":
+            continue
+        try:
+            txt = p.read_text(errors="replace")
+        except Exception:
+            continue
+        for m in C.CREDENTIAL_CONTENT_MARKERS:
+            if m in txt:
+                hits.append(f"CREDENTIAL CONTENT: {rel} contains {m!r}")
+                break
+    return hits
+
+
 def leak_scan(ws: Path, repo: Path) -> list:
     """Belt-and-braces check that no sealed material or path-back reached the workspace."""
     problems = []
@@ -236,7 +267,7 @@ def provision(rep_id, dest_root, dry_run=False, db_limit=None, force=False):
         raise SystemExit(f"workspace git has a remote ({remotes}) -- that is a path back")
 
     # --- 5. leak scan -------------------------------------------------------------------
-    problems = leak_scan(ws, C.REPO)
+    problems = leak_scan(ws, C.REPO) + credential_scan(ws)
     if problems:
         for p in problems:
             print("  LEAK:", p)

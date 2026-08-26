@@ -119,6 +119,24 @@ LEAK_DENY_WARN = [
     "other arm", "ungated", "gated arm", "replicate study", "scored", "rubric",
 ]
 
+# --- credentials must never enter a workspace OR the repository ------------------------
+# Standing rule, PI 2026-08-26. Two independent checks, because a key leaks either by its
+# FILENAME being copied or by its CONTENT being pasted into an otherwise innocent file.
+CREDENTIAL_FILENAME_PATTERNS = [
+    "id_rsa*", "id_ed25519*", "id_ecdsa*", "id_dsa*", "*ed25519*", "*_rsa", "*_ecdsa",
+    "authorized_keys*", "known_hosts*", "*.pem", "*.ppk", "ssh_config", "config.bak*",
+    "*.pub", ".ssh",
+]
+# Built by concatenation on purpose: if the markers appeared verbatim here, this file would
+# trip its own scanner, and the natural fix -- exempting it -- is exactly the kind of
+# exemption that later hides a real leak. No literal marker exists anywhere in the source.
+_PK = " PRIVATE KEY"
+CREDENTIAL_CONTENT_MARKERS = [
+    "BEGIN OPENSSH" + _PK, "BEGIN RSA" + _PK, "BEGIN EC" + _PK,
+    "BEGIN DSA" + _PK, "BEGIN" + _PK, "PuTTY-User-Key" + "-File",
+    "ssh-ed255" + "19 AAAA", "ssh-r" + "sa AAAA", "ecdsa-sha2-" + "nistp",
+]
+
 # --- section 8 escalation table, transcribed VERBATIM from the charter ------------------
 # Do not paraphrase these. The router quotes them; it does not author replies.
 ESC_TABLE = {
