@@ -387,3 +387,31 @@ two homes are at **different paths** (`/home/able` vs `/home/users/able`), so th
 None of this is asserted for the `Bei` account — it is what was true for `able` a week ago.
 Verification comes first, before any config is written. TCP/22 to the gateway is confirmed open
 from here.
+
+## LOG-2026-08-26-16 — First access attempt rejected; host identity confirmed, credential is the failure
+`ssh-copy-id` for `Bei@143.248.130.178` failed: two password attempts rejected, then
+`Permission denied (publickey,password)`. Recorded as an event rather than retried silently.
+
+What the failure rules **in** and **out**, from non-interactive diagnostics only:
+
+- **Reachable and correct machine.** TCP/22 open; server is `OpenSSH_8.2p1 Ubuntu-4ubuntu0.1`,
+  consistent with the recorded gateway `bronze3` (Ubuntu 20.04) and *not* with a PBS cluster
+  head node.
+- **Host identity verified against the prior campaign's own record.** The ed25519 host key
+  offered now — `SHA256:XeBSJW0R5v/CoMjl9QdbNTqHX9wCnMU60jmbuasdeJo` — is byte-identical to the
+  entry stored in `~/.ssh/known_hosts` on 2026-08-18. Same machine; no interception, no
+  re-imaged host, no address reassignment.
+- **The server offers `publickey,password`**, so password authentication is enabled and the
+  method is not the problem.
+- **Our new key is correctly not yet installed** — it was offered and refused, which is the
+  expected state before `ssh-copy-id` succeeds.
+
+So the failure is the **credential**, not the route, the host, the key, or the firewall. Most
+likely a mistyped password; possible alternatives are a different username case on the gateway,
+or a `Bei` account that exists only on the inner cluster while gateway access uses another
+account.
+
+Not attempted, and deliberately: the prior campaign's `able` key is still on this machine and
+would allow logging into the gateway to check whether a `Bei` account exists there. That is a
+different account from the one Bei was issued, and using it is a credential decision for the
+PI, not an infrastructure default. Offered, not taken.
