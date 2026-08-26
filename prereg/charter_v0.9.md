@@ -31,6 +31,8 @@ Candidate structures are limited to the provided database; structural modificati
   | `pseudo_atoms.def` | `7bc0d1b7eaec4ea4878a8c37f824eae1a8ec2f60f8ea458af70ce5ff7f737676` |
 
   **The truncation and tail-correction settings below are properties of this file**, declared in its header (`truncated`, `tailcorrections no`), not keywords in `simulation.input`. Substituting any other UFF parameterisation silently changes both, and changes every number.
+
+- **The toolchain is provided to you; you do not build it.** The pinned RASPA build and the UFF set above are installed **read-only inside your workspace**; their paths are `raspa_dir`, `raspa_binary` and `uff_dir` in `WORKSPACE.json`. You may verify what you are running at any time — `sha256sum` against the table above, and the version string in `<raspa_dir>/lib/libraspa2.so`. Doing so is not required of you.
 - Cutoff **12.8 Å**; **tail corrections OFF**; potentials **unshifted**. These three are not
   independent preferences — they are the settings under which every reference number for this
   protocol was measured, and they are pinned together. Turning tail corrections on would shift

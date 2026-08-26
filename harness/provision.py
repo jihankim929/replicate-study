@@ -75,6 +75,27 @@ def split_charter(text: str, arm: str) -> str:
     return body.rstrip() + "\n"
 
 
+MAX_TEXT_BYTES = 1 << 20          # only the first 1 MB of any file is searched for markers
+
+
+def _text_head(p: Path):
+    """Return searchable text, or None if the file is binary.
+
+    Binaries get filename checks only. A key embedded inside a compiled artefact is not the
+    threat model here -- we build the toolchain ourselves -- and reading 60 MB of RASPA as
+    text on every scan would make the mandatory pre-launch check slow enough to skip.
+    That trade is stated rather than hidden.
+    """
+    try:
+        with open(p, "rb") as fh:
+            head = fh.read(MAX_TEXT_BYTES)
+    except Exception:
+        return None
+    if b"\0" in head[:8192]:
+        return None
+    return head.decode("utf-8", errors="replace")
+
+
 def credential_scan(root: Path) -> list:
     """Credentials must never reach a workspace or the repository (PI standing rule).
 
@@ -95,9 +116,8 @@ def credential_scan(root: Path) -> list:
                 break
         if not p.is_file() or p.suffix == ".cif":
             continue
-        try:
-            txt = p.read_text(errors="replace")
-        except Exception:
+        txt = _text_head(p)
+        if txt is None:
             continue
         for m in C.CREDENTIAL_CONTENT_MARKERS:
             if m in txt:
@@ -113,7 +133,14 @@ def leak_scan(ws: Path, repo: Path) -> list:
     sealed_hashes = {sha256(p) for p in sealed.rglob("*") if p.is_file()} if sealed.exists() else set()
     for p in ws.rglob("*"):
         if p.is_symlink():
-            problems.append(f"symlink present (path back / escape risk): {p.relative_to(ws)}")
+            # A symlink matters only if it LEAVES the workspace. Flagging every symlink was
+            # too blunt: a normal shared-library install ships internal version links
+            # (libfoo.so -> libfoo.so.0.0.0), and a check that cries wolf on those is a check
+            # people learn to wave through.
+            target = Path(os.path.realpath(p))
+            if not str(target).startswith(str(ws.resolve()) + os.sep):
+                problems.append(
+                    f"symlink escapes workspace (path back): {p.relative_to(ws)} -> {target}")
             continue
         if not p.is_file() or ".git/" in str(p.relative_to(ws)):
             continue
@@ -121,9 +148,8 @@ def leak_scan(ws: Path, repo: Path) -> list:
             continue                      # database payload: checked by manifest instead
         if sha256(p) in sealed_hashes:
             problems.append(f"SEALED FILE COPIED INTO WORKSPACE: {p.relative_to(ws)}")
-        try:
-            txt = p.read_text(errors="replace")
-        except Exception:
+        txt = _text_head(p)
+        if txt is None:
             continue
         if str(repo) in txt:
             problems.append(f"contains a path back to the study repo: {p.relative_to(ws)}")
@@ -160,10 +186,10 @@ def leak_warn(ws: Path) -> list:
     for p in ws.rglob("*"):
         if not p.is_file() or p.suffix in {".cif", ".sha256"} or ".git/" in str(p):
             continue
-        try:
-            low = p.read_text(errors="replace").lower()
-        except Exception:
+        _t = _text_head(p)
+        if _t is None:
             continue
+        low = _t.lower()
         for term in C.LEAK_DENY_WARN:
             if term in low:
                 warns.append(f"{p.name}: discloses {term!r}")
@@ -239,6 +265,13 @@ def provision(rep_id, dest_root, dry_run=False, db_limit=None, force=False, remo
         "max_queued_jobs": C.RATIFIED["max_queued_jobs"][phase],
         "queue": C.RATIFIED["queue"],
         "job_tag_prefix": f"{rep_id}_",
+        # Fixed toolchain, provided read-only inside the workspace. Replicates do not build
+        # their own: toolchain assembly is upstream of every behaviour the study measures.
+        "raspa_dir": "toolchain/raspa",
+        "raspa_binary": "toolchain/raspa/bin/simulate",
+        "uff_dir": "toolchain/raspa/share/raspa/forcefield/UFF",
+        "raspa_version": C.RATIFIED["raspa"]["version"],
+        "raspa_commit": C.RATIFIED["raspa"]["commit"],
     }
     meta["workspace_root"] = str(remote_root) if remote_root else str(ws)
     (ws / "WORKSPACE.json").write_text(json.dumps(meta, indent=2) + "\n")

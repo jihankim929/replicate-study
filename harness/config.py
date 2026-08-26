@@ -57,6 +57,8 @@ RATIFIED = {
     # --- section 3 protocol, ratified 2026-08-26 from the archived record -----------------
     "raspa": {
         "version": "2.0.37",
+        "tag": "v2.0.37",
+        "commit": "4467e14c375c2e02f3839ffc63c14edf0bbde0a2",
         "compiler": "gcc 4.8.5 20150623 (Red Hat 4.8.5-36)",
         "build_recipe": "autotools from $HOME/RASPA/RASPA2, --prefix=$HOME/RASPA/Research/simulations",
         "dir": "$HOME/RASPA/Research/simulations",
@@ -68,6 +70,13 @@ RATIFIED = {
     # across 7 runs, with `All potentials are unshifted`. The charter's draft said "on";
     # the measured record governs. See prereg/charter_revisions.md Rev 8.
     "tail_corrections": False,
+    # RASPA ships no UFF. These are the local three files every reference number used, and
+    # they are also where `truncated` / `tailcorrections no` are actually declared.
+    "uff_sha256": {
+        "force_field.def": "7af262e06d52dc8adac53dc530ab2a4d7f228240d2b727da9efe0886f9d9b4a9",
+        "force_field_mixing_rules.def": "0ed430e444a1a5850f2383fc3a8686dda39b4f0445f8deba93eac713147e4fb5",
+        "pseudo_atoms.def": "7bc0d1b7eaec4ea4878a8c37f824eae1a8ec2f60f8ea458af70ce5ff7f737676",
+    },
     "potentials_shifted": False,
     "node_groups": ["aa", "ab", "ac", "amd", "ax", "xeonphi"],
     "interactive_max_min": 30,

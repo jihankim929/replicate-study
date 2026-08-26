@@ -32,6 +32,16 @@ chk "prereg master keeps every row"       "$(grep -c '^\s*| \*\*\(Smoke\|Main\)\
 echo "== 2. isolation: no path back =="
 chk "no git remote"        "$(git -C "$MOCK/s01" remote | wc -l | tr -d ' ')" "0"
 chk "no symlinks"          "$(find "$MOCK/s01" -type l | wc -l | tr -d ' ')" "0"
+ln -s db "$MOCK/s01/internal_link"; ln -s /etc "$MOCK/s01/escape_link"
+chk "internal symlink allowed"  "$(python3 -c '
+import sys;sys.path.insert(0,"harness");from pathlib import Path
+import provision as P, config as C
+print(sum(1 for x in P.leak_scan(Path("'"$MOCK"'/s01"),C.REPO) if "internal_link" in x))')" "0"
+chk "escaping symlink caught"   "$(python3 -c '
+import sys;sys.path.insert(0,"harness");from pathlib import Path
+import provision as P, config as C
+print(sum(1 for x in P.leak_scan(Path("'"$MOCK"'/s01"),C.REPO) if "escape_link" in x))')" "1"
+rm -f "$MOCK/s01/internal_link" "$MOCK/s01/escape_link"
 chk "no sealed material"   "$(grep -rl 'answer-key' "$MOCK/s01" 2>/dev/null | wc -l | tr -d ' ')" "0"
 
 echo "== 3. checksum verification on arrival =="

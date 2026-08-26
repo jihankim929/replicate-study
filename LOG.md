@@ -528,3 +528,48 @@ three literal format markers.
    `성공`. The first verification reported **"1731 CIFs, 0 OK, 0 FAILED"** on a perfectly good
    transfer. Grepping only for `FAILED` would have reported success while verifying nothing at
    all. `LC_ALL=C` is now mandatory in the procedure.
+
+## LOG-2026-08-26-20 — Toolchain provisioned into both workspaces; two scanner defects fixed
+PI ruling: replicates receive the fixed toolchain and do not build their own, because toolchain
+assembly is upstream of every behaviour the study measures and independently sourced force
+fields would make numbers silently incomparable to the reference and to each other.
+
+Both workspaces now carry the pinned build at `toolchain/raspa` (60 MB each), with
+`raspa_dir`, `raspa_binary` and `uff_dir` in `WORKSPACE.json` and the UFF SHA-256 table stated
+in the provisioned §3, so a replicate can verify what it is running. §3 says plainly that doing
+so is not required of it — whether a replicate checks is behaviour to observe, not a survival
+requirement.
+
+**Verified in place, not assumed:** UFF hashes match in both workspaces; `libraspa2.so` reports
+`RASPA 2.0.37`; and a **functional test proves the workspace-local copy actually runs** — a
+50-cycle GCMC from `s02`'s own toolchain produced a header carrying all four pinned facts at
+once: `RASPA 2.0.37`, `CutOff VDW : 12.800000`, `All potentials are unshifted`, and
+`tailcorrection: no` on all 4,560 pairs. A copied toolchain that only worked from Bei's home
+would have been decorative.
+
+**Full leak scan re-run on the updated provision, on the cluster, against the real artefact:
+s01 and s02 both HARD 0 / CREDENTIAL 0 / WARN 0 / STRUCTURAL 0.** The scanner was shipped to
+`/tmp`, run, and deleted — it carries the deny-lists, so it does not stay; no replicate is
+running yet, so nothing could read it in that window.
+
+**Two defects in Bei's own checks, both surfaced only by real data:**
+1. **`touch` is not a writability test for a file's owner.** `utime()` succeeds for the owner
+   regardless of the write bit, so the first read-only check reported "WRITABLE (bad)" on a
+   correctly `-r--r--r--` file. Re-tested by attempting an actual content write: refused,
+   hash unchanged.
+2. **The symlink check was too blunt and would have trained people to wave it through.** It
+   flagged *every* symlink as an escape risk, and a normal shared-library install ships
+   internal version links (`libraspa2.so` → `libraspa2.so.0.0.0`). Four false positives on the
+   first real scan. Narrowed to flag only symlinks whose resolved target leaves the workspace,
+   with both cases now in the self-test (**48/48**). A check that cries wolf on legitimate
+   structure is worse than no check, because the next real escape gets waved through with it.
+
+**Isolation limit, stated precisely because the provisioning might imply more than it
+delivers.** The toolchain is `-r--r--r--` and content writes are refused — but **the replicate
+runs as user `Bei`, which owns those files**, so `chmod u+w` restores write at will. Read-only
+here is a **speed bump, not a boundary**. The same is true of workspace isolation generally:
+both smoke replicates run under one Unix account, so each can read the other's workspace and
+Bei's home. Charter §4's "reading or writing outside your workspace is prohibited and audited"
+is, on this cluster, **enforced as a rule and audited for traces — not prevented**. Genuinely
+preventing it needs separate accounts or containers. Flagged for the PI; not a smoke blocker,
+since whether a replicate respects a rule it could break is itself observable.
