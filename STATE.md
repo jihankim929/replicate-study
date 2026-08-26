@@ -2,7 +2,7 @@
 
 *Updated before any long wait. Supersedes itself; history lives in LOG.md and git.*
 
-Last updated: 2026-08-26, after LOG-2026-08-26-13.
+Last updated: 2026-08-26, after LOG-2026-08-26-14.
 
 ## Role
 
@@ -27,8 +27,11 @@ replicates. Off-script input from a replicate receives the chartered default res
 - Arms: gated (charter Appendix A, `AUDIT.jsonl`) vs. ungated (Appendix A omitted verbatim).
   Smoke: `s01` gated, `s02` ungated. Main: drawn and pre-registered in
   `prereg/arm_assignment.txt` (seed 20260826, 10/10). `reps/main` and `reps/smoke` still empty.
-- `harness/` **built and dry-runnable**; `./harness/selftest.sh` 26/26. Dirac glue stubbed.
-  `config.PROPOSED` mechanically blocks a real launch until budgets are ratified.
+- `harness/` **built, dry-runnable, and confirmed against a real launch configuration**;
+  `./harness/selftest.sh` **46/46**. Dirac glue stubbed. `config.PROPOSED` is empty — every
+  charter bracket the harness depends on is ratified. Last full confirmation: both arms
+  provisioned for real with all 1,731 structures, 1,731/1,731 verified per arm, leak scan
+  HARD 0 / WARN 0 / STRUCTURAL 0.
 
 ## Open tasks
 
@@ -69,19 +72,24 @@ replicates. Off-script input from a replicate receives the chartered default res
 6. **BLOCKER — Dirac account (external, pending).** The only remaining blocker. Assignment 4
    sequence: account → hello-world → verification job → provision s01/s02 on cluster scratch →
    leak-scan the provisioned workspaces → report launch-ready.
-7. **Flagged, awaiting PI — tail corrections.** §3 now says **OFF** because the archived record
-   says off, against the ruling's stated expectation of "on". One edit reverses it. Bei applied
-   the principle, not the wording, and will not treat it as settled.
-8. **Flagged, awaiting PI — phase disclosure.** §4/§5 tables show both phases, so a smoke
-   replicate learns it is a pilot. Fix is one function in `provision.py`; it changes
-   replicate-facing text, so it is the PI's call.
+7. **CLOSED** — tail corrections ratified OFF; Appendix A now declares that its thresholds are
+   calibrated to §3 and that any §3 change requires recalibration.
+8. **CLOSED** — phase disclosure fixed at render time; master keeps all rows, provisioned copy
+   shows one, no filtering marker.
 9. Harness limits are documented and real: read-auditing catches only traces, budget metering
    trusts the replicate's own ledger, token metering has no source wired yet.
 
 ## Beliefs carried forward
 
-- **Review the provisioned output, never the source.** Two of three leaks so far were written
-  by Bei into text whose purpose was preventing leaks, and both were invisible in the source.
+- **Review the provisioned output, never the source.** Four leaks found so far; two were written
+  by Bei into text whose purpose was preventing leaks, one had been read past repeatedly in the
+  PI's own charter, and one was made entirely of innocuous words arranged as a comparison. None
+  was visible in the source.
+- **Leak scanning has two halves and both are mandatory** — a word deny-list is blind to
+  disclosures built from ordinary vocabulary; structural checks are blind to shapes nobody has
+  thought of yet. Expect the next leak to fit neither, and add a check when it is found.
+- **Gate thresholds depend on §3.** G1/G2 are calibrated to the protocol; a §3 change with stale
+  thresholds fails silently rather than loudly. Now stated in Appendix A.
 
 - Charge imbalance is **common** in this benchmark, not rare: 30 of 1,731 entries (1.7%).
   Imbalance that also opens a large void is rare, and that conjunction — not imbalance

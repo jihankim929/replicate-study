@@ -22,6 +22,13 @@ chk "gated arm gets audit schema"        "$([ -f "$MOCK/s01/AUDIT_SCHEMA.md" ] &
 chk "ungated arm gets no audit schema"   "$([ -f "$MOCK/s02/AUDIT_SCHEMA.md" ] && echo y || echo n)" "n"
 chk "workspace metadata hides the arm"   "$(grep -ci 'gated' "$MOCK/s01/WORKSPACE.json")" "0"
 
+echo "== 1b. provisioned copy renders only the replicate's own phase =="
+chk "s01 charter has its own phase row"   "$(grep -c '^\s*| \*\*Smoke\*\*' "$MOCK/s01/CHARTER.md")" "2"
+chk "s01 charter hides the other phase"   "$(grep -c '^\s*| \*\*Main\*\*' "$MOCK/s01/CHARTER.md")" "0"
+chk "s02 charter hides the other phase"   "$(grep -c '^\s*| \*\*Main\*\*' "$MOCK/s02/CHARTER.md")" "0"
+chk "no marker that rows were filtered"   "$(grep -ci 'omitted\|filtered\|redacted' "$MOCK/s01/CHARTER.md")" "0"
+chk "prereg master keeps every row"       "$(grep -c '^\s*| \*\*\(Smoke\|Main\)\*\*' prereg/charter_v0.9.md)" "4"
+
 echo "== 2. isolation: no path back =="
 chk "no git remote"        "$(git -C "$MOCK/s01" remote | wc -l | tr -d ' ')" "0"
 chk "no symlinks"          "$(find "$MOCK/s01" -type l | wc -l | tr -d ' ')" "0"

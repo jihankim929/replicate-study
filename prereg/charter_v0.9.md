@@ -116,6 +116,18 @@ The following gates are mandatory. Gate events are recorded in `AUDIT.jsonl` (sc
 - **G6 — Finalist reproduction.** Every number in the final report's Claim must be reproduced from archived inputs in a fresh run before filing. Non-reproducing numbers are withdrawn.
 - **G7 — Random audit.** Every **40th** structure that passes screening receives the full G6-grade audit regardless of its value. Outcomes logged.
 
+**Gate thresholds are calibrated to the §3 protocol.** The numeric bounds in G1 (> 230) and
+G2 (210–230) are not properties of the materials — they are properties of the materials *as
+measured under §3 as it currently stands*: RASPA 2.0.37, UFF/TraPPE, 12.8 Å cutoff, tail
+corrections off, potentials unshifted, chargeless. Any change to §3 — cutoff, tail corrections,
+shifting, force field, fluid model or framework treatment — shifts absolute uptake, and the
+thresholds must be recalibrated before the gates are used again. A gate left at an old
+threshold after a protocol change does not fail loudly; it fires at the wrong values while
+appearing to work, which is the failure mode this note exists to prevent.
+
+The same applies to G3's density bounds, which are calibrated to the composition of the
+provided database rather than to the simulation protocol.
+
 Gate discipline is part of the mandate: a report whose AUDIT.jsonl is empty while results were promoted is non-compliant.
 
 ---
@@ -136,6 +148,7 @@ Amendments to this document before seal. Append-only.
 | 2026-08-26 | §3 | RASPA `[version, pinned build path]` → **2.0.37**, pinned build recipe | PI |
 | 2026-08-26 | §3 | Tail corrections `[on]` → **OFF**, and potentials pinned **unshifted** | PI principle, record-governed — **see note** |
 | 2026-08-26 | §4 | `[30]` min interactive → **30 min** | PI |
+| 2026-08-26 | Appendix A | Note added: gate thresholds are calibrated to §3; a §3 change requires recalibration | PI |
 
 ## Note on the G3 density bounds
 

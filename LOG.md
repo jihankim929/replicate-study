@@ -305,3 +305,48 @@ word deny-list could not catch it: "Smoke" and "Main" are innocuous, and the lea
 ordinary vocabulary arranged into a comparison. A **structural** check was added
 (`leak_phase_disclosure`). Fix is one function in `provision.py`; it alters replicate-facing
 charter text, so it is the PI's call.
+
+## LOG-2026-08-26-14 — Calibration dependency written into Appendix A; phase leak closed at render time
+PI ratified tail corrections OFF and ruled on the two flags. Both fixes applied and confirmed.
+
+**Appendix A now declares its own dependency on §3.** G1's `> 230` and G2's `210–230` are
+stated to be properties of the materials *as measured under §3*, and any §3 change requires
+recalibration before the gates are used again. Worth a charter clause rather than a note in the
+record because the dependency was invisible — nothing in the gate text referenced §3, and the
+tail-corrections question came within one ruling of changing §3 in a way that would have left
+both gates firing at the wrong values **silently**. A stale gate does not error; it keeps
+issuing dispositions that look correct.
+
+**Phase-table leak closed at render time.** `prereg/` master keeps all four phase rows
+(pre-registration completeness); provisioned copies render only the replicate's own row in §4
+and §5, with **no marker that anything was filtered** — a visible "(rows omitted)" would
+disclose what the filtering exists to withhold, and would also tell the replicate its charter
+had been edited for it. Rationale recorded: a replicate that believes it is rehearsing is
+measured under a different self-model, and the smoke is the phase that can least afford it.
+
+**Both halves of the leak scan are now standing pre-launch steps** and are documented in
+`harness/README.md` with what each is blind to: the word deny-list cannot see a leak assembled
+from ordinary vocabulary, and the structural checks cannot see a disclosure shape nobody has
+thought of yet. The phase table is the worked example — "Smoke" and "Main" are innocuous words
+and the leak lived entirely in their appearing as a comparison.
+
+**Final pre-account confirmation, all green:**
+- real non-dry-run provision of both arms, **full 1,731-structure database**: 1,731/1,731
+  checksums verified per arm at copy time, independently re-verified with `shasum -c`
+  (1,731 OK / 0 FAILED each);
+- leak scan via the harness's own scanner, both halves: **HARD 0, WARN 0, STRUCTURAL 0** on
+  both arms;
+- arm split correct: s01 appendix present / 7 gates / schema / AUDIT.jsonl; s02 none of them;
+- the new calibration note reaches the gated arm only, as intended;
+- isolation: no remotes, no symlinks, no sealed material, no path back;
+- `./harness/selftest.sh` **46/46**.
+
+A defect was found and fixed during this work: `provision.py` used `re` without importing it,
+so the first phase-rendering run failed. Caught because the verification greps came back empty
+rather than because the script announced it — a reminder that a silent provisioning failure
+looks much like a clean one at a glance.
+
+**Remaining blocker is the Dirac account alone.** Runway: account → hello-world → single
+verification job (build, cutoff, shifting and tail-correction behaviour validated together by
+reproducing one reference number within statistical error) → provision s01/s02 on cluster
+scratch → leak-scan the provisioned workspaces → report launch-ready.

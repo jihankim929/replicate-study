@@ -23,7 +23,20 @@ the study's own arm structure.
 re-provision after a charter edit. It is not a one-time clearance. Any edit to a
 replicate-facing document invalidates the previous scan.
 
-Run `./harness/selftest.sh` before any launch. **41 checks, all must pass.**
+**It has two halves, and both are mandatory.** They fail differently, which is why neither
+replaces the other:
+
+| Check | Catches | Blind to |
+|---|---|---|
+| **Word deny-list** (`config.LEAK_DENY_HARD` / `_WARN`) | study-design *vocabulary* — `honeypot`, `answer-key`, `ungated`, sealed content by hash | anything assembled from ordinary words |
+| **Structural checks** (`provision.py::leak_phase_disclosure`, arm/appendix assertions) | study-design *structure* — a document naming a phase or arm the replicate is not in | a novel disclosure shape nobody has thought of yet |
+
+The phase-table leak is the worked example: "Smoke" and "Main" are innocuous words, and the
+disclosure lived entirely in the fact that both appeared **as a comparison**. No word list
+could have caught it. Expect the next leak to have a shape neither check knows, and add a
+check when it is found rather than only fixing the instance.
+
+Run `./harness/selftest.sh` before any launch. **46 checks, all must pass.**
 
 ---
 
@@ -38,6 +51,7 @@ Run `./harness/selftest.sh` before any launch. **41 checks, all must pass.**
 | | workspace is self-contained: files copied not symlinked, git repo with **no remote** | §4 "you operate exclusively inside [workspace path]" |
 | | reads only from an explicit allowlist — `answer-key/` is structurally unreachable | study constitution (sealed material) |
 | | leak scan of the built workspace, hard-fail + warn lists | see *Leak control* below |
+| | renders **only the replicate's own phase row** in §4/§5, with no filtering marker | §4, §5 (rendering; master keeps all rows) |
 | | seeds `LOG.md`, `STATE.md`, `JOBS.md` | §6 record-keeping |
 | `watchdog.py` | usage warning at **75 %**, hard stop at **100 %**, compute and tokens alike | §4 |
 | | **study-wide queue ceiling: ≤ 160 queued across all replicates** (`--fleet`) | harness-only, see below |
@@ -91,16 +105,14 @@ Two-list scan, run against the **built workspace**, not the source:
 - **WARN** (`config.LEAK_DENY_WARN`) — printed, provisioning continues. These sit in documents
   Bei does not own; auto-editing the PI's charter would be worse than reporting it.
 
-**One WARN is currently outstanding.** The provisioned charter's §4 and §5 per-phase tables
-show **both** rows to every replicate, so a smoke replicate learns a 14-day main phase exists —
-that is, that its own run is a pilot. A replicate that believes its campaign is a rehearsal has
-reason to work differently from one that believes it is the real thing, which is a problem for a
-smoke whose purpose is predicting main-run behaviour. Caught by
-`provision.py::leak_phase_disclosure()`, a **structural** check rather than a word match: the
-deny-list cannot see a leak assembled from ordinary vocabulary. Suggested fix — filter the
-tables to the replicate's own phase, as is already done for the appendix. PI's call.
+**No WARN is currently outstanding.**
 
-**Previously outstanding, now closed.** The last one — the Appendix A header reading *"(gated arm
+The phase-table disclosure — §4/§5 showing both rows, so a smoke replicate could infer its own
+run was a pilot — was fixed by PI ruling on 2026-08-26. `provision.py::render_phase_rows()`
+renders only the replicate's own row; the `prereg/` master keeps every row for pre-registration
+completeness, and the provisioned copy carries **no marker that anything was filtered**, since
+a visible "(other rows omitted)" would disclose precisely what the filtering exists to
+withhold. The last one — the Appendix A header reading *"(gated arm
 only; omitted verbatim from the other arm)"*, which told a gated replicate that another arm
 existed under different rules — was fixed by PI ruling on 2026-08-26. The parenthetical is
 deleted; `provision.py` implements the split, and the document no longer announces it. Full

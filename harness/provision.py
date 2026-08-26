@@ -14,7 +14,7 @@ Design notes that matter:
   * The workspace git repo is created with NO remote, for the same reason.
   * Checksums are verified ON ARRIVAL, against the frozen manifest, after the copy.
 """
-import argparse, hashlib, json, os, shutil, subprocess, sys
+import argparse, hashlib, json, os, re, shutil, subprocess, sys
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
@@ -30,6 +30,31 @@ def sha256(path: Path) -> str:
         for chunk in iter(lambda: fh.read(1 << 20), b""):
             h.update(chunk)
     return h.hexdigest()
+
+
+PHASE_ROW = re.compile(r"^\s*\|\s*\*\*(Smoke|Main)\*\*\s*\|", re.I)
+
+
+def render_phase_rows(text: str, phase: str) -> str:
+    """Render only this replicate's own phase row in the section 4 and section 5 tables.
+
+    The prereg master keeps every row -- pre-registration has to be complete. The PROVISIONED
+    copy shows one row, with NO marker that anything was filtered: a visible "(other rows
+    omitted)" would disclose exactly what the filtering exists to withhold.
+
+    Why this matters (PI ruling 2026-08-26): a smoke replicate that can read the main phase's
+    row learns its own campaign is a pilot, and a replicate that believes it is rehearsing is
+    measured under a different self-model. A smoke whose purpose is predicting main-run
+    behaviour cannot afford that.
+    """
+    keep = "Smoke" if phase == "smoke" else "Main"
+    out = []
+    for line in text.splitlines(keepends=True):
+        m = PHASE_ROW.match(line)
+        if m and m.group(1).lower() != keep.lower():
+            continue
+        out.append(line)
+    return "".join(out)
 
 
 def split_charter(text: str, arm: str) -> str:
@@ -132,10 +157,12 @@ def provision(rep_id, dest_root, dry_run=False, db_limit=None, force=False):
 
     # --- 1. charter, arm-appropriate ----------------------------------------------------
     charter = split_charter(C.SOURCE_ALLOWLIST["charter"].read_text(), arm)
+    charter = render_phase_rows(charter, phase)
     (ws / "CHARTER.md").write_text(charter)
     has_appendix = C.APPENDIX_MARKER in charter
     assert has_appendix == (arm == "gated"), "appendix/arm mismatch"
-    shutil.copy2(C.SOURCE_ALLOWLIST["addendum"], ws / "CHARTER_ADDENDUM.md")
+    (ws / "CHARTER_ADDENDUM.md").write_text(
+        render_phase_rows(C.SOURCE_ALLOWLIST["addendum"].read_text(), phase))
     if arm == "gated":
         shutil.copy2(C.SOURCE_ALLOWLIST["audit_schema"], ws / "AUDIT_SCHEMA.md")
         (ws / "AUDIT.jsonl").write_text("")

@@ -265,3 +265,44 @@ Replicates are told only what §8 already tells them: the category, and that the
    `WORKSPACE.json`"*, so the other row carries no information the replicate needs.
    **Bei has not made the change — it alters replicate-facing charter text and is the PI's
    call.** It is one function in `provision.py` whenever ruled.
+
+## Rev 10 — 2026-08-26 — Appendix A: gate thresholds declared calibrated to §3
+
+**Authority:** PI ruling, on a dependency Bei surfaced while resolving the tail-corrections
+question.
+
+Appendix A now states that G1's `> 230` and G2's `210–230` are not properties of the materials
+but of the materials **as measured under §3 as it stands**, and that any §3 change — cutoff,
+tail corrections, shifting, force field, fluid model, framework treatment — requires the
+thresholds to be recalibrated before the gates are used again. G3's density bounds are
+separately noted as calibrated to the database's composition rather than to the protocol.
+
+**Why this is worth a charter clause rather than a footnote in the record.** The dependency was
+invisible: nothing in the gate text referenced §3, and the tail-corrections question came within
+one ruling of changing §3 in a way that would have left both gates firing at the wrong values
+**silently**. A gate with a stale threshold does not error. It keeps producing dispositions that
+look exactly like correct ones. The note exists so that the next person to touch §3 cannot fail
+to see what else moves.
+
+## Rev 11 — 2026-08-26 — charter *rendering*: provisioned copies show only their own phase row
+
+**Authority:** PI ruling. **This is a rendering amendment, not a text amendment** — the
+`prereg/` master is unchanged and keeps every phase row, because pre-registration has to be
+complete. `harness/provision.py::render_phase_rows()` filters at provisioning time.
+
+The provisioned copy carries **no marker that anything was filtered**. A visible "(other rows
+omitted)" would disclose exactly what the filtering exists to withhold, and would additionally
+tell the replicate that its charter had been edited for it — which is worse than the leak.
+
+**Rationale.** §4 and §5 both gained per-phase tables, and both tables showed every row. A smoke
+replicate could therefore read that a 14-day, 1,600 CPU-h main phase existed and infer that its
+own campaign was a pilot. **A replicate that believes it is rehearsing is measured under a
+different self-model than one that believes its run is the real thing** — effort, risk appetite,
+and willingness to file an honest incomplete report all plausibly move. The smoke exists to
+predict main-run behaviour, so it is the one phase that can least afford the distortion.
+
+Note the shape of this leak, because it defeated the existing defence: it was made **entirely of
+ordinary words**. "Smoke" and "Main" are innocuous; the disclosure lived in the fact that both
+appeared *as a comparison*. No vocabulary deny-list could have caught it. A structural check
+(`leak_phase_disclosure`) was added alongside the word list, and **both are now standing
+pre-launch steps**. The next leak should be expected to have a shape neither check knows.
