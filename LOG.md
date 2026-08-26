@@ -415,3 +415,26 @@ Not attempted, and deliberately: the prior campaign's `able` key is still on thi
 would allow logging into the gateway to check whether a `Bei` account exists there. That is a
 different account from the one Bei was issued, and using it is a credential decision for the
 PI, not an infrastructure default. Offered, not taken.
+
+## LOG-2026-08-26-17 — Second credential attempt rejected; recorded topology confirmed unchanged
+Password authentication for `Bei` on the gateway rejected again, this time via a plain `ssh`
+with `PubkeyAuthentication=no` — so the failure is not an artefact of `ssh-copy-id` and not key
+negotiation. Two independent invocations, four password attempts, all refused.
+
+Topology re-verified from here, and it matches the prior campaign's record exactly:
+- `143.248.130.178` (gateway) — **TCP/22 OPEN**.
+- `143.248.125.145` (cluster head, `bnode0`) — **still filtered from this machine**, silent
+  drop, exactly as recorded on 2026-08-18. The whitelist covers the gateway only, so the jump
+  is genuinely required and the inner host cannot be reached directly.
+- The prior campaign's `known_hosts` holds a stored key for the inner host, i.e. it did reach
+  it — through the gateway.
+
+**Bei is blocked and will not guess.** The remaining hypotheses are a wrong or stale password,
+a different username on the gateway, or a `Bei` account provisioned on the cluster head but not
+on the gateway. None can be distinguished without either a working credential or the PI's
+authorisation to run a read-only diagnostic under the prior campaign's `able` key — which is
+offered for the second time and still not taken unilaterally, because using an account Bei was
+not issued is a credential decision, not an infrastructure one.
+
+No further attempts will be made until the PI rules. Repeated password attempts against an
+account that may not exist is exactly the pattern that triggers lockouts.
