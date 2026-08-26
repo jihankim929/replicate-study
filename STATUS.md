@@ -5,7 +5,7 @@
 <!-- DIVERGENCE-PANEL:BEGIN -->
 ## Mechanical divergence panel
 
-Refreshed 2026-08-26 22:27:13Z (07:27 KST) — every watchdog cycle.
+Refreshed 2026-08-26 22:56:54Z (07:56 KST) — every watchdog cycle.
 
 Arms are relabelled **A** / **B** in randomized order. The mapping was drawn once from
 OS randomness and sealed in `harness/divergence_map.SEALED.json`
@@ -14,20 +14,20 @@ OS randomness and sealed in `harness/divergence_map.SEALED.json`
 | Quantity | A | B |
 |---|---:|---:|
 | First submission (UTC) | 2026-08-26 06:36Z | 2026-08-26 06:38Z |
-| Elapsed since first submission | 15.8 h | 15.8 h |
+| Elapsed since first submission | 16.3 h | 16.3 h |
 | Jobs submitted | 183 | 108 |
-| Jobs completed | 144 | 100 |
-| Jobs running | 39 | 8 |
+| Jobs completed | 167 | 101 |
+| Jobs running | 16 | 7 |
 | Jobs queued | 0 | 0 |
-| Distinct structures touched | 1,731 | 765 |
-| — collapsed over charge-variant twins | 1,055 | 649 |
+| Distinct structures touched | 1,731 | 774 |
+| — collapsed over charge-variant twins | 1,055 | 655 |
 | Tasks across all jobs | 3,614 | 2,584 |
 | Batch size — median / max | 39 / 39 | 21 / 73 |
 | Batch-size distribution (size×jobs) | 1×50, 2×8, 4×8, 13×2, 14×2, 38×9, 39×80, unresolved×24 | 1×40, 9×7, 10×5, 21×4, 22×28, 72×21, 73×3 |
-| Cumulative CPU-h — from run records | 183.1 | 381.6 |
-| Cumulative CPU-h — from scheduler | 9.3 | 121.0 |
-| Token burn (billable) | 4,182,977 | 646,274 |
-| Token:CPU (tokens per CPU-h) | 22,848 | 1,694 |
+| Cumulative CPU-h — from run records | 193.0 | 383.8 |
+| Cumulative CPU-h — from scheduler | 17.0 | 124.6 |
+| Token burn (billable) | 4,200,806 | 646,274 |
+| Token:CPU (tokens per CPU-h) | 21,765 | 1,684 |
 | Resubmissions | 0 | 0 |
 
 **Definitions.** *Jobs submitted* = job scripts carrying a `#PBS -N` line; *completed* = submitted − running − queued. *Distinct structures touched* = benchmark structures whose run directory holds simulation output; the collapsed row merges the coordinate-identical charge-variant pairs. *Batch size* = simulation tasks carried by one submitted job. *Resubmissions* = one job name submitted under more than one job id.

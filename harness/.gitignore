@@ -8,3 +8,6 @@ escalation_queue.jsonl
 # quantities the A/B panel publishes, but under the real replicate ids, so committing it would
 # unblind the panel from inside the repo.
 .divergence_raw/
+# Transcript-growth observations. Runtime state, and per-replicate byte counts are themselves
+# a cross-replicate quantity -- they belong beside the other blinded ledgers, not in git.
+.transcript_growth.json

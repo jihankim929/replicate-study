@@ -1,2 +1,2 @@
-{"replicate": "s01", "day": "2026-08-26", "input_tokens": 872, "output_tokens": 543617, "cache_creation_input_tokens": 3638488, "cache_read_input_tokens": 92294743, "billable": 4182977}
+{"replicate": "s01", "day": "2026-08-26", "input_tokens": 888, "output_tokens": 552612, "cache_creation_input_tokens": 3647306, "cache_read_input_tokens": 95215680, "billable": 4200806}
 {"replicate": "s02", "day": "2026-08-26", "input_tokens": 426, "output_tokens": 285943, "cache_creation_input_tokens": 359905, "cache_read_input_tokens": 26560074, "billable": 646274}

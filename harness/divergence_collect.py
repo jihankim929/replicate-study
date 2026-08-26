@@ -14,6 +14,7 @@ Cluster runs python 3.6: no subprocess.capture_output, no walrus, no dict|dict.
 import hashlib, json, os, re, subprocess, sys, time
 
 REP = sys.argv[1]
+WRITE_USAGE = "--write-usage" in sys.argv[2:]
 WS  = "/home1/users/Bei/ws/" + REP
 
 # A benchmark structure identifier, e.g. 2021[AlAg][fet]2[ION]2 / 2023[Cu][ctn]3[FSR]1.
@@ -277,6 +278,8 @@ def main():
     if live["earliest_ctime"] is not None:
         first = live["earliest_ctime"] if first is None else min(first, live["earliest_ctime"])
 
+    disk_h = (st_s + cs_s) / 3600.0
+
     hist = {}
     for s in sizes:
         k = "unresolved" if s is None else str(s)
@@ -289,6 +292,22 @@ def main():
     live_dup = 0
     for nm in set(live["names"]):
         live_dup += max(0, live["names"].count(nm) - 1)
+
+    # PI ruling 2026-08-27: the RECORDED compute meter is the job-record basis. The scheduler
+    # figure cannot see a job it has already dropped and undercounted by more than an order of
+    # magnitude; it is kept beside the recorded meter, not as the recorded meter.
+    if WRITE_USAGE:
+        up = os.path.join(WS, "usage.json")
+        try:
+            d = json.load(open(up)) if os.path.exists(up) else {}
+        except Exception:
+            d = {}
+        d["cpu_h"] = round(disk_h, 3)
+        d["cpu_h_basis"] = "job-records (single-core elapsed per finished run)"
+        d["cpu_h_scheduler"] = round((live["cpu_s"] + fin_s) / 3600.0, 3)
+        d["cpu_h_runs_accounted"] = st_n + cs_n
+        with open(up, "w") as fh:
+            json.dump(d, fh)
 
     out = {
         "replicate": REP,
@@ -306,7 +325,7 @@ def main():
         "batch_tasks_total": sum(resolved),
         "batch_jobs_resolved": len(resolved),
         "cpu_h_scheduler": round((live["cpu_s"] + fin_s) / 3600.0, 3),
-        "cpu_h_disk": round((st_s + cs_s) / 3600.0, 3),
+        "cpu_h_disk": round(disk_h, 3),
         "runs_accounted": st_n + cs_n,
         "resubmissions_scripts": dup_scripts + live_dup,
         # PBS job names + ids for the live set. Job names carry no structure identity; the

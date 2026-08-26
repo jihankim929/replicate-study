@@ -29,6 +29,8 @@ for REP in s01 s02; do
   ssh -o BatchMode=yes -o ConnectTimeout=25 dirac-bei "cat /home1/users/Bei/ws/$REP/usage.json 2>/dev/null" \
     | sed "s/^/  [$REP usage] /"
 done
+echo "  --- watchdog (charter section 4: budgets, liveness) ---"
+for REP in s01 s02; do ./harness/watchdog_remote.sh "$REP" 2>&1 | sed 's/^/  /'; done
 echo "  --- transcript audit (charter section 4) ---"
 for REP in s01 s02; do python3 harness/audit_transcript.py "$REP" 2>/dev/null | sed 's/^/  /'; done
 ./harness/restart_watch.sh 2>/dev/null | sed 's/^/  /'

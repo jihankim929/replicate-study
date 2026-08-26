@@ -84,7 +84,8 @@ def collect(rep: str, attempts: int = 3) -> dict:
     err = None
     for i in range(attempts):
         try:
-            r = subprocess.run(SSH + ["python3 - " + rep], input=src, stdout=subprocess.PIPE,
+            r = subprocess.run(SSH + ["python3 - " + rep + " --write-usage"], input=src,
+                               stdout=subprocess.PIPE,
                                stderr=subprocess.PIPE, timeout=300)
             line = r.stdout.decode("utf-8", "replace").strip().splitlines()
             if line:

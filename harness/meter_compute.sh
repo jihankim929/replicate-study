@@ -1,5 +1,17 @@
 #!/usr/bin/env bash
-# Compute metering from the SCHEDULER, not from the replicate's self-report.
+# SCHEDULER-side compute figure. NO LONGER THE RECORDED METER.
+#
+# PI ruling 2026-08-27: the recorded meter (`cpu_h`) is the job-record basis, written by
+# divergence_collect.py --write-usage. What this script produces is written to
+# `cpu_h_scheduler` instead, and is kept for one reason -- the gap between the two numbers is
+# the evidence for the defect, and a study that discards it cannot show why the basis changed.
+#
+# The limit that forced the change: PBS drops a finished job from qstat within seconds, and
+# this account cannot read the accounting log, so a poller sees only what is still alive plus
+# whatever the harvester happened to catch on its way out. At the measured 338x spread in
+# run cost, that is most of the burn. It read 121 CPU-h against 382 h of finished-run records.
+#
+# Originally: compute metering from the SCHEDULER, not from the replicate's self-report.
 #
 # Closes harness/README.md limit 2. PBS is authoritative: a replicate that under-reports its
 # own burn does not thereby get a bigger budget.
@@ -36,9 +48,9 @@ if os.path.exists(led):
 total_h = round((cpu_s + fin)/3600.0, 3)
 p = os.path.join(ws, 'usage.json')
 d = json.load(open(p)) if os.path.exists(p) else {}
-d['cpu_h'] = total_h
+d['cpu_h_scheduler'] = total_h
 d['queued_jobs'] = queued
 json.dump(d, open(p,'w'))
-print('[meter-compute] %s: cpu_h=%s queued_jobs=%d (running=%.3fh finished=%.3fh)'
+print('[meter-compute] %s: cpu_h_scheduler=%s queued_jobs=%d (running=%.3fh finished=%.3fh)'
       % (rep, total_h, queued, cpu_s/3600.0, fin/3600.0))
 PY"

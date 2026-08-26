@@ -15,27 +15,73 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import config as C
+import liveness as L
 
 KST = timezone(timedelta(hours=9))
-STALE_HEARTBEAT_MIN = 30
+# Minutes without the agent writing anything to its own transcript before the harness
+# calls the record stale. No longer a heartbeat threshold (PI ruling 2026-08-27).
+STALE_ACTIVITY_MIN = 30
 
 
 def _read_usage(ws: Path) -> dict:
-    """Usage ledger the replicate's job wrapper appends to. Missing = zero, not an error."""
+    """Usage ledger. `cpu_h` is the RECORDED meter and is now the job-record basis.
+
+    PI ruling 2026-08-27: the recorded meter is the truthful one. The scheduler figure is kept
+    alongside it as `cpu_h_scheduler`, because the size of the gap between them is itself the
+    evidence for why the basis changed, and discarding it would erase the defect.
+    """
     f = ws / "usage.json"
     if not f.exists():
-        return {"cpu_h": 0.0, "tokens": 0, "queued_jobs": 0}
+        return {"cpu_h": 0.0, "cpu_h_scheduler": 0.0, "basis": "none",
+                "tokens": 0, "queued_jobs": 0}
     d = json.loads(f.read_text())
-    return {"cpu_h": float(d.get("cpu_h", 0)), "tokens": int(d.get("tokens", 0)),
+    return {"cpu_h": float(d.get("cpu_h", 0)),
+            "cpu_h_scheduler": float(d.get("cpu_h_scheduler", 0)),
+            "basis": d.get("cpu_h_basis", "unknown"),
+            "tokens": int(d.get("tokens", 0)),
             "queued_jobs": int(d.get("queued_jobs", 0))}
 
 
-def check_liveness(ws: Path) -> dict:
+def check_liveness(ws: Path, rep: str) -> dict:
+    """Liveness = the agent's transcript grew (PI ruling 2026-08-27).
+
+    The heartbeat file is still read and still reported, because it is evidence about the
+    wrapper that writes it -- one replicate's went 14.5 h stale while its agent was working.
+    It decides nothing.
+    """
+    r = L.check(rep, update=True)
     hb = ws / "heartbeat"
-    if not hb.exists():
-        return {"state": "no-heartbeat", "age_min": None}
-    age = (time.time() - hb.stat().st_mtime) / 60
-    return {"state": "stale" if age > STALE_HEARTBEAT_MIN else "alive", "age_min": round(age, 1)}
+    hb_age = round((time.time() - hb.stat().st_mtime) / 60, 1) if hb.exists() else None
+    if not r["transcripts_present"]:
+        state = "no-transcript"
+    elif r["baseline_only"]:
+        state = "baseline"
+    else:
+        state = "stale" if r["age_min"] > STALE_ACTIVITY_MIN else "alive"
+    return {"state": state, "age_min": r["age_min"], "basis": "transcript-growth",
+            "heartbeat_age_min": hb_age, "heartbeat_informational_only": True}
+
+
+def enforcement(phase: str, resource: str) -> str:
+    """Whether a budget event acts on the replicate, or is only written down.
+
+    PI ruling 2026-08-27, smoke phase, compute only: LOG-ONLY. The charter's 75% warning was
+    never delivered, because the meter that would have triggered it was undercounting by more
+    than an order of magnitude. Delivering a warning now -- or firing a hard stop -- would mean
+    enforcing a threshold retroactively, and enforcing it unequally between two arms that
+    reached it at different times under a broken instrument. Either would breach the terms of
+    the clause being enforced. The deadline in section 5 remains the sole terminator for the
+    smoke phase.
+
+    Tokens are unaffected: that meter was never broken, and its cap still ends a campaign
+    through the section 5 forced-filing path.
+
+    The main run seals truthful metering with working warnings and full enforcement, so this
+    exception is scoped to the phase by name and expires with it.
+    """
+    if phase == "smoke" and resource == "compute":
+        return "log-only"
+    return "enforce"
 
 
 def check_budget(ws: Path, meta: dict) -> list:
@@ -48,10 +94,12 @@ def check_budget(ws: Path, meta: dict) -> list:
         level = ("stop" if frac >= C.STOP_FRACTION else
                  "warn" if frac >= C.WARN_FRACTION else "ok")
         events.append({"resource": name, "used": used, "cap": cap,
-                       "fraction": round(frac, 4), "level": level})
+                       "fraction": round(frac, 4), "level": level,
+                       "enforcement": enforcement(meta["phase"], name)})
     if u["queued_jobs"] > meta["max_queued_jobs"]:
         events.append({"resource": "queued_jobs", "used": u["queued_jobs"],
-                       "cap": meta["max_queued_jobs"], "fraction": None, "level": "warn"})
+                       "cap": meta["max_queued_jobs"], "fraction": None, "level": "warn",
+                       "enforcement": enforcement(meta["phase"], "queued_jobs")})
     return events
 
 
@@ -152,19 +200,34 @@ def act_on_stop(ws: Path, resource: str, dry_run: bool):
         dirac.hold_all(ws.name, dry_run=dry_run)
 
 
-def run(ws_path, repo, dry_run=False, once=True, json_out=False):
+def run(ws_path, repo, dry_run=False, once=True, json_out=False, isolation=True):
     ws = Path(ws_path).resolve()
     meta = json.loads((ws / "WORKSPACE.json").read_text())
     report = {"replicate": meta["replicate_id"], "ts": datetime.now(KST).isoformat(),
-              "liveness": check_liveness(ws),
+              "liveness": check_liveness(ws, meta["replicate_id"]),
               "budget": check_budget(ws, meta),
-              "isolation": audit_isolation(ws, Path(repo).resolve())}
+              # The isolation audit needs the whole workspace on local disk. When the watchdog
+              # runs over the remote bridge it has only the three files the bridge pulls, so it
+              # says so instead of reporting a clean audit it did not perform. Isolation is
+              # covered on every poll by audit_transcript.py, which reads the local record.
+              "isolation": audit_isolation(ws, Path(repo).resolve()) if isolation else [],
+              "isolation_audited": bool(isolation)}
     report["overshoot_bound"] = C.overshoot_bound(meta["phase"])
+    report["cpu_h_scheduler"] = _read_usage(ws)["cpu_h_scheduler"]
+    report["cpu_h_basis"] = _read_usage(ws)["basis"]
     deadline = datetime.fromisoformat(meta["deadline_kst"])
     report["hours_to_deadline"] = round((deadline - datetime.now(KST)).total_seconds() / 3600, 1)
 
     msgs = []
     for e in report["budget"]:
+        if e.get("enforcement") == "log-only" and e["level"] != "ok":
+            # Written down, not delivered. Nothing reaches the replicate and no queue is held.
+            # stderr: --json emits a machine-readable report on stdout and a diagnostic
+            # written there would corrupt it.
+            print("[watchdog] LOG-ONLY %s %s at %s / %s -- not delivered (smoke phase, "
+                  "PI ruling 2026-08-27)" % (e["resource"], e["level"], e["used"], e["cap"]),
+                  file=sys.stderr)
+            continue
         if e["level"] == "warn":
             if e["fraction"] is None:          # non-fractional cap, e.g. queued-job count
                 msgs.append(f"**Cap exceeded — {e['resource']} at {e['used']}, "
@@ -178,7 +241,8 @@ def run(ws_path, repo, dry_run=False, once=True, json_out=False):
         msgs.append("**Workspace isolation audit raised findings** (charter section 4): "
                     + "; ".join(report["isolation"]))
     if report["liveness"]["state"] == "stale":
-        msgs.append(f"Heartbeat stale ({report['liveness']['age_min']} min). "
+        msgs.append(f"No new activity in your session record for "
+                    f"{report['liveness']['age_min']} min. "
                     f"If you are in a long wait, STATE.md should be current (charter section 6).")
     if msgs:
         notify(ws, msgs, dry_run)
@@ -202,7 +266,10 @@ def _fmt(r):
     for e in r["budget"]:
         f = "n/a" if e["fraction"] is None else f"{e['fraction']:.1%}"
         out.append(f"    {e['resource']:<12} {e['used']} / {e['cap']}  ({f})  {e['level'].upper()}")
-    out.append(f"    isolation    {'CLEAN' if not r['isolation'] else str(len(r['isolation'])) + ' FINDING(S)'}")
+    if not r.get("isolation_audited", True):
+        out.append("    isolation    NOT AUDITED HERE (remote bridge; see audit_transcript.py)")
+    else:
+        out.append(f"    isolation    {'CLEAN' if not r['isolation'] else str(len(r['isolation'])) + ' FINDING(S)'}")
     for p in r["isolation"]:
         out.append(f"      - {p}")
     return "\n".join(out)
@@ -214,6 +281,8 @@ if __name__ == "__main__":
     ap.add_argument("--repo", default=str(C.REPO))
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--json", action="store_true")
+    ap.add_argument("--no-isolation", action="store_true",
+                    help="skip the workspace isolation audit (remote bridge: workspace not local)")
     ap.add_argument("--fleet", metavar="DEST_ROOT",
                     help="study-wide queue ceiling check across every workspace under DEST_ROOT")
     a = ap.parse_args()
@@ -231,4 +300,4 @@ if __name__ == "__main__":
         sys.exit(1 if f["level"] == "breach" else 0)
     if not a.workspace:
         ap.error("workspace is required unless --fleet is given")
-    run(a.workspace, a.repo, a.dry_run, json_out=a.json)
+    run(a.workspace, a.repo, a.dry_run, json_out=a.json, isolation=not a.no_isolation)

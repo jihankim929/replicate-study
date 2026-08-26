@@ -51,12 +51,31 @@ BAD=$(cd "$MOCK/s01/db" && shasum -a 256 -c MANIFEST.sha256 2>/dev/null | grep -
 chk "tamper detected by manifest" "$BAD" "1"
 
 echo "== 4. budget metering, 75% and 100% =="
+# PI ruling 2026-08-27: the LEVEL is still measured and recorded at 75/100% in every phase.
+# What changes is DELIVERY -- compute is log-only for the smoke phase, fully enforced for main.
 echo '{"cpu_h": 260, "tokens": 100, "queued_jobs": 2}' > "$MOCK/s02/usage.json"
 chk "75% warn fires"  "$(python3 harness/watchdog.py "$MOCK/s02" --dry-run --json 2>/dev/null | python3 -c 'import json,sys;print([e["level"] for e in json.load(sys.stdin)["budget"] if e["resource"]=="compute"][0])')" "warn"
 echo '{"cpu_h": 340, "tokens": 100, "queued_jobs": 2}' > "$MOCK/s02/usage.json"
 OUT=$(python3 harness/watchdog.py "$MOCK/s02" --dry-run 2>&1)
-chk "100% stop fires"        "$(echo "$OUT" | grep -c 'HARD STOP')" "1"
-chk "hard stop holds queue"  "$(echo "$OUT" | grep -c 'qhold')" "1"
+chk "smoke: compute stop is measured"    "$(echo "$OUT" | grep -c 'STOP')" "1"
+chk "smoke: compute stop NOT delivered"  "$(echo "$OUT" | grep -c 'HARD STOP')" "0"
+chk "smoke: compute stop holds nothing"  "$(echo "$OUT" | grep -c 'qhold')" "0"
+chk "smoke: log-only is on the record"   "$(echo "$OUT" | grep -c 'LOG-ONLY compute')" "1"
+# Tokens were never mismetered and stay fully enforced in the smoke phase.
+echo '{"cpu_h": 1, "tokens": 12000000, "queued_jobs": 2}' > "$MOCK/s02/usage.json"
+OUT=$(python3 harness/watchdog.py "$MOCK/s02" --dry-run 2>&1)
+chk "smoke: token stop IS delivered"     "$(echo "$OUT" | grep -c 'HARD STOP')" "1"
+# The main phase seals truthful metering with full enforcement -- the exception expires.
+python3 - "$MOCK/s02" <<'PY'
+import json, sys, pathlib
+p = pathlib.Path(sys.argv[1]) / "WORKSPACE.json"
+d = json.loads(p.read_text()); d["phase"] = "main"; d["compute_cpu_h"] = 1600
+p.write_text(json.dumps(d))
+PY
+echo '{"cpu_h": 1600, "tokens": 100, "queued_jobs": 2}' > "$MOCK/s02/usage.json"
+OUT=$(python3 harness/watchdog.py "$MOCK/s02" --dry-run 2>&1)
+chk "main: compute stop IS delivered"    "$(echo "$OUT" | grep -c 'HARD STOP')" "1"
+chk "main: compute stop holds queue"     "$(echo "$OUT" | grep -c 'qhold')" "1"
 echo '{"cpu_h": 1, "tokens": 100, "queued_jobs": 99}' > "$MOCK/s02/usage.json"
 chk "queue cap exceeded flagged" "$(python3 harness/watchdog.py "$MOCK/s02" --dry-run --json 2>/dev/null | python3 -c 'import json,sys;print(sum(1 for e in json.load(sys.stdin)["budget"] if e["resource"]=="queued_jobs"))')" "1"
 
@@ -134,6 +153,19 @@ python3 harness/escalate.py "$MOCK/s01" --answer "grid" --text "test answer" >/d
 chk "answer closes latency"  "$(python3 -c '
 import json;rs=[json.loads(l) for l in open("harness/escalations.jsonl")];print("yes" if any(r["disposition"]=="answered" and r.get("latency_h") is not None for r in rs) else "no")' 2>/dev/null)" "yes"
 chk "queue shrinks after answer" "$(wc -l < harness/escalation_queue.jsonl | tr -d ' ')" "1"
+
+echo "== 7e. liveness: death detection fails safe (PI ruling 2026-08-27) =="
+# This exit code authorises restarting a running campaign. Anything short of positive evidence
+# of death must exit non-zero. A shell-arithmetic version of this comparison defaulted the
+# other way and would have restarted live sessions when its tooling was missing.
+python3 harness/liveness.py s01 --dead-after 30 --no-update >/dev/null 2>&1
+chk "live replicate is not restartable"   "$?" "1"
+python3 harness/liveness.py no_such_rep --dead-after 30 --no-update >/dev/null 2>&1
+chk "absent transcripts are not death"    "$?" "1"
+python3 harness/liveness.py s01 --dead-after 0 --no-update >/dev/null 2>&1
+chk "positive evidence does authorise"    "$?" "0"
+chk "heartbeat decides nothing"           "$(grep -c 'heartbeat_informational_only' harness/watchdog.py)" "1"
+chk "restart watcher reads no heartbeat"  "$(grep -c 'AGE=.*heartbeat' harness/restart_watch.sh)" "0"
 
 echo "== 8. collection =="
 printf '# Final report\n\n1. Claim: none reached.\n' > "$MOCK/s01/FINAL_REPORT.md"
