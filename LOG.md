@@ -249,3 +249,59 @@ away.**
 Not a defect to fix silently: an inline barrier would require the harness to sit between the
 replicate and the scheduler, which is a larger design change than the smoke needs. Flagged for
 the PI to decide after the smoke.
+
+## LOG-2026-08-26-13 — §3 flipped from the archived record; tail corrections were OFF, not on
+PI ruled the last three gates. Two settled cleanly; one settled **against** the ruling's stated
+expectation, and the principle was applied rather than the wording.
+
+**Cycle counts** ratified: floor 2,000+10,000, Claim-grade 10,000+50,000, with the PI's
+rationale recorded — longer production is unbiased for GCMC ensemble averages, so it reduces
+variance without moving the expectation and Claim-grade comparability to the key is unaffected.
+That same argument is why it does **not** extend to cutoff or tail corrections, which move the
+expectation.
+
+**RASPA pinned to 2.0.37** — read from the archived output headers (`Compiler and run-time
+data`), together with gcc 4.8.5, compile date 2026-08-18, and the `build.qsub` recipe.
+
+**Tail corrections: the record says OFF.** The ruling anticipated the archive would confirm the
+charter's `[on]` and instructed §3 to state "on" with a citation. It does not. Archived RASPA
+output headers show **`tailcorrection: no` on all 4,560 interaction pairs, in each of seven
+independent runs**, plus `All potentials are unshifted` — including every methane pair, which
+are the ones that matter. §3 now states **off**, applying the ruling's governing principle
+(*the record governs*) rather than its literal wording, because its condition failed.
+
+This is not a close call and it is not cosmetic:
+- every reference number for this protocol, the answer key's own included, was produced with
+  corrections off, so a Claim-grade number with them on would not be comparable to the key;
+- Appendix A's thresholds (G1 > 230, G2 210–230) were calibrated on corrections-off numbers, so
+  enabling corrections would leave the gates firing at the wrong values, silently — nothing in
+  the gate text mentions the dependency.
+
+**One edit reverses it** if the PI wants `on` regardless. Flagged rather than treated as
+settled. The archive settling this also means item 3's fallback A/B job pair is **not needed**,
+and the item-2 verification job now validates build, cutoff, shifting and tail-correction
+behaviour in a single run.
+
+**Hard stop** deferred post-smoke per ruling; poll interval tightened to 10 min (smoke) /
+30 min (main) and the bound made exact and machine-computed:
+`overshoot ≤ max_queued_jobs × poll_hours` → **8.33 CPU-h (2.45 %)** smoke, 4.00 CPU-h (0.25 %)
+main. The watchdog prints it every run so the bound travels with the measurement. The observed
+135 % mock overshoot is recorded in `harness/README.md` as a known bound, and the mock is left
+overspending deliberately.
+
+**Cadence non-disclosure** ratified and its rationale recorded: §8 promises categories, not
+timing; a published schedule is a promise, a latency ledger is a measurement.
+
+**`config.PROPOSED` is now empty and `provision.py` accepts a real launch configuration** —
+verified by a real, non-dry-run provision of both arms with the **full 1,731-structure
+database**: 1,731/1,731 checksums verified per arm, independently rechecked with `shasum -c`,
+leak scan clean, 2.8 s. `./harness/selftest.sh` 41/41.
+
+**New leak found on that first real provision, flagged not fixed:** §4's and §5's per-phase
+tables show **both** rows, so a smoke replicate learns a 14-day main phase exists — that its own
+run is a pilot. A replicate that thinks it is rehearsing has reason to work differently from one
+that thinks it is not, which is a problem for a smoke meant to predict main-run behaviour. The
+word deny-list could not catch it: "Smoke" and "Main" are innocuous, and the leak is made of
+ordinary vocabulary arranged into a comparison. A **structural** check was added
+(`leak_phase_disclosure`). Fix is one function in `provision.py`; it alters replicate-facing
+charter text, so it is the PI's call.

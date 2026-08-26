@@ -78,6 +78,22 @@ def leak_scan(ws: Path, repo: Path) -> list:
     return problems
 
 
+def leak_phase_disclosure(ws: Path, phase: str) -> list:
+    """Does the provisioned charter tell this replicate about the OTHER phase?
+
+    Not a word the deny-list can catch -- "Smoke" and "Main" are innocuous tokens. But a smoke
+    replicate that can read the main phase's row learns it is in a pilot, and a replicate that
+    believes its run is a rehearsal may not work the way it would on the real thing.
+    """
+    other = "Main" if phase == "smoke" else "Smoke"
+    hits = []
+    for name in ("CHARTER.md", "CHARTER_ADDENDUM.md"):
+        f = ws / name
+        if f.exists() and f"**{other}**" in f.read_text():
+            hits.append(f"{name}: names the other phase ({other}) in a resource/timeline table")
+    return hits
+
+
 def leak_warn(ws: Path) -> list:
     """Terms that disclose study design but sit in documents Bei does not own.
 
@@ -198,7 +214,7 @@ def provision(rep_id, dest_root, dry_run=False, db_limit=None, force=False):
         for p in problems:
             print("  LEAK:", p)
         raise SystemExit(f"provisioning aborted: {len(problems)} isolation problem(s)")
-    for w in sorted(set(leak_warn(ws))):
+    for w in sorted(set(leak_warn(ws))) + leak_phase_disclosure(ws, phase):
         print("  WARN (study-design disclosure, not auto-edited):", w)
     print(f"[provision] isolation: no remote, no symlinks, no sealed material, no path back  OK")
 

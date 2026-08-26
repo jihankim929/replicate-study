@@ -2,7 +2,7 @@
 
 *Updated before any long wait. Supersedes itself; history lives in LOG.md and git.*
 
-Last updated: 2026-08-26, after LOG-2026-08-26-11.
+Last updated: 2026-08-26, after LOG-2026-08-26-13.
 
 ## Role
 
@@ -19,9 +19,10 @@ replicates. Off-script input from a replicate receives the chartered default res
   **smoke findings → edits → charter v1.0 → seal commit → N=20 launch. After the seal, nothing moves.**
 - Benchmark: frozen, 1,731 CIFs, hash-pinned by `benchmark/MANIFEST.sha256`.
 - Protocol documents: charter v0.9 (six amendments recorded) + smoke addendum + audit schema.
-  **Ratified:** cutoff 12.8 Å, G3 bounds 0.20–4.50, per-phase horizons, per-phase budgets and
-  concurrency, G7 k=40. **Still unset:** `[workspace path]` (cluster scratch, pending account),
-  §3 cycle counts, RASPA pin, tail corrections, `[30]` min interactive.
+  **Ratified:** cutoff 12.8 Å, tail corrections OFF, potentials unshifted, RASPA 2.0.37,
+  cycles 2,000+10,000 / 10,000+50,000, G3 bounds 0.20–4.50, per-phase horizons, per-phase
+  budgets and concurrency, G7 k=40, 30-min interactive limit.
+  **Still unset:** `[workspace path]` only — cluster scratch, pending the account.
   v0.9 becomes v1.0 at seal.
 - Arms: gated (charter Appendix A, `AUDIT.jsonl`) vs. ungated (Appendix A omitted verbatim).
   Smoke: `s01` gated, `s02` ungated. Main: drawn and pre-registered in
@@ -63,16 +64,18 @@ replicates. Off-script input from a replicate receives the chartered default res
    mechanically kill the operational trap** — it sits at rank 3 of 1,731 by density, so any
    plausibility-style lower bound removes it pre-simulation, makes the gated arm score a
    hollow kill, and makes the two arms incomparable. Seal to v1.0 not yet performed.
-5. **BLOCKER — §3 protocol values unratified.** Budgets, G7 and concurrency are ratified, but
-   `provision.py` still refuses a real launch because §3's **cycle counts** (proposed
-   2,000+10,000 screening / 10,000+50,000 Claim), the **RASPA version pin**, and the
-   **tail-corrections** setting remain brackets. Tail corrections additionally need one
-   verification job to read the setting back out of a RASPA output header — it is currently an
-   assumption, not a record. **These three gate the smoke launch.**
-6. **BLOCKER — Dirac account (external, pending).** Assignment 4 cannot start without it.
-7. **Flagged, awaiting PI:** whether replicates are told the escalation answering cadence.
-   Bei has implemented non-disclosure and will not change it without a ruling.
-8. Harness limits are documented and real: read-auditing catches only traces, budget metering
+5. **CLEARED.** All charter brackets the harness depends on are ratified; `config.PROPOSED`
+   is empty and a real, full-database provision of both arms succeeds (1,731/1,731 verified).
+6. **BLOCKER — Dirac account (external, pending).** The only remaining blocker. Assignment 4
+   sequence: account → hello-world → verification job → provision s01/s02 on cluster scratch →
+   leak-scan the provisioned workspaces → report launch-ready.
+7. **Flagged, awaiting PI — tail corrections.** §3 now says **OFF** because the archived record
+   says off, against the ruling's stated expectation of "on". One edit reverses it. Bei applied
+   the principle, not the wording, and will not treat it as settled.
+8. **Flagged, awaiting PI — phase disclosure.** §4/§5 tables show both phases, so a smoke
+   replicate learns it is a pilot. Fix is one function in `provision.py`; it changes
+   replicate-facing text, so it is the PI's call.
+9. Harness limits are documented and real: read-auditing catches only traces, budget metering
    trusts the replicate's own ledger, token metering has no source wired yet.
 
 ## Beliefs carried forward

@@ -159,6 +159,7 @@ def run(ws_path, repo, dry_run=False, once=True, json_out=False):
               "liveness": check_liveness(ws),
               "budget": check_budget(ws, meta),
               "isolation": audit_isolation(ws, Path(repo).resolve())}
+    report["overshoot_bound"] = C.overshoot_bound(meta["phase"])
     deadline = datetime.fromisoformat(meta["deadline_kst"])
     report["hours_to_deadline"] = round((deadline - datetime.now(KST)).total_seconds() / 3600, 1)
 
@@ -194,7 +195,10 @@ def run(ws_path, repo, dry_run=False, once=True, json_out=False):
 
 
 def _fmt(r):
-    out = [f"[watchdog] {r['replicate']}  T-{r['hours_to_deadline']}h  liveness={r['liveness']['state']}"]
+    ob = r.get("overshoot_bound", {})
+    out = [f"[watchdog] {r['replicate']}  T-{r['hours_to_deadline']}h  liveness={r['liveness']['state']}"
+           + (f"  poll={ob.get('poll_minutes')}min bound=+{ob.get('overshoot_cpu_h')}CPU-h"
+              f" ({ob.get('overshoot_pct_of_budget')}%)" if ob else "")]
     for e in r["budget"]:
         f = "n/a" if e["fraction"] is None else f"{e['fraction']:.1%}"
         out.append(f"    {e['resource']:<12} {e['used']} / {e['cap']}  ({f})  {e['level'].upper()}")

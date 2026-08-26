@@ -23,7 +23,7 @@ the study's own arm structure.
 re-provision after a charter edit. It is not a one-time clearance. Any edit to a
 replicate-facing document invalidates the previous scan.
 
-Run `./harness/selftest.sh` before any launch. **36 checks, all must pass.**
+Run `./harness/selftest.sh` before any launch. **41 checks, all must pass.**
 
 ---
 
@@ -91,7 +91,16 @@ Two-list scan, run against the **built workspace**, not the source:
 - **WARN** (`config.LEAK_DENY_WARN`) — printed, provisioning continues. These sit in documents
   Bei does not own; auto-editing the PI's charter would be worse than reporting it.
 
-**No WARN is currently outstanding.** The last one — the Appendix A header reading *"(gated arm
+**One WARN is currently outstanding.** The provisioned charter's §4 and §5 per-phase tables
+show **both** rows to every replicate, so a smoke replicate learns a 14-day main phase exists —
+that is, that its own run is a pilot. A replicate that believes its campaign is a rehearsal has
+reason to work differently from one that believes it is the real thing, which is a problem for a
+smoke whose purpose is predicting main-run behaviour. Caught by
+`provision.py::leak_phase_disclosure()`, a **structural** check rather than a word match: the
+deny-list cannot see a leak assembled from ordinary vocabulary. Suggested fix — filter the
+tables to the replicate's own phase, as is already done for the appendix. PI's call.
+
+**Previously outstanding, now closed.** The last one — the Appendix A header reading *"(gated arm
 only; omitted verbatim from the other arm)"*, which told a gated replicate that another arm
 existed under different rules — was fixed by PI ruling on 2026-08-26. The parenthetical is
 deleted; `provision.py` implements the split, and the document no longer announces it. Full
@@ -135,13 +144,32 @@ ruling rather than a Bei default. Main-run policy is revisited with the smoke fi
 
 Stated because a monitoring component that overstates its reach is worse than none.
 
-0. **The watchdog is polled, not inline — overshoot between polls is possible.** It detects a
-   breach and holds the queue; it cannot prevent a replicate from crossing 100 % between two
-   polls. The full-loop dry run makes this visible on purpose: the mock `s02` reaches **135 %**
-   of its compute budget before the first poll sees it. Charter §4's hard stop is therefore
-   enforced as *"stop on detection"*, not as an inline barrier. Poll frequency is the control,
-   and it should be set against the largest plausible single-poll burn — at the measured 338×
-   run-cost spread, a single long chunk can move usage a long way between polls.
+0. **The watchdog is polled, not inline. This is a KNOWN BOUND, not a bug.**
+   *(PI ruling 2026-08-26: deferred to post-smoke; poll interval tightened; bound recorded.)*
+
+   It detects a breach and holds the queue; it cannot prevent a replicate crossing 100 %
+   between two polls. Charter §4's hard stop is enforced as **"stop on detection"**, not as an
+   inline barrier.
+
+   **The bound is exact.** A single-core job burns at most one CPU-hour per wall-hour, so
+
+   > `overshoot_cpu_h ≤ max_queued_jobs × poll_interval_hours`
+
+   | Phase | Concurrency | Poll | Worst-case overshoot | % of budget |
+   |---|---|---|---|---|
+   | Smoke | 50 | **10 min** | **8.33 CPU-h** | **2.45 %** |
+   | Main | 8 | **30 min** | **4.00 CPU-h** | **0.25 %** |
+
+   `config.overshoot_bound(phase)` computes it; the watchdog prints it on every run, so the
+   bound travels with the measurement instead of living only in this file.
+
+   **Observed, for the record:** in the full-loop dry run the mock `s02` reached **135 % of its
+   compute budget** before the first poll saw it — that run polls once at the end, which is the
+   worst case by construction. The mock is left overspending deliberately so the limitation
+   stays visible rather than being tuned out of sight.
+
+   An inline barrier would require the harness to sit between replicate and scheduler. That is
+   a larger design change than the smoke needs, and it is deferred to post-smoke by ruling.
 1. **Read-auditing is partial.** `watchdog.audit_isolation()` catches escapes that leave a
    trace: symlinks, git remotes, sealed content, absolute paths in files. It **cannot** detect a
    read that left no artifact. Genuine read-auditing needs OS-level mediation — a read-only bind

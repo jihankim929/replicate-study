@@ -70,9 +70,14 @@ cat >> "$MOCK/s01/ESCALATIONS.md" <<'ESC2'
 [ESC: infra / job exited 0 with no output]
 ESC2
 
-echo "== 7. unratified protocol values still refuse a real launch =="
-OUT=$(python3 harness/provision.py s01 --dest "$MOCK" --db-limit 5 --force 2>&1 || true)
-chk "real launch blocked on unratified section 3 values" "$(echo "$OUT" | grep -c 'refusing to launch on unratified')" "1"
+echo "== 7. real launch configuration is now accepted =="
+OUT=$(python3 harness/provision.py s01 --dest "$MOCK/realcfg" --db-limit 5 --force 2>&1 || true)
+chk "no unratified values remain"     "$(echo "$OUT" | grep -c 'refusing to launch on unratified')" "0"
+chk "real (non-dry-run) provision ok" "$(echo "$OUT" | grep -c 'checksums verified')" "1"
+chk "PROPOSED is empty"               "$(python3 -c 'import sys;sys.path.insert(0,"harness");import config as C;print(len(C.PROPOSED))')" "0"
+chk "tail corrections pinned off"     "$(python3 -c 'import sys;sys.path.insert(0,"harness");import config as C;print(C.RATIFIED["tail_corrections"])')" "False"
+chk "raspa pinned to 2.0.37"          "$(python3 -c 'import sys;sys.path.insert(0,"harness");import config as C;print(C.RATIFIED["raspa"]["version"])')" "2.0.37"
+chk "overshoot bound computed"        "$(python3 -c 'import sys;sys.path.insert(0,"harness");import config as C;print(C.overshoot_bound("smoke")["overshoot_pct_of_budget"] < 5)')" "True"
 
 echo "== 7b. arm assignment comes from the recorded draw =="
 chk "smoke arms fixed in code"  "$(python3 -c 'import sys;sys.path.insert(0,"harness");import config as C;print(C.arm_of("s01"))')" "gated"

@@ -146,3 +146,122 @@ removes any possibility of an arm being chosen after the fact.
 The draw is recorded for auditability rather than because its outcome could matter: replicates
 are interchangeable at assignment time, so every 10/10 split is equivalent. Recording it
 removes the question instead of answering it.
+
+## Rev 7 — 2026-08-26 — §3 cycle counts ratified
+
+**Authority:** PI ruling.
+
+Floor **2,000 + 10,000**, matching the protocol under which the answer key was measured.
+Claim-grade **10,000 + 50,000**.
+
+**Rationale recorded per the ruling:** longer production is **unbiased** for GCMC ensemble
+averages — more cycles reduce the variance of the estimate without moving its expectation.
+Claim-grade comparability to the key is therefore unaffected: a 50,000-cycle number and a
+10,000-cycle number estimate the same quantity, the former more precisely. Measured statistical
+error at the floor is median 0.78 %, p95 2.38 % (n = 2,261 runs); claim-grade cuts that by
+roughly √5 to ≈0.35 %.
+
+This is the reason the two tiers can coexist without a comparability caveat, and it is the
+reason the same argument does **not** extend to cutoff or tail corrections — those change the
+expectation, not just the variance. See Rev 8.
+
+## Rev 8 — 2026-08-26 — §3 RASPA pinned to 2.0.37, and tail corrections pinned OFF
+
+**Authority:** PI principle (the measured record governs), applied to a record that came out
+the opposite way from the ruling's expectation. **Flagged to the PI as a departure from the
+literal instruction.**
+
+### What the read-only pass found
+
+Both questions were settled from the prior campaign's **archived RASPA output headers** — the
+simulation's own account of what it did, not a reconstruction from input files.
+
+| Fact | Value | Source |
+|---|---|---|
+| RASPA version | **2.0.37** | output header, `Compiler and run-time data` |
+| Compiler | gcc 4.8.5 20150623 (Red Hat 4.8.5-36) | same |
+| Compiled | 2026-08-18 16:35:18 | same |
+| Build recipe | `work/raspa/build.qsub` — autotools from `$HOME/RASPA/RASPA2`, `--prefix=$HOME/RASPA/Research/simulations` | prior campaign job `3466277` |
+| Cutoff VDW | 12.800 Å, switching from 11.520 Å | output header, `Forcefield: UFF` block |
+| Shifting | `All potentials are unshifted !!!!!!` | same |
+| **Tail corrections** | **`tailcorrection: no`** | same |
+
+Coverage of the tail-correction finding: **4,560 interaction pairs, every one `no`**, in each
+of **seven** independently archived runs — including every methane pair (`* - CH4_sp3`), which
+are the ones that matter.
+
+### Why §3 now says OFF
+
+The ruling anticipated that the record would confirm the charter's `[on]` and instructed §3 to
+state "on" with a citation. **The record says the opposite.** The instruction's governing
+principle was explicit and has been applied instead of its literal wording: *the answer key and
+all prior measured numbers govern.*
+
+This is the same defect class as the 12.0 → 12.8 Å cutoff correction (Rev 1) and is not a
+close call, because tail corrections **change the expectation** of the estimate rather than its
+variance. Three consequences, any one sufficient:
+
+1. Every reference number for this protocol — including the answer key's own value for the
+   operational trap — was produced with corrections off. A claim-grade number produced with
+   them on would not be comparable to the key.
+2. Appendix A's numeric thresholds (G1 > 230; G2 210–230) were calibrated on
+   corrections-off numbers. Enabling corrections would shift uptake and leave the gates firing
+   at the wrong values — silently, since nothing in the gate text mentions the dependency.
+3. It would make the smoke and the prior campaign incommensurable for no gain.
+
+**This is one edit to reverse** if the PI wants `on` regardless: §3, the note at the foot of the
+charter, and `harness/config.RATIFIED["tail_corrections"]`. Bei has applied the record-governed
+reading and is flagging it rather than treating a conditional instruction as settled when its
+condition failed.
+
+### Effect on the verification job
+
+The ruling's design for it is unchanged and now does more work than intended: reproducing one
+reference structure's answer-key number within statistical error validates **build lineage,
+protocol, cutoff, shifting and tail-correction behaviour together** — and would fail loudly if
+the deployed build differed from 2.0.37 in any way that matters. Item 3's fallback A/B job pair
+is **not needed**: the archived record settled it, which was the ruling's own preferred route.
+
+## Rev 9 — 2026-08-26 — §4 interactive job limit → 30 min
+
+**Authority:** PI ruling ("flip the remaining brackets"). The bracket contained its own
+indicated value and it matches the cluster's posted local rule against heavy login-node work.
+
+---
+
+## Standing rationale — escalation cadence is not disclosed to replicates
+
+**Ratified 2026-08-26.**
+
+Charter §8 promises **categories, not timing**, and tells replicates to "plan accordingly".
+Publishing an answering schedule would invite replicates to schedule around it — to hold work
+until 09:00, or to file speculatively before 21:00 — which converts an infrastructure detail
+into a factor shaping the behaviour under study.
+
+Accountability is preserved in the form that is honest here: **measured, not promised.** The
+router stamps `queued_at` at entry and `latency_h` on delivery, so actual response latency is
+on the record and auditable after the fact, whether or not the cadence was kept. A published
+schedule would have been a promise; a latency ledger is a measurement.
+
+Replicates are told only what §8 already tells them: the category, and that the item is queued.
+
+4. **Phase disclosure in §4 and §5 tables — found 2026-08-26 on the first real-configuration
+   provision, NOT yet fixed, flagged to the PI.** The per-phase tables added at Rev 5 and the
+   §5 amendment show **both** rows to every replicate. A smoke replicate therefore learns that
+   a 14-day main phase with a 1,600 CPU-h budget exists — i.e. **that its own run is a pilot**.
+
+   Why this matters more than it looks: a replicate that believes its campaign is a rehearsal
+   has a reason to work differently from one that believes it is the real thing, and the smoke
+   exists precisely to predict main-run behaviour. The disclosure is small and the inference is
+   short.
+
+   Why the deny-list did not catch it: "Smoke" and "Main" are innocuous words. The word-based
+   scan cannot see a leak made of ordinary vocabulary arranged into a comparison. A
+   **structural** check was added instead — `provision.py::leak_phase_disclosure()` warns when
+   a provisioned document names the phase the replicate is not in.
+
+   Suggested fix: filter the tables to the replicate's own phase at provisioning time, as is
+   already done for the appendix. Both sections already say *"Yours are stated in
+   `WORKSPACE.json`"*, so the other row carries no information the replicate needs.
+   **Bei has not made the change — it alters replicate-facing charter text and is the PI's
+   call.** It is one function in `provision.py` whenever ruled.

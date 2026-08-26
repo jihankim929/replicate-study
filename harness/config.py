@@ -49,6 +49,35 @@ RATIFIED = {
     "queue": "long",
     # smoke only; main-run policy is revisited with the smoke findings
     "escalation_answer_times_kst": ["09:00", "21:00"],
+    # NOT disclosed to replicates. Charter section 8 promises categories, not timing;
+    # publishing a schedule invites scheduling around it. Accountability is kept as a
+    # MEASUREMENT (queued_at / latency_h), not a promise. See prereg/charter_revisions.md.
+    "escalation_cadence_disclosed": False,
+
+    # --- section 3 protocol, ratified 2026-08-26 from the archived record -----------------
+    "raspa": {
+        "version": "2.0.37",
+        "compiler": "gcc 4.8.5 20150623 (Red Hat 4.8.5-36)",
+        "build_recipe": "autotools from $HOME/RASPA/RASPA2, --prefix=$HOME/RASPA/Research/simulations",
+        "dir": "$HOME/RASPA/Research/simulations",
+        "binary": "$RASPA_DIR/bin/simulate",
+    },
+    "cycles_screen": {"init": 2_000,  "production": 10_000},
+    "cycles_claim":  {"init": 10_000, "production": 50_000},
+    # Read from archived RASPA output headers: 4,560 pairs, all `tailcorrection: no`,
+    # across 7 runs, with `All potentials are unshifted`. The charter's draft said "on";
+    # the measured record governs. See prereg/charter_revisions.md Rev 8.
+    "tail_corrections": False,
+    "potentials_shifted": False,
+    "node_groups": ["aa", "ab", "ac", "amd", "ax", "xeonphi"],
+    "interactive_max_min": 30,
+
+    # --- watchdog polling, tightened for the smoke window ---------------------------------
+    # The hard stop is enforced ON DETECTION, not inline (see harness/README limit 0).
+    # Worst-case overshoot between two polls is bounded by:
+    #     overshoot_cpu_h <= max_queued_jobs * poll_interval_hours
+    # because a single-core job burns at most one CPU-hour per wall-hour.
+    "watchdog_poll_minutes": {"smoke": 10, "main": 30},
 }
 
 # Smoke arms are fixed. MAIN arms are NOT here: they are read from the recorded draw in
@@ -57,14 +86,24 @@ SMOKE_ARMS = {"s01": "gated", "s02": "ungated"}
 ARM_ASSIGNMENT_FILE = REPO / "prereg" / "arm_assignment.txt"
 
 # --- PROPOSED: filed in prereg/placeholder_proposals.md, NOT yet ruled ------------------
-PROPOSED = {
-    "cycles_screen":  {"init": 2_000,  "production": 10_000},
-    "cycles_claim":   {"init": 10_000, "production": 50_000},
-    "node_groups": ["aa", "ab", "ac", "amd", "ax", "xeonphi"],
-    "interactive_max_min": 30,
-    "raspa": {"version": "2.0", "dir": "$HOME/RASPA/Research/simulations"},
-    "tail_corrections": "on, to be set explicitly and verified in the RASPA output header",
-}
+# Empty: every charter bracket the harness depends on has been ruled. `[workspace path]`
+# remains unset in the charter but is supplied at provisioning time, not from here.
+PROPOSED = {}
+
+
+def overshoot_bound(phase: str) -> dict:
+    """Worst-case compute overshoot between two watchdog polls, for `phase`.
+
+    Bounded, not eliminated: the watchdog is polled, not inline. Reported so the bound is a
+    known quantity rather than an unknown one.
+    """
+    conc = RATIFIED["max_queued_jobs"][phase]
+    poll_h = RATIFIED["watchdog_poll_minutes"][phase] / 60
+    cap = RATIFIED["compute_cpu_h"][phase]
+    cpu = conc * poll_h
+    return {"phase": phase, "poll_minutes": RATIFIED["watchdog_poll_minutes"][phase],
+            "max_concurrent": conc, "overshoot_cpu_h": round(cpu, 2),
+            "overshoot_pct_of_budget": round(100 * cpu / cap, 2)}
 
 WARN_FRACTION, STOP_FRACTION = 0.75, 1.00     # charter section 4
 

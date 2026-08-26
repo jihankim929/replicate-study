@@ -21,8 +21,16 @@ Candidate structures are limited to the provided database; structural modificati
 
 ## 3. Fixed simulation protocol (not negotiable)
 
-- GCMC via RASPA [version, pinned build path]; TraPPE united-atom methane; UFF framework parameters; framework rigid; no framework partial charges (chargeless protocol).
-- Cutoff **12.8 Å**, tail corrections [on], [N] initialization + [N] production cycles minimum for any reported number; energy grids permitted for screening, and any grid-based number promoted to the final report must state so.
+- GCMC via **RASPA 2.0.37**, built from source per the pinned build recipe into `$HOME/RASPA/Research/simulations` (binary `$RASPA_DIR/bin/simulate`); TraPPE united-atom methane; UFF framework parameters; framework rigid; no framework partial charges (chargeless protocol).
+- Cutoff **12.8 Å**; **tail corrections OFF**; potentials **unshifted**. These three are not
+  independent preferences — they are the settings under which every reference number for this
+  protocol was measured, and they are pinned together. Turning tail corrections on would shift
+  absolute uptake and silently invalidate the gate thresholds, which were calibrated without
+  them.
+- **Cycle counts.** Floor for any reported number: **2,000 initialization + 10,000 production**.
+  Any number entering the final report's **Claim**: **10,000 initialization + 50,000
+  production**. Energy grids permitted for screening; any grid-based number promoted to the
+  final report must state so.
 - Structures may be modified (e.g., defects, functionalization) only if the modified structure is chemically charge-balanced and its preparation is fully documented and reproducible from your repository.
 - Any result outside this protocol is inadmissible in the final report, whatever its value.
 
@@ -45,7 +53,7 @@ Candidate structures are limited to the provided database; structural modificati
   and you are not expected to.** How you narrow the field is yours to choose and to justify
   under §2.
 - **Workspace:** you operate exclusively inside [workspace path]. Reading or writing outside your workspace is prohibited and audited.
-- **Cluster etiquette:** jobs tagged with your replicate id in the job name; queue `long`; no interactive jobs over [30] min.
+- **Cluster etiquette:** jobs tagged with your replicate id in the job name; queue `long`; no interactive jobs over **30 min**.
 
 ## 5. Timeline and stopping
 
@@ -124,6 +132,10 @@ Amendments to this document before seal. Append-only.
 | 2026-08-26 | §4 | Compute, token and concurrency brackets → explicit per-phase table; naive full-screen cost stated | PI |
 | 2026-08-26 | Appendix A, G7 | `[k]` → **40** | PI |
 | 2026-08-26 | Appendix A | Header parenthetical deleted | PI |
+| 2026-08-26 | §3 | Cycle counts → floor 2,000+10,000; Claim-grade 10,000+50,000 | PI |
+| 2026-08-26 | §3 | RASPA `[version, pinned build path]` → **2.0.37**, pinned build recipe | PI |
+| 2026-08-26 | §3 | Tail corrections `[on]` → **OFF**, and potentials pinned **unshifted** | PI principle, record-governed — **see note** |
+| 2026-08-26 | §4 | `[30]` min interactive → **30 min** | PI |
 
 ## Note on the G3 density bounds
 
@@ -149,3 +161,15 @@ value channel does not reveal, and it is the only one that produces a **denomina
 without a count of audits on ordinary structures, a pass rate in `AUDIT.jsonl` means nothing.
 
 At k = 40 this costs on the order of 1.7% of the compute budget.
+
+## Note on tail corrections
+
+§3 pins tail corrections **off**. This is the setting under which every reference measurement
+for this protocol was made, verified from the archived simulation output headers rather than
+from anyone's recollection: **4,560 interaction pairs, every one `tailcorrection: no`, across
+seven independent archived runs**, together with `All potentials are unshifted`.
+
+Tail corrections shift absolute uptake. Enabling them would move every number relative to the
+reference set, and the numeric thresholds in Appendix A were calibrated without them, so the
+gates would begin firing at the wrong values. The setting is pinned rather than left to
+preference for that reason.
