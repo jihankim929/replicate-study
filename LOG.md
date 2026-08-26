@@ -438,3 +438,41 @@ not issued is a credential decision, not an infrastructure one.
 
 No further attempts will be made until the PI rules. Repeated password attempts against an
 account that may not exist is exactly the pattern that triggers lockouts.
+
+## LOG-2026-08-26-18 — Cluster access working end to end; sketched topology corrected on the record
+Both hops passwordless under `~/.ssh/bei_ed25519`. The earlier password failures were a session
+passthrough artefact, not the credential — the account exists on both machines, so the
+hypotheses recorded at LOG-2026-08-26-17 are dead. **The `able`-key diagnostic was declined and
+is closed; it was never used.**
+
+**Verified topology — the sketch was wrong in two ways, both load-bearing:**
+
+| Hop | Address | Host | Facts |
+|---|---|---|---|
+| 1 gateway | `143.248.130.178` | **`bronze3`** | Ubuntu 20.04 (5.8.0-44), home `/home/Bei`, **no scheduler**, no `/home/users`, no `/usr/local/pbs`, no `/usr/local/mjs` |
+| 2 cluster | `143.248.125.145` | **`bnode0.kaist.ac.kr`** | home `/home/users/Bei`, PBS at `/usr/local/pbs/bin`, group wrapper `/usr/local/mjs/qas` |
+
+1. **The second hop is a different address, not a repeat of the first.** From inside `bronze3`,
+   `143.248.130.178` still resolves to `bronze3` itself (`getent hosts` → `bronze3`), so "the
+   same command again" cannot be literal — it would be a self-jump. Reachability confirms the
+   split: from this Mac `…130.178:22` is OPEN and `…125.145:22` is FILTERED (silent drop); from
+   `bronze3`, `…125.145:22` is OPEN. The jump is genuinely required.
+2. **`ProxyJump Bei@<ip>` does not work and the failure is silent-looking.** A bare
+   host-and-user `ProxyJump` spawns a nested `ssh` that does **not** inherit `-i` /
+   `IdentityFile`, falls back to password, and fails — which is what the sketch would have
+   produced. `ProxyJump` must reference an **alias** that carries the identity. Observed
+   directly before the fix.
+
+`~/.ssh/config` updated with `dirac-bei-gw` (gateway) and `dirac-bei` (cluster, ProxyJump via
+the alias), the verified topology recorded in-file as comments, and the prior campaign's `able`
+blocks left untouched. Config backed up to `config.bak-20260826-bei`. Keys and config live
+outside the repository; the credential scan confirms neither has entered it.
+
+**Verification, all passing:** passwordless round-trip to both hops; `scp` up and down with a
+byte-identical round trip; `qstat` visible — server `bnode0` **Active**, 28 jobs running, queues
+`long` / `infi` / `dque` / `short` all enabled.
+
+**One observation that bears on a ratified value:** queue `long` reports **Max 580**, against
+the 129 running slots the prior campaign observed and on which Bei based the study-wide ceiling
+of 160. The ceiling is therefore more conservative than assumed rather than less — no action
+needed, but the basis is now known to be a floor, not the cap.
