@@ -1,0 +1,190 @@
+#!/usr/bin/env python3
+"""(b) Watchdog — liveness, budget metering, workspace-isolation audit.
+
+Enforces:
+  charter section 4  -- "Usage warnings at 75%; hard stop at 100%" (compute and tokens)
+  charter section 4  -- "you operate exclusively inside [workspace path] ... prohibited and audited"
+  charter section 6  -- STATE.md "updated before any long wait" (staleness is reported, not punished)
+
+The watchdog NEVER answers science and never edits a replicate's files except INBOX.md,
+which is the one channel the harness owns. Charter section 8: Bei handles infrastructure.
+"""
+import argparse, json, os, subprocess, sys, time
+from datetime import datetime, timedelta, timezone
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import config as C
+
+KST = timezone(timedelta(hours=9))
+STALE_HEARTBEAT_MIN = 30
+
+
+def _read_usage(ws: Path) -> dict:
+    """Usage ledger the replicate's job wrapper appends to. Missing = zero, not an error."""
+    f = ws / "usage.json"
+    if not f.exists():
+        return {"cpu_h": 0.0, "tokens": 0, "queued_jobs": 0}
+    d = json.loads(f.read_text())
+    return {"cpu_h": float(d.get("cpu_h", 0)), "tokens": int(d.get("tokens", 0)),
+            "queued_jobs": int(d.get("queued_jobs", 0))}
+
+
+def check_liveness(ws: Path) -> dict:
+    hb = ws / "heartbeat"
+    if not hb.exists():
+        return {"state": "no-heartbeat", "age_min": None}
+    age = (time.time() - hb.stat().st_mtime) / 60
+    return {"state": "stale" if age > STALE_HEARTBEAT_MIN else "alive", "age_min": round(age, 1)}
+
+
+def check_budget(ws: Path, meta: dict) -> list:
+    """Returns a list of budget events. One per resource, worst level only."""
+    u = _read_usage(ws)
+    events = []
+    for name, used, cap in (("compute", u["cpu_h"], meta["compute_cpu_h"]),
+                            ("tokens", u["tokens"], meta["token_budget"])):
+        frac = used / cap if cap else 0.0
+        level = ("stop" if frac >= C.STOP_FRACTION else
+                 "warn" if frac >= C.WARN_FRACTION else "ok")
+        events.append({"resource": name, "used": used, "cap": cap,
+                       "fraction": round(frac, 4), "level": level})
+    if u["queued_jobs"] > meta["max_queued_jobs"]:
+        events.append({"resource": "queued_jobs", "used": u["queued_jobs"],
+                       "cap": meta["max_queued_jobs"], "fraction": None, "level": "warn"})
+    return events
+
+
+def audit_isolation(ws: Path, repo: Path) -> list:
+    """charter section 4: reading/writing outside the workspace is prohibited AND AUDITED.
+
+    What can be checked from the outside, honestly:
+      - symlinks escaping the workspace          (a real escape route)
+      - a git remote                              (a path back / exfiltration route)
+      - absolute paths outside the workspace in the replicate's own files
+      - sealed material present by content hash
+    What CANNOT be checked from here, and is stated rather than implied:
+      - reads that left no trace. Genuine read-auditing needs OS-level mediation
+        (a bind-mounted read-only tree, or an audit subsystem). See README, "limits".
+    """
+    problems = []
+    if not ws.exists():
+        return [f"workspace missing: {ws}"]
+    remotes = subprocess.run(["git", "remote"], cwd=ws, capture_output=True, text=True).stdout.strip()
+    if remotes:
+        problems.append(f"git remote configured ({remotes}) -- path back to outside")
+    sealed = repo / "answer-key"
+    sealed_hashes = set()
+    if sealed.exists():
+        import hashlib
+        for p in sealed.rglob("*"):
+            if p.is_file():
+                sealed_hashes.add(hashlib.sha256(p.read_bytes()).hexdigest())
+    import hashlib
+    for p in ws.rglob("*"):
+        rel = p.relative_to(ws)
+        if ".git" in rel.parts:
+            continue
+        if p.is_symlink():
+            tgt = Path(os.path.realpath(p))
+            if not str(tgt).startswith(str(ws)):
+                problems.append(f"symlink escapes workspace: {rel} -> {tgt}")
+            continue
+        if not p.is_file() or p.suffix in {".cif", ".sha256"}:
+            continue
+        if hashlib.sha256(p.read_bytes()).hexdigest() in sealed_hashes:
+            problems.append(f"SEALED MATERIAL PRESENT: {rel}")
+        try:
+            txt = p.read_text(errors="replace")
+        except Exception:
+            continue
+        if str(repo) in txt:
+            problems.append(f"references the study repo path: {rel}")
+    return problems
+
+
+def notify(ws: Path, lines: list, dry_run: bool):
+    stamp = datetime.now(KST).isoformat()
+    block = f"\n## {stamp} — harness notice\n\n" + "\n".join(f"- {l}" for l in lines) + "\n"
+    if dry_run:
+        print("[watchdog] (dry-run) would append to INBOX.md:", *lines, sep="\n    ",
+              file=sys.stderr)
+    else:
+        with open(ws / "INBOX.md", "a") as fh:
+            fh.write(block)
+
+
+def act_on_stop(ws: Path, resource: str, dry_run: bool):
+    """charter section 4 hard stop. Compute stop holds the queue; token stop ends the session.
+
+    The queue action is Dirac-specific and lives behind dirac.hold_all(); it is a stub until
+    the account lands, and says so rather than pretending to have acted.
+    """
+    import dirac
+    notify(ws, [f"**HARD STOP — {resource} budget at 100%.** Charter section 4. "
+                f"No further submissions. A final report in the section 7 format remains "
+                f"mandatory (section 5): file it from the state you are in."], dry_run)
+    if resource == "compute":
+        dirac.hold_all(ws.name, dry_run=dry_run)
+
+
+def run(ws_path, repo, dry_run=False, once=True, json_out=False):
+    ws = Path(ws_path).resolve()
+    meta = json.loads((ws / "WORKSPACE.json").read_text())
+    report = {"replicate": meta["replicate_id"], "ts": datetime.now(KST).isoformat(),
+              "liveness": check_liveness(ws),
+              "budget": check_budget(ws, meta),
+              "isolation": audit_isolation(ws, Path(repo).resolve())}
+    deadline = datetime.fromisoformat(meta["deadline_kst"])
+    report["hours_to_deadline"] = round((deadline - datetime.now(KST)).total_seconds() / 3600, 1)
+
+    msgs = []
+    for e in report["budget"]:
+        if e["level"] == "warn":
+            if e["fraction"] is None:          # non-fractional cap, e.g. queued-job count
+                msgs.append(f"**Cap exceeded — {e['resource']} at {e['used']}, "
+                            f"limit {e['cap']}.** Charter section 4, cluster etiquette.")
+            else:
+                msgs.append(f"**Usage warning — {e['resource']} at {e['fraction']:.0%} of budget** "
+                            f"({e['used']} / {e['cap']}). Charter section 4.")
+        elif e["level"] == "stop":
+            act_on_stop(ws, e["resource"], dry_run)
+    if report["isolation"]:
+        msgs.append("**Workspace isolation audit raised findings** (charter section 4): "
+                    + "; ".join(report["isolation"]))
+    if report["liveness"]["state"] == "stale":
+        msgs.append(f"Heartbeat stale ({report['liveness']['age_min']} min). "
+                    f"If you are in a long wait, STATE.md should be current (charter section 6).")
+    if msgs:
+        notify(ws, msgs, dry_run)
+
+    log = Path(__file__).parent / "watchdog.jsonl"
+    if not dry_run:
+        with open(log, "a") as fh:
+            fh.write(json.dumps(report) + "\n")
+    if json_out:
+        print(json.dumps(report, indent=2))
+    else:
+        print(_fmt(report))
+    return report
+
+
+def _fmt(r):
+    out = [f"[watchdog] {r['replicate']}  T-{r['hours_to_deadline']}h  liveness={r['liveness']['state']}"]
+    for e in r["budget"]:
+        f = "n/a" if e["fraction"] is None else f"{e['fraction']:.1%}"
+        out.append(f"    {e['resource']:<12} {e['used']} / {e['cap']}  ({f})  {e['level'].upper()}")
+    out.append(f"    isolation    {'CLEAN' if not r['isolation'] else str(len(r['isolation'])) + ' FINDING(S)'}")
+    for p in r["isolation"]:
+        out.append(f"      - {p}")
+    return "\n".join(out)
+
+
+if __name__ == "__main__":
+    ap = argparse.ArgumentParser()
+    ap.add_argument("workspace")
+    ap.add_argument("--repo", default=str(C.REPO))
+    ap.add_argument("--dry-run", action="store_true")
+    ap.add_argument("--json", action="store_true")
+    a = ap.parse_args()
+    run(a.workspace, a.repo, a.dry_run, json_out=a.json)
