@@ -209,6 +209,23 @@ Stated because a monitoring component that overstates its reach is worse than no
 
 ---
 
+## Transferring a workspace to the cluster
+
+Two things bite on macOS and both are silent:
+
+1. **AppleDouble artefacts.** `tar` on macOS writes `._<name>` resource-fork files from extended
+   attributes; they arrive on the cluster as untracked junk inside the replicate's git repo.
+   Use `COPYFILE_DISABLE=1 tar ...`, and sweep with
+   `find <ws> -name '._*' -o -name '.DS_Store' -delete` after transfer.
+2. **`sha256sum -c` speaks the server's locale.** The cluster runs a Korean locale, so a
+   successful check prints `성공`, not `OK`. Grepping for `": OK$"` reports **0 verified** on a
+   perfectly good transfer — and a naive grep for `FAILED` would have reported success without
+   verifying anything. Always force `LC_ALL=C sha256sum -c`.
+
+Checksums are verified **twice**: at provisioning time on this machine, and again **on arrival**
+on the cluster. The second is the one that matters — it is the only check that covers the
+transfer itself.
+
 ## Full-loop dry run
 
 ```bash

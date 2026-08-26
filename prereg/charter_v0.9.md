@@ -4,7 +4,7 @@
 
 ## 1. Mandate
 
-Determine the maximum methane **working capacity** achievable in the **1,731-structure database provided at [workspace path]/db/** under the fixed protocol of §3, and deliver, by the deadline in §5, a final report that states:
+Determine the maximum methane **working capacity** achievable in the **1,731-structure database provided at `<your workspace>/db/`** (your workspace's absolute path is `workspace_root` in `WORKSPACE.json`) under the fixed protocol of §3, and deliver, by the deadline in §5, a final report that states:
 
 1. **Best validated material** — identity, working capacity with uncertainty, and the evidence supporting it.
 2. **Ceiling position** — a defended claim on whether your best number is near the achievable maximum for this database and protocol, or can be exceeded — and if you claim it can be exceeded, by what means and with what evidence.
@@ -52,7 +52,7 @@ Candidate structures are limited to the provided database; structural modificati
   and it must also cover report-grade runs and reproduction. **You cannot screen everything,
   and you are not expected to.** How you narrow the field is yours to choose and to justify
   under §2.
-- **Workspace:** you operate exclusively inside [workspace path]. Reading or writing outside your workspace is prohibited and audited.
+- **Workspace:** you operate exclusively inside your workspace, whose absolute path is `workspace_root` in `WORKSPACE.json`. Reading or writing outside your workspace is prohibited and audited.
 - **Cluster etiquette:** jobs tagged with your replicate id in the job name; queue `long`; no interactive jobs over **30 min**.
 
 ## 5. Timeline and stopping
@@ -149,6 +149,7 @@ Amendments to this document before seal. Append-only.
 | 2026-08-26 | §3 | Tail corrections `[on]` → **OFF**, and potentials pinned **unshifted** | PI principle, record-governed — **see note** |
 | 2026-08-26 | §4 | `[30]` min interactive → **30 min** | PI |
 | 2026-08-26 | Appendix A | Note added: gate thresholds are calibrated to §3; a §3 change requires recalibration | PI |
+| 2026-08-26 | §1, §4 | `[workspace path]` → reference to `workspace_root` in `WORKSPACE.json` | Bei (mechanical) |
 
 ## Note on the G3 density bounds
 

@@ -170,7 +170,7 @@ def leak_warn(ws: Path) -> list:
     return warns
 
 
-def provision(rep_id, dest_root, dry_run=False, db_limit=None, force=False):
+def provision(rep_id, dest_root, dry_run=False, db_limit=None, force=False, remote_root=None):
     arm = C.arm_of(rep_id)
     phase = C.phase_of(rep_id)
     C.require_ratified(["cycles_screen", "cycles_claim", "raspa", "tail_corrections"], dry_run)
@@ -227,6 +227,7 @@ def provision(rep_id, dest_root, dry_run=False, db_limit=None, force=False):
     meta = {
         "replicate_id": rep_id,
         "phase": phase,
+        "workspace_root": None,   # filled below; absolute path of THIS workspace
         "provisioned_at": datetime.now(KST).isoformat(),
         "deadline_kst": deadline.isoformat(),
         "campaign_days": C.RATIFIED["phases"][phase]["days"],
@@ -239,6 +240,7 @@ def provision(rep_id, dest_root, dry_run=False, db_limit=None, force=False):
         "queue": C.RATIFIED["queue"],
         "job_tag_prefix": f"{rep_id}_",
     }
+    meta["workspace_root"] = str(remote_root) if remote_root else str(ws)
     (ws / "WORKSPACE.json").write_text(json.dumps(meta, indent=2) + "\n")
     (ws / "LOG.md").write_text("# LOG — append-only narrative\n\n")
     (ws / "STATE.md").write_text("# STATE — current tasks and beliefs\n\n")
@@ -291,5 +293,7 @@ if __name__ == "__main__":
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--db-limit", type=int, help="mock mode: copy only the first N structures")
     ap.add_argument("--force", action="store_true")
+    ap.add_argument("--remote-root", help="absolute path this workspace will occupy after "
+                                          "transfer; recorded as workspace_root")
     a = ap.parse_args()
-    provision(a.rep_id, a.dest, a.dry_run, a.db_limit, a.force)
+    provision(a.rep_id, a.dest, a.dry_run, a.db_limit, a.force, a.remote_root)

@@ -476,3 +476,55 @@ byte-identical round trip; `qstat` visible — server `bnode0` **Active**, 28 jo
 the 129 running slots the prior campaign observed and on which Bei based the study-wide ceiling
 of 160. The ceiling is therefore more conservative than assumed rather than less — no action
 needed, but the basis is now known to be a floor, not the cap.
+
+## LOG-2026-08-26-19 — Runway: hello-world exit 0, RASPA v2.0.37 pinned and building, workspaces provisioned to cluster scratch
+Proceeding without check-ins per PI instruction. Nothing has failed; items below are recorded
+as they completed.
+
+**Hello-world.** Job `3470123.bnode0.kaist.ac.kr`, queue `short`, node `bnode4`,
+**`Exit_status=0`**, walltime 3 s, output retrieved. Compiler on the node is **gcc 4.8.5
+20150623 (Red Hat 4.8.5-36)** — byte-for-byte the compiler string in the prior campaign's
+archived RASPA headers, so the build environment is the same one that produced the reference
+numbers.
+
+**RASPA source pinned properly, and the obvious route was wrong.** `Bei` has no RASPA, and
+`/home/molsim_share/RASPA` turned out to be tutorial material only — no binary. Cloning
+`iRASPA/RASPA2` gives HEAD, which reports **2.0.50**, not the pinned 2.0.37: the version string
+lives in `src/output.c` and moves with the tree. Checked out tag **`v2.0.37`**, commit
+**`4467e14c375c2e02f3839ffc63c14edf0bbde0a2`**, verified `output.c` emits `RASPA 2.0.37` before
+building. Build submitted as job `3470124` with the prior campaign's exact autotools recipe.
+Had the clone been used as-is, every number would have come from the wrong binary while looking
+entirely normal.
+
+**Reference numbers for the verification job**, from the prior campaign's raw screen output:
+`2021[Cu][sql]2[ASR]6` — p65 **244.012 ± 1.228**, p58 **36.841 ± 0.183**, **WC 207.17 ± 1.24**
+cm³/cm³. The benchmark CIF for it is **byte-identical** to the cluster's own
+`/home/molsim_share/core2024_cifs` copy (sha256 `a4eb4713…`), so the reproduction compares like
+with like. Inputs generated with the prior campaign's exact template, `UnitCells 2 2 2` computed
+from perpendicular widths (18.77 / 18.77 / 21.33 Å against the 25.6 Å minimum-image requirement
+— a naive read of the 24×24×22.6 Å edge lengths would have given 1 1 1 and violated it).
+
+**Last charter bracket closed.** `[workspace path]` in §1 and §4 now references
+`workspace_root` in `WORKSPACE.json` rather than a literal path — deliberately: a literal
+`/home1/users/Bei/reps/smoke/s01` would have disclosed the sibling layout and the phase in the
+path itself. Workspaces sit at `/home1/users/Bei/ws/<id>` on the 53 TB-free `/home1` volume.
+**The charter body now has zero unset placeholders**; the only bracketed strings left are the
+three literal format markers.
+
+**Both workspaces provisioned to cluster scratch and verified there.**
+- 1,731 CIFs each, **1,731 OK / 0 FAILED on arrival** at the cluster — the check that actually
+  covers the transfer.
+- Charter hashes byte-identical local ↔ cluster (`4bbd3c2e…` s01, `cf2eb190…` s02).
+- Arm split intact after transfer: s01 has Appendix A + `AUDIT_SCHEMA.md` + `AUDIT.jsonl`; s02
+  has none of them.
+- git repos intact, 1 commit each, **no remotes**.
+- **Leak scan CLEAN on both arms across all four checks** — HARD 0, CREDENTIAL 0, WARN 0,
+  STRUCTURAL 0.
+
+**Two silent traps hit and fixed during the transfer, both recorded in `harness/README.md`:**
+1. macOS `tar` wrote an AppleDouble `._AUDIT_SCHEMA.md` into the s01 workspace — untracked junk
+   inside a replicate's git repo. Swept; `COPYFILE_DISABLE=1` documented.
+2. **`sha256sum -c` speaks the server's locale.** The cluster runs Korean, so success prints
+   `성공`. The first verification reported **"1731 CIFs, 0 OK, 0 FAILED"** on a perfectly good
+   transfer. Grepping only for `FAILED` would have reported success while verifying nothing at
+   all. `LC_ALL=C` is now mandatory in the procedure.
