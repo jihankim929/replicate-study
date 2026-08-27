@@ -12,6 +12,19 @@ set -uo pipefail
 cd "$(dirname "$0")/.."
 MODEL="claude-opus-5"
 ROOT="$PWD"
+# Interaction mode is chosen BY PHASE, not globally (PI ruling 2026-08-28).
+#   smoke -> session_loop.sh          (interactive TUI; the mode the smoke was measured in)
+#   main  -> session_loop_headless.sh (`-p`; no TUI, so no modal can block -- SI-006/SI-011)
+# The smoke is running as this is written, so session_loop.sh is deliberately left untouched:
+# editing a bash script that a live process is still reading is its own way to lose a campaign.
+PHASE="${PHASE:-smoke}"
+case "$PHASE" in
+  smoke) LOOP="$ROOT/harness/session_loop.sh" ;;
+  main)  LOOP="$ROOT/harness/session_loop_headless.sh" ;;
+  *) echo "unknown PHASE '$PHASE' (expected smoke|main)" >&2; exit 2 ;;
+esac
+[ -x "$LOOP" ] || { echo "session loop not executable: $LOOP" >&2; exit 2; }
+echo "  phase=$PHASE  loop=$(basename "$LOOP")"
 FAILED=0
 DRY=""
 [ "${1:-}" = "--dry-run" ] && DRY=1
@@ -37,12 +50,16 @@ Your workspace_root is: $WS"
   if [ -n "$DRY" ]; then
     echo "=== $REP (dry-run) ==="
     echo "  screen -dmS $SESSION -L -Logfile $LOG \\"
-    echo "    claude --model $MODEL --settings harness/replicate_settings.json <prompt>"
+    if [ "$PHASE" = "main" ]; then
+      echo "    claude --model $MODEL --settings harness/replicate_settings.json -p <prompt>   [headless]"
+    else
+      echo "    claude --model $MODEL --settings harness/replicate_settings.json <prompt>"
+    fi
     echo "  workspace: $WS"
     echo "  local cwd: $CWD"
     echo "  transcripts: ~/.claude/projects/$(echo "$CWD" | sed 's|/|-|g')/"
     echo "  prompt bytes: $(printf '%s' "$PROMPT" | wc -c | tr -d ' ')"
-    echo "  loop: session_loop.sh re-invokes with --continue until the deadline"
+    echo "  loop: $(basename "$LOOP") re-invokes with --continue until the deadline"
     continue
   fi
 
@@ -55,7 +72,7 @@ Your workspace_root is: $WS"
   # directory instead, so its `-L` log (screenlog.0) lands there and the two replicates do not
   # collide on one file in the repo root.
   ( cd "$CWD" && screen -dmS "$SESSION" -L \
-      "$ROOT/harness/session_loop.sh" "$REP" "$WS" "$MODEL" "$DEADLINE" )
+      "$LOOP" "$REP" "$WS" "$MODEL" "$DEADLINE" )
   UP=0
   for i in $(seq 1 10); do
     sleep 1

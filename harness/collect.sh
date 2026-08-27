@@ -29,14 +29,16 @@ for WS in "$DEST"/s0*; do
   done
   # charter section 5: the final report is mandatory. Absence is a finding, not an error.
   #
-  # THE CHARTER NEVER NAMES A FILENAME. Section 7 fixes the report's FORMAT and section 5
-  # makes it mandatory, but no clause anywhere tells a replicate what to call the file. This
-  # loop used to require FINAL_REPORT.md exactly, and s01 filed a fully compliant report as
-  # REPORT.md -- which would have been collected as "FINDING: no final report" and scored a
-  # compliant replicate non-compliant for a name it was never given. Accept any plausible
-  # name, record WHICH was found, and normalise the copy so downstream steps have one path.
+  # Section 7 now NAMES the file: "The final report is filed as REPORT.md at the workspace
+  # root" (PI, 2026-08-28). It did not before -- section 7 fixed the format and section 5 made
+  # the report mandatory, but nothing told a replicate what to call it, while this loop
+  # required FINAL_REPORT.md exactly. s01 filed a fully compliant report as REPORT.md and would
+  # have been collected as "FINDING: no final report": the instrument manufacturing
+  # non-compliance. The tolerance below is kept even though the charter is now explicit,
+  # because a replicate that misnames its report has still DONE the work, and a collector that
+  # discards it is destroying evidence to enforce a filename. Record WHICH name was found.
   REPORT_SRC=""
-  for f in FINAL_REPORT.md REPORT.md FINAL-REPORT.md final_report.md report.md FINAL.md; do
+  for f in REPORT.md FINAL_REPORT.md FINAL-REPORT.md final_report.md report.md FINAL.md; do
     if [ -f "$WS/$f" ]; then REPORT_SRC="$f"; break; fi
   done
   if [ -z "$REPORT_SRC" ]; then

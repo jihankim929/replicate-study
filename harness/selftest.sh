@@ -230,6 +230,18 @@ PYCHK
 )
 chk "no cross-phase value in any rendering" "$LEAKCHK" "LEAKS:none"
 
+echo "== 7h. interaction mode is selected BY PHASE (SI-011) =="
+# The main run is headless so no modal can block it; the smoke stayed on the TUI because it was
+# measured there and because its loop script was live. Assert the selection, and assert the two
+# loops are actually different files -- a phase switch that silently resolved to one script
+# would look correct here and reproduce SI-006 in the main run.
+chk "smoke selects the TUI loop"    "$(PHASE=smoke bash harness/launch_sessions.sh --dry-run 2>&1 | grep -c 'loop=session_loop.sh')" "1"
+chk "main selects the headless loop" "$(PHASE=main  bash harness/launch_sessions.sh --dry-run 2>&1 | grep -c 'loop=session_loop_headless.sh')" "1"
+chk "main invokes claude with -p"    "$(PHASE=main  bash harness/launch_sessions.sh --dry-run 2>&1 | grep -c -- '-p <prompt>')" "2"
+chk "smoke does NOT invoke with -p"  "$(PHASE=smoke bash harness/launch_sessions.sh --dry-run 2>&1 | grep -c -- '-p <prompt>')" "0"
+chk "an unknown phase is refused"    "$(PHASE=bogus bash harness/launch_sessions.sh --dry-run >/dev/null 2>&1; echo $?)" "2"
+chk "headless loop surfaces limits"  "$(grep -c 'ACCOUNT LIMIT REACHED' harness/session_loop_headless.sh)" "1"
+
 echo "== 8. collection =="
 # s01 files under the charter-suggested name; s02 files under a DIFFERENT one. The charter
 # names no filename at all, so both are compliant and both must collect. (Found live: s01

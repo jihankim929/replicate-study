@@ -145,7 +145,30 @@ the limit exceeds 800 M tokens' worth of spend with margin, and record the confi
 
 - [ ] *(unchecked)* Spend limit confirmed to exceed the fleet ceiling with margin — PI, date:
 
-**Leg 2 — non-interactive invocation. NOT implemented; needs a PI decision.**
+## S6. Main-run launch gaps found while wiring headless mode — not blocking today, blocking at launch
+
+- **`launch_sessions.sh` iterates a hardcoded `for REP in s01 s02`.** It cannot launch the main
+  fleet as written. The phase-selected loop, the deadline read, the credential-clean environment
+  and the growth-based proof of life are all correct and reusable; only the replicate list is
+  wrong. Must be driven from `config.RATIFIED["phases"][phase]["ids"]` before the main launch.
+- **`poll.sh`, `restart_watch.sh` and `collect.sh` carry the same hardcoded pair.** Same fix,
+  same place to make it.
+- **`session_loop_headless.sh` has never run a live replicate** (SI-011). Recommend a
+  single-replicate rehearsal against a throwaway workspace before the fleet launch — the smoke
+  launch surfaced three independent defects in its first hour, and none of them were visible
+  from a dry run.
+
+**Leg 2 — non-interactive invocation. RULED AND IMPLEMENTED 2026-08-28.**
+Approved for the main run, with the smoke-vs-main mode difference stated as a limitation in
+**SI-011**. `launch_sessions.sh` selects by phase: `smoke → session_loop.sh` (TUI, unchanged and
+still running), `main → session_loop_headless.sh` (`-p`). The headless loop names an account
+limit in its log, notifies the replicate that it is an infrastructure condition, backs off
+linearly, and stops after 5 consecutive hard failures instead of spinning for the term.
+Verified that `-p` honours the settings allow-list, executes tool calls, and resumes with
+`--continue`. **Not yet exercised on a live campaign** — the first main-run launch is its first
+real use.
+
+*Original framing, retained:*
 Replicates run `claude` in its default interactive TUI mode, which is what allowed a modal to
 be drawn at all. In `-p/--print` mode there is no modal: a limit returns an error and the
 process **exits non-zero**, which `session_loop.sh` already records and which the harness can

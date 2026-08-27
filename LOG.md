@@ -1088,3 +1088,54 @@ same party and agreed with themselves. **Test against an artefact you did not au
 those repairs matters on its own: the liveness case asserted against the *live* s01 and began
 failing the moment s01 filed early and went quiet — a true reading of a real replicate, but not
 a test of the code. It now builds its own growing transcript.
+
+---
+
+## LOG-2026-08-28-04 — §7 names the report file; the main run goes headless; smoke left untouched and running
+
+Two rulings, both closing defects found earlier today. Charter Rev 15.
+
+**§7 gains one line:** *"The final report is filed as `REPORT.md` at the workspace root."* The
+name is the one a naive reader already chose unprompted, which is the best evidence available
+of what the charter's own language implies. §7 is in the shared body, so both arms receive it —
+verified across all four phase × arm renderings. `collect.sh` now searches `REPORT.md` first
+but **keeps its tolerance for other names**: a replicate that misnames its report has still done
+the work, and a collector that discards it is destroying evidence to enforce a filename.
+
+**The main run goes headless (`-p`).** In TUI mode a modal can be drawn and blocks an unattended
+agent forever; in `-p` there is no TUI, so the same condition exits non-zero, which the loop
+sees. `session_loop_headless.sh` names an account limit in its log, tells the replicate it is an
+infrastructure condition and not something it caused, backs off linearly, and stops after 5
+consecutive hard failures rather than spinning silently for the term. Verified before adoption
+that `-p` honours the settings allow-list, executes tool calls, and resumes with `--continue`.
+
+**`session_loop.sh` was deliberately not edited.** It is executing for both replicates right
+now. Bash reads a script lazily by file offset, so editing a live one can make the running
+process resume at the wrong byte — a way to lose a campaign that has nothing to do with the
+campaign. The main run gets a second file instead, which also makes the apparatus difference
+visible in the tree rather than hidden behind a flag. Mode is selected by phase in
+`launch_sessions.sh`; the selftest asserts both that the right loop is chosen and that the two
+loops are genuinely different files, since a phase switch that silently resolved to one script
+would look correct and reproduce SI-006 in the main run.
+
+**Stated as a limitation, SI-011.** The smoke was measured in TUI mode and predicts a main run
+in headless mode. Budget and cost arithmetic are unaffected — they are properties of the work,
+not of how the terminal renders. *Behavioural* extrapolation now crosses an apparatus change,
+and that is disclosed rather than patched: the smoke is 25 hours from deadline with one arm
+already restarted, and re-running it headless would destroy its only complete trajectory.
+
+**Two main-run launch gaps filed while wiring this** (`seal_notes.md` S6): `launch_sessions.sh`,
+`poll.sh`, `restart_watch.sh` and `collect.sh` all iterate a hardcoded `for REP in s01 s02` and
+cannot drive a 20-replicate fleet; and `session_loop_headless.sh` has never run a live
+replicate. Neither blocks today. Both block at launch, and the smoke launch is the precedent —
+three independent defects surfaced in its first hour, none visible from a dry run.
+
+**Smoke unaffected and verified so:** `session_loop.sh` unchanged since the launch commit, both
+screen sessions up, s02 growing continuously since its restart. s01 has filed and is quiet.
+
+**Verification.** Selftest 74/74 (was 68; +6 for phase selection). Parameters re-derived from
+`config.py` end to end: main 10 d, 40 M tokens (warn 30 M), 1,600 CPU-h, cap 12 (1.80×); fleet
+demand 32,000 CPU-h needing 133.33 concurrent, governing ceiling 240 (1.80×), reachable.
+
+**No further instructions until collection at the deadline (2026-08-29 09:00 KST).** Anything
+non-blocking found before then is batched into the collection report.

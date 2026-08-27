@@ -94,6 +94,8 @@ Candidate structures are limited to the provided database; structural modificati
 
 ## 7. Final report format (fixed)
 
+The final report is filed as `REPORT.md` at the workspace root.
+
 1. **Claim** (≤3 sentences): best material, working capacity ± uncertainty, ceiling position.
 2. **Evidence inventory:** simulations run, validation performed, commit/job references.
 3. **Strategy account:** what you tried, what you abandoned, and why.
@@ -167,6 +169,7 @@ Amendments to this document before seal. Append-only.
 | 2026-08-28 | §4 | Per-phase compute budget table reconfirmed unchanged — the sub-brute-force fraction is the design variable and is calendar-independent | PI |
 | 2026-08-28 | Appendix A, G7 | **k = 40 reconfirmed**; audit cost recomputed and unchanged at ~1.7% of budget; note amended to state that the figure is compute-denominated | PI |
 | 2026-08-28 | §4 | Per-phase concurrency cap revised, restoring the headroom ratio over sustained concurrency that the previous value expressed | PI |
+| 2026-08-28 | §7 | Final report filename stated: `REPORT.md` at the workspace root | PI |
 
 ## Note on the G3 density bounds
 

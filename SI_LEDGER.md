@@ -554,3 +554,64 @@ general fix is the same: test against an artefact you did not author.
 **Effect on the record.** No collection has run against the live workspaces, so nothing was
 mis-scored. Had the smoke been collected before this was found, s01 would have been recorded as
 having filed no final report.
+
+---
+
+## SI-011 — The main run is headless; the smoke was not. Apparatus difference, stated as a limitation
+
+**Opened:** 2026-08-28 by PI ruling, on the recommendation in `prereg/seal_notes.md` S5.
+**Phase:** applies to the main run. **Status:** implemented, not yet exercised on a live campaign.
+
+**The change.** Main-run replicates invoke Claude Code with `-p` (headless). Smoke replicates
+ran, and are still running, in the interactive TUI. Selected by phase in
+`launch_sessions.sh`: `smoke → session_loop.sh`, `main → session_loop_headless.sh`.
+
+**Why.** In TUI mode an interactive modal can be drawn, and for an unattended agent it blocks
+forever — SI-006, where a smoke replicate sat at *"You've hit your monthly spend limit"* for
+38.6 hours of a 72-hour campaign while its screen session, its heartbeat wrapper and every
+signal above the TUI reported health. Two earlier instances (a permission dialog at launch, a
+settings dialog) were each fixed *as specific dialogs*; the class is **"an interactive modal
+halts an unattended agent while everything above the TUI reports health"**, and it is not
+enumerable. In `-p` mode there is no TUI, so the condition that would have drawn a modal
+instead **exits non-zero**, which the loop sees, logs by name, escalates to the replicate's
+INBOX as an infrastructure condition, backs off, and — after 5 consecutive hard failures —
+stops rather than spinning silently for the rest of the term. Not detecting the dialog; making
+it unreachable. The same shape as the permission allow-list.
+
+**Verified before adoption**, in a throwaway workspace: `-p` honours the replicate settings
+allow-list, executes tool calls (wrote and read back a file), and `--continue -p` resumes the
+prior conversation correctly. The campaign structure — one invocation per turn, `--continue`
+carrying context — is unchanged.
+
+### The limitation, which is the reason this entry exists
+
+**The smoke's behavioural observations were made under a different interaction mode than the
+main run's.** The smoke is the instrument that prices and predicts the main run, so wherever a
+main-run expectation is drawn from smoke behaviour, that extrapolation now crosses an apparatus
+change.
+
+What is and is not affected, stated rather than left to inference:
+
+| Carried from the smoke | Affected? |
+|---|---|
+| Token-burn arithmetic, compute cost per structure, G7 audit cost | **No** — these are properties of the work, not of how the terminal renders |
+| Budget and horizon arithmetic (Rev 13/14) | **No** |
+| *Behavioural* readings — deliberation vs execution style, pacing, how a replicate spends a turn | **Yes, potentially.** `-p` returns after each turn with no persistent UI, and whether that changes how an agent paces or structures work is unmeasured |
+| Failure modes | **Yes, by design** — that is the point of the change |
+
+**Not equalised by re-running the smoke headless**, and deliberately so: the smoke is 25 hours
+from its deadline with one arm already restarted, and changing its apparatus now would destroy
+the only complete trajectory it has. The difference is accepted and disclosed rather than
+patched over.
+
+**Not yet exercised on a live campaign.** `session_loop_headless.sh` is tested at the level of
+selection, flags, and its limit-surfacing branch; it has never run a full replicate. The first
+main-run launch is its first real use. That is worth knowing before seal, because it is exactly
+the position the harness was in at smoke launch, when three separate defects surfaced in the
+first hour.
+
+**Why session_loop.sh was not simply edited.** It was executing for both replicates as this was
+written. Bash reads a script lazily by file offset, so editing a live script can make the
+running process resume at the wrong byte — a way to lose a campaign that has nothing to do with
+the campaign. The two modes are two files, which also makes the apparatus difference visible in
+the tree rather than hidden behind a flag.

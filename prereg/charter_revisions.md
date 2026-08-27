@@ -540,3 +540,39 @@ no limit hook. All four queues show an identical "58" despite differing otherwis
 request is needed.** Full evidence, the counterfactual had 58 been real (43.5% of the fleet
 budget spendable, the main run unreachable), and the prepared burst verification are in
 `prereg/seal_notes.md` S1.
+
+
+---
+
+## Rev 15 — 2026-08-28 — §7 names the final report file; main run goes headless
+
+**Authority:** PI ruling. Both from SI-010 and SI-006 respectively.
+
+### §7 — `REPORT.md`
+
+One line added to §7: *"The final report is filed as `REPORT.md` at the workspace root."*
+
+The charter previously named **no filename at all** — §5 made the report mandatory and §7 fixed
+its format, while `collect.sh` silently required `FINAL_REPORT.md`. s01 filed a complete,
+committed, §7-format report as `REPORT.md` and would have been collected as having filed
+nothing. The requirement existed only inside the instrument, was never communicated, and would
+have been scored against the replicate.
+
+**The name chosen is the one a naive reader already picked**, unprompted, which is the best
+available evidence of what the charter's own language implies. §7 is in the shared body, so
+both arms receive it; verified across all four phase × arm renderings.
+
+The collector keeps its tolerance for other names even now that the charter is explicit. A
+replicate that misnames its report has still *done the work*, and a collector that discards it
+is destroying evidence to enforce a filename.
+
+### Main run runs headless (`-p`)
+
+Not a charter change — replicates are not told how they are invoked, and telling them would
+disclose apparatus. Recorded here because it changes what the smoke predicts about the main run.
+
+Approved on the recommendation in `seal_notes.md` S5, with the apparatus difference stated as a
+limitation in **SI-011**: budget and cost arithmetic carry across unaffected; *behavioural*
+extrapolation from smoke to main now crosses a mode change. The smoke is not being re-run
+headless to equalise it — it is 25 hours from deadline with one arm already restarted, and
+changing its apparatus now would destroy the only complete trajectory it has.
