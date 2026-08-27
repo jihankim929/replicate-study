@@ -377,3 +377,16 @@ not bind. The 10-day calendar admits **1,051** structure-screens at the current 
 **k = 40, unscoped, 15 audits ≈ 27 CPU-h ≈ 1.71% of budget.**
 
 Under option B of R3.3 the calendar admits 1,577 screens, which does not change this either.
+
+---
+
+## R3.3 RESOLVED — 2026-08-28 — Flag H ruled: main concurrency cap **12**
+
+The PI ruled option **B**. The invariant is the headroom ratio (~1.7–1.8× over sustained
+concurrency), not the numeral: **12 is 1.80×** the 6.67 that a 1,600 CPU-h budget over 10 days
+implies, and required queue saturation drops from 83.3% to **55.6%**, below what the 14-day
+design ever demanded. Written into charter §4 and `harness/config.py`; rationale in
+`prereg/charter_revisions.md` Rev 14. Fleet worst case is now 20 × 12 = 240.
+
+**Flag I opened at the same time** — the study-wide ceiling of 160 carries the identical
+1.20× ratio at the fleet scale and is **not** ruled. See `prereg/seal_notes.md` S2.

@@ -206,3 +206,195 @@ as a style, or a peak-day rate to be read afterwards as a sustained one.
 **Open dependency.** SI-004 is still open and B has not written for ~38 h. If the smoke ends
 with B never resuming, **the study has one arm's token burn, not two**, and the 40 M figure
 rests on a single trajectory. That is worth knowing before seal.
+
+---
+
+## SI-006 — SI-004 resolved: the stall is a blocking spend-limit dialog, not a stalled agent
+
+**Found:** 2026-08-28, on the PI's instruction to report SI-004's status.
+**Phase:** smoke. **Status:** mechanism established; **no repair applied** (see below).
+**Supersedes:** SI-004's "not yet established" clause.
+
+**The question SI-004 left open** was whether the affected replicate's turn was blocked on a
+tool call that would not return, or was progressing without emitting transcript entries.
+**Neither.** Recovered from the session's own `screenlog.0`, which the harness already
+collects, with no interaction with the session:
+
+```
+⎿  You've hit your monthly spend limit.
+   What do you want to do?
+ ❯ 1. Stop and wait for limit to reset
+   2. Upgrade your plan
+   Usage credit balance: $959.51
+   Resets 5pm (Asia/Seoul)
+```
+
+The agent is sitting at an **unanswered interactive modal**. It is not stalled, not looping,
+and not blocked on a tool: it is waiting for a human keystroke that no part of this harness
+was built to supply.
+
+**This explains every observation in SI-004 exactly.**
+
+| Observation | Cause |
+|---|---|
+| Transcript frozen at 1,030,694 bytes | No turn can begin; nothing is written |
+| Screen session up | The TUI process is alive and healthy |
+| `screenlog.0` still growing | The TUI repaints — the last 8,192 bytes are nothing but `ESC[?1000h ESC[?1002h ESC[?1003h ESC[?1006h` repeated, mouse-tracking mode-set sequences and no content |
+| Heartbeat frozen 38.6 h | The wrapper loop is inside the same blocked `claude` invocation |
+| Still inside session-loop iteration 1 | The invocation never returned, so the loop never iterated |
+
+**Timing.** Last transcript write 2026-08-26 16:57 KST; at this entry the session has been
+blocked **~38.6 hours** of a 3-day smoke. The dialog says the limit resets at 17:00 KST, i.e.
+it very likely lifted within the hour — **but the modal is sticky**. Once drawn it blocks until
+answered, whether or not the condition that raised it has cleared. The other arm, which shares
+the account, was unaffected and has run continuously since (6.49 M tokens against this arm's
+0.65 M). There is no arm-asymmetric configuration: both were launched by the same script with
+the same model, the same settings file and the same account, and the bootstrap prompt is
+byte-identical. Which session met the modal was an accident of which one made a request at the
+moment the threshold was crossed.
+
+**This is the third instance of one failure class.** Launch (commit `8097168`) failed on a
+blocking permission dialog, then on a blocking settings dialog. Both were fixed *as specific
+dialogs*. The class is **"Claude Code can present an interactive modal that halts an
+unattended agent indefinitely, while every liveness signal above the TUI keeps reporting
+health"**, and it has now produced a third member that neither earlier fix anticipated. The
+lesson the first two did not teach: the fixes enumerated known dialogs, and the class is not
+enumerable.
+
+### Why the scripted restart path did not fire
+
+**The death test is not evading detection — it fires correctly.** `liveness.py` measures
+transcript **bytes**, not mtime (the file's mtime does advance without the size changing, which
+an mtime-based test would have read as life; it does not):
+
+```
+$ python3 harness/liveness.py s02 --dead-after 30 --no-update
+[liveness] s02: transcript last grew 1436.8 min ago, threshold 30 -> DEAD ; exit=0
+```
+
+The restart path does not fire because `restart_watch.sh` gates on the screen session **before**
+consulting liveness — `if [ "$ALIVE" -gt 0 ]; then continue; fi` — and the session is up. This
+is **precisely the limit SI-003 wrote down**: *"A restart requires both no transcript growth and
+an absent screen session. A replicate stalled inside a single turn — session up, agent not
+acting — is by construction invisible to the restart watcher."* SI-004 was that specimen; SI-006
+is its mechanism.
+
+A second gate would also have stopped it: `launch_sessions.sh` skips any replicate whose screen
+session already exists, so even had the liveness gate passed, the restart would have been a
+no-op against a live session.
+
+**No repair applied, deliberately.** The PI's standing instruction is to document the mechanism
+as a specimen before any repair, and the smoke deadline (2026-08-29 09:00 KST) is close enough
+that a repair now would change the instrument mid-measurement for a replicate that is already
+unrecoverable — ~38.6 h of a 72 h campaign is gone whatever happens next. Answering the modal
+by hand would also make this arm's remaining hours incomparable to the other's. **Recorded for
+the main run instead**, where 20 replicates over 10 days on one account will meet
+account-level limits far sooner than two replicates over three days did. Options, none ruled:
+detect the modal in `screenlog.0` and escalate; run with a spend limit that cannot be reached
+inside a campaign; or make the session loop kill and relaunch an invocation whose transcript
+has not grown while its process lives — the last being the only one that addresses the class
+rather than this member of it.
+
+**Effect on the record — this is the important part.** The smoke did not compare two working
+replicates. It compared one working replicate against one that worked for 1.5 hours and then
+sat at a dialog for 38.6. **Every cross-arm comparison in `STATUS.md`'s divergence panel is
+contaminated**, and the panel does not say so. The token-burn figure that priced the main
+run's 40 M budget (SI-005) is the most consequential: the "execution-heavy style" reading of
+that arm's 0.39 M/day was, on this evidence, a measurement of a blocked session. **The smoke
+has one usable trajectory, not two.**
+
+---
+
+## SI-007 — The restart cap of 3 could not have been enforced
+
+**Found:** 2026-08-28, while establishing SI-006. **Phase:** smoke. **Fixed:** 2026-08-28.
+
+**Defect.** `restart_watch.sh` caps restarts at 3 per replicate per campaign — *"repeated death
+is a fact about the run, and unlimited restarts would hide it."* The counter was broken twice
+over, and either fault alone defeats the cap.
+
+1. **Writer and reader disagreed on the format.** The ledger is written by `printf` as
+   `{"ts":"...","replicate":"s01",...}` — no space after the colon. The counter greps for
+   `"replicate": "s01"` — with a space. It never matches. The one restart already on the
+   record (s01, 2026-08-26 04:59:45Z) was counted as **zero**.
+2. **`grep -c` exits non-zero when it finds nothing**, so `N=$(grep -c ... || echo 0)`
+   appends a second `0` and yields the two-line string `"0\n0"`. `[ "$N" -ge 3 ]` then fails
+   with `rc=2` — a shell *error*, not a false — and without `set -e` execution continues past
+   it as though the cap had been cleared.
+
+Observed directly, before the fix:
+
+```
+  s01: session=up transcript_age=0.0min ... restarts=0
+0/3                       <- the two-line count, printed as-is
+$ grep -c '"replicate":"s01"' harness/restarts.jsonl
+1                         <- the truthful count
+```
+
+**Both faults push the same way: toward restarting more, never fewer.** A replicate could have
+been restarted without limit while the ledger recorded each one and the cap read zero — and the
+cap exists precisely so that repeated death shows up as a fact rather than being smoothed away
+by the harness.
+
+**Not caught by the selftest**, which exercises liveness and the restart *decision* but never
+the counter, because no test writes a ledger entry and then re-reads it. The general fault: the
+writer and the reader of a record were tested separately and never against each other.
+
+**Change (immediate).** The count is taken with `grep -c` against a pattern tolerant of both
+spacings, the exit status is neutralised without appending to the value, and the result is
+forced to a single integer. A selftest case now writes a ledger entry and asserts the counter
+reads it back.
+
+**Effect on the record.** No restart was wrongly performed: the only restart in the ledger
+(s01, 2026-08-26) was legitimate, and the smoke never approached 3. The defect is that the
+cap was decorative, not that it misfired.
+
+---
+
+## SI-008 — The phase-row filter's first live catch: a leak introduced into the charter itself
+
+**Found:** 2026-08-28, during the pre-seal revisions (charter Rev 13). **Phase:** smoke.
+**Status:** caught before commit; nothing provisioned; no replicate exposed.
+
+**Recorded because a control that has never fired is indistinguishable from one that does not
+work.** This is the first time `provision.py:render_phase_rows` and the phase × arm rendering
+check caught a real leak in live use rather than in a test.
+
+**The defect.** Implementing the Rev 13 revisions, Bei wrote the charter's own revision-record
+rows in the natural style — naming what changed and what it changed to:
+
+```
+| 2026-08-28 | §5 | Main campaign length **14 days → 10 days** ... | PI |
+| 2026-08-28 | §4 | Main token budget **57,000,000 → 40,000,000** ... | PI |
+```
+
+`render_phase_rows` filters the §4 and §5 **tables**. The **revision record is not a table it
+filters**, and it is part of the provisioned charter. A smoke replicate would have read the
+main phase's horizon and budget off the foot of its own charter and learned that a longer,
+better-funded main phase exists — i.e. **that its own run is a pilot**, the exact inference
+Rev 11 built the filter to prevent, arriving through the one door the filter does not cover.
+The same edit had put `"when the main horizon was shortened"` into the Appendix A G7 note,
+which is gated-arm text but is read by the gated **smoke** replicate too.
+
+**Why the existing rows were safe** is that every prior revision row names the change and not
+the value — *"Compute, token and concurrency brackets → explicit per-phase table"*. That
+discipline was deliberate and nowhere stated, so it was invisible to someone editing in good
+faith. It is now stated, here and in Rev 13.
+
+**How it was caught.** Not by review. By running the artefact through the filter and asserting
+on the output — all four phase × arm renderings checked for the other phase's values:
+
+```
+smoke  gated    leaked=['1,600 CPU-hours', '40,000,000', '10 days']
+```
+
+**Change.** The rows were rewritten to name the change without the value, and the check is
+now the standing verification for any charter edit. Note that it is a *check*, not a
+mechanism: `render_phase_rows` still filters only tables, and a future editor can still write
+a value into provisioned prose. Making the filter cover prose is not obviously possible; making
+the check mandatory before provisioning is, and is recommended for the seal.
+
+**The recurring lesson, third time in this study's record.** RASPA exits 0 on fatal input
+errors and the verification script judged success on exit status; the compute meter reported
+a number nobody had checked against job records; and here a leak control was assumed to cover
+a document it does not cover. **Check the artefact, not the intention.**

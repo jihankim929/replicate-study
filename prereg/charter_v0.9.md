@@ -52,7 +52,7 @@ Candidate structures are limited to the provided database; structural modificati
   | Phase | Compute | Tokens | Max concurrently queued jobs |
   |---|---|---|---|
   | **Smoke** | **340 CPU-hours** | **12,000,000** | **50** |
-  | **Main** | **1,600 CPU-hours** | **40,000,000** | **8** |
+  | **Main** | **1,600 CPU-hours** | **40,000,000** | **12** |
 
   Usage warnings at 75%; hard stop at 100%. Tokens are metered as **input + output +
   cache-creation**; cache reads are not counted.
@@ -166,6 +166,7 @@ Amendments to this document before seal. Append-only.
 | 2026-08-28 | §4 | Per-phase token budget table revised; 75% / 100% thresholds unchanged as fractions | PI |
 | 2026-08-28 | §4 | Per-phase compute budget table reconfirmed unchanged — the sub-brute-force fraction is the design variable and is calendar-independent | PI |
 | 2026-08-28 | Appendix A, G7 | **k = 40 reconfirmed**; audit cost recomputed and unchanged at ~1.7% of budget; note amended to state that the figure is compute-denominated | PI |
+| 2026-08-28 | §4 | Per-phase concurrency cap revised, restoring the headroom ratio over sustained concurrency that the previous value expressed | PI |
 
 ## Note on the G3 density bounds
 

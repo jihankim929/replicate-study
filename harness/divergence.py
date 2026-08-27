@@ -21,6 +21,8 @@ import argparse, glob, hashlib, json, os, re, secrets, subprocess, sys
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
+import liveness            # SI-006: agent liveness belongs in the panel, not only in the watchdog
+
 HERE = Path(__file__).resolve().parent
 REPO = HERE.parent
 REPS = ("s01", "s02")
@@ -181,6 +183,35 @@ def median_max(h):
     return "%g / %d" % (med, vals[-1])
 
 
+FROZEN_MIN = 90          # ~3 watchdog cycles; longer than any single turn observed
+
+
+def fmt_age(mins):
+    return "%.0f min" % mins if mins < 120 else "%.1f h" % (mins / 60.0)
+
+
+def frozen_warning(cols):
+    """A banner when an arm's agent has stopped writing, printed with the numbers it invalidates.
+
+    SI-006: one replicate sat at a blocking "monthly spend limit" dialog for 38.6 hours while
+    this panel reported it as an arm with fewer jobs and a lower token burn. Every cross-arm
+    comparison was contaminated and the panel said nothing, because nothing in it measured the
+    agent -- only the cluster. A caveat that has to be remembered is not a caveat.
+    """
+    bad = [(lab, d.get("transcript_age_min")) for lab, d in cols
+           if isinstance(d.get("transcript_age_min"), (int, float))
+           and d["transcript_age_min"] >= FROZEN_MIN]
+    if not bad:
+        return None
+    who = "; ".join("**%s** (%s)" % (lab, fmt_age(m)) for lab, m in bad)
+    return ("> **⚠ CROSS-ARM COMPARISON IS NOT VALID THIS CYCLE.** The agent's own transcript"
+            " has not grown for: " + who + ". An arm whose agent has stopped acting still"
+            " carries its finished jobs, its CPU-hours and its structure counts forward, so"
+            " every row above reads as a working arm that merely did less. It did not do less;"
+            " it stopped. Do not read any row as a difference between arms until this clears."
+            " See SI-006 in `SI_LEDGER.md`.\n")
+
+
 def render(cols, maphash, now):
     """cols = [(label, data-dict), ...] already in A/B order."""
     stale = []
@@ -233,7 +264,11 @@ def render(cols, maphash, now):
         row("Token burn (billable)", lambda d: format(d["tokens"], ",")),
         row("Token:CPU (tokens per CPU-h)", ratio),
         row("Resubmissions", lambda d: format(d["resubmissions"], ",")),
+        "| Agent transcript last grew | %s | %s |" % tuple(
+            "—" if d.get("transcript_age_min") is None else fmt_age(d["transcript_age_min"])
+            for _, d in cols),
         "",
+        frozen_warning(cols),
         "**Definitions.** *Jobs submitted* = job scripts carrying a `#PBS -N` line; *completed*"
         " = submitted − running − queued. *Distinct structures touched* = benchmark structures"
         " whose run directory holds simulation output; the collapsed row merges the"
@@ -281,6 +316,15 @@ def main():
             if prev:
                 prev["stale"] = True
                 d = prev
+        # SI-006: every cluster row above can be carried forward or go stale; this one cannot,
+        # because it is read from the agent's own transcript on THIS machine. It is attached
+        # outside the reachable branch deliberately -- when the cluster stops answering, agent
+        # liveness is exactly the reading that is still trustworthy, and the cycle where the
+        # panel knows least about the jobs is the cycle where it must still say who is working.
+        try:
+            d["transcript_age_min"] = liveness.check(rep, update=False)["age_min"]
+        except Exception:
+            d["transcript_age_min"] = None
         data[rep] = d
 
     block = render([("A", data[m["A"]]), ("B", data[m["B"]])], maphash, now)

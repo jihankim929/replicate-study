@@ -483,3 +483,60 @@ report-grade fidelity (9.13 CPU-h each) costs 137 CPU-h, 8.6% of budget.
 The charter's G7 note now states that the figure is compute-denominated, so a future horizon
 change cannot silently invalidate it — the same failure mode the Appendix A calibration note
 exists to prevent.
+
+---
+
+## Rev 14 — 2026-08-28 — §4 main concurrency cap 8 → 12 (Flag H ruled)
+
+**Authority:** PI ruling. **Raised by:** Bei at Rev 13, as Flag H.
+
+**The ruling states the invariant explicitly:** *the headroom ratio (~1.7–1.8× over the
+sustained concurrency the budget implies) is what Rev 2 set; the numeral 8 was only its value
+under a 14-day horizon.* The 160 fleet ceiling handles crowding independently.
+
+| | 14 days | 10 days, cap 8 | 10 days, **cap 12** |
+|---|---:|---:|---:|
+| Sustained concurrency to spend 1,600 CPU-h | 4.76 | 6.67 | 6.67 |
+| Headroom at the cap | 1.68× | 1.20× | **1.80×** |
+| Calendar capacity | 2,688 CPU-h | 1,920 CPU-h | **2,880 CPU-h** |
+| Queue saturation needed | 59.5% | 83.3% | **55.6%** |
+| Fleet worst case (N = 20) | 160 | 160 | 240 |
+
+At cap 12 the required saturation (55.6%) is **lower than the 14-day design ever demanded**
+(59.5%), so the shortened horizon no longer makes the compute budget harder to reach than it
+was when it was set. A replicate's per-replicate share of the 129 observed running slots on
+queue `long` is 9.3%.
+
+`max_queued_jobs` is counted as **live jobs** — `meter_compute.sh` counts every job carrying
+the replicate's tag in `qstat -f`, running or waiting — so it is a concurrency cap, which is
+what all of the above arithmetic assumes.
+
+**Recorded in the charter's revision record without values**, per SI-008.
+
+### The invariant applies at the fleet scale too, and there it is unruled
+
+The same ruling that fixed the per-replicate cap leaves the **study-wide ceiling of 160**
+sitting at the identical ratio it just rejected:
+
+| | 14 days | 10 days |
+|---|---:|---:|
+| Fleet sustained concurrency (20 × 1,600 CPU-h) | 95.24 | **133.33** |
+| Headroom at ceiling 160 | 1.68× | **1.20×** |
+
+These are the same numbers as the per-replicate row because they are the same arithmetic at a
+different scale. Applying the ratified invariant gives 227–240, and **240 = 20 × 12** exactly.
+Raised as **Flag I** in `prereg/seal_notes.md` S2, not ruled: at 160 the fleet ceiling binds
+before the per-replicate caps do, so replicates would be throttled by a limit they cannot see
+and cannot attribute — the Flag H confound again, but invisible from inside the workspace. The
+counter-argument is crowding and it is legitimate; it is a PI judgement, not arithmetic.
+
+### The premise of the accompanying run-limit ruling does not survive checking
+
+The ruling recorded the queues' `Lm 58` as *"an admin-imposed per-user cap"* to be raised.
+**There is no cap of 58.** `qstat -q` prints `Lm` in a two-character field, and PBS Pro 4.2.10
+renders the per-user run limit there: the configured **580 displays as "58"**. Read directly,
+`max_user_run = 580` on the server, `max_running = 580` on every queue, no queue-level override,
+no limit hook. All four queues show an identical "58" despite differing otherwise. **No admin
+request is needed.** Full evidence, the counterfactual had 58 been real (43.5% of the fleet
+budget spendable, the main run unreachable), and the prepared burst verification are in
+`prereg/seal_notes.md` S1.

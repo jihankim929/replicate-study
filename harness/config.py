@@ -45,12 +45,13 @@ RATIFIED = {
     # Per-day compute rates now differ by phase: main 160.0, smoke 113.3 CPU-h/day.
     "compute_cpu_h":   {"smoke": 340,        "main": 1600},
     "token_budget":    {"smoke": 12_000_000, "main": 40_000_000},
-    # FLAGGED at the 2026-08-28 horizon revision, NOT changed -- awaiting a PI ruling before
-    # seal. The main cap of 8 was set at ~1.7x the sustained concurrency a 14-day, 1,600 CPU-h
-    # budget implies (4.76). At 10 days the sustained figure is 6.67 and the cap is 1.20x it,
-    # so a replicate must hold the queue ~83% saturated for the whole campaign to be able to
-    # spend its compute at all. See horizon_derived() and prereg/placeholder_proposals.md R3.3.
-    "max_queued_jobs": {"smoke": 50,         "main": 8},
+    # Main cap RULED 8 -> 12 on 2026-08-28 (Flag H). The invariant Rev 2 actually set was
+    # "~1.7-1.8x the sustained concurrency the budget implies", not the numeral 8: at 14 days
+    # sustained was 4.76 and 8 was 1.68x it; at 10 days sustained is 6.67 and 8 would be 1.20x,
+    # so keeping 8 would have kept the number and discarded the rule. 12 is 1.80x.
+    # Counted as LIVE jobs (running + queued) -- meter_compute.sh counts every job carrying the
+    # replicate tag in `qstat -f`, so this is a concurrency cap, not a backlog cap.
+    "max_queued_jobs": {"smoke": 50,         "main": 12},
     "g7_k": 40,                              # unscoped; see charter Appendix A G7
     # Study-wide ceiling. Independent of, and additional to, the per-replicate cap:
     # the study can never crowd the shared queue however individual replicates behave.
@@ -126,6 +127,44 @@ def overshoot_bound(phase: str) -> dict:
             "overshoot_pct_of_budget": round(100 * cpu / cap, 2)}
 
 WARN_FRACTION, STOP_FRACTION = 0.75, 1.00     # charter section 4
+
+
+def fleet_reachability(per_user_run_limit: int, phase: str = "main") -> dict:
+    """Can the FLEET actually spend what the fleet was budgeted?
+
+    Every replicate submits from ONE cluster account, so PBS's per-user run limit is a
+    study-wide constraint even though every charter quantity is written per replicate. A cap
+    that is generous per replicate can still be unreachable once N of them share one account,
+    and nothing in the per-replicate arithmetic of horizon_derived() would show it.
+
+    Three ceilings stack, and the smallest one governs:
+      - `per_user_run_limit` -- PBS, an external fact, verified not assumed;
+      - `fleet_max_queued_jobs` -- this harness's own study-wide ceiling, the enforcement layer;
+      - N x max_queued_jobs -- what the replicates could ask for between them.
+    """
+    days = RATIFIED["phases"][phase]["days"]
+    n    = RATIFIED["phases"][phase]["replicates"]
+    cpu  = RATIFIED["compute_cpu_h"][phase]
+    demand_cpu_h = n * cpu
+    sustained    = demand_cpu_h / (days * 24)          # fleet-wide concurrent jobs needed
+    ceilings = {"pbs_per_user_run": per_user_run_limit,
+                "harness_fleet_ceiling": fleet_max_queued_jobs(),
+                "sum_of_replicate_caps": n * RATIFIED["max_queued_jobs"][phase]}
+    governing_name = min(ceilings, key=ceilings.get)
+    governing = ceilings[governing_name]
+    return {"phase": phase, "days": days, "replicates": n,
+            "fleet_demand_cpu_h": demand_cpu_h,
+            "fleet_sustained_concurrency": round(sustained, 2),
+            "ceilings": ceilings,
+            "governing_ceiling": governing_name, "governing_value": governing,
+            "fleet_capacity_cpu_h": governing * 24 * days,
+            "reachable_fraction": round(min(1.0, governing * 24 * days / demand_cpu_h), 3),
+            "headroom_x": round(governing / sustained, 2),
+            "reachable": governing >= sustained}
+
+
+def fleet_max_queued_jobs() -> int:
+    return RATIFIED["fleet_max_queued_jobs"]
 
 
 def horizon_derived(phase: str) -> dict:

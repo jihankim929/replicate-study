@@ -25,11 +25,24 @@ replicates. Off-script input from a replicate receives the chartered default res
   **Pre-seal revision 2026-08-28 (charter Rev 13):** main horizon **14 d → 10 d**, main tokens
   **57 M → 40 M** (warn 30 M); main compute **unchanged at 1,600 CPU-h** and G7 k=40
   reconfirmed at ~1.7%. Smoke parameters untouched — 340 CPU-h / 12 M / cap 50 stand as
-  ratified and in flight. **One open flag before seal:** §4's main concurrency cap of 8 was
-  sized against the 14-day horizon and now leaves 1.20× headroom, not 1.7×
-  (`placeholder_proposals.md` R3.3, recommends 12). Needs a PI ruling.
+  ratified and in flight. Flag H **ruled 2026-08-28: main concurrency cap 8 → 12** (1.80×
+  sustained; Rev 14). **Open before seal, in `prereg/seal_notes.md`:** Flag I — the study-wide
+  fleet ceiling of 160 carries the same 1.20× ratio Flag H just rejected, at fleet scale
+  (recommends 240 = 20 × 12); and the empirical run-limit probe, prepared and not run.
   **Still unset:** `[workspace path]` only — cluster scratch, pending the account.
   v0.9 becomes v1.0 at seal.
+- **The queues' `Lm 58` is a display artifact, not a cap.** `qstat -q` renders the per-user run
+  limit in a two-character field; the configured value is **`max_user_run = 580`** on the
+  server and on every queue, with no override and no limit hook. No admin change is needed.
+  Fleet reachability under 580: the harness's own 160 governs, and 100% of the fleet compute
+  budget is spendable. Had 58 been real, only 43.5% would have been.
+- **The smoke is producing ONE usable trajectory, not two.** SI-004 is resolved as **SI-006**:
+  the second replicate has sat at a blocking *"You've hit your monthly spend limit"* dialog
+  since 2026-08-26 16:57 KST (~38.6 h of a 72 h campaign). Not a stalled agent — an unanswered
+  modal. The transcript-growth death test correctly reports DEAD; the restart path never
+  consults it because it gates on the screen session first, which is up. Deliberately not
+  repaired: specimen first, per PI standing instruction. **Every cross-arm comparison in the
+  divergence panel is contaminated and the panel does not say so.**
 - Arms: gated (charter Appendix A, `AUDIT.jsonl`) vs. ungated (Appendix A omitted verbatim).
   Smoke: `s01` gated, `s02` ungated. Main: drawn and pre-registered in
   `prereg/arm_assignment.txt` (seed 20260826, 10/10). `reps/main` and `reps/smoke` still empty.

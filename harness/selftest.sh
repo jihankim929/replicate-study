@@ -167,6 +167,49 @@ chk "positive evidence does authorise"    "$?" "0"
 chk "heartbeat decides nothing"           "$(grep -c 'heartbeat_informational_only' harness/watchdog.py)" "1"
 chk "restart watcher reads no heartbeat"  "$(grep -c 'AGE=.*heartbeat' harness/restart_watch.sh)" "0"
 
+echo "== 7f. restart CAP counter reads back what the ledger WRITER wrote (SI-007) =="
+# The writer and the reader of this record were tested separately and never against each
+# other, so a format mismatch made the cap of 3 decorative: a real restart counted as zero,
+# and grep's no-match exit status turned the count into "0\n0", which made the cap test EXIT 2
+# instead of returning false. Both faults pushed toward restarting more. This case closes the
+# loop: emit a ledger line with the WRITER's exact printf, then count it with the READER's grep.
+CAPL="$MOCK/restarts.jsonl"; : > "$CAPL"
+for i in 1 2; do
+  printf '{"ts":"%s","replicate":"%s","restart_number":%d,"reason":"test","downtime_min":%s}\n' \
+    "2026-01-01T00:00:0${i}Z" "s01" "$i" "60" >> "$CAPL"
+done
+printf '{"ts":"%s","replicate":"%s","restart_number":%d,"reason":"test","downtime_min":%s}\n' \
+  "2026-01-01T00:00:03Z" "s02" "1" "60" >> "$CAPL"
+count_reps () { C=$(grep -cE "\"replicate\": ?\"$1\"" "$CAPL" 2>/dev/null | head -1); C=${C:-0}; case "$C" in (*[!0-9]*|"") C=0 ;; esac; printf '%s' "$C"; }
+chk "counter reads the writer's format"   "$(count_reps s01)" "2"
+chk "counter does not cross replicates"   "$(count_reps s02)" "1"
+chk "no-match yields a single clean 0"    "$(count_reps nobody)" "0"
+# the value must be usable as an INTEGER -- the old one exited 2 here rather than returning false
+if [ "$(count_reps nobody)" -ge 3 ] 2>/dev/null; then R=cap-holds; else R=$?; fi
+chk "zero count compares as an integer"   "$R" "1"
+chk "spaced variant also counted"         "$(printf '{"replicate": "s09"}\n' >> "$CAPL"; count_reps s09)" "1"
+
+echo "== 7g. no phase's values leak into another phase's provisioned charter (SI-008) =="
+# render_phase_rows filters the section 4/5 TABLES. It does not filter prose, and the charter's
+# own REVISION RECORD is prose -- which is how a Rev 13 edit put the main phase's horizon and
+# budget into the smoke's charter. Assert on the rendered artefact, every phase x arm.
+LEAKCHK=$(python3 - <<'PYCHK'
+import sys; sys.path.insert(0, "harness")
+import provision as P
+from pathlib import Path
+t = Path("prereg/charter_v0.9.md").read_text()
+MAIN  = ["1,600 CPU-hours", "40,000,000", "10 days", "57,000,000", "14 days"]
+SMOKE = ["340 CPU-hours", "12,000,000", "3 days"]
+bad = []
+for phase, forbid in (("smoke", MAIN), ("main", SMOKE)):
+    for arm in ("gated", "ungated"):
+        r = P.split_charter(P.render_phase_rows(t, phase), arm)
+        bad += [f"{phase}/{arm}:{s}" for s in forbid if s in r]
+print("LEAKS:" + (",".join(bad) if bad else "none"))
+PYCHK
+)
+chk "no cross-phase value in any rendering" "$LEAKCHK" "LEAKS:none"
+
 echo "== 8. collection =="
 printf '# Final report\n\n1. Claim: none reached.\n' > "$MOCK/s01/FINAL_REPORT.md"
 C=$(./harness/collect.sh --dest "$MOCK" --out "$MOCK/collected" 2>&1)

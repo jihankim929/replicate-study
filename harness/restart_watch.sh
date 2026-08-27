@@ -34,7 +34,16 @@ for REP in s01 s02; do
   HB=$(ssh -o BatchMode=yes -o ConnectTimeout=20 dirac-bei \
         "test -f $WS/heartbeat && echo \$(( ( \$(date +%s) - \$(stat -c %Y $WS/heartbeat) ) / 60 )) || echo 99999" 2>/dev/null)
   HB=${HB:-99999}
-  N=$(grep -c "\"replicate\": \"$REP\"" "$LEDGER" 2>/dev/null || echo 0)
+  # SI-007: this counter was broken two ways and both pushed toward restarting MORE.
+  # (1) the ledger is written by printf as "replicate":"s01" -- no space -- and this grep
+  #     looked for "replicate": "s01" WITH one, so it never matched and a real restart counted
+  #     as zero; (2) `grep -c || echo 0` appends a second 0 on no-match, yielding "0\n0", and
+  #     `[ "$N" -ge 3 ]` then EXITS 2 rather than returning false -- which, with no `set -e`,
+  #     falls through as though the cap were clear. Tolerate both spacings, swallow grep's
+  #     exit status without adding to the value, and force a single integer.
+  N=$(grep -cE "\"replicate\": ?\"$REP\"" "$LEDGER" 2>/dev/null | head -1)
+  N=${N:-0}
+  case "$N" in (*[!0-9]*|"") N=0 ;; esac
   echo "  $REP: session=$([ "$ALIVE" -gt 0 ] && echo up || echo DOWN) transcript_age=${AGE}min (deciding) heartbeat_age=${HB}min (reported only) restarts=$N/$MAX_RESTARTS"
 
   if [ "$ALIVE" -gt 0 ]; then continue; fi

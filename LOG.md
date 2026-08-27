@@ -867,3 +867,122 @@ knowing before seal.
 still scoped to smoke + compute only** and not widened by any of this. A dry-run provision of
 `rep01` carries `campaign_days: 10`, `token_budget: 40000000`, `compute_cpu_h: 1600` and a
 deadline at launch + 10 days.
+
+---
+
+## LOG-2026-08-28-02 — Cap 12 ratified; the "58-job cap" is a display artifact; SI-004 resolved as a blocking spend-limit dialog, and the restart cap it exposed was decorative
+
+**Four rulings actioned, and three of them turned up something the ruling did not anticipate.**
+
+### Flag H ratified — main concurrency cap 8 → 12
+
+Charter Rev 14. The invariant is the headroom ratio, not the numeral: 12 is **1.80×** the 6.67
+sustained concurrency a 1,600 CPU-h budget over 10 days implies. Required queue saturation
+drops 83.3% → **55.6%**, below what the 14-day design ever demanded, so the shortened horizon
+no longer makes the budget harder to reach than when it was set.
+
+**The same invariant is now violated one scale up, and that is unruled.** The study-wide
+ceiling of 160 was set in Rev 5 against the same 14-day horizon: fleet sustained concurrency is
+20 × 1,600 ÷ (10 × 24) = **133.33**, so 160 is **1.20×** — the identical ratio Flag H just
+rejected, because it is the identical arithmetic at fleet scale. The invariant gives 227–240,
+and **240 = 20 × 12** exactly. Raised as **Flag I** in the new `prereg/seal_notes.md` S2, with
+the crowding counter-argument stated: at 240 the study is ~68% of concurrent queue load against
+other users' ~112 jobs, up from ~59%. That is a judgement, not arithmetic. What should not
+happen is leaving 160 by default — at 160 the fleet ceiling binds *before* the per-replicate
+caps do, so replicates would be throttled by a limit they cannot see, cannot attribute, and
+would experience as their own jobs mysteriously not starting. Flag H's confound again, and
+invisible from inside the workspace.
+
+### The per-user run limit: there is no cap of 58
+
+**The ruling's premise does not survive checking, so no admin request is needed.** `qstat -q`
+prints its `Lm` column in a **two-character field**, and PBS Pro 4.2.10 renders the per-user
+run limit there — a configured **580 displays as "58"**. Read directly instead of off the
+display: `max_user_run = 580` on the server, `max_running = 580` on all four queues, no
+queue-level override, no limit hook anywhere in `qmgr -c "print server"`. All four queues show
+an identical "58" while differing in walltime and node settings, which is what one truncated
+580 looks like and not what four independently-administered caps look like.
+
+Worth stating the counterfactual, because it is what made the check worth running: **had 58
+been real, the fleet could have run 58 concurrent jobs against the 133.33 it needs — 43.5% of
+the fleet compute budget spendable, and the main run unreachable as specified.** Under the
+verified 580 the harness's own 160 governs and 100% is spendable, exactly as the PI ruled.
+
+`harness/config.py:fleet_reachability()` computes this from the three stacking ceilings (PBS,
+harness, sum-of-caps) and names which one governs — the per-replicate charter says nothing
+about the fleet, and all 20 replicates submit from one account.
+
+**Empirical verification prepared, not run.** `harness/verify_run_limit.sh` bursts short
+single-core sleep jobs past 58, samples concurrency, logs the observed ceiling and `qdel`s
+every probe job from an unconditional EXIT trap; `--dry-run` prints the plan and the configured
+limits without submitting. It is gated on the PI, loads a shared queue, and is not called by
+`poll.sh`. Recommended before seal anyway: it is the difference between *the config says 580*
+and *the scheduler let one account run 70 at once*.
+
+### SI-004 resolved — SI-006. It is not a stalled agent
+
+Recovered from the session's own `screenlog.0`, without touching the session:
+
+> **You've hit your monthly spend limit.** — `1. Stop and wait for limit to reset` /
+> `2. Upgrade your plan` — Usage credit balance: $959.51 — Resets 5pm (Asia/Seoul)
+
+The agent is at an **unanswered interactive modal**, and has been for ~38.6 hours of a 72-hour
+smoke. That explains every SI-004 observation exactly: no turn can begin, so the transcript is
+frozen; the TUI process is alive, so the screen session is up; the TUI repaints, so
+`screenlog.0` keeps growing — its last 8,192 bytes are nothing but mouse-tracking mode-set
+escapes and no content; the wrapper is inside the same blocked invocation, so the heartbeat is
+frozen too. The limit itself very likely lifted at 17:00 KST that day, but **the modal is
+sticky**: once drawn it blocks until answered, whether or not the condition cleared.
+
+**Answering the PI's question directly: the stall does not evade the death test.**
+`liveness.py` measures transcript **bytes** (the file's mtime does advance without the size
+changing — an mtime-based test would have read that as life) and reports `DEAD, exit=0`. What
+does not fire is the restart *path*: `restart_watch.sh` gates on the screen session before
+consulting liveness, and the session is up. That is **precisely the limit SI-003 wrote down**
+in its "known limit" clause. **No restart has occurred and none was logged against the cap.**
+
+**Not repaired, deliberately** — specimen first, per standing instruction, and with the smoke
+deadline ~25 h away a repair now would change the instrument mid-measurement for an arm that is
+already unrecoverable. This is the **third instance of one class**: launch failed on a blocking
+permission dialog, then a blocking settings dialog, both fixed *as specific dialogs*. The class
+is "an interactive modal halts an unattended agent indefinitely while every liveness signal
+above the TUI reports health", and it is not enumerable.
+
+### The restart cap of 3 was decorative — SI-007, fixed
+
+Found while establishing SI-006. The counter was broken twice, and either fault alone defeats
+the cap. The ledger is written as `"replicate":"s01"` and the counter grepped for
+`"replicate": "s01"` — **with a space** — so the one real restart on the record counted as
+zero. And `grep -c ... || echo 0` appends a second `0` on no-match, yielding `"0\n0"`, so
+`[ "$N" -ge 3 ]` **exits 2** rather than returning false and, with no `set -e`, falls straight
+through as though the cap were clear. **Both faults push toward restarting more, never fewer.**
+Fixed; the counter now reads `restarts=1/3` for the replicate that has one. A selftest case now
+writes a ledger line with the writer's exact `printf` and reads it back with the reader's grep
+— the general fault was that writer and reader were each tested alone and never against each
+other.
+
+### The divergence panel was lying by omission, and now says so mechanically
+
+Every row in the panel measures the **cluster**. None measured whether the agent was still
+acting, so an arm blocked at a dialog kept its finished jobs, CPU-hours and structure counts
+and read as a working arm that had merely done less. The panel now carries an **Agent
+transcript last grew** row and, above the definitions, an automatic banner when any arm exceeds
+90 minutes without transcript growth. It is attached **outside** the cluster-reachability gate
+on purpose: when the cluster stops answering, local agent liveness is exactly the reading still
+worth trusting. It is firing now (**B, 24.1 h**). The A/B blind is preserved.
+
+**Consequence for the study, stated plainly: the smoke compared one working replicate against
+one that worked for 1.5 hours and then sat at a dialog for 38.6.** Every cross-arm number in
+the record is contaminated, including the token burn that priced the 40 M budget — the
+"execution-heavy style" reading of that arm's 0.39 M/day was a measurement of a blocked
+session. Per the ruling, 40 M stands on its stated basis and the evidentiary note is revisited
+at seal; `prereg/seal_notes.md` S3 carries that forward. **The smoke has one usable trajectory,
+not two.**
+
+### The leak of Rev 13, recorded as asked — SI-008
+
+Filed as the phase-row filter's first live catch, on the principle that a control which has
+never fired is indistinguishable from one that does not work. It is now a selftest case, and
+**verified to fail when a leak is reintroduced** — a check that cannot fail is worth nothing.
+
+**Verification.** Selftest 65/65 (was 59; +6 cases across SI-007 and SI-008).
