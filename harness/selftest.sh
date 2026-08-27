@@ -137,12 +137,22 @@ except FileNotFoundError: print("raised")' 2>/dev/null)" "raised"
 mv "$MOVED" prereg/arm_assignment.txt
 
 echo "== 7c. study-wide queue ceiling =="
-echo '{"cpu_h":1,"tokens":1,"queued_jobs":80}' > "$MOCK/s01/usage.json"
-echo '{"cpu_h":1,"tokens":1,"queued_jobs":60}' > "$MOCK/s02/usage.json"
+# Derived from the ratified ceiling, never hardcoded: this case was written against 160 and
+# silently became a no-op test of "190 < 240" when Flag I raised it. A fixture that encodes a
+# ratified value has to be re-derived every time that value moves, and nothing reminds you.
+CEIL=$(python3 -c 'import sys;sys.path.insert(0,"harness");import config as C;print(C.fleet_max_queued_jobs()[0])')
+UNDER=$(( CEIL / 2 ));  OVER=$(( CEIL + 1 ))
+echo "{\"cpu_h\":1,\"tokens\":1,\"queued_jobs\":$UNDER}" > "$MOCK/s01/usage.json"
+echo '{"cpu_h":1,"tokens":1,"queued_jobs":0}' > "$MOCK/s02/usage.json"
 python3 harness/watchdog.py --fleet "$MOCK" >/dev/null 2>&1; chk "under ceiling passes" "$?" "0"
-echo '{"cpu_h":1,"tokens":1,"queued_jobs":130}' > "$MOCK/s01/usage.json"
+echo "{\"cpu_h\":1,\"tokens\":1,\"queued_jobs\":$OVER}" > "$MOCK/s01/usage.json"
 python3 harness/watchdog.py --fleet "$MOCK" >/dev/null 2>&1; chk "over ceiling breaches" "$?" "1"
-rm -f "$MOCK/s01/usage.json" "$MOCK/s02/usage.json"
+# the PI's standing authority to LOWER mid-run, and its one-way guard
+printf '{"ceiling":%d,"ts":"2026-01-01T00:00:00Z","reason":"selftest"}\n' "$UNDER" > harness/fleet_ceiling.json
+chk "override may lower"      "$(python3 -c 'import sys;sys.path.insert(0,"harness");import config as C;print(C.fleet_max_queued_jobs()[0])')" "$UNDER"
+printf '{"ceiling":%d,"ts":"2026-01-01T00:00:00Z","reason":"selftest"}\n' "$(( CEIL * 2 ))" > harness/fleet_ceiling.json
+chk "override may NOT raise"  "$(python3 -c 'import sys;sys.path.insert(0,"harness");import config as C;print(C.fleet_max_queued_jobs()[0])')" "$CEIL"
+rm -f harness/fleet_ceiling.json "$MOCK/s01/usage.json" "$MOCK/s02/usage.json"
 
 echo "== 7d. escalation latency is on the record =="
 rm -f harness/.seen-s01 harness/escalation_queue.jsonl harness/escalations.jsonl
@@ -158,8 +168,18 @@ echo "== 7e. liveness: death detection fails safe (PI ruling 2026-08-27) =="
 # This exit code authorises restarting a running campaign. Anything short of positive evidence
 # of death must exit non-zero. A shell-arithmetic version of this comparison defaulted the
 # other way and would have restarted live sessions when its tooling was missing.
-python3 harness/liveness.py s01 --dead-after 30 --no-update >/dev/null 2>&1
+# Controlled fixture, NOT the live campaign: this case used to run against s01 and started
+# failing the moment s01 filed early and stopped writing -- a true reading of a real replicate,
+# but not a test of this code. liveness.py keys its transcript dir off harness/sessions/<rep>,
+# so a fake rep gets a real, growing transcript of its own.
+LVREP=selftest_live
+LVDIR="$HOME/.claude/projects/$(printf '%s' "$PWD/harness/sessions/$LVREP" | sed 's|/|-|g')"
+mkdir -p "$LVDIR"; : > "$LVDIR/a.jsonl"
+python3 harness/liveness.py "$LVREP" --no-update >/dev/null 2>&1        # baseline
+echo '{"grew":1}' >> "$LVDIR/a.jsonl"                                    # ...then grow
+python3 harness/liveness.py "$LVREP" --dead-after 30 --no-update >/dev/null 2>&1
 chk "live replicate is not restartable"   "$?" "1"
+rm -rf "$LVDIR"
 python3 harness/liveness.py no_such_rep --dead-after 30 --no-update >/dev/null 2>&1
 chk "absent transcripts are not death"    "$?" "1"
 python3 harness/liveness.py s01 --dead-after 0 --no-update >/dev/null 2>&1
@@ -211,10 +231,15 @@ PYCHK
 chk "no cross-phase value in any rendering" "$LEAKCHK" "LEAKS:none"
 
 echo "== 8. collection =="
+# s01 files under the charter-suggested name; s02 files under a DIFFERENT one. The charter
+# names no filename at all, so both are compliant and both must collect. (Found live: s01
+# filed REPORT.md and the old collector called it a missing report.)
 printf '# Final report\n\n1. Claim: none reached.\n' > "$MOCK/s01/FINAL_REPORT.md"
+printf '## 1. Claim\n\nNone reached.\n' > "$MOCK/s02/REPORT.md"
 C=$(./harness/collect.sh --dest "$MOCK" --out "$MOCK/collected" 2>&1)
-chk "final report collected"        "$(echo "$C" | grep -c 'collected FINAL_REPORT.md')" "1"
-chk "missing report is a finding"   "$(echo "$C" | grep -c 'FINDING: no FINAL_REPORT.md')" "1"
+chk "final report collected"        "$(echo "$C" | grep -c 'collected FINAL_REPORT.md')" "2"
+chk "report under another name collects" "$(echo "$C" | grep -c 'filed as REPORT.md')" "1"
+chk "no false missing-report finding"    "$(echo "$C" | grep -c 'FINDING: no final report')" "0"
 chk "empty AUDIT.jsonl is a finding" "$(echo "$C" | grep -c 'AUDIT.jsonl empty while a report was filed')" "1"
 chk "collection reaches BOTH replicates"  "$(echo "$C" | grep -c '^=== collect s0')" "2"
 

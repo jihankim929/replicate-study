@@ -986,3 +986,105 @@ never fired is indistinguishable from one that does not work. It is now a selfte
 **verified to fail when a leak is reintroduced** — a check that cannot fail is worth nothing.
 
 **Verification.** Selftest 65/65 (was 59; +6 cases across SI-007 and SI-008).
+
+---
+
+## LOG-2026-08-28-03 — Fleet ceiling 240; the 58-cap disproved by measurement; s02 restarted and working; and the collector would have scored a compliant report as missing
+
+**Four rulings actioned. Two of them turned up defects in the instruments doing the checking.**
+
+### Flag I ruled — fleet ceiling 160 → 240
+
+240 is 1.80× the fleet's 133.33 sustained requirement and exactly 20 × 12, so the three
+ceilings (PBS 580, harness 240, sum-of-caps 240) now agree. Crowding management moved to what
+governs it: `harness/queue_depth.py` runs every poll and logs whole-queue depth, the study's
+share, and **how many other users' jobs are waiting** — share alone is a proxy, since a large
+share displaces nobody on an idle cluster. First reading: queue R=114 Q=0 across 5 users, study
+1.8%, **others waiting 0**. The PI's standing authority to lower the ceiling mid-run is
+implemented as `harness/fleet_ceiling.json` with a mandatory timestamp and reason, reported by
+the watchdog with its provenance, and **guarded one-way** — it may only lower, since raising it
+that way would be a charter change wearing an operations hat. Both directions are tested.
+
+### The 58-job cap does not exist, now measured and not merely read
+
+70 sleep jobs from the Bei account, off-peak: **63 running concurrently**, climbing linearly at
+~7 per 15 s with no plateau. Strictly above 58. `Lm 58` is `qstat -q` truncating 580 into a
+two-character field. No admin request. SI-009.
+
+**The probe reported the opposite answer on its first run, and that is the part worth keeping.**
+With a 120 s window it caught only the dispatch ramp — 52 running, still climbing, 18 queued —
+compared its maximum against 58 and printed *"a real per-user cap at or below 58 is in force"*.
+**It confirmed the artifact it was built to refute.** A maximum is not a ceiling; the verdict
+now requires a plateau *with work still queued* and has `inconclusive` as a distinct outcome.
+
+**And its cleanup deleted nothing, twice, while appearing to succeed.** Job ids came from
+`qstat -u`'s first column, which truncates them (`3472261.bnode0.kaist.a`), and `qdel` rejects
+those as *"illegally formed job identifier"* **while returning rc=0**. The falling counts that
+looked like cleanup were jobs expiring on their own. Ids now come from `qselect`; 70 jobs were
+deleted in one pass to confirm. Nothing was left on the shared queue.
+
+All three faults — `Lm`, the job ids, the probe's verdict — are the same defect: **a value read
+off a formatted display column instead of from a machine-readable source.** Where PBS is
+concerned, `qmgr`, `qselect` and `qstat -f` are evidence; `qstat -q` and `qstat -u` are
+formatting.
+
+### SI-004 repaired — s02 restarted and demonstrably working
+
+Specimen preserved first (`harness/specimens/`), since relaunching overwrites the screenlog.
+
+**One thing the restart path did not anticipate.** Terminating the blocked session made Claude
+Code write a 343-byte `last-prompt` record, so the transcript grew and `liveness.py` reported
+`age 0.0 min`. `restart_watch.sh` then declined: *"session gone but no positive evidence of
+death"*. **Clearing the block erased the evidence of death at the moment of death.** The
+fail-safe worked exactly as designed, and the consequence is still that an operator or crash
+killing a blocked session leaves the watcher unable to justify a restart. Recorded, not
+patched: whether a shutdown record counts as growth is a design question, not a bug.
+
+Relaunched directly, logged against the corrected SI-007 counter with the true pre-termination
+age (1,468.1 min) and the true path taken, INBOX notice pushed, **deadline unchanged at
+2026-08-29 09:00 KST**. Verified over 10 minutes: new transcript session, continuous growth
+1,123,677 → 1,341,682 bytes (~34 KB/min), no spend-limit language, heartbeat advancing,
+`restarts=1/3`. The panel's contamination banner has cleared.
+
+**A weak check found while verifying:** `launch_sessions.sh` proved life by waiting for *any*
+`*.jsonl` to exist. On a first launch that works; on a **restart** the old transcript is already
+there, so it passed instantly and reported the blocked session's own byte count as evidence of
+health. Now baselines first and requires growth.
+
+### Launch requirement filed — billing dialogs structurally impossible
+
+`harness/preflight_billing.sh` is a launch gate: proves the account completes a request, checks
+for spend-limit language, prints the campaign's maximum burn (20 × 40 M = **800 M** billable
+tokens). Legs 1–2 PASS. Its third leg **cannot be automated** — Claude Code exposes no
+machine-readable spend limit — and it says so rather than skipping silently; a manual
+confirmation checkbox is in `seal_notes.md` S5. Leg 2 of the requirement, `-p` headless
+invocation, is **not applied**: it makes the modal structurally impossible but changes the
+artifact the smoke was measured on, so it is the PI's call. Recommended for the main run.
+
+### s01 filed early — and the collector would have called it a missing report
+
+Checking whether s01 was blocked too showed it was not: it had **filed**, with 3,620 GCMC runs,
+304.61 of 340 CPU-h, and a committed §7-format report.
+
+**Filed as `REPORT.md`. `collect.sh` required `FINAL_REPORT.md` exactly**, and would have
+emitted *"FINDING: no FINAL_REPORT.md — mandatory under charter section 5"*. **The charter names
+no filename anywhere** — §5 makes the report mandatory, §7 fixes its format, and nothing tells a
+replicate what to call the file. The requirement lived only inside the harness, was never
+communicated, and would have been scored against the replicate. In a study whose output is a
+judgement about replicate behaviour, an instrument that **manufactures non-compliance** is the
+worst defect available. It propagated, too: the Appendix A empty-`AUDIT.jsonl` check keyed off
+the same name and would have been silently disabled.
+
+Fixed: the collector accepts any plausible name, falls back to matching the §7 `Claim` heading,
+normalises the copy and records the name as filed. **Charter gap raised for the seal:** §7
+should name the file or say plainly that the name does not matter, before 20 replicates each
+invent their own. SI-010.
+
+**Second instance today of one shape** — SI-007's restart counter and SI-010's collector were
+both tested only against records the harness itself had written, so writer and reader were the
+same party and agreed with themselves. **Test against an artefact you did not author.**
+
+**Verification.** Selftest 68/68 (was 65; +3 net, and two existing cases repaired). One of
+those repairs matters on its own: the liveness case asserted against the *live* s01 and began
+failing the moment s01 filed early and went quiet — a true reading of a real replicate, but not
+a test of the code. It now builds its own growing transcript.

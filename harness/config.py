@@ -5,6 +5,7 @@ ruled on are NOT usable for a real launch: `require_ratified()` refuses. This is
 mechanical expression of "proposed, not ratified" — the harness cannot quietly launch a
 campaign on a number Bei invented.
 """
+import json
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent
@@ -53,10 +54,17 @@ RATIFIED = {
     # replicate tag in `qstat -f`, so this is a concurrency cap, not a backlog cap.
     "max_queued_jobs": {"smoke": 50,         "main": 12},
     "g7_k": 40,                              # unscoped; see charter Appendix A G7
-    # Study-wide ceiling. Independent of, and additional to, the per-replicate cap:
-    # the study can never crowd the shared queue however individual replicates behave.
-    # Observed capacity of queue `long` was 129 running slots (shared with other users).
-    "fleet_max_queued_jobs": 160,
+    # Study-wide ceiling. Independent of, and additional to, the per-replicate cap.
+    # RULED 160 -> 240 on 2026-08-28 (Flag I). Same invariant as Flag H, one scale up: the
+    # fleet's sustained requirement is 20 x 1,600 / (10 x 24) = 133.33 concurrent jobs, and
+    # 240 is 1.80x it -- and is exactly 20 x 12, so the three ceilings now agree instead of
+    # the harness silently contradicting its own per-replicate ruling. Under the VERIFIED PBS
+    # per-user limit of 580, nothing above 240 binds.
+    # Crowding is no longer managed by holding this number low. It is managed by measuring
+    # displacement (queue_depth.jsonl, written every poll) and by the PI's standing authority
+    # to lower the ceiling mid-run as a logged, uniform infrastructure event -- see
+    # fleet_max_queued_jobs() and FLEET_CEILING_OVERRIDE.
+    "fleet_max_queued_jobs": 240,
     "token_metering_basis": "input + output + cache_creation (cache reads excluded)",
     "queue": "long",
     # smoke only; main-run policy is revisited with the smoke findings
@@ -148,7 +156,7 @@ def fleet_reachability(per_user_run_limit: int, phase: str = "main") -> dict:
     demand_cpu_h = n * cpu
     sustained    = demand_cpu_h / (days * 24)          # fleet-wide concurrent jobs needed
     ceilings = {"pbs_per_user_run": per_user_run_limit,
-                "harness_fleet_ceiling": fleet_max_queued_jobs(),
+                "harness_fleet_ceiling": fleet_max_queued_jobs()[0],
                 "sum_of_replicate_caps": n * RATIFIED["max_queued_jobs"][phase]}
     governing_name = min(ceilings, key=ceilings.get)
     governing = ceilings[governing_name]
@@ -163,8 +171,28 @@ def fleet_reachability(per_user_run_limit: int, phase: str = "main") -> dict:
             "reachable": governing >= sustained}
 
 
-def fleet_max_queued_jobs() -> int:
-    return RATIFIED["fleet_max_queued_jobs"]
+FLEET_CEILING_OVERRIDE = REPO / "harness" / "fleet_ceiling.json"
+
+
+def fleet_max_queued_jobs() -> tuple:
+    """The study-wide ceiling in force, and where it came from.
+
+    The PI holds standing authority to LOWER this mid-run if students are genuinely displaced.
+    Exercising it must be a uniform infrastructure event on the record, not a quiet edit: an
+    override that no replicate can attribute and no reader can date would confound every arm
+    at once and leave no trace of when. So it lives in a file with a timestamp and a reason,
+    it is reported by the watchdog every cycle, and it may only ever REDUCE the ratified
+    ceiling -- raising it that way would be a charter change wearing an operations hat.
+    """
+    base = RATIFIED["fleet_max_queued_jobs"]
+    try:
+        d = json.loads(FLEET_CEILING_OVERRIDE.read_text())
+        v = int(d["ceiling"])
+    except Exception:
+        return base, "ratified"
+    if v >= base:
+        return base, "ratified (override ignored: may only lower)"
+    return v, "LOWERED %s -> %s on %s: %s" % (base, v, d.get("ts", "?"), d.get("reason", "no reason given"))
 
 
 def horizon_derived(phase: str) -> dict:

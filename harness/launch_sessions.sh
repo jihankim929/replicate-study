@@ -68,14 +68,21 @@ Your workspace_root is: $WS"
   # settings dialog for 40 minutes with the session "up". Proof of life is the agent WRITING
   # A TRANSCRIPT. Wait for one, and fail loudly if it never appears.
   TDIR="$HOME/.claude/projects/$(echo "$CWD" | sed 's|/|-|g')"
+  # Proof of life is GROWTH, not existence. On a first launch the directory is empty so
+  # "a transcript appeared" is proof; on a RESTART the previous transcript is already there,
+  # and this check passed instantly against the dead session's own bytes -- it reported the
+  # blocked replicate as "launched and WORKING" using the byte count of the file that proved
+  # it was stuck. Baseline first, then require the total to exceed it. (SI-006)
+  BASE=$(cat "$TDIR"/*.jsonl 2>/dev/null | wc -c | tr -d " "); BASE=${BASE:-0}
   OK=0
   for i in $(seq 1 30); do
-    if ls "$TDIR"/*.jsonl >/dev/null 2>&1; then OK=1; break; fi
+    NOW_B=$(cat "$TDIR"/*.jsonl 2>/dev/null | wc -c | tr -d " "); NOW_B=${NOW_B:-0}
+    if [ "$NOW_B" -gt "$BASE" ]; then OK=1; break; fi
     sleep 4
   done
   if [ "$OK" -eq 1 ]; then
     B=$(cat "$TDIR"/*.jsonl 2>/dev/null | wc -c | tr -d " ")
-    echo "  $REP: launched and WORKING (screen '$SESSION', transcript $B bytes)"
+    echo "  $REP: launched and WORKING (screen '$SESSION', transcript $BASE -> $B bytes)"
   else
     echo "  $REP: LAUNCH FAILED -- session up but no transcript after 120s (blocked on a prompt?)"
     screen -S "$SESSION" -X hardcopy "/tmp/stuck_$REP.txt" 2>/dev/null

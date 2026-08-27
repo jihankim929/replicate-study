@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # One operational poll of the whole smoke fleet. Run every 10 minutes (ratified interval).
 #   harvest finished cput -> meter compute -> meter tokens -> watchdog -> fleet -> escalations
+#   -> restart watch -> queue-depth covariate -> divergence panel
 set -uo pipefail
 cd "$(dirname "$0")/.."
 echo "=========== poll $(date -u +%FT%TZ) ==========="
@@ -36,5 +37,7 @@ for REP in s01 s02; do python3 harness/audit_transcript.py "$REP" 2>/dev/null | 
 ./harness/restart_watch.sh 2>/dev/null | sed 's/^/  /'
 echo "  --- escalations ---"
 python3 harness/escalate.py --queue 2>/dev/null | sed 's/^/  /'
+echo "  --- shared-queue depth (crowding covariate, Flag I) ---"
+python3 harness/queue_depth.py 2>&1 | sed 's/^/  /'
 echo "  --- mechanical divergence panel ---"
 python3 harness/divergence.py 2>&1 | sed 's/^/  /'

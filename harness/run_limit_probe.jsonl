@@ -1,0 +1,2 @@
+{"ts":"2026-08-27T22:55:38Z","burst":70,"sleep_s":120,"queue":"long","observed_max_running":52,"value_under_test":58}
+{"ts":"2026-08-27T23:01:38Z","burst":70,"sleep_s":420,"queue":"long","observed_max_running":63,"queued_at_end":7,"plateau_samples":0,"value_under_test":58,"verdict":"no_cap_at_58"}

@@ -154,9 +154,18 @@ def audit_isolation(ws: Path, repo: Path) -> list:
 def fleet_check(dest_root: Path) -> dict:
     """Study-wide queue ceiling (PI ruling 2026-08-26).
 
-    Independent of, and additional to, the per-replicate cap: the study must never crowd the
-    shared queue however individual replicates behave. Queue `long` was observed with 129
-    running slots, shared with other users; the ceiling is 160 QUEUED across the whole study.
+    Independent of, and additional to, the per-replicate cap.
+
+    RULED 160 -> 240 on 2026-08-28 (Flag I): 240 is 1.80x the fleet's 133.33 sustained
+    requirement, the same invariant as the per-replicate cap and exactly 20 x 12. At 160 this
+    ceiling bound BEFORE the per-replicate caps did, so replicates would have been throttled
+    by a study-wide limit they cannot see, cannot attribute, and would experience as their own
+    jobs mysteriously not starting -- a confound in the funnel decision the study measures.
+
+    Crowding is now managed by what actually governs it: displacement is MEASURED every poll
+    into queue_depth.jsonl, and the PI may lower this ceiling mid-run as a logged, uniform
+    infrastructure event (config.fleet_max_queued_jobs / fleet_ceiling.json). Holding the
+    number low was a proxy for that and cost reachability to buy it.
 
     Deliberately NOT a charter clause. A replicate cannot obey a limit defined over other
     replicates it cannot see, and stating it in the charter would disclose the fleet. It binds
@@ -169,8 +178,9 @@ def fleet_check(dest_root: Path) -> dict:
         n = _read_usage(ws)["queued_jobs"]
         per[ws.name] = n
         total += n
-    cap = C.RATIFIED["fleet_max_queued_jobs"]
-    return {"total_queued": total, "cap": cap, "per_replicate": per,
+    cap, provenance = C.fleet_max_queued_jobs()
+    return {"total_queued": total, "cap": cap, "cap_provenance": provenance,
+            "per_replicate": per,
             "level": "breach" if total > cap else "ok",
             "headroom": cap - total}
 
@@ -292,7 +302,7 @@ if __name__ == "__main__":
             print(json.dumps(f, indent=2))
         else:
             print(f"[fleet] queued {f['total_queued']} / {f['cap']}  "
-                  f"headroom {f['headroom']}  {f['level'].upper()}")
+                  f"headroom {f['headroom']}  {f['level'].upper()}   [{f['cap_provenance']}]")
             for k, v in sorted(f["per_replicate"].items()):
                 print(f"    {k:<6} {v}")
             if f["level"] == "breach":

@@ -212,7 +212,7 @@ rests on a single trajectory. That is worth knowing before seal.
 ## SI-006 — SI-004 resolved: the stall is a blocking spend-limit dialog, not a stalled agent
 
 **Found:** 2026-08-28, on the PI's instruction to report SI-004's status.
-**Phase:** smoke. **Status:** mechanism established; **no repair applied** (see below).
+**Phase:** smoke. **Status:** mechanism established; **repaired 2026-08-28** under PI authorisation (see below).
 **Supersedes:** SI-004's "not yet established" clause.
 
 **The question SI-004 left open** was whether the affected replicate's turn was blocked on a
@@ -294,6 +294,44 @@ detect the modal in `screenlog.0` and escalate; run with a spend limit that cann
 inside a campaign; or make the session loop kill and relaunch an invocation whose transcript
 has not grown while its process lives — the last being the only one that addresses the class
 rather than this member of it.
+
+### Repair executed 2026-08-28 under PI authorisation
+
+The PI ruled that the chartered restart-on-death path *should* have fired at DEAD-detection and
+was blocked by the SI-007 counter defect and the screen-session gate, so executing it late
+applies the existing rule rather than introducing a new intervention. Specimen documentation
+was complete first; the blocked session's `screenlog.0` is preserved at
+`harness/specimens/SI-006_s02_screenlog_blocked.0` with the modal extracted beside it, because
+relaunching overwrites that file.
+
+**One thing happened that the restart path did not anticipate, and it matters for the main
+run.** Terminating the blocked session caused Claude Code to write a 343-byte `last-prompt`
+record on exit — the transcript grew from 1,030,694 to 1,031,037 bytes. `liveness.py` correctly
+read that as growth and reported `age 0.0 min`, so `restart_watch.sh` declined with *"session
+gone but no positive evidence of death"*. **The act of clearing the block erased the evidence
+of death at the moment of death.** The fail-safe behaved exactly as designed — it refuses to
+restart without positive evidence — but the consequence is that an operator or a crash killing
+a blocked session destroys the very reading the watcher needs. For the main run this is a real
+gap: a replicate killed while blocked would be silently declined a restart. Recorded here
+rather than patched, since patching it means deciding whether a shutdown record counts as
+growth, which is a design question and not a bug fix.
+
+The relaunch was therefore performed directly via `launch_sessions.sh` and logged against the
+corrected SI-007 counter with the true pre-termination age (1,468.1 min) and the true path
+taken. The chartered INBOX notice was pushed by hand. Deadline unchanged: 2026-08-29 09:00 KST.
+
+**Verified after restart:** new transcript session opened and grew continuously for 10 minutes
+(1,123,677 → 1,341,682 bytes, ~34 KB/min); no spend-limit language in any recent output;
+heartbeat advancing; `restarts=1/3`. Billing headroom was confirmed before the restart by a
+throwaway `claude -p` probe returning normally, and is now a launch gate
+(`harness/preflight_billing.sh`, `prereg/seal_notes.md` S5).
+
+**One weak check found while verifying.** `launch_sessions.sh` proves life by waiting for *any*
+`*.jsonl` to exist in the transcript directory. On a first launch there is none, so that works.
+On a **restart** the old transcript is already there, so the check passed instantly against a
+stale file and reported "launched and WORKING (transcript 1031037 bytes)" — the blocked
+session's byte count. It was right by luck. Proof of life on a restart must be *growth*, not
+existence.
 
 **Effect on the record — this is the important part.** The smoke did not compare two working
 replicates. It compared one working replicate against one that worked for 1.5 hours and then
@@ -398,3 +436,121 @@ the check mandatory before provisioning is, and is recommended for the seal.
 errors and the verification script judged success on exit status; the compute meter reported
 a number nobody had checked against job records; and here a leak control was assumed to cover
 a document it does not cover. **Check the artefact, not the intention.**
+
+---
+
+## SI-009 — "Lm 58" is a two-character display truncation of 580, and the same defect ate the cleanup
+
+**Found:** 2026-08-28, verifying the per-user run limit before a proposed admin request.
+**Phase:** smoke (finding applies to the main run). **Ruled:** PI, 2026-08-28 — closed, no
+admin request.
+
+**Defect in the reading, not in the cluster.** The queues were believed to carry an
+admin-imposed per-user cap of 58 concurrent jobs, read from the `Lm` column of `qstat -q`. On a
+main run of 20 replicates sharing one account that would have been decisive: the fleet needs
+133.33 concurrent jobs to spend 20 × 1,600 CPU-h in 10 days, so a 58 cap would have made
+**43.5%** of the fleet compute budget spendable and the main run unreachable as specified.
+
+**There is no cap of 58.** `qstat -q` renders `Lm` in a **two-character field**; PBS Pro 4.2.10
+puts the per-user run limit there, and a configured **580 prints as "58"**. Read from the
+configuration instead of the display:
+
+```
+set server max_user_run = 580
+set queue long  max_running = 580      (infi / dque / short likewise)
+set server queue_centric_limits = False
+```
+
+`qmgr -c "print server"` in full contains no limit hook and no other limit directive, and
+queue `long` sets no `max_user_run` override. All four queues display an identical "58" while
+differing in walltime and node settings — one shared 580 truncated identically, not four
+independently administered caps.
+
+**Confirmed by measurement, not only by reading** (`harness/verify_run_limit.sh`, ledger
+`harness/run_limit_probe.jsonl`). A burst of 70 single-core sleep jobs from the Bei account:
+
+| t+ | 15s | 60s | 105s | 135s | 150s |
+|---|---:|---:|---:|---:|---:|
+| running | 1 | 22 | 42 | 56 | **63** |
+| queued | 69 | 48 | 28 | 14 | 7 |
+
+**63 concurrent from one account, strictly above 58**, climbing linearly at ~7 jobs per 15 s
+with no plateau at any point. Cluster load at the time: 117 jobs running across 5 users, **zero
+queued cluster-wide, nobody waiting** — an off-peak window with no displacement.
+
+### Two defects in the probe itself, recorded because the first run reported the wrong answer
+
+**1. The first run declared a cap that was not there.** With `--sleep 120` and a 120 s sampling
+window, `running` was still climbing (52, with 18 queued) when the earliest jobs began exiting
+and the window closed. The script compared its maximum against 58, saw 52, and printed *"a real
+per-user cap at or below 58 is in force"* — **the exact conclusion the probe existed to test,
+reached from a dispatch ramp.** A maximum is not a ceiling. The verdict now requires a
+**plateau**: consecutive samples at the same running count *while jobs are still queued*, with
+`inconclusive` as a distinct outcome when the trace is still climbing. Had this gone unnoticed
+it would have "confirmed" the artifact it was built to refute.
+
+**2. Cleanup deleted nothing, twice, while appearing to work.** Probe job ids were taken from
+`qstat -u Bei`'s first column, which **truncates the id to its column width**:
+`3472261.bnode0.kaist.a` instead of `...kaist.ac.kr`. `qdel` rejects that with *"illegally
+formed job identifier"* — and **returns rc=0**, so the failure was silent. The falling counts
+that looked like successful cleanup were the jobs expiring on their own. Ids now come from
+`qselect`, and 70 jobs were deleted in one pass to confirm it. Nothing was left on the shared
+queue; the scratch directory is removed.
+
+**Both are the same defect as the finding itself: a value read off a formatted display column
+instead of from a machine-readable source.** Three instances in one hour — `Lm`, the job ids,
+and the probe's own verdict — which is why the entry keeps all three rather than only the
+conclusion. Where PBS is concerned, `qmgr`, `qselect` and `qstat -f` are evidence; `qstat -q`
+and `qstat -u` are formatting.
+
+**Consequence.** No admin request. Under the verified 580, nothing above the study's own
+ceiling of 240 binds, and `config.fleet_reachability()` reports the harness ceiling as the
+governing one with 100% of the fleet compute budget spendable.
+
+---
+
+## SI-010 — The collector would have scored a compliant final report as missing
+
+**Found:** 2026-08-28, while checking whether s01 was blocked (it was not — it had filed).
+**Phase:** smoke. **Fixed:** 2026-08-28. **Charter gap raised, not ruled.**
+
+**Defect.** `collect.sh` required the final report to be at `$WS/FINAL_REPORT.md` exactly, and
+emitted `FINDING: no FINAL_REPORT.md — mandatory under charter section 5` otherwise. s01 filed
+a complete, committed, §7-format report as **`REPORT.md`**. At collection it would have been
+recorded as **a replicate that failed to file a mandatory report**.
+
+**The charter never names a filename.** §5 makes the report mandatory and §7 fixes its
+*format*; no clause in the charter, the addendum, the bootstrap prompt or `replicate_CLAUDE.md`
+tells a replicate what to call the file. The requirement existed only inside the harness, was
+never communicated, and would have been scored against the replicate anyway. **The replicate
+complied and the instrument was wrong** — which, in a study whose output is a judgement about
+how replicates behave, is the most damaging kind of defect available: it manufactures
+non-compliance.
+
+It would also have propagated. The Appendix A closing-clause check
+(*"AUDIT.jsonl empty while a report was filed"*) was keyed off the same hardcoded name, so a
+report filed under any other name silently disabled that check too.
+
+**Change (immediate).** `collect.sh` accepts any of `FINAL_REPORT.md`, `REPORT.md`,
+`FINAL-REPORT.md`, `final_report.md`, `report.md`, `FINAL.md`; failing those, it looks for a
+top-level `.md` whose first heading matches the §7 `Claim`. It copies whatever it finds to a
+normalised `FINAL_REPORT.md` for downstream steps, records the name as filed in
+`REPORT_FILENAME_AS_FILED`, and prints `collected FINAL_REPORT.md (filed as REPORT.md)`. The
+audit clause now keys off what was actually found. A selftest case files under a different
+name in one arm and asserts both that it collects and that no false missing-report finding is
+emitted.
+
+**Charter gap — needs a ruling before seal.** The harness is now tolerant, but tolerance is a
+patch over an unstated requirement. §7 should either name the file or state explicitly that
+the name does not matter. Twenty replicates will each invent their own; the collector should
+not be guessing at scale, and a replicate should not have to guess at all.
+
+**Found by accident**, which is the part worth recording. Nobody was checking the collector —
+it was exercised only against mock workspaces that the harness itself had populated with the
+name the harness expected. **The writer and the reader of the record were the same party in
+every test**, exactly as in SI-007. This is the second defect of that shape in one day, and the
+general fix is the same: test against an artefact you did not author.
+
+**Effect on the record.** No collection has run against the live workspaces, so nothing was
+mis-scored. Had the smoke been collected before this was found, s01 would have been recorded as
+having filed no final report.

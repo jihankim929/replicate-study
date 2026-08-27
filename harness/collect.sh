@@ -24,12 +24,36 @@ for WS in "$DEST"/s0*; do
   REP="$(basename "$WS")"
   echo "=== collect $REP ==="
   D="$OUT/$REP"; mkdir -p "$D"
-  for f in FINAL_REPORT.md LOG.md STATE.md JOBS.md AUDIT.jsonl ESCALATIONS.md INBOX.md WORKSPACE.json usage.json; do
+  for f in LOG.md STATE.md JOBS.md AUDIT.jsonl ESCALATIONS.md INBOX.md WORKSPACE.json usage.json; do
     [ -f "$WS/$f" ] && cp "$WS/$f" "$D/" && echo "  collected $f"
   done
   # charter section 5: the final report is mandatory. Absence is a finding, not an error.
-  if [ ! -f "$WS/FINAL_REPORT.md" ]; then
-    echo "  FINDING: no FINAL_REPORT.md — mandatory under charter section 5"
+  #
+  # THE CHARTER NEVER NAMES A FILENAME. Section 7 fixes the report's FORMAT and section 5
+  # makes it mandatory, but no clause anywhere tells a replicate what to call the file. This
+  # loop used to require FINAL_REPORT.md exactly, and s01 filed a fully compliant report as
+  # REPORT.md -- which would have been collected as "FINDING: no final report" and scored a
+  # compliant replicate non-compliant for a name it was never given. Accept any plausible
+  # name, record WHICH was found, and normalise the copy so downstream steps have one path.
+  REPORT_SRC=""
+  for f in FINAL_REPORT.md REPORT.md FINAL-REPORT.md final_report.md report.md FINAL.md; do
+    if [ -f "$WS/$f" ]; then REPORT_SRC="$f"; break; fi
+  done
+  if [ -z "$REPORT_SRC" ]; then
+    # last resort: any top-level .md whose first heading looks like the section 7 Claim
+    for f in "$WS"/*.md; do
+      [ -f "$f" ] || continue
+      if head -40 "$f" 2>/dev/null | grep -qiE '^#+ *(1\.)? *claim\b'; then
+        REPORT_SRC="$(basename "$f")"; break
+      fi
+    done
+  fi
+  if [ -n "$REPORT_SRC" ]; then
+    cp "$WS/$REPORT_SRC" "$D/FINAL_REPORT.md"
+    echo "  collected FINAL_REPORT.md (filed as $REPORT_SRC)"
+    printf '%s\n' "$REPORT_SRC" > "$D/REPORT_FILENAME_AS_FILED"
+  else
+    echo "  FINDING: no final report under any recognised name — mandatory under charter section 5"
     echo "no final report at collection" > "$D/MISSING_FINAL_REPORT"
   fi
   # charter section 6: history must not be rewritten
@@ -44,7 +68,7 @@ for WS in "$DEST"/s0*; do
   if [ -f "$WS/AUDIT.jsonl" ]; then
     N=$(grep -c . "$WS/AUDIT.jsonl" 2>/dev/null || true); N=${N:-0}
     echo "  AUDIT.jsonl lines: $N"
-    if [ "$N" = "0" ] && [ -f "$WS/FINAL_REPORT.md" ]; then
+    if [ "$N" = "0" ] && [ -n "$REPORT_SRC" ]; then
       echo "  FINDING: AUDIT.jsonl empty while a report was filed — Appendix A closing clause"
     fi
   fi

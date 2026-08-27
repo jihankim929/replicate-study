@@ -18,7 +18,12 @@ set -uo pipefail
 cd "$(dirname "$0")/.."
 
 N=70                       # must exceed the value under test (58) with margin
-SLEEP=180                  # long enough for all to be running at once, short enough to be cheap
+# The first run of this probe used SLEEP=120 and sampled for exactly 120s. PBS dispatched at
+# roughly 7-8 jobs per 15s, so `running` was still climbing monotonically (52, 18 still queued)
+# when the earliest jobs began exiting and the window closed. That is a DISPATCH RAMP, not a
+# ceiling, and the script called it a cap. The walltime must exceed the time to dispatch all N
+# with margin, and the verdict must require a PLATEAU rather than a maximum.
+SLEEP=420
 QUEUE=long
 TAG="limitprobe"
 LEDGER=harness/run_limit_probe.jsonl
@@ -55,12 +60,30 @@ fi
 # Cleanup is unconditional: a probe that leaves 70 jobs on a shared queue is worse than no probe.
 cleanup() {
   echo "-- cleanup: deleting every ${TAG}_ job --"
-  ssh -o BatchMode=yes -o ConnectTimeout=30 dirac-bei '
+  # qdel does not take effect instantly, so counting once immediately after it reports a
+  # frightening number that is merely stale. Loop until clear, and say so if it is not.
+  # Job ids MUST come from qselect, not from a qstat column. `qstat -u` truncates the id to
+  # its column width -- "3472261.bnode0.kaist.a" instead of "...kaist.ac.kr" -- and qdel
+  # rejects that as "illegally formed job identifier" while returning rc=0, so the first two
+  # runs of this probe deleted NOTHING and the jobs merely expired on their own. That is the
+  # same defect as the "Lm 58" this script exists to disprove: a value read off a formatted
+  # display column instead of from a machine-readable source. Do not reintroduce it.
+  ssh -o BatchMode=yes -o ConnectTimeout=120 dirac-bei '
     export PATH=$PATH:/usr/local/pbs/bin
-    ids=$(qstat -u Bei 2>/dev/null | grep '"$TAG"'_ | awk "{print \$1}")
-    [ -n "$ids" ] && qdel $ids 2>/dev/null
-    sleep 3
-    echo -n "   remaining probe jobs: "; qstat -u Bei 2>/dev/null | grep -c '"$TAG"'_ || echo 0
+    for pass in 1 2 3 4 5 6; do
+      probe=""
+      for j in $(qselect -u Bei 2>/dev/null); do
+        nm=$(qstat -f "$j" 2>/dev/null | awk -F"= " "/Job_Name/{print \$2}" | tr -d " \r")
+        case "$nm" in '"$TAG"'_*) probe="$probe $j" ;; esac
+      done
+      [ -z "$probe" ] && break
+      qdel $probe >/dev/null 2>&1
+      sleep 8
+    done
+    n=$(qstat -u Bei 2>/dev/null | grep -c '"$TAG"'_)
+    echo "   remaining probe jobs: $n"
+    [ "$n" = "0" ] || echo "   !! probe jobs still present -- qdel by hand before leaving"
+    rm -rf /home1/users/Bei/limitprobe
   '
 }
 trap cleanup EXIT INT TERM
@@ -77,9 +100,9 @@ ssh -o BatchMode=yes -o ConnectTimeout=60 dirac-bei "
   echo \"   submitted $N\"
 "
 
-echo "-- sampling concurrency (the observed ceiling is the max RUNNING across samples) --"
-MAXRUN=0
-SAMPLES=$((SLEEP / 15))
+echo "-- sampling concurrency (a ceiling is a PLATEAU with work still queued, not a maximum) --"
+MAXRUN=0; PREV=-1; PLATEAU=0; LASTQ=0; CLIMBING=1
+SAMPLES=$(( (SLEEP - 60) / 15 ))     # stop before the earliest jobs start exiting
 for i in $(seq 1 "$SAMPLES"); do
   read -r R Q <<<"$(ssh -o BatchMode=yes -o ConnectTimeout=25 dirac-bei "
     export PATH=\$PATH:/usr/local/pbs/bin
@@ -87,19 +110,36 @@ for i in $(seq 1 "$SAMPLES"); do
       awk '/ R\$/{r=\$1} / Q\$/{q=\$1} END{printf \"%d %d\", r+0, q+0}'")"
   R=${R:-0}; Q=${Q:-0}
   [ "$R" -gt "$MAXRUN" ] && MAXRUN=$R
-  printf '   t+%3ds  running=%-4s queued=%-4s  max_seen=%s\n' "$((i*15))" "$R" "$Q" "$MAXRUN"
+  # A plateau is consecutive samples at the same running count WHILE work is still queued.
+  # Without the "still queued" clause, a burst that has fully dispatched looks like a ceiling.
+  if [ "$R" -eq "$PREV" ] && [ "$Q" -gt 0 ]; then PLATEAU=$((PLATEAU+1)); else PLATEAU=0; fi
+  PREV=$R; LASTQ=$Q
+  printf '   t+%3ds  running=%-4s queued=%-4s  max_seen=%-4s plateau=%s\n' \
+    "$((i*15))" "$R" "$Q" "$MAXRUN" "$PLATEAU"
+  # Decisive early exit: strictly more than the value under test are running at once.
+  if [ "$R" -gt 58 ]; then CLIMBING=0; break; fi
+  # Decisive the other way: held flat for 4 samples (60s) with jobs still waiting.
+  if [ "$PLATEAU" -ge 4 ]; then CLIMBING=0; break; fi
   sleep 15
 done
 
 echo
-echo "== observed ceiling: $MAXRUN concurrent jobs from one account =="
-if [ "$MAXRUN" -gt 58 ]; then
-  echo "   > 58 -- the 'Lm 58' column is a DISPLAY ARTIFACT, not a limit."
-else
-  echo "   <= 58 -- a real per-user cap at or below 58 is in force. Fleet reachability is affected;"
-  echo "   see config.fleet_reachability() and prereg/seal_notes.md."
-fi
 TS=$(date -u +%FT%TZ)
-printf '{"ts":"%s","burst":%d,"sleep_s":%d,"queue":"%s","observed_max_running":%d,"value_under_test":58}\n' \
-  "$TS" "$N" "$SLEEP" "$QUEUE" "$MAXRUN" >> "$LEDGER"
+if [ "$MAXRUN" -gt 58 ]; then
+  VERDICT="no_cap_at_58"
+  echo "== $MAXRUN concurrent jobs ran from one account =="
+  echo "   > 58. The 'Lm 58' column is a DISPLAY ARTIFACT of qstat -q's two-character field,"
+  echo "   not a limit. Confirms max_user_run = 580."
+elif [ "$PLATEAU" -ge 4 ]; then
+  VERDICT="real_cap"
+  echo "== ceiling observed: $MAXRUN concurrent, held flat with $LASTQ still queued =="
+  echo "   A real per-user cap at or below 58 is in force. Fleet reachability is affected;"
+  echo "   see config.fleet_reachability() and prereg/seal_notes.md."
+else
+  VERDICT="inconclusive"
+  echo "== INCONCLUSIVE: reached $MAXRUN and was still climbing when the window closed =="
+  echo "   This is a dispatch ramp, not a ceiling. Re-run with a longer --sleep."
+fi
+printf '{"ts":"%s","burst":%d,"sleep_s":%d,"queue":"%s","observed_max_running":%d,"queued_at_end":%d,"plateau_samples":%d,"value_under_test":58,"verdict":"%s"}\n' \
+  "$TS" "$N" "$SLEEP" "$QUEUE" "$MAXRUN" "$LASTQ" "$PLATEAU" "$VERDICT" >> "$LEDGER"
 echo "   logged -> $LEDGER"

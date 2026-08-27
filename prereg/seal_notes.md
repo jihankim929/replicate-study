@@ -19,9 +19,9 @@ Three ceilings stack; the smallest governs:
 
 | Ceiling | Value | Headroom over 133.33 | Status |
 |---|---:|---:|---|
-| PBS `max_user_run` (external) | **580** | 4.35× | **verified by config read 2026-08-28; burst test pending** |
-| Harness study-wide ceiling (`watchdog.py --fleet`) | **160** | **1.20×** | **governing — see S2** |
-| Sum of per-replicate caps (20 × 12) | 240 | 1.80× | ratified 2026-08-28 (Flag H) |
+| PBS `max_user_run` (external) | **580** | 4.35× | **CLOSED — config read and burst-measured 2026-08-28** |
+| Harness study-wide ceiling (`watchdog.py --fleet`) | **240** | **1.80×** | **RULED 2026-08-28 (Flag I) — governing** |
+| Sum of per-replicate caps (20 × 12) | 240 | 1.80× | ratified 2026-08-28 (Flag H) — now equal to the ceiling |
 
 **The main run is reachable: 100% of the fleet compute budget is spendable.** The binding layer
 is the harness's own 160, exactly as the PI ruled — the PBS setting is not what constrains it.
@@ -56,62 +56,50 @@ deal — the fleet could have run only 58 concurrent jobs against the 133.33 it 
 is worth stating that counterfactual plainly, because it is the one this check was worth
 running for.
 
-### S1.2 Empirical verification — PREPARED, NOT RUN
+### S1.2 Empirical verification — RUN 2026-08-28, CLOSED
 
-`harness/verify_run_limit.sh` submits a controlled burst of short single-core sleep jobs past
-58, samples concurrency, logs the observed ceiling to `harness/run_limit_probe.jsonl`, and
-`qdel`s every probe job from an unconditional `EXIT` trap. `--dry-run` prints the plan and the
-configured limits without submitting.
+`harness/verify_run_limit.sh`, 70 single-core sleep jobs from the Bei account, off-peak
+(117 jobs running across 5 users, **zero queued cluster-wide, nobody waiting**):
 
-It is **not run** and is not called by `poll.sh`: it loads a shared queue (112 jobs from other
-users were running at the check), and the PI gated it on confirming the admin change. Since the
-admin change now appears unnecessary, the burst's remaining value is to convert S1.1 from a
-documentary argument into a measurement. **Recommend running it once before seal** — it is
-cheap, self-cleaning, and it is the difference between "the config says 580" and "the scheduler
-let one account run 70 at once".
+| t+ | 15s | 60s | 105s | 135s | 150s |
+|---|---:|---:|---:|---:|---:|
+| running | 1 | 22 | 42 | 56 | **63** |
+| queued | 69 | 48 | 28 | 14 | 7 |
 
-**Open until run.** If it observes a ceiling ≤ 58, S1's governing row changes to PBS and the
-main run is **not** reachable as specified; that would have to be resolved before seal.
+**63 concurrent jobs from one account — strictly above 58**, climbing linearly at ~7 per 15 s
+with no plateau. The documentary reading is now a measurement. Logged to
+`harness/run_limit_probe.jsonl`; all 70 probe jobs deleted and the scratch directory removed.
 
-## S2. Flag I — the study-wide ceiling of 160 has the defect Flag H just fixed
+**Two defects in the probe itself are recorded in SI-009**, because the first run reported the
+opposite answer: a 120 s window caught only the dispatch ramp and the script called 52 a
+ceiling, and cleanup passed truncated job ids to `qdel`, which rejected them while returning
+rc=0 so nothing was deleted. Both are fixed; both were the same read-a-formatted-column defect
+as `Lm 58` itself.
 
-**Raised 2026-08-28, not ruled.**
+## S2. Flag I — RULED 2026-08-28: fleet ceiling 160 → 240
 
-Flag H established the invariant: *the headroom ratio over sustained concurrency is the rule;
-the numeral is not.* The study-wide ceiling of 160 was set in Rev 5 against the same 14-day
-horizon that made the per-replicate cap 8, and it moved for the same reason:
+The invariant is restored at fleet scale: **240 is 1.80× the 133.33 concurrent jobs the fleet
+needs**, and is exactly **20 × 12**, so the three ceilings now agree instead of the harness
+contradicting its own per-replicate ruling. Under the verified PBS limit of 580, nothing above
+240 binds.
 
-| | 14 days | 10 days |
-|---|---:|---:|
-| Fleet sustained concurrency | 95.24 | **133.33** |
-| Headroom at ceiling 160 | **1.68×** | **1.20×** |
-| Per-replicate headroom at cap 8 | 1.68× | 1.20× |
+**Crowding management moved to what actually governs it**, rather than to holding the ceiling
+low as a proxy:
 
-The two rows are identical because they are the same arithmetic at two scales. Applying the
-ratified invariant (~1.7–1.8×) to the fleet gives **227–240**, and **240 is exactly 20 × 12** —
-the sum of the per-replicate caps just ratified, and exactly 1.80×. The three ceilings would
-then agree instead of the harness silently contradicting its own per-replicate ruling.
-
-| Ceiling | Headroom | Capacity | Study share of queue at 112 other jobs | % of PBS 580 |
-|---:|---:|---:|---:|---:|
-| 160 (current) | 1.20× | 38,400 CPU-h | 59% | 28% |
-| 227 | 1.70× | 54,480 CPU-h | 67% | 39% |
-| **240 (recommended)** | **1.80×** | **57,600 CPU-h** | **68%** | **41%** |
-
-**The counter-argument is crowding, and it is real.** Rev 5 built this ceiling so *"the study
-can never crowd the shared queue however individual replicates behave."* At 240 the study would
-be ~68% of concurrent load against the ~112 jobs other users were running, up from ~59%. That
-is a judgement about being a good cluster citizen, not an arithmetic question, and it is the
-PI's to make.
-
-**What should not happen is leaving it at 160 by default.** At 160 the fleet ceiling binds
-before the per-replicate caps do, so replicates would be throttled by a study-wide limit they
-cannot see, cannot attribute, and would experience as their own jobs mysteriously not starting.
-A replicate that under-spends its compute for that reason is a confounded observation in
-exactly the way Flag H described — only harder to detect, because the constraint is invisible
-from inside the workspace. If the PI wants 160 for crowding reasons, that is a coherent
-position; it should then be recorded that the fleet ceiling, not the replicate's own judgement,
-may be what shaped the funnel decision.
+1. **Displacement is measured.** `harness/queue_depth.py` runs every poll and writes
+   `harness/queue_depth.jsonl`: whole-queue running/queued across all users, the study's share,
+   and — the reading that matters — **how many *other* users' jobs are waiting**. Share alone
+   is a proxy: a large share displaces nobody on an idle cluster, and a small share can displace
+   badly on a full one. First reading, 2026-08-28 08:16 KST: queue R=114 Q=0 across 5 users,
+   study R=2 (1.8%), **others waiting 0**.
+2. **The group heads-up** — a human action, outside the harness.
+3. **The PI's standing authority to lower the ceiling mid-run**, as a logged, uniform
+   infrastructure event. Implemented as `harness/fleet_ceiling.json`
+   (`{"ceiling": N, "ts": ..., "reason": ...}`), read by `config.fleet_max_queued_jobs()`,
+   reported by the watchdog every cycle with its provenance. It may only ever **lower** the
+   ratified ceiling — raising it that way would be a charter change wearing an operations hat,
+   and the guard is tested. A quiet edit would confound every arm at once and leave no trace of
+   when, so the timestamp and reason are mandatory.
 
 ## S3. Token budget — 40 M stands, evidentiary note to be revisited
 
@@ -131,3 +119,56 @@ a single replicate's burn, measured over ~1.7 days, one of which was an opening 
 - **SI-007** — the restart cap of 3 was inoperative. Fixed 2026-08-28; the fix needs to be
   exercised against a real restart before it is trusted.
 - **Charter `[workspace path]`** — still unset, supplied at provisioning.
+- **SI-009** — `Lm 58` closed; the two probe defects it records are fixed.
+- **SI-010 — CHARTER GAP, needs a ruling.** The charter never names a filename for the final
+  report. §5 makes it mandatory and §7 fixes its format, but nothing tells a replicate what to
+  call the file; `collect.sh` required `FINAL_REPORT.md` and s01 filed `REPORT.md`, which would
+  have been scored as a missing mandatory report. The collector is now tolerant, but **§7
+  should either name the file or say plainly that the name does not matter** before 20
+  replicates each invent their own.
+
+## S5. LAUNCH REQUIREMENT — billing/spend dialogs must be structurally impossible
+
+**Filed 2026-08-28 by PI ruling, arising from SI-006.** Same class as the permission
+allow-list: the goal is not to detect the dialog but to make it unreachable.
+
+**Leg 1 — pre-verified headroom. Implemented as a launch gate.**
+`harness/preflight_billing.sh` must pass before any replicate starts. It proves the account can
+complete a request right now, checks the response for spend-limit language, and prints the
+campaign's maximum possible burn (**20 × 40 M = 800,000,000 billable tokens** for the main run).
+Run 2026-08-28: **legs 1–2 PASS**.
+
+Its third leg **cannot be automated** — Claude Code exposes no machine-readable spend limit —
+and the script says so rather than skipping it silently. **Manual confirmation required before
+seal:** confirm in the account's billing settings that either no monthly spend limit is set, or
+the limit exceeds 800 M tokens' worth of spend with margin, and record the confirmation here.
+
+- [ ] *(unchecked)* Spend limit confirmed to exceed the fleet ceiling with margin — PI, date:
+
+**Leg 2 — non-interactive invocation. NOT implemented; needs a PI decision.**
+Replicates run `claude` in its default interactive TUI mode, which is what allowed a modal to
+be drawn at all. In `-p/--print` mode there is no modal: a limit returns an error and the
+process **exits non-zero**, which `session_loop.sh` already records and which the harness can
+escalate. That is the structural fix.
+
+It is not applied unilaterally because **it changes the artifact under study**: the smoke was
+measured in TUI mode, and switching the main run to headless changes the thing the smoke was
+supposed to predict. The trade is real in both directions and is the PI's to make:
+
+| | TUI (current) | `-p` headless |
+|---|---|---|
+| Spend/permission modal | can block indefinitely | impossible — process exits |
+| Comparability with the smoke | matched | broken |
+| Failure visible to the harness | only via transcript growth | via exit code, immediately |
+
+**Recommend `-p` for the main run** and recording the smoke/main mode difference as a stated
+limitation. Twenty replicates over ten days on one account is far more exposed to this class
+than two replicates over three days were, and the smoke has already lost 38.6 hours of one arm
+to it.
+
+**Leg 3 — the general case.** Legs 1 and 2 close spend dialogs specifically. The class is
+"any interactive modal halts an unattended agent while every signal above the TUI reports
+health", and it has now produced three members (permission, settings, spend). The only
+harness-side defence that addresses the class rather than its members is to **kill and relaunch
+an invocation whose transcript has not grown while its process is alive** — the gap SI-003
+documented and SI-006 walked through. Not implemented; recommended for the main run.
