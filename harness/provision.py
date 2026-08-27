@@ -260,7 +260,7 @@ def provision(rep_id, dest_root, dry_run=False, db_limit=None, force=False, remo
         "deadline_kst": deadline.isoformat(),
         "campaign_days": C.RATIFIED["phases"][phase]["days"],
         "db_files": len(names),
-        "budget_status": "ratified 2026-08-26",
+        "budget_status": "ratified 2026-08-26; revised 2026-08-28 (charter Rev 13)",
         "compute_cpu_h": C.RATIFIED["compute_cpu_h"][phase],
         "token_budget": C.RATIFIED["token_budget"][phase],
         "token_metering_basis": C.RATIFIED["token_metering_basis"],

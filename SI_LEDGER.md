@@ -145,3 +145,64 @@ current evidence nothing in the harness will end this state before the §5 deadl
 **Not yet established.** Whether the turn is blocked on a tool call that will not return, or
 is progressing without emitting transcript entries. Distinguishing these requires inspecting
 the session, which the PI has ruled out for now.
+
+---
+
+## SI-005 — The main token budget was re-set from a smoke burn measurement with one arm stalled
+
+**Found:** 2026-08-28, while implementing the pre-seal parameter revisions (charter Rev 13).
+**Phase:** smoke. **Status:** recorded; the revision stands.
+
+**Why this entry exists.** The main token budget moved 57 M → 40 M on the stated basis of
+*measured smoke burn*. That is the right instrument to use — the smoke exists to price the
+main run. But at the moment of measurement only one of the two arms was producing a burn
+reading that means what it appears to mean, and a budget defended by a measurement should
+carry the measurement's limits on the same page.
+
+**Both readings, at the revision (2026-08-27 22:16 UTC / 2026-08-28 07:16 KST):**
+
+| Basis | A | B |
+|---|---:|---:|
+| Billable tokens since launch (06:28 UTC 2026-08-26) | 6,486,002 | 646,274 |
+| Elapsed-campaign rate | 3.91 M/day | 0.39 M/day |
+| First-24 h rate | 5.64 M/day | 0.65 M/day |
+| Transcript last advanced | 2026-08-27 22:16 UTC (live) | **2026-08-26 07:57 UTC (frozen ~38 h)** |
+| Runway against 40 M, elapsed basis | 10.2 d | 103 d |
+| Runway against 40 M, first-24 h basis | 7.1 d | 62 d |
+
+Rates are `harness/meter_tokens.py`'s own basis — input + output + cache-creation, cache reads
+excluded — read directly from the two live transcripts, not from `harness/token_daily.jsonl`,
+which had not been refreshed since 2026-08-26 and still carried day-1 partials.
+
+**Three limits, stated rather than implied.**
+
+1. **One arm's rate is a measurement of a stall, not of a working style.** B's transcript is
+   the frozen 1,030,694 bytes of the open **SI-004**. Its 0.39 M/day is what an agent that
+   stopped writing 38 hours ago burns. Describing it as an execution-heavy *style* attributes
+   to a research style what the evidence attributes to a stall. The conclusion it supports —
+   that a low-burn trajectory never approaches 40 M in 10 days — happens to be robust, since
+   even B's *pre-stall* rate of 0.65 M/day gives 62 days of runway. But it is robust by margin,
+   not by measurement.
+2. **Peak and sustained give different answers.** Against 40 M, A's first-24 h rate forces
+   filing at day 7; A's sustained rate does not force filing before the §5 deadline at all.
+   The revision's "day 6–7" figure is the peak-basis answer. Rev 2 explicitly declined to price
+   the main run off a peak day when it rejected the prior campaign's 5.73 M peak in favour of
+   its 4.07 M sustained rate; this entry records that the new figure sits on the other side of
+   that same distinction.
+3. **1.66 days of smoke is a short lever on a 10-day forecast**, and one of those days is the
+   opening day, which is not representative of any campaign's steady state.
+
+**No change to the instrument.** `meter_tokens.py` was already reading the correct source on
+the correct basis and reported both the daily and total figures; nothing here is a defect in
+it. Its docstrings now name the budgets in force and point here.
+
+**No change to the ruling.** 40 M is a cost decision the PI is entitled to make on cost
+grounds, and it is not contradicted by any basis above: on every reading, a low-burn
+trajectory clears 10 days untouched and a high-burn one is the only one the cap can bind. This
+entry exists so that if a main-run replicate files under a forced token stop, the record shows
+what was and was not predicted at the time — and does not permit a stall to be read afterwards
+as a style, or a peak-day rate to be read afterwards as a sustained one.
+
+**Open dependency.** SI-004 is still open and B has not written for ~38 h. If the smoke ends
+with B never resuming, **the study has one arm's token burn, not two**, and the 40 M figure
+rests on a single trajectory. That is worth knowing before seal.

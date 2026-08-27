@@ -358,3 +358,128 @@ Neither was caught by reading. Both were caught by **running the protocol and ch
 output rather than the exit status** — RASPA exits 0 on fatal input errors, a trap the prior
 campaign documented, and the verification script judged success on a non-empty expected output
 file instead. The same pattern as the leak scans: check the artefact, not the intention.
+
+---
+
+## Rev 13 — 2026-08-28 — §5 main horizon 14 → 10 days; §4 main tokens 57 M → 40 M; compute and G7 reconfirmed
+
+**Authority:** PI ruling, pre-seal, on cost and smoke-burn evidence. Frozen at seal.
+
+### What moved
+
+| § | Was | Now |
+|---|---|---|
+| §5, main length | 14 days | **10 days** (launch + 10 days, 09:00 KST) |
+| §4, main tokens | 57,000,000 | **40,000,000** (warning **30,000,000**, hard stop **40,000,000**) |
+| §4, main compute | 1,600 CPU-h | **1,600 CPU-h — unchanged** |
+| Appendix A, G7 | k = 40, ~1.7% of budget | **k = 40, ~1.7% — reconfirmed** |
+
+### §5 — 10 days
+
+**PI rationale, for the record.** The prior campaign reached a defensible claim in ~12 days
+*while building its toolchain from nothing*. Replicates start provisioned — RASPA built, UFF
+installed, database in place, all pinned by content — so the toolchain-construction phase that
+consumed the front of the prior campaign does not exist here. Ten days preserves the full
+campaign arc (screen, validate, second act, endgame) with margin.
+
+The smoke addendum's disapplication of the §8 day-7 interim status is unaffected: it is
+disapplied because the smoke is 3 days, not by reference to the main horizon.
+
+### §4 — 40 M tokens
+
+**PI rationale, for the record.** Measured smoke burn shows roughly **6.2 M/day** for a
+deliberation-heavy style and **0.95 M/day** for an execution-heavy one. At 40 M an
+execution-style trajectory never approaches the cap, and a deliberation-style trajectory
+reaches forced filing around day 6–7 — after screening and a second act are both feasible.
+The budget reflects measured burn and cost constraints.
+
+**What this meter actually reads, stated beside the rationale rather than instead of it.**
+As of 2026-08-27 22:16 UTC, `harness/meter_tokens.py` over the two live smoke transcripts:
+
+| Basis | Deliberation-heavy arm | Execution-heavy arm |
+|---|---:|---:|
+| Billable total since launch | 6,486,002 | 646,274 |
+| Elapsed-campaign rate | 3.91 M/day | 0.39 M/day |
+| First-24 h rate | 5.64 M/day | 0.65 M/day |
+| Runway against 40 M, elapsed basis | 10.2 days | 103 days |
+| Runway against 40 M, first-24 h basis | **7.1 days** | 62 days |
+
+The **direction** of the rationale is confirmed on every basis: the execution-heavy style
+never approaches 40 M inside 10 days, and the deliberation-heavy style is the only one the cap
+can bind. The **day 6–7 forced-filing figure holds on the peak-day basis, not the sustained
+one** — at the sustained rate the cap does not bind before the §5 deadline at all. This is the
+same peak-versus-sustained distinction Rev 2 ruled on when it declined to price the main run
+off the prior campaign's 5.73 M peak day.
+
+**The execution-heavy figure is the weak one and should not be leant on.** That arm's
+transcript has been frozen since 2026-08-26 07:57 UTC — the open stall of SI-004 — so its
+measured rate is a measurement of a stalled agent, not of a working style. Filed as **SI-005**.
+
+**Neither caveat argues against 40 M.** A cap that binds a deliberation-heavy trajectory
+around the peak-rate day 7 and never binds an execution-heavy one is the stated intent, and
+the number is a cost decision the PI is entitled to make on cost grounds alone. The caveats
+are recorded so that a post-hoc reading of a forced filing at day 7 cannot be presented as a
+prediction this record did not make.
+
+**Per-day allowance, incidentally now consistent across phases:** 40 M ÷ 10 = **4.00 M/day**,
+identical to the smoke's 12 M ÷ 3. The old pairing (4.07 main / 4.00 smoke) was an artifact of
+rounding, not a design choice.
+
+### §4 — compute unchanged at 1,600 CPU-h
+
+The compute budget is not a duration-derived quantity. Its design variable is the **fraction
+of a brute-force screen** it permits — 1,600 ÷ 3,162 = **50.6%** — and that fraction is a
+property of the database and the per-structure cost, both calendar-independent. Shortening the
+horizon does not make a full screen cheaper, so it does not change what the budget must forbid.
+§4's phase table is confirmed for compute and tokens.
+
+**What the shortened horizon does change is the rate at which the same budget must be spent**,
+and two of the numbers that follow from it no longer read as they did:
+
+| Derived from the horizon | 14 days | 10 days |
+|---|---:|---:|
+| Main compute per day | 114.3 CPU-h | **160.0 CPU-h** |
+| Sustained concurrency to spend the budget | 4.76 | **6.67** |
+| Headroom at the §4 cap of 8 | 1.68× | **1.20×** |
+| Calendar capacity at cap 8 | 2,688 CPU-h | **1,920 CPU-h** |
+| Queue saturation needed to spend 1,600 CPU-h | 59.5% | **83.3%** |
+
+Compute remains the binding constraint (1,920 > 1,600), so the sub-brute-force design survives
+— but by 1.20× where it previously had 1.68×. **This is raised as a flag, not ruled**: see
+R3.3 in `prereg/placeholder_proposals.md`. All of these quantities are now computed by
+`harness/config.py:horizon_derived()` rather than transcribed, so the next horizon change
+cannot leave them stale.
+
+**The smoke's 340 CPU-h is unaffected but its derivation is superseded.** It was set at
+1,600 ÷ 14 × 3 = 343, i.e. the same per-day rate as main. The equivalent figure at 10 days
+would be 480. **340 stands** — it is ratified and in flight, and a budget cannot be raised
+under a running campaign it is meant to constrain. The consequence is recorded rather than
+smoothed over: the smoke now runs at **70.8%** of the main run's per-day compute rate, so it
+exercises the funnel decision under *sharper* pressure than the main run rather than equal
+pressure. That strengthens the smoke as a stress test and weakens it as a proportional
+forecast of main-run pacing, and main-run pacing predictions drawn from it should say so.
+
+### Appendix A, G7 — k = 40 reconfirmed
+
+G7's cost is denominated in compute, and compute did not change, so every percentage in the
+Rev 2 table is unchanged:
+
+| Passers | k = 25 | k = 40 | k = 75 |
+|---|---|---|---|
+| 400 | 16 audits · 29 CPU-h (1.8%) | 10 · 18 (1.1%) | 5 · 9 (0.6%) |
+| 600 | 24 audits · 44 CPU-h (2.7%) | **15 · 27 (1.7%)** | 8 · 15 (0.9%) |
+| 800 | 32 audits · 58 CPU-h (3.7%) | 20 · 37 (2.3%) | 10 · 18 (1.1%) |
+
+The one way the horizon could have reached G7 is through the passer count: if a 10-day
+calendar cut how many structures can be screened, the expected ~600 passers would fall and
+with it the audit count. It does not. At the §4 cap of 8 the 10-day calendar admits
+1,920 CPU-h ≈ **1,051 structure-screens**, against the **876** the 1,600 CPU-h budget can
+buy — compute stays binding, the screen count is unchanged, and the ~600-passer working
+estimate stands. **15 audits ≈ 27 CPU-h ≈ 1.71% of budget**, as before.
+
+The worst case is unchanged too: 800 passers at 2.28%, and even escalating all 15 audits to
+report-grade fidelity (9.13 CPU-h each) costs 137 CPU-h, 8.6% of budget.
+
+The charter's G7 note now states that the figure is compute-denominated, so a future horizon
+change cannot silently invalidate it — the same failure mode the Appendix A calibration note
+exists to prevent.

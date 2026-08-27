@@ -3,10 +3,14 @@
 
 Basis (ratified): input + output + cache_creation. Cache reads excluded.
 
-This reads the SAME source the 12 M budget was derived from — Claude Code's per-message
+This reads the SAME source the budgets were derived from — Claude Code's per-message
 `usage` records — so the number the budget was set from is the number the meter reports.
 Deriving the budget from one instrument and metering with another is how budgets quietly
 stop meaning anything.
+
+Budgets in force: smoke 12 M (warn 9 M), main 40 M (warn 30 M) — see config.horizon_derived().
+The main figure was re-set from 57 M on 2026-08-28 against this meter's own smoke output; the
+caveat on how far that output can be trusted is SI-005 in SI_LEDGER.md.
 """
 import argparse, glob, json, os, sys
 from pathlib import Path
@@ -17,9 +21,14 @@ FIELDS = ("input_tokens", "output_tokens", "cache_creation_input_tokens")
 def per_day(session_dir: Path) -> dict:
     """Per-calendar-day usage, for pricing the main run from measured smoke burn.
 
-    A campaign total cannot price a 14-day run: the prior campaign averaged 2.8 M/day across
-    11 days but peaked at 5.73 M, and the difference decides whether a budget binds. Daily
-    resolution is the thing that makes the smoke's burn usable as a forecast.
+    A campaign total cannot price a multi-day run: the prior campaign averaged 2.8 M/day
+    across 11 days but peaked at 5.73 M, and the difference decides whether a budget binds.
+    Daily resolution is the thing that makes the smoke's burn usable as a forecast.
+
+    That distinction is exactly what the 2026-08-28 revision turned on. Against the 40 M main
+    budget, this replicate's sustained rate (3.91 M/day) does not bind inside 10 days, while
+    its first-24 h rate (5.64 M/day) forces filing at day 7. Peak and sustained give different
+    answers to the same question, so the meter reports both and neither is called 'the' rate.
     """
     days = {}
     for f in sorted(glob.glob(str(session_dir / "*.jsonl"))):

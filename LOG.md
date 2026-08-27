@@ -790,3 +790,80 @@ transcripts recording, heartbeats 0 min old, restart counters 0/3. First meterin
 s01 **72,252** tokens, s02 **50,683** of 12 M each; compute 0 CPU-h (no jobs submitted yet).
 Transcript audit: 11 tool calls each, **0 out-of-scope findings**. Escalation queue empty.
 Self-test 49/49.
+
+---
+
+## LOG-2026-08-28-01 — Pre-seal parameter revisions: main horizon 10 d, tokens 40 M, compute held at 1,600; a leak I introduced and a cap that no longer means what it says
+
+**PI ruling, pre-seal, to be frozen at seal.** Three decisions, implemented across the charter,
+the harness and the record.
+
+| | Was | Now |
+|---|---|---|
+| §5 main length | 14 days | **10 days** |
+| §4 main tokens | 57 M (warn 42.75 M) | **40 M (warn 30 M)** |
+| §4 main compute | 1,600 CPU-h | **1,600 CPU-h — unchanged** |
+| G7 | k = 40, ~1.7% | **k = 40, ~1.7% — reconfirmed** |
+
+Rationale and full arithmetic: `prereg/charter_revisions.md` Rev 13 and
+`prereg/placeholder_proposals.md` R3. Smoke parameters are untouched — 340 CPU-h / 12 M /
+cap 50 are ratified and in flight, and a budget cannot be moved under the campaign it exists
+to constrain.
+
+**Every duration-derived quantity is now computed, not transcribed.**
+`harness/config.py:horizon_derived(phase)` returns the per-day rates, the warning and stop
+absolutes, sustained concurrency, cap headroom and calendar capacity. The whole reason this
+revision needed care is that the previous horizon's arithmetic had been written down as prose
+in four documents, and prose does not recompute itself.
+
+**Three findings the implementation produced.**
+
+**1. I introduced a blinding leak into the charter and the phase-row filter caught it.**
+My first draft of the §4/§5 revision-record rows named the new values —
+*"Main campaign length 14 days → 10 days"*, *"token budget 57,000,000 → 40,000,000"*. The
+revision record is part of the **provisioned** charter, and `render_phase_rows` only filters
+the phase *tables*. A smoke replicate would have read the main phase's horizon and budget off
+the revision record and learned its own run is a pilot — precisely the inference Rev 11 exists
+to prevent, arriving through the door Rev 11 does not cover. The existing rows are number-free
+for this reason and I had not noticed it was deliberate. Rewritten to name the change and not
+the value, and the same edit was needed in the G7 note, which had said *"when the main horizon
+was shortened"* — gated-arm text, but a gated **smoke** replicate reads it too. Verified clean
+across all four phase × arm renderings. **The lesson is the one this repo keeps relearning:
+the test of a replicate-facing document is not what it says but what can be inferred from it,
+and the check has to be run against the artefact rather than the intention.**
+
+**2. §4's main concurrency cap of 8 was sized against the 14-day horizon and no longer means
+what Rev 2 said it meant.** Rev 2 set it at *"~1.7× the 4.76 average concurrency the budget can
+sustain"*. At 10 days the sustained figure is **6.67** and the cap is **1.20×** it. Compute is
+still the binding constraint — 1,920 CPU-h of calendar capacity against a 1,600 CPU-h budget,
+so the sub-brute-force design survives and G7 is untouched — but a replicate must now hold its
+queue **83% saturated for ten consecutive days** to spend what it was given, against 59.5%
+before. Under-spend for queue-shaped reasons is a **confounded observation**: the funnel
+decision is what the study measures, and a harness-constrained funnel is not a measured one.
+The smoke cannot detect this (cap 50, 10.6× headroom, 9.4% saturation needed).
+**Filed as Flag H, not fixed** — it is a charter value and therefore a PI ruling.
+Recommendation: **cap 12**, which restores Rev 2's stated *rule* rather than preserving its
+numeral; the study-wide ceiling of 160 does the crowding-prevention work independently, which
+is why it was built as a separate mechanism.
+
+**3. The token revision's evidence is thinner than the decision needs it to look — SI-005.**
+The 40 M figure is defended by measured smoke burn. Read from the live transcripts rather than
+the stale daily ledger, one arm sits at 3.91 M/day sustained (5.64 M/day over its first 24 h)
+and the other at 0.39 M/day — but that second arm is the frozen transcript of the open SI-004
+stall, so its rate measures a stalled agent, not an execution-heavy working style. And against
+40 M the "forced filing at day 6–7" figure holds on the **peak-day** rate; on the **sustained**
+rate the cap does not bind before the §5 deadline at all — the same peak-versus-sustained
+distinction Rev 2 ruled on in the other direction when it declined to price the main run off
+the prior campaign's 5.73 M peak day. **Neither caveat argues against 40 M**: on every basis a
+low-burn trajectory clears 10 days untouched and a high-burn one is the only one the cap can
+bind, and the number is a cost decision besides. They are recorded so a forced filing at day 7
+cannot later be read as a prediction this record did not make. **Open dependency: if the smoke
+ends with SI-004 unresolved, the 40 M figure rests on one trajectory, not two** — worth
+knowing before seal.
+
+**Verification.** Harness selftest 59/59. Threshold boundaries exercised directly against
+`watchdog.py`: main tokens `ok` at 29,999,999, `warn` at exactly 30,000,000, `stop` at
+40,000,000; main compute unchanged and fully enforced; **SI-001's log-only exception confirmed
+still scoped to smoke + compute only** and not widened by any of this. A dry-run provision of
+`rep01` carries `campaign_days: 10`, `token_budget: 40000000`, `compute_cpu_h: 1600` and a
+deadline at launch + 10 days.

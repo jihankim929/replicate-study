@@ -11,6 +11,7 @@ approval.
 |---|---|---|
 | 1 | 2026-08-26 | First filing. All rows proposed; charter unmodified. |
 | 2 | 2026-08-26 | PI ruled on all six flags. Cutoff, G3 bounds and §5 horizons **ratified and written into the charter**. Campaign horizons now **stated** (smoke 3 d / n=2; main 14 d / N=20), so the 7-day inference of Rev 1 is withdrawn. Budgets **re-proposed on a sub-brute-force basis** per PI budget philosophy. G7 recomputed under the tightened budget. One **new** flag (G) raised: §4's concurrency cap has the same one-value-two-phases bug §5 just had. |
+| 3 | 2026-08-28 | **Pre-seal horizon and token revision (charter Rev 13).** Main horizon **14 d → 10 d**, main tokens **57 M → 40 M**; main compute **reconfirmed unchanged at 1,600 CPU-h** and G7 **k = 40 reconfirmed at ~1.7%**. The R2.3 derivations for main tokens and for the smoke's 340 CPU-h are **SUPERSEDED** — see R3. One **new** flag (H) raised: §4's main concurrency cap of 8 was sized against the 14-day horizon and retains only 1.20× headroom at 10 days. |
 
 Prepared by Bei, 2026-08-26, from a **read-only** pass over the prior campaign's repository
 at `/Users/jihankim/agent-student` (`AUDIT.jsonl`, `JOBS.md`, `LOG.md`, `SESSIONS.md`,
@@ -195,8 +196,8 @@ random and reporting the best of it has made a choice, and that choice is data.
 | Bracket | Proposed | Status | One-line derivation |
 |---|---|---|---|
 | §4 compute, **main**, per replicate | **1,600 CPU-h** | PROPOSED | **50.6 % of the 3,162 CPU-h naive screen** — the midpoint of the PI's 1,500–2,000 band and the closest round number to exactly half, so the "you may screen about half the database, once" constraint is legible without arithmetic. |
-| §4 tokens, **main**, per replicate | **57 M**, metered **input + output + cache-creation**, cache-reads excluded | PROPOSED | Measured steady-state burn **4.07 M/day × 14 days**. Uses the sustained rate, not the 5.73 M peak: a 14-day campaign cannot run at peak throughout, and Rev 1's peak-based figure would have over-funded it by 40 %. |
-| A2 compute, **smoke**, per replicate | **340 CPU-h** | PROPOSED | Same per-day basis as main: 1,600 ÷ 14 × 3 = 343, rounded down. **Deliberately not a scaled-down full screen** — 340 CPU-h buys ~186 structure-screens, ~11 % of the database, so the smoke exercises the funnel decision under sharper pressure than the main run. |
+| §4 tokens, **main**, per replicate | ~~**57 M**~~ → **40 M** at Rev 3, metered **input + output + cache-creation**, cache-reads excluded | **SUPERSEDED — see R3.1** | *(Rev 2 derivation, retained:)* Measured steady-state burn **4.07 M/day × 14 days**. Uses the sustained rate, not the 5.73 M peak: a 14-day campaign cannot run at peak throughout, and Rev 1's peak-based figure would have over-funded it by 40 %. |
+| A2 compute, **smoke**, per replicate | **340 CPU-h** (value stands) | **DERIVATION SUPERSEDED — see R3.2** | *(Rev 2 derivation, retained:)* Same per-day basis as main: 1,600 ÷ 14 × 3 = 343, rounded down. **Deliberately not a scaled-down full screen** — 340 CPU-h buys ~186 structure-screens, ~11 % of the database, so the smoke exercises the funnel decision under sharper pressure than the main run. |
 | A2 tokens, **smoke**, per replicate | **12 M** | PROPOSED | 4.07 M/day × 3 days. |
 
 Fleet totals implied: **main 20 × 1,600 = 32,000 CPU-h**; **smoke 2 × 340 = 680 CPU-h**.
@@ -264,3 +265,115 @@ table exactly as §5 now has.
 adopted per PI ruling as a harness requirement: **dynamic work-stealing, never even chunking**.
 Implemented in `harness/` and recorded in `harness/README.md`. It is not a charter value and
 sets no bracket.
+
+---
+
+# R3 — Pre-seal revision, 2026-08-28 — RATIFIED except where marked
+
+Charter Rev 13. Every quantity below is reproducible from
+`harness/config.py:horizon_derived(phase)`; nothing here is transcribed.
+
+## R3.1 Main tokens 57 M → 40 M — RATIFIED
+
+| Bracket | Was | Now | Status |
+|---|---|---|---|
+| §4 tokens, **main**, per replicate | 57,000,000 | **40,000,000** | RATIFIED |
+| §4 warning (75%), main | 42,750,000 | **30,000,000** | RATIFIED (derived) |
+| §4 hard stop (100%), main | 57,000,000 | **40,000,000** | RATIFIED (derived) |
+| Implied per-day allowance | 4.07 M/day | **4.00 M/day** | now equal to the smoke's |
+
+Metering basis is unchanged: **input + output + cache-creation**, cache reads excluded.
+
+The R2.3 derivation (prior campaign's 4.07 M/day sustained × 14 days) is superseded by
+**measured smoke burn** — the smoke exists to price the main run, and it has now done so from
+this study's own instrument rather than from the prior campaign's. The rationale, the meter's
+actual readings, and the two caveats that attach to them are recorded in
+`prereg/charter_revisions.md` Rev 13 and in `SI_LEDGER.md` SI-005. In short: the direction of
+the rationale is confirmed on every basis, the "day 6–7" figure holds on the peak-day rate and
+not the sustained one, and the execution-heavy arm's rate is contaminated by the open SI-004
+stall and should not be leant on.
+
+## R3.2 Smoke compute 340 CPU-h — value stands, derivation superseded
+
+Not a revision; a bookkeeping correction so the number is not read as still meaning what it
+meant. 340 was set as the **same per-day rate as main** (1,600 ÷ 14 × 3 = 343). At 10 days
+that construction yields 480.
+
+**340 stands.** It is ratified and in flight, and raising a budget under a running campaign
+that the budget exists to constrain would invalidate what the smoke is measuring.
+
+| | Smoke | Main (14 d) | Main (10 d) |
+|---|---:|---:|---:|
+| Compute | 340 CPU-h | 1,600 CPU-h | 1,600 CPU-h |
+| Per day | 113.3 | 114.3 | **160.0** |
+| Smoke as fraction of main per-day rate | — | 0.99 | **0.71** |
+| Tokens per day | 4.00 M | 4.07 M | **4.00 M** |
+| Structure-screens affordable | ~186 (10.7% of db) | ~876 (50.6%) | ~876 (50.6%) |
+
+The consequence, stated rather than smoothed over: **the smoke now runs under sharper compute
+pressure per day than the main run will**, where it previously ran under matched pressure.
+That makes it a stronger stress test of the funnel decision and a weaker proportional forecast
+of main-run pacing. Any main-run pacing prediction drawn from the smoke must say so. The token
+rate, by contrast, is now exactly matched across phases, so token-burn extrapolation from the
+smoke is on firmer ground than compute-burn extrapolation.
+
+## R3.3 Flag H — §4's main concurrency cap of 8 was sized against a 14-day horizon — NEEDS A PI RULING
+
+**Not changed. Raised for a ruling before seal.**
+
+Rev 2 set the main cap at 8 on the reasoning that it was *"~1.7× the 4.76 average concurrency
+the budget can sustain, so bursts are absorbed."* The 4.76 was 1,600 CPU-h ÷ (14 × 24). At
+10 days that figure is **6.67**, and the cap of 8 is **1.20×** it, not 1.7×.
+
+| | 14 days | 10 days |
+|---|---:|---:|
+| Sustained concurrency to spend 1,600 CPU-h | 4.76 | **6.67** |
+| Headroom at cap 8 | 1.68× | **1.20×** |
+| Calendar capacity at cap 8 | 2,688 CPU-h | **1,920 CPU-h** |
+| Queue saturation needed for the full budget | 59.5% | **83.3%** |
+| Fleet worst case (N = 20) | 160 queued | 160 queued |
+
+Compute is still the binding constraint — 1,920 CPU-h of calendar capacity against a
+1,600 CPU-h budget — so the sub-brute-force design does survive, and G7 is untouched (R3.4).
+**The risk is not that the cap forbids the budget; it is that it makes the budget hard to
+reach.** A replicate must now hold its queue 83% saturated for ten consecutive days to spend
+what it was given. Any real campaign has gaps — analysis between batches, a failed batch, a
+night spent on one long job — and each gap is now compute that cannot be recovered later. A
+replicate that under-spends its compute for queue-shaped reasons is a **confounded
+observation**: its funnel decision was constrained by the harness, not by its own judgment,
+and the funnel decision is what the study is measuring.
+
+Note also that the smoke cannot detect this. The smoke's cap of 50 gives it 10.6× headroom
+and 9.4% required saturation, so no smoke observation will surface a constraint the main run
+would hit.
+
+**Three options, with a recommendation:**
+
+| Option | Cap | Headroom | Fleet worst case | Note |
+|---|---:|---:|---:|---|
+| A — leave at 8 | 8 | 1.20× | 160 | Accepts the confound; nothing to implement. |
+| B — **restore ~1.7× headroom** | **12** | **1.80×** | 240 | Preserves Rev 2's *stated reasoning* under the new horizon. Exceeds the 160 fleet ceiling in the worst case, but that ceiling is enforced independently by `watchdog.py --fleet` and does not depend on the per-replicate cap. |
+| C — split the difference | 10 | 1.50× | 200 | Same shape as B, less headroom. |
+
+**Recommend B (cap 12).** Rev 2's cap was never the number 8 — it was the rule *1.7× sustained
+concurrency*, chosen so bursts are absorbed while no replicate takes an outsized share of the
+queue. Keeping 8 keeps the numeral and discards the rule. At 12 the per-replicate share of the
+129 observed running slots is 9.3%, still small, and the study-wide ceiling of 160 continues to
+do the crowding-prevention work it was built for — which is precisely why it was built as a
+separate mechanism rather than as a per-replicate number.
+
+**This is the same class of defect as Flag G and as the §5 bug of Rev 3**: a value that was
+correct as a *derivation* and became wrong as a *number* when the quantity it derived from
+moved. It is filed here rather than fixed in place because the cap is a charter value and this
+is a PI ruling, not a Bei default.
+
+## R3.4 G7 k = 40 reconfirmed under the 10-day horizon — RATIFIED, unchanged
+
+The full recomputation is in `prereg/charter_revisions.md` Rev 13. Summary: G7's cost is
+denominated in compute, compute did not change, and the one channel through which the horizon
+could have reached it — a calendar-limited screen count reducing the passer denominator — does
+not bind. The 10-day calendar admits **1,051** structure-screens at the current cap against the
+**876** the budget buys, so compute remains binding and the ~600-passer estimate stands.
+**k = 40, unscoped, 15 audits ≈ 27 CPU-h ≈ 1.71% of budget.**
+
+Under option B of R3.3 the calendar admits 1,577 screens, which does not change this either.

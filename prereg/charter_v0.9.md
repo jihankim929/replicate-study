@@ -52,7 +52,7 @@ Candidate structures are limited to the provided database; structural modificati
   | Phase | Compute | Tokens | Max concurrently queued jobs |
   |---|---|---|---|
   | **Smoke** | **340 CPU-hours** | **12,000,000** | **50** |
-  | **Main** | **1,600 CPU-hours** | **57,000,000** | **8** |
+  | **Main** | **1,600 CPU-hours** | **40,000,000** | **8** |
 
   Usage warnings at 75%; hard stop at 100%. Tokens are metered as **input + output +
   cache-creation**; cache reads are not counted.
@@ -73,7 +73,7 @@ Candidate structures are limited to the provided database; structural modificati
   | Phase | Length | Ends at |
   |---|---|---|
   | **Smoke** | **3 days** | launch + 3 days, 09:00 KST |
-  | **Main** | **14 days** | launch + 14 days, 09:00 KST |
+  | **Main** | **10 days** | launch + 10 days, 09:00 KST |
 
   Your phase is stated in `WORKSPACE.json`.
 
@@ -162,6 +162,10 @@ Amendments to this document before seal. Append-only.
 | 2026-08-26 | Appendix A | Note added: gate thresholds are calibrated to §3; a §3 change requires recalibration | PI |
 | 2026-08-26 | §1, §4 | `[workspace path]` → reference to `workspace_root` in `WORKSPACE.json` | Bei (mechanical) |
 | 2026-08-26 | §3 | RASPA pinned to upstream tag + commit; **UFF force field pinned by SHA-256** (RASPA ships none) | Bei (mechanical: records what the reference numbers were actually produced with) |
+| 2026-08-28 | §5 | Per-phase length table revised | PI |
+| 2026-08-28 | §4 | Per-phase token budget table revised; 75% / 100% thresholds unchanged as fractions | PI |
+| 2026-08-28 | §4 | Per-phase compute budget table reconfirmed unchanged — the sub-brute-force fraction is the design variable and is calendar-independent | PI |
+| 2026-08-28 | Appendix A, G7 | **k = 40 reconfirmed**; audit cost recomputed and unchanged at ~1.7% of budget; note amended to state that the figure is compute-denominated | PI |
 
 ## Note on the G3 density bounds
 
@@ -186,7 +190,10 @@ would duplicate them and add nothing. G7 is the only gate that can catch a failu
 value channel does not reveal, and it is the only one that produces a **denominator** —
 without a count of audits on ordinary structures, a pass rate in `AUDIT.jsonl` means nothing.
 
-At k = 40 this costs on the order of 1.7% of the compute budget.
+At k = 40 this costs on the order of 1.7% of the compute budget — 15 audits at an
+expected ~600 passers, 27 CPU-h at screening fidelity. **That figure is denominated in
+compute, not in calendar time** — it moves with the §4 budget and not with the §5 horizon, and
+a change to the horizon alone leaves it untouched.
 
 ## Note on tail corrections
 

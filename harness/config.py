@@ -33,13 +33,23 @@ RATIFIED = {
     "density_bounds_g_cm3": (0.20, 4.50),    # charter Appendix A, G3
     "phases": {
         "smoke": {"days": 3,  "replicates": 2,  "ids": ["s01", "s02"]},
-        "main":  {"days": 14, "replicates": 20,
+        "main":  {"days": 10, "replicates": 20,
                   "ids": [f"rep{i:02d}" for i in range(1, 21)]},
     },
     "deadline_time_kst": "09:00",
     # ratified 2026-08-26
+    # Compute is UNCHANGED at the 2026-08-28 revision: the sub-brute-force fraction (50.6% of
+    # the 3,162 CPU-h naive full screen) is the design variable, and it is calendar-independent.
+    # Note the smoke figure's ORIGINAL derivation -- 1600/14*3 = 343 -- no longer reproduces it.
+    # 340 stands because it was ratified and is in flight, not because it is still 3/14 of main.
+    # Per-day compute rates now differ by phase: main 160.0, smoke 113.3 CPU-h/day.
     "compute_cpu_h":   {"smoke": 340,        "main": 1600},
-    "token_budget":    {"smoke": 12_000_000, "main": 57_000_000},
+    "token_budget":    {"smoke": 12_000_000, "main": 40_000_000},
+    # FLAGGED at the 2026-08-28 horizon revision, NOT changed -- awaiting a PI ruling before
+    # seal. The main cap of 8 was set at ~1.7x the sustained concurrency a 14-day, 1,600 CPU-h
+    # budget implies (4.76). At 10 days the sustained figure is 6.67 and the cap is 1.20x it,
+    # so a replicate must hold the queue ~83% saturated for the whole campaign to be able to
+    # spend its compute at all. See horizon_derived() and prereg/placeholder_proposals.md R3.3.
     "max_queued_jobs": {"smoke": 50,         "main": 8},
     "g7_k": 40,                              # unscoped; see charter Appendix A G7
     # Study-wide ceiling. Independent of, and additional to, the per-replicate cap:
@@ -116,6 +126,40 @@ def overshoot_bound(phase: str) -> dict:
             "overshoot_pct_of_budget": round(100 * cpu / cap, 2)}
 
 WARN_FRACTION, STOP_FRACTION = 0.75, 1.00     # charter section 4
+
+
+def horizon_derived(phase: str) -> dict:
+    """Every quantity that falls out of the phase horizon, computed rather than transcribed.
+
+    The 2026-08-28 revision cut the main horizon 14 -> 10 days and the token budget
+    57 M -> 40 M. Both moved numbers that were written down elsewhere as prose -- sustained
+    concurrency, cap headroom, per-day allowances, the absolute warning levels. Prose does not
+    recompute itself, so it is derived here and quoted from here.
+
+    `calendar_capacity_cpu_h` is the compute a replicate could physically consume if it held
+    `max_queued_jobs` saturated for the whole horizon (one single-core job burns at most one
+    CPU-hour per wall-hour). When it falls below the compute budget the CALENDAR is binding,
+    not the budget, and the sub-brute-force design variable stops meaning what it says.
+    """
+    days = RATIFIED["phases"][phase]["days"]
+    cpu  = RATIFIED["compute_cpu_h"][phase]
+    tok  = RATIFIED["token_budget"][phase]
+    cap  = RATIFIED["max_queued_jobs"][phase]
+    sustained = cpu / (days * 24)
+    capacity  = cap * 24 * days
+    return {
+        "phase": phase, "days": days,
+        "compute_cpu_h": cpu, "compute_per_day_cpu_h": round(cpu / days, 1),
+        "token_budget": tok, "token_per_day": round(tok / days),
+        "token_warn_at": round(WARN_FRACTION * tok),
+        "token_stop_at": round(STOP_FRACTION * tok),
+        "max_queued_jobs": cap,
+        "sustained_concurrency": round(sustained, 2),
+        "cap_headroom_x": round(cap / sustained, 2),
+        "calendar_capacity_cpu_h": capacity,
+        "queue_saturation_needed_pct": round(100 * cpu / capacity, 1),
+        "compute_is_binding": capacity >= cpu,
+    }
 
 # --- study-design terms that must never reach a replicate workspace --------------------
 # Rationale in prereg/charter_revisions.md, "standing leak-control note". The test of a

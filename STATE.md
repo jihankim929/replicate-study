@@ -22,6 +22,12 @@ replicates. Off-script input from a replicate receives the chartered default res
   **Ratified:** cutoff 12.8 Å, tail corrections OFF, potentials unshifted, RASPA 2.0.37,
   cycles 2,000+10,000 / 10,000+50,000, G3 bounds 0.20–4.50, per-phase horizons, per-phase
   budgets and concurrency, G7 k=40, 30-min interactive limit.
+  **Pre-seal revision 2026-08-28 (charter Rev 13):** main horizon **14 d → 10 d**, main tokens
+  **57 M → 40 M** (warn 30 M); main compute **unchanged at 1,600 CPU-h** and G7 k=40
+  reconfirmed at ~1.7%. Smoke parameters untouched — 340 CPU-h / 12 M / cap 50 stand as
+  ratified and in flight. **One open flag before seal:** §4's main concurrency cap of 8 was
+  sized against the 14-day horizon and now leaves 1.20× headroom, not 1.7×
+  (`placeholder_proposals.md` R3.3, recommends 12). Needs a PI ruling.
   **Still unset:** `[workspace path]` only — cluster scratch, pending the account.
   v0.9 becomes v1.0 at seal.
 - Arms: gated (charter Appendix A, `AUDIT.jsonl`) vs. ungated (Appendix A omitted verbatim).
