@@ -57,6 +57,95 @@ def render_phase_rows(text: str, phase: str) -> str:
     return "".join(out)
 
 
+# ---- phase-dependent PROSE (charter Rev 16, PI Ruling 1) -------------------------------
+# The section 4 and 5 TABLES carry their phase in a row, so PHASE_ROW can filter them. The
+# section 1 mandate and the section 4 sub-brute-force paragraph carry theirs MID-SENTENCE, and
+# a row filter cannot reach inside a sentence. Ruling 1 made the two phases' worlds different
+# sizes -- the smoke's 1,731-CIF slice against the main run's full CoRE MOF 2024 database -- so
+# those sentences now differ by phase and something has to render them.
+#
+#   master, both phases present and readable:   {{smoke=1,731|main=[Q1:N]}}
+#   provisioned, this phase's value, no marker: 1,731
+#
+# The master stays complete, exactly as render_phase_rows keeps every row: pre-registration
+# that hides half its own values is not pre-registration. The filtering happens on the way out.
+#
+# Three properties, each with a test in selftest.sh 7i:
+#   1. UNSET IS A HARD STOP. A value that is still an unpopulated [Q...] bracket aborts
+#      provisioning for that phase. The main run's N and naive cost do not exist until Q1 and
+#      Q2 produce them; a main launch before then must fail loudly rather than write a literal
+#      bracket into 20 workspaces. The smoke's values are populated, so the smoke is unaffected.
+#   2. NO RESIDUE. No span syntax may survive into a workspace. An unrendered span discloses
+#      BOTH phases at once -- strictly worse than the leak the filter exists to prevent.
+#   3. NO CROSS-PHASE VALUE. The other phase's value must not appear in the provisioned
+#      charter. This is the SI-008 check, and it now derives its forbid-list from the master's
+#      own spans rather than from hand-copied literals. The hand-copied list had already gone
+#      stale: it still named 40,000,000 after Rev 16 moved the main budget to 45,000,000, so it
+#      was guarding a number the charter no longer contains.
+PHASE_SPAN = re.compile(r"\{\{smoke=(?P<smoke>[^|{}]*)\|main=(?P<main>[^|{}]*)\}\}")
+UNSET_VALUE = re.compile(r"^\s*\[Q\d[^\]]*\]\s*$")
+
+
+def phase_spans(text: str) -> list:
+    """Every phase-dependent prose value in a master document, as {'smoke':…, 'main':…}."""
+    return [m.groupdict() for m in PHASE_SPAN.finditer(text)]
+
+
+def render_phase_prose(text: str, phase: str) -> str:
+    """Replace each phase span with this phase's value. Unpopulated values abort."""
+    if phase not in ("smoke", "main"):
+        raise RuntimeError(f"render_phase_prose: unknown phase {phase!r}")
+    unset = sorted({sp[phase] for sp in phase_spans(text) if UNSET_VALUE.match(sp[phase])})
+    if unset:
+        raise RuntimeError(
+            f"charter carries {len(unset)} unpopulated phase value(s) for phase={phase}: "
+            + ", ".join(unset)
+            + " -- populate them before provisioning this phase (prereg/seal_notes.md S7)")
+    return PHASE_SPAN.sub(lambda m: m.group(phase), text)
+
+
+PROVISIONED_DOCS = (("CHARTER.md", "charter"), ("CHARTER_ADDENDUM.md", "addendum"))
+
+
+def phase_span_residue(ws: Path) -> list:
+    """HARD. Any span syntax that survived rendering into the workspace.
+
+    Aborts provisioning rather than warning. An unrendered span shows the reader BOTH phases'
+    values side by side with an equals sign between them -- strictly worse than the disclosure
+    the filter exists to prevent -- and unlike a prose choice in the PI's document, it can only
+    ever be a harness defect. There is nothing here for a human to weigh.
+    """
+    return [f"{name}: an unrendered phase span survived into the workspace (discloses BOTH phases)"
+            for name, _ in PROVISIONED_DOCS
+            if (ws / name).exists() and PHASE_SPAN.search((ws / name).read_text())]
+
+
+def leak_phase_prose(ws: Path, phase: str) -> list:
+    """WARN. The other phase's span value appearing in this phase's provisioned charter.
+
+    Same severity as leak_phase_disclosure and for the same reason: the text is the PI's, and
+    Bei does not auto-edit it. selftest 7g makes it a build-time failure, which is where SI-008
+    was caught.
+
+    The short-value guard is a stated blind spot, not an oversight: a value of three characters
+    or fewer ("12", "10 d") occurs too often in ordinary prose to search for without drowning
+    the report in false positives. Values that short do not belong in a span at all -- put them
+    in a table row, where PHASE_ROW filters them exactly.
+    """
+    other = "main" if phase == "smoke" else "smoke"
+    hits = []
+    for name, key in PROVISIONED_DOCS:
+        f = ws / name
+        if not f.exists():
+            continue
+        got = f.read_text()
+        for sp in phase_spans(C.SOURCE_ALLOWLIST[key].read_text()):
+            v, mine = sp[other].strip(), sp[phase].strip()
+            if len(v) > 3 and v != mine and not UNSET_VALUE.match(v) and v in got:
+                hits.append(f"{name}: carries the {other} phase's value {v!r}")
+    return hits
+
+
 def split_charter(text: str, arm: str) -> str:
     """Gated arm gets the whole charter. Ungated gets everything before Appendix A.
 
@@ -214,12 +303,12 @@ def provision(rep_id, dest_root, dry_run=False, db_limit=None, force=False, remo
 
     # --- 1. charter, arm-appropriate ----------------------------------------------------
     charter = split_charter(C.SOURCE_ALLOWLIST["charter"].read_text(), arm)
-    charter = render_phase_rows(charter, phase)
+    charter = render_phase_prose(render_phase_rows(charter, phase), phase)
     (ws / "CHARTER.md").write_text(charter)
     has_appendix = C.APPENDIX_MARKER in charter
     assert has_appendix == (arm == "gated"), "appendix/arm mismatch"
-    (ws / "CHARTER_ADDENDUM.md").write_text(
-        render_phase_rows(C.SOURCE_ALLOWLIST["addendum"].read_text(), phase))
+    (ws / "CHARTER_ADDENDUM.md").write_text(render_phase_prose(
+        render_phase_rows(C.SOURCE_ALLOWLIST["addendum"].read_text(), phase), phase))
     # Operating conventions -- identical for both arms, verbatim, no arm branching.
     shutil.copy2(C.SOURCE_ALLOWLIST["conventions"], ws / "CLAUDE.md")
     if arm == "gated":
@@ -304,12 +393,13 @@ def provision(rep_id, dest_root, dry_run=False, db_limit=None, force=False, remo
         raise SystemExit(f"workspace git has a remote ({remotes}) -- that is a path back")
 
     # --- 5. leak scan -------------------------------------------------------------------
-    problems = leak_scan(ws, C.REPO) + credential_scan(ws)
+    problems = leak_scan(ws, C.REPO) + credential_scan(ws) + phase_span_residue(ws)
     if problems:
         for p in problems:
             print("  LEAK:", p)
         raise SystemExit(f"provisioning aborted: {len(problems)} isolation problem(s)")
-    for w in sorted(set(leak_warn(ws))) + leak_phase_disclosure(ws, phase):
+    for w in (sorted(set(leak_warn(ws))) + leak_phase_disclosure(ws, phase)
+              + leak_phase_prose(ws, phase)):
         print("  WARN (study-design disclosure, not auto-edited):", w)
     print(f"[provision] isolation: no remote, no symlinks, no sealed material, no path back  OK")
 

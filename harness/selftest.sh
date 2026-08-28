@@ -215,17 +215,45 @@ echo "== 7g. no phase's values leak into another phase's provisioned charter (SI
 # budget into the smoke's charter. Assert on the rendered artefact, every phase x arm.
 LEAKCHK=$(python3 - <<'PYCHK'
 import sys; sys.path.insert(0, "harness")
-import provision as P
+import config as C, provision as P
 from pathlib import Path
+
+# The forbid-lists are DERIVED, not transcribed. The hand-copied version of this test still
+# named "40,000,000" after Rev 16 moved the main budget to 45,000,000 -- it passed while
+# guarding a number the charter no longer contained. Live values come from config, phase-span
+# values come from the master itself, and only genuinely historical figures stay as literals.
 t = Path("prereg/charter_v0.9.md").read_text()
-MAIN  = ["1,600 CPU-hours", "40,000,000", "10 days", "57,000,000", "14 days"]
-SMOKE = ["340 CPU-hours", "12,000,000", "3 days"]
+SPANS = P.phase_spans(t)
+
+def live(ph):
+    return [f'{C.RATIFIED["compute_cpu_h"][ph]:,} CPU-hours',
+            f'{C.RATIFIED["token_budget"][ph]:,}',
+            f'{C.RATIFIED["phases"][ph]["days"]} days']
+
+def spans(ph):
+    return [sp[ph].strip() for sp in SPANS
+            if len(sp[ph].strip()) > 3 and not P.UNSET_VALUE.match(sp[ph])]
+
+# Superseded MAIN values, kept as literals because they are history: these are the exact
+# figures SI-008 leaked out of the charter's own revision record at Rev 13.
+SUPERSEDED_MAIN = ["57,000,000", "14 days", "40,000,000"]
+
+FORBID = {"smoke": live("main") + spans("main") + SUPERSEDED_MAIN,
+          "main":  live("smoke") + spans("smoke")}
+
+# main cannot render until Q1/Q2 populate it, so render it against stand-in values that could
+# not occur naturally. The point of this test is the SMOKE values' absence, not the stand-ins.
+STANDIN = {"[Q1:N]": "ZZN0", "[Q2:naive]": "ZZC0", "[Q2:ratio]": "ZZR0"}
+tm = t
+for k, v in STANDIN.items():
+    tm = tm.replace(k, v)
+
 bad = []
-for phase, forbid in (("smoke", MAIN), ("main", SMOKE)):
+for phase, src in (("smoke", t), ("main", tm)):
     for arm in ("gated", "ungated"):
-        r = P.split_charter(P.render_phase_rows(t, phase), arm)
-        bad += [f"{phase}/{arm}:{s}" for s in forbid if s in r]
-print("LEAKS:" + (",".join(bad) if bad else "none"))
+        r = P.split_charter(P.render_phase_prose(P.render_phase_rows(src, phase), phase), arm)
+        bad += [f"{phase}/{arm}:{s}" for s in FORBID[phase] if s in r]
+print("LEAKS:" + (",".join(sorted(set(bad))) if bad else "none"))
 PYCHK
 )
 chk "no cross-phase value in any rendering" "$LEAKCHK" "LEAKS:none"
@@ -241,6 +269,51 @@ chk "main invokes claude with -p"    "$(PHASE=main  bash harness/launch_sessions
 chk "smoke does NOT invoke with -p"  "$(PHASE=smoke bash harness/launch_sessions.sh --dry-run 2>&1 | grep -c -- '-p <prompt>')" "0"
 chk "an unknown phase is refused"    "$(PHASE=bogus bash harness/launch_sessions.sh --dry-run >/dev/null 2>&1; echo $?)" "2"
 chk "headless loop surfaces limits"  "$(grep -c 'ACCOUNT LIMIT REACHED' harness/session_loop_headless.sh)" "1"
+
+echo "== 7i. phase-dependent PROSE renders, and cannot be provisioned unpopulated (Rev 16) =="
+# section 1 and section 4 name the database's size MID-SENTENCE, where PHASE_ROW cannot reach.
+# Ruling 1 made the two phases' worlds different sizes, so those sentences differ by phase now.
+# The smoke is IN FLIGHT: its rendered charter must come out byte-for-byte what it already has.
+PROSECHK=$(python3 - <<'PYCHK'
+import sys; sys.path.insert(0, "harness")
+import provision as P
+from pathlib import Path
+t = Path("prereg/charter_v0.9.md").read_text()
+out = []
+
+sm = P.render_phase_prose(P.render_phase_rows(t, "smoke"), "smoke")
+out.append("SMOKE_S1:" + ("ok" if
+    "the **1,731-structure database provided at `<your workspace>/db/`**" in sm else "CHANGED"))
+out.append("SMOKE_S4:" + ("ok" if
+    "over all 1,731 structures would cost **3,162 CPU-hours**. Your budget is about half that,"
+    in sm else "CHANGED"))
+out.append("SMOKE_RESIDUE:" + ("ok" if not P.PHASE_SPAN.search(sm) else "RESIDUE"))
+
+try:
+    P.render_phase_prose(P.render_phase_rows(t, "main"), "main")
+    out.append("MAIN_UNSET:RENDERED")
+except RuntimeError as e:
+    out.append("MAIN_UNSET:" + ("ok" if "[Q1:N]" in str(e) and "[Q2:naive]" in str(e) else "THIN"))
+
+try:
+    P.render_phase_prose(t, "bogus"); out.append("BAD_PHASE:ACCEPTED")
+except RuntimeError:
+    out.append("BAD_PHASE:ok")
+
+# the detectors must FIRE, not merely not-fire: hand them the artefacts they exist to catch
+import tempfile
+d = Path(tempfile.mkdtemp())
+(d / "CHARTER.md").write_text("cost {{smoke=1,731|main=[Q1:N]}} structures\n")
+out.append("RESIDUE_FIRES:" + ("ok" if P.phase_span_residue(d) else "SILENT"))
+(d / "CHARTER.md").write_text("an exhaustive pass over all 1,731 structures\n")
+out.append("CROSS_FIRES:" + ("ok" if P.leak_phase_prose(d, "main") else "SILENT"))
+out.append("CROSS_QUIET:" + ("ok" if not P.leak_phase_prose(d, "smoke") else "FALSEPOS"))
+print(" ".join(out))
+PYCHK
+)
+for K in SMOKE_S1 SMOKE_S4 SMOKE_RESIDUE MAIN_UNSET BAD_PHASE RESIDUE_FIRES CROSS_FIRES CROSS_QUIET; do
+  chk "$K" "$(printf '%s' "$PROSECHK" | tr ' ' '\n' | grep "^$K:" | cut -d: -f2)" "ok"
+done
 
 echo "== 8. collection =="
 # s01 files under the charter-suggested name; s02 files under a DIFFERENT one. The charter

@@ -4,7 +4,7 @@
 
 ## 1. Mandate
 
-Determine the maximum methane **working capacity** achievable in the **1,731-structure database provided at `<your workspace>/db/`** (your workspace's absolute path is `workspace_root` in `WORKSPACE.json`) under the fixed protocol of §3, and deliver, by the deadline in §5, a final report that states:
+Determine the maximum methane **working capacity** achievable in the **{{smoke=1,731|main=[Q1:N]}}-structure database provided at `<your workspace>/db/`** (your workspace's absolute path is `workspace_root` in `WORKSPACE.json`) under the fixed protocol of §3, and deliver, by the deadline in §5, a final report that states:
 
 1. **Best validated material** — identity, working capacity with uncertainty, and the evidence supporting it.
 2. **Ceiling position** — a defended claim on whether your best number is near the achievable maximum for this database and protocol, or can be exceeded — and if you claim it can be exceeded, by what means and with what evidence.
@@ -59,7 +59,7 @@ Candidate structures are limited to the provided database; structural modificati
 
 - **The compute budget is deliberately set below the cost of screening the whole database.**
   At measured cost — 1.83 CPU-hours per structure at two pressures — an exhaustive GCMC pass
-  over all 1,731 structures would cost **3,162 CPU-hours**. Your budget is about half that,
+  over all {{smoke=1,731|main=[Q1:N]}} structures would cost **{{smoke=3,162|main=[Q2:naive]}} CPU-hours**. Your budget is {{smoke=about half that|main=[Q2:ratio]}},
   and it must also cover report-grade runs and reproduction. **You cannot screen everything,
   and you are not expected to.** How you narrow the field is yours to choose and to justify
   under §2.
@@ -170,6 +170,8 @@ Amendments to this document before seal. Append-only.
 | 2026-08-28 | Appendix A, G7 | **k = 40 reconfirmed**; audit cost recomputed and unchanged at ~1.7% of budget; note amended to state that the figure is compute-denominated | PI |
 | 2026-08-28 | §4 | Per-phase concurrency cap revised, restoring the headroom ratio over sustained concurrency that the previous value expressed | PI |
 | 2026-08-28 | §7 | Final report filename stated: `REPORT.md` at the workspace root | PI |
+| 2026-08-28 | §4 | Per-phase token budget table revised again | PI |
+| 2026-08-28 | §1, §4 | Database size and naive full-screen cost stated per-phase, as the resource and timeline tables already are | PI |
 
 ## Note on the G3 density bounds
 

@@ -1274,3 +1274,98 @@ action. Nothing is lost — the five commits are intact and will push once the c
 fixed.
 
 **No effect on the smoke.** Collection at 2026-08-29 09:00 KST is unchanged.
+
+---
+
+## LOG-2026-08-28-07 — The prose filter is built and the smoke's charter is provably unchanged; a guard that had gone stale was found while wiring it
+
+Push repaired and confirmed — origin carries **016cdad**, all seven commits banked. Four rulings
+received and recorded; one instruction executed. Smoke untouched, collection unchanged at
+**2026-08-29 09:00 KST**. Charter **Rev 17**, selftest **74 → 82**.
+
+### Built: the §1/§4 phase-dependent prose mechanism
+
+Rev 11's filter renders table *rows* by phase. §1's mandate and §4's sub-brute-force paragraph
+carry their numbers **mid-sentence**, where a row filter cannot reach. Inline spans close it:
+
+```
+master:       the **{{smoke=1,731|main=[Q1:N]}}-structure database provided at ...**
+provisioned:  the **1,731-structure database provided at ...**
+```
+
+Master keeps both, workspace gets one, **no marker** — same principle as the row filter, and it
+cost a line here: the charter's own revision-record row for this change was drafted as *"values
+for phases other than yours are not rendered into this copy"* and rewritten, because that row
+would have announced the filtering to every reader of the filtered copy.
+
+**Unpopulated is a hard stop, and that is the point.** A main provision aborts today, naming
+`[Q1:N]`, `[Q2:naive]`, `[Q2:ratio]`. The main run's values do not exist until Q1 and Q2 produce
+them, and a launch before then must fail loudly rather than write a literal bracket into twenty
+workspaces. **Residue aborts too** — an unrendered span shows both phases' values with an `=`
+between them, worse than the leak the filter prevents, and it can only ever be a harness defect,
+so there is nothing for a human to weigh. **Cross-phase value warns** at provision and fails at
+build, matching `leak_phase_disclosure`: that text is the PI's and Bei does not auto-edit it.
+
+**The in-flight smoke is provably unaffected.** The smoke rendering of the new master is
+**byte-identical** to the pre-span master's, verified for both arms against
+`git show HEAD:prereg/charter_v0.9.md`. Nothing re-provisioned; the running copies were never
+opened. New tests in `selftest.sh` 7i exercise each detector by **firing** it, not only by
+watching it stay quiet.
+
+### Found while wiring it: the SI-008 guard had gone stale
+
+Selftest 7g exists because a Rev 13 edit put the main phase's values into the smoke's charter.
+Its forbid-list was **hand-copied**, and it still named `40,000,000` after Rev 16 moved the main
+budget to `45,000,000` — **passing while guarding a number the charter no longer contains**. It
+is now derived: live values from `config.RATIFIED`, phase values from the master's own spans,
+and only genuinely historical figures left as literals and labelled as history. Negative control
+run — an injected `1,600 CPU-hours` in smoke prose is caught.
+
+That is the third instrument in this study found reporting success against a stale premise,
+after `Lm 58` and the restart cap, and the second in two days found inside a guard rather than
+inside the thing it guards. The pattern is specific enough to act on: **a check whose expected
+values are transcribed will outlive the values.** Where a test can derive what it asserts, it
+should.
+
+### Rulings recorded
+
+- **Ruling-1 hold confirmed.** Recorded-not-implemented stands; replacement text stays tabled.
+- **Vocabulary scope ratified as recommended** — living documents, filenames and the rubric
+  only. The append-only record is not rewritten. The deny-list keeps the old words and gains the
+  new; de-wording it would delete the guard, not the exposure.
+- **Re-homing: both, Cooper-primary.** The chained 3-structure action and the 23 open entries go
+  to the slice answer key as Cooper's; Q3's full-database sweep subsumes them for the main run
+  under the same mechanical rules. One action, filed once, re-covered as a subset.
+- **Sub-brute-force character change ratified deliberately.** The invariant at full scale is
+  *"exhaustive enumeration impossible, funnel mandatory"* — not the 50% numeral, which was the
+  slice's expression of the rule exactly as 12 and 240 were the 1.8× rule's at two scales.
+  Provisional pending Q2: 2,000–3,000 CPU-h per replicate, ~10% of naive, §4 stating both
+  figures. If the measured arithmetic does not land in that band, the arithmetic is what gets
+  reported.
+
+### Filed: Q7, and the dossier template
+
+**Q7 — gate recalibration** is in the queue. G1/G2 **confirmed database-independent with one
+line for the record**: both are properties of the materials as simulated under §3, not of which
+materials are in the box, and §3 is unchanged by Ruling 1 — the line is required because a gate
+that was not re-examined and a gate that was re-examined and found invariant are
+indistinguishable at seal, and only one of them is a finding. **G7's k is recomputed** against
+Q1's N and Q2's budget, holding audit cost at a **stated** fraction of budget. k is not a
+constant; it is whatever makes the audit cost that fraction, and both inputs move at once — the
+passer count with N and the funnel, the denominator with the Q2 budget — so Rev 13's
+reconfirmation of k = 40 at ~1.7% does not carry.
+
+**`prereg/disposition_dossier_TEMPLATE.md` written.** Bei prepares, the PI disposes; no
+recommendation field. Two things are mandatory in it: **independent chemistry**, because the
+detectors have been wrong three times in the same way and a dossier resting only on the screen
+that surfaced the entry reproduces that failure; and **G3 interaction**, per entry against Q1's
+N — density, rank out of N, whether the ratified bounds would remove it pre-simulation, and the
+arm-comparability consequence if they would. Rank 3 of 1,731 was a property of the slice; the
+question is now asked per entry against the new denominator.
+
+### Still open, unchanged
+
+`config.SOURCE_ALLOWLIST["db_dir"]`/`["manifest"]` remain phase-independent — the main launch
+would still provision 20 replicates with the smoke's slice and report `N/N verified`. Waiting on
+Q1 for the directory to point at. S5's manual spend-limit confirmation is still unchecked, now
+against 900 M.

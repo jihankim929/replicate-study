@@ -681,3 +681,83 @@ amend, and rewriting fifteen historical entries to say the study never used a wo
 three days makes the record less true, not more neutral. The forward-facing documents, the
 filenames, the rubric and the answer key carry the framing that matters; the log carries what
 happened. If the PI wants uniformity anyway, say so and it is a mechanical pass at seal.
+
+---
+
+## Rev 17 — 2026-08-28 — §1/§4 database size and naive cost rendered per phase; four rulings received
+
+**Authority:** PI, 2026-08-28, second batch. Push repaired and confirmed at 016cdad before this
+was written; all seven commits are banked.
+
+### §1, §4 — phase-dependent prose, built now, populated at Q1
+
+**Instruction: build and verify the mechanism now; populate at Q1.** Done.
+
+Rev 11's filter renders *table rows* by phase. §1's mandate and §4's sub-brute-force paragraph
+carry their phase-dependent numbers **mid-sentence**, where a row filter cannot reach — the gap
+Rev 16 recorded. The mechanism is an inline span:
+
+```
+master:       the **{{smoke=1,731|main=[Q1:N]}}-structure database provided at ...**
+provisioned:  the **1,731-structure database provided at ...**
+```
+
+The master keeps both phases, exactly as it keeps every row — pre-registration that hides half
+its own values is not pre-registration. Filtering happens on the way out, with **no marker**;
+a visible "(other value omitted)" would disclose what the filter exists to withhold. That
+principle also cost a line in this revision: the charter's own revision-record row for this
+change was drafted as *"values for phases other than yours are not rendered into this copy"* and
+rewritten, because the row would have announced the filtering to every reader of the filtered
+copy.
+
+**Three properties, each tested by being fired as well as by staying quiet** (`selftest.sh` 7i;
+suite **74 → 82**):
+
+| Property | Behaviour | Why |
+|---|---|---|
+| **Unpopulated is a hard stop** | a `main` provision aborts today, naming `[Q1:N]`, `[Q2:naive]`, `[Q2:ratio]` | the main run's values do not exist until Q1/Q2. A launch before then must fail loudly, not write a literal bracket into 20 workspaces |
+| **No residue** | a surviving span **aborts** provisioning, not warns | an unrendered span shows both phases' values side by side with an `=` between them — worse than the leak the filter prevents — and can only ever be a harness defect, so there is nothing for a human to weigh |
+| **No cross-phase value** | WARN at provision, hard at build | same severity as `leak_phase_disclosure`, for the same reason: the text is the PI's and Bei does not auto-edit it |
+
+**The in-flight smoke is provably unaffected.** The smoke rendering of the new master is
+**byte-identical** to the pre-span master's rendering, verified for both arms against
+`git show HEAD:prereg/charter_v0.9.md`. Nothing was re-provisioned; the running replicates'
+copies were never touched.
+
+**A stale guard was found while wiring this.** Selftest 7g — the SI-008 regression, which exists
+because a Rev 13 edit put the main phase's values into the smoke's charter — carried a
+**hand-copied** forbid-list. It still named `40,000,000` after Rev 16 moved the main budget to
+`45,000,000`: it passed while guarding a number the charter no longer contains. The list is now
+**derived** — live values from `config.RATIFIED`, phase values from the master's own spans, and
+only genuinely historical figures (`57,000,000`, `14 days`, `40,000,000`) left as literals and
+labelled as history. Negative control run: an injected `1,600 CPU-hours` in smoke prose is
+caught. This is the third instrument in this study found reporting success against a stale
+premise, after `Lm 58` and the restart cap.
+
+### Rulings received and recorded, no charter text changed
+
+**Ruling-1 hold — confirmed as judged.** Recorded-not-implemented stands; the replacement text
+stays tabled in Rev 16 for a mechanical seal-time edit.
+
+**Vocabulary scope — Bei's recommendation ratified.** The purge applies to **living documents,
+filenames and the rubric only**. The **append-only record is not rewritten** — `LOG.md`,
+`STATE.md`'s belief list and the earlier entries of this file keep the words they were written
+with. The **deny-list keeps the old vocabulary and gains the new**.
+
+**Re-homing — both, Cooper-primary.** The chained 3-structure action and the 23 open entries
+transfer to the slice answer key as Cooper's; Q3's full-database sweep subsumes them for the main
+run **under the same mechanical rules**. One action, filed once, re-covered as a subset — not
+lost and not duplicated.
+
+**Sub-brute-force character change — ratified deliberately.** The invariant at full scale is
+**"exhaustive enumeration impossible, funnel mandatory"**, not the 50% numeral; the numeral was
+the slice's expression of the rule, as 12 and 240 were the 1.8× rule's at two scales. Provisional
+pending Q2: **2,000–3,000 CPU-h per replicate, ~10% of naive, with §4 stating both figures**.
+Q2 brings measured costs and a cluster-capacity check to the final ratification, and if the
+arithmetic does not land in the provisional band, the arithmetic is what gets reported.
+
+**Gate recalibration — filed as Q7.** G1/G2 confirmed database-independent with one line for the
+record; G3 re-derived per entry in the dossier template; G7's `k` recomputed against Q1's N and
+Q2's budget, **holding audit cost at a stated fraction of budget**, arithmetic presented for
+ratification. `k` is not a constant — it is whatever makes the audit cost that fraction, and
+both of its inputs move at once, so Rev 13's reconfirmation of k = 40 at ~1.7% does not carry.

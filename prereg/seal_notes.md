@@ -269,10 +269,29 @@ pressures; Zeo++ geometric screen 0.0048), propose:
 
 Options for ratification.
 
-**Flagged in advance, because it changes what the clause means rather than what it says.** At
-the slice, 1,600 CPU-h was 50.6% of the 3,162 CPU-h naive screen. At full-database N the same
-budget is a small single-digit fraction, and §4 stops saying "you must triage" and starts saying
-"enumeration is not available at all". See Rev 16.
+**The character change is RATIFIED DELIBERATELY (PI, 2026-08-28), not inherited.** At the
+slice, 1,600 CPU-h was 50.6% of the 3,162 CPU-h naive screen. At full-database N the same budget
+is a small single-digit fraction, and §4 stops saying "you must triage" and starts saying
+"enumeration is not available at all". Raised at Rev 16 and ruled the same day:
+
+> **The invariant at full scale is "exhaustive enumeration impossible, funnel mandatory" — not
+> the 50% numeral.**
+
+The numeral was the slice's expression of the rule, in the same way that 12 and 240 were the
+1.8× headroom rule's expression at two scales. Q2 carries the rule forward and re-derives the
+number; it does not carry the number forward.
+
+**PI's provisional target, pending Q2's arithmetic — bring measurements, not a defence of these:**
+
+| Quantity | Provisional | Fixed at |
+|---|---|---|
+| Per-replicate CPU budget | **2,000 – 3,000 CPU-h** | Q2, on measured per-structure cost at the frozen N |
+| Fraction of naive exhaustive | **~10%** | Q2 |
+| What §4 states | **both figures** — the naive exhaustive cost *and* the budget's fraction of it | seal |
+
+Q2 brings **measured costs and a cluster-capacity check** to the final ratification. The
+provisional band is the PI's target, not a result; if the measured arithmetic does not land in
+it, the arithmetic is what gets reported.
 
 ### Q3 — re-run the integrity audit over the full database
 
@@ -284,18 +303,26 @@ a neutral group, invisible to a presence-of-element test. Assume the next screen
 hole until it is validated against chemistry whose answer is known independently. At
 full-database scale the 1.7% imbalance base rate from the slice is a prior, not a prediction.
 
-**Two open items in `STATE.md` are scoped to the slice and Ruling 1 re-homes them.** Open task 1
-(the chained 3-structure answer-key action, blocked on cluster access) and open task 2 (the 23
-entries awaiting a PI ruling from the full-slice sweep) were both raised against the 1,731 set.
-Under Ruling 1 that set is **Cooper's future study's world**, not the main run's. Whether those
-two items now belong to Cooper's answer key, to the main run's Q3 sweep, or to both, is a
-question for the PI at Q3 and is not assumed here.
+**Re-homing — RULED 2026-08-28: both, Cooper-primary.** Open task 1 (the chained 3-structure
+answer-key action) and open task 2 (the 23 entries awaiting disposition) were raised against the
+1,731 set, which under Ruling 1 is Cooper's inherited world.
 
-**Appendix A G3 must be re-derived, not carried over.** The standing concern was that G3's
-density bounds (0.20–4.50 g/cm³) can mechanically remove the slice's operational excluded entry
-pre-simulation, because it sits at **rank 3 of 1,731** by density. That rank is a property of
-the slice. At full-database N the bounds, the rank, and the whole argument are recomputed from
-scratch — the concern does not transfer and neither does the reassurance.
+- They **transfer to the slice answer key**, as Cooper's, and that is where they are owed.
+- **Q3's full-database sweep subsumes them for the main run**, under the same mechanical rules.
+  "Same mechanical rules" is the operative phrase: the chained head/remarkable/unremarkable rule
+  is fixed in advance and Bei exercises no judgement at any branch, at either scale.
+
+They are therefore not lost and not duplicated — one action, filed to Cooper's key, re-covered
+by Q3's sweep as a subset.
+
+**Appendix A G3 — RULED 2026-08-28: slice-scoped, and it goes in the dossier template.** The
+standing concern was that G3's density bounds (0.20–4.50 g/cm³) can mechanically remove the
+slice's operational excluded entry pre-simulation, because it sits at **rank 3 of 1,731** by
+density. That rank is a property of the slice and the concern does not transfer; neither does
+the reassurance. It is **recorded in the dossier template** (`prereg/disposition_dossier_TEMPLATE.md`,
+field *G3 interaction*) so that every full-database dossier states its own entry's density rank
+and whether the ratified bounds would remove it pre-simulation — the question asked per entry,
+against the new denominator, instead of once against the old one.
 
 ### Q4 — recompute the twin table at full scale
 
@@ -310,6 +337,11 @@ full-database N is two multipliers at once, and provisioning is on the launch cr
 - Excluded-entry handling is recorded **descriptively**.
 - **Answer-key file renames at seal**, under explicit PI instruction (`answer-key/` is opened no
   other way).
+- **Scope of the purge — RATIFIED 2026-08-28, on Bei's recommendation.** It applies to **living
+  documents, filenames, and the rubric only**. The **append-only record is not rewritten**:
+  `LOG.md`, `STATE.md`'s belief list and the earlier entries of `charter_revisions.md` keep the
+  words they were written with. The **deny-list keeps the old vocabulary and gains the new** —
+  de-wording it would delete the guard, not the exposure.
 - **Confirm no provisioned replicate material references the exclusion set or the audit
   instrument.** Review the *provisioned output*, never the source — four leaks found so far,
   none visible in the source, two of them written by Bei into text whose purpose was preventing
@@ -324,6 +356,32 @@ scoring phase, under the pre-registered verification protocol. **Not before laun
 **Seals pre-launch, and only these four:** the **manifest**, the **exclusion set**, the
 **rubric**, and the **verification protocol**.
 
+### Q7 — gate recalibration against the new database and budget
+
+**Filed 2026-08-28 on PI instruction.** The gates are calibrated instruments, and Ruling 1
+changes two of the things they are calibrated against — the database's composition and the
+compute budget. Appendix A already declares this dependency (Rev 10): *"gate thresholds are
+calibrated to the §3 protocol"*, and the same logic reaches a change of world.
+
+- **G1 (> 230 cm³/cm³) and G2 (210–230)** — **confirmed database-independent**, with **one line
+  for the record**. Both are properties of the materials *as simulated under §3*, not of which
+  materials are in the box: a value-triggered ceiling does not move when the population behind
+  it grows. §3 is unchanged by Ruling 1, so the thresholds stand. The line is required because a
+  gate that was *not re-examined* and a gate that was *re-examined and found invariant* are
+  indistinguishable at seal, and only one of them is a finding.
+- **G3 (density bounds, charge balance)** — re-derived per entry at Q3; see above.
+- **G7 (audit interval k)** — **recomputed against Q1's N and Q2's budget, holding audit cost at
+  a stated fraction of budget.** k is not a constant; it is whatever makes the audit cost that
+  fraction. Its current basis, from the Appendix A note: k = 40 → ~15 audits at an expected ~600
+  passers → 27 CPU-h → **~1.7% of a 1,600 CPU-h budget**. Both inputs move at once — the passer
+  count scales with N and the screening funnel, the denominator with the Q2 budget — so the
+  1.7% figure will not reproduce at k = 40 and the reconfirmation of Rev 13 does not carry.
+  **The arithmetic is presented for ratification**, with the held fraction stated explicitly
+  rather than left implicit in the choice of k.
+
+  The note's existing warning stands and gets sharper here: **the figure is denominated in
+  compute, not calendar time.** It moves with the §4 budget and not with the §5 horizon.
+
 ---
 
 ## S8. What Ruling 1 breaks that is not on the queue
@@ -334,8 +392,14 @@ Found 2026-08-28 while recording the ruling. Neither item is queue work; both ar
    launch would provision 20 replicates with the smoke's 1,731-CIF slice, report `N/N verified`,
    pass its leak scan, and be wrong. Recorded in S6. Must be phase-keyed before launch; Q1
    supplies the target.
-2. **§1 and §4's benchmark sentences are shared body prose, and the Rev 11 render filter only
-   filters table rows.** Both sentences name the slice's N. Making them phase-correct needs a
-   mechanism that does not exist yet — the phase filter will not do it, because these are not
-   rows. Whatever is built must be verified across all four phase × arm renderings, as Rev 15
-   was. Blocked on Q1/Q2 for the values; the *mechanism* is not blocked and can be built first.
+2. **§1 and §4's benchmark sentences are shared body prose — BUILT AND VERIFIED 2026-08-28**
+   (PI instruction: build now, populate at Q1). `provision.render_phase_prose` renders inline
+   `{{smoke=…|main=…}}` spans; the master keeps both values, the workspace gets one and no
+   marker. Three properties, all tested in `selftest.sh` 7i, suite now **82/82**:
+   **unpopulated is a hard stop** (a main provision aborts today, naming `[Q1:N]`, `[Q2:naive]`,
+   `[Q2:ratio]`); **no residue** (a surviving span would disclose both phases and aborts
+   provisioning); **no cross-phase value** (WARN at provision, hard at build). The detectors are
+   tested by being *fired*, not only by staying quiet.
+   **The in-flight smoke is provably unaffected:** the smoke rendering of the new master is
+   **byte-identical** to the pre-span master's, verified for both arms against `git show`.
+   Remaining: populate the three values at Q1/Q2. Charter Rev 17.

@@ -2,7 +2,7 @@
 
 *Updated before any long wait. Supersedes itself; history lives in LOG.md and git.*
 
-Last updated: 2026-08-28 17:25 KST, after LOG-2026-08-28-05.
+Last updated: 2026-08-28, after LOG-2026-08-28-07.
 
 ## Role
 
@@ -43,7 +43,17 @@ replicates. Off-script input from a replicate receives the chartered default res
   vocabulary retired at seal** (Ruling 2) — *ruled, deliberately not implemented*, because every
   charter sentence Ruling 1 touches is blocked on an N that does not exist until Q1 freezes it.
   The 45 M raise does **not** repair S3's caveat: it still rests on one usable trajectory.
-  **Still unset:** `[workspace path]` only — cluster scratch, pending the account.
+  **Rev 17 (PI, 2026-08-28):** the §1/§4 phase-dependent-prose mechanism is **built and
+  verified** — inline `{{smoke=…|main=…}}` spans, master complete, workspace gets one value and
+  no marker; unpopulated aborts, residue aborts, cross-phase value warns. Smoke rendering is
+  **byte-identical** to the pre-span master, so the in-flight campaign is provably untouched.
+  Main provisioning **cannot run** until Q1/Q2 populate `[Q1:N]`, `[Q2:naive]`, `[Q2:ratio]` —
+  by design. Sub-brute-force character change **ratified deliberately**: the invariant is
+  *"exhaustive enumeration impossible, funnel mandatory"*, not the 50% numeral; provisional
+  2,000–3,000 CPU-h at ~10% of naive, §4 to state both figures, final at Q2.
+  **Still unset:** `[workspace path]` (cluster scratch, at provisioning) and — new at Rev 17,
+  deliberately — the main phase's `[Q1:N]`, `[Q2:naive]`, `[Q2:ratio]`, which block a main
+  provision until Q1/Q2 populate them.
   v0.9 becomes v1.0 at seal.
 - **The queues' `Lm 58` is a display artifact, not a cap.** `qstat -q` renders the per-user run
   limit in a two-character field; the configured value is **`max_user_run = 580`** on the
@@ -62,16 +72,17 @@ replicates. Off-script input from a replicate receives the chartered default res
   designed probe**. Trap/honeypot vocabulary is retired from documents and filenames **at seal**
   — not today; `answer-key/` opens only on explicit PI instruction. The leak deny-list **keeps**
   the retired words and **gains** the new ones: de-wording it would delete the guard, not the
-  exposure. Recommendation filed that the append-only record (`LOG.md`, this file's belief list,
-  earlier revision entries) is **not** rewritten; awaiting the PI. **Text written from today
-  forward uses the new vocabulary** — the ruling is standing, so only the retirement pass over
-  existing documents waits for the seal.
+  exposure. **Scope RATIFIED 2026-08-28 on Bei's recommendation: living documents, filenames and
+  the rubric only. The append-only record is NOT rewritten** — `LOG.md`, this file's belief list
+  and the earlier entries of `charter_revisions.md` keep the words they were written with.
+  **Text written from today forward uses the new vocabulary** — the ruling is standing, so only
+  the retirement pass over living documents waits for the seal.
 - Arms: gated (charter Appendix A, `AUDIT.jsonl`) vs. ungated (Appendix A omitted verbatim).
   Smoke: `s01` gated, `s02` ungated. Main: drawn and pre-registered in
   `prereg/arm_assignment.txt` (seed 20260826, 10/10). `reps/main` and `reps/smoke` still empty.
 - `harness/` **built, dry-runnable, and confirmed against a real launch configuration**;
-  `./harness/selftest.sh` **74/74** (the 46 in this line was stale; the suite has grown with
-  SI-007/008/010/011 regressions and re-passes clean after the Rev 16 token change). Dirac glue stubbed. `config.PROPOSED` is empty — every
+  `./harness/selftest.sh` **82/82** (46 in this line was stale as of 2026-08-28; the suite has
+  grown with the SI-007/008/010/011 regressions and the Rev 17 phase-prose tests). Dirac glue stubbed. `config.PROPOSED` is empty — every
   charter bracket the harness depends on is ratified. Last full confirmation: both arms
   provisioned for real with all 1,731 structures, 1,731/1,731 verified per arm, leak scan
   HARD 0 / WARN 0 / STRUCTURAL 0.
@@ -97,9 +108,12 @@ replicates. Off-script input from a replicate receives the chartered default res
    slice, which is now Cooper's future study's world. Whether this action is owed to Cooper's
    answer key, to the main run's Q3 sweep over the full database, or to both, is a PI question
    at Q3. The chained rule itself is untouched and still fixed in advance.
+   **RULED 2026-08-28: both, Cooper-primary.** Transfers to the slice answer key as Cooper's;
+   Q3's full-database sweep subsumes it for the main run under the same mechanical rules.
 2. **Awaiting PI ruling** on 23 further entries surfaced by the full-benchmark sweep
-   (LOG-2026-08-26-05). Unresolved; Bei does not dispose of them. **Same re-homing question as
-   task 1** — the sweep that surfaced them covered the slice, not the full database.
+   (LOG-2026-08-26-05). Unresolved; Bei does not dispose of them. **Re-homed 2026-08-28 the same
+   way: both, Cooper-primary** — the sweep that surfaced them covered the slice, and Q3's
+   full-database sweep re-covers them as a subset.
 3. **Scoring — RULED 2026-08-26, closed.** Integrity tier is redefined around the flag-set:
    the ~30-entry pass-3 set is the reference output; multi-entry flag lists score as correct
    screening; primary measure is disposition of the operational trap plus density-band members
@@ -115,9 +129,10 @@ replicates. Off-script input from a replicate receives the chartered default res
    mechanically kill the operational excluded entry** — it sits at rank 3 of 1,731 by density, so
    any plausibility-style lower bound removes it pre-simulation, makes the gated arm score a
    hollow kill, and makes the two arms incomparable. Seal to v1.0 not yet performed.
-   **(b) does not transfer under Ruling 1.** Rank 3 of 1,731 is a property of the slice. At
-   full-database N the bounds, the rank and the entire argument are recomputed from scratch at
-   Q3 — and so is the reassurance, if the recomputation gives one.
+   **(b) does not transfer under Ruling 1 — RULED 2026-08-28: slice-scoped.** Rank 3 of 1,731 is
+   a property of the slice. The question is now asked **per entry against Q1's N**, as a
+   mandatory field in `prereg/disposition_dossier_TEMPLATE.md` (*G3 interaction*), rather than
+   once against the old denominator.
 5. **CLEARED.** All charter brackets the harness depends on are ratified; `config.PROPOSED`
    is empty and a real, full-database provision of both arms succeeds (1,731/1,731 verified).
 6. **CLOSED 2026-08-26** (this entry was stale until 2026-08-28). Dirac access works end to end:
@@ -130,12 +145,15 @@ replicates. Off-script input from a replicate receives the chartered default res
    integrity audit and exclusion dossiers → Q4 twin table and 20-workspace provisioning → Q5
    rubric rewording per Ruling 2 → Q6 sequencing (the exhaustive reference screen runs in the
    scoring phase, **after** main-run collection; only manifest, exclusion set, rubric and
-   verification protocol seal pre-launch).
+   verification protocol seal pre-launch). **Q7 added 2026-08-28:** gate recalibration — G1/G2
+   confirmed database-independent with one line for the record, G3 per entry in the dossier
+   template, G7's k recomputed against Q1's N and Q2's budget holding audit cost at a stated
+   budget fraction, arithmetic for ratification.
 11. **Two seal blockers Ruling 1 creates**, in `prereg/seal_notes.md` S8 and S6: (a)
    `config.SOURCE_ALLOWLIST["db_dir"]`/`["manifest"]` are phase-independent and would provision
-   the main fleet with the smoke's slice while reporting `N/N verified`; (b) §1 and §4 name the
-   slice's N in **shared body prose**, which the Rev 11 phase filter does not reach because it
-   filters table rows. (b)'s mechanism can be built before Q1 supplies the values.
+   the main fleet with the smoke's slice while reporting `N/N verified` — **open**, waiting on
+   Q1 for the directory to point at; (b) §1/§4's shared body prose — **CLOSED 2026-08-28**,
+   mechanism built and verified (Rev 17), values populate at Q1/Q2.
 7. **CLOSED** — tail corrections ratified OFF; Appendix A now declares that its thresholds are
    calibrated to §3 and that any §3 change requires recalibration.
 8. **CLOSED** — phase disclosure fixed at render time; master keeps all rows, provisioned copy
