@@ -45,7 +45,9 @@ RATIFIED = {
     # 340 stands because it was ratified and is in flight, not because it is still 3/14 of main.
     # Per-day compute rates now differ by phase: main 160.0, smoke 113.3 CPU-h/day.
     "compute_cpu_h":   {"smoke": 340,        "main": 1600},
-    "token_budget":    {"smoke": 12_000_000, "main": 40_000_000},
+    # Main tokens: 57 M -> 40 M at Rev 13, 40 M -> 45 M at Rev 16 (PI, 2026-08-28). Warn is
+    # derived (0.75 x budget), so the warning level moves with it: 30 M -> 33.75 M.
+    "token_budget":    {"smoke": 12_000_000, "main": 45_000_000},
     # Main cap RULED 8 -> 12 on 2026-08-28 (Flag H). The invariant Rev 2 actually set was
     # "~1.7-1.8x the sustained concurrency the budget implies", not the numeral 8: at 14 days
     # sustained was 4.76 and 8 was 1.68x it; at 10 days sustained is 6.67 and 8 would be 1.20x,

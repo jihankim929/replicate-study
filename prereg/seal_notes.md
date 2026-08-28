@@ -101,15 +101,20 @@ low as a proxy:
    and the guard is tested. A quiet edit would confound every arm at once and leave no trace of
    when, so the timestamp and reason are mandatory.
 
-## S3. Token budget — 40 M stands, evidentiary note to be revisited
+## S3. Token budget — 45 M as of Rev 16; the evidentiary note is unrepaired by the increase
 
-The 40 M figure stands on the basis stated in charter Rev 13. **SI-005 must be re-read at smoke
-end**: its caveat was that one arm's burn measurement might be contaminated. It is now known to
-be contaminated — SI-006 established that arm was blocked at a spend-limit modal, not working
-at a low rate. **The smoke has produced one usable token-burn trajectory, not two.**
+**Revised 40 M → 45 M by PI ruling, 2026-08-28 (charter Rev 16).** Implemented in the charter
+§4 table and `config.RATIFIED`; the 0.75 warning level derives from it and moves to 33.75 M.
 
-If the smoke ends without a second usable trajectory, the seal should record that 40 M rests on
-a single replicate's burn, measured over ~1.7 days, one of which was an opening day.
+**SI-005 must still be re-read at smoke end.** Its caveat was that one arm's burn measurement
+*might* be contaminated. It is now known to be contaminated — SI-006 established that arm was
+blocked at a spend-limit modal, not working at a low rate. **The smoke has produced one usable
+token-burn trajectory, not two**, and raising the number does not add a second one.
+
+If the smoke ends without a second usable trajectory, the seal must record that 45 M rests on a
+single replicate's burn, measured over ~1.7 days, one of which was an opening day. Post-
+collection is the first moment that trajectory is complete rather than partial, so the re-read
+is queued there and not before.
 
 ## S4. Carried over
 
@@ -135,15 +140,21 @@ allow-list: the goal is not to detect the dialog but to make it unreachable.
 **Leg 1 — pre-verified headroom. Implemented as a launch gate.**
 `harness/preflight_billing.sh` must pass before any replicate starts. It proves the account can
 complete a request right now, checks the response for spend-limit language, and prints the
-campaign's maximum possible burn (**20 × 40 M = 800,000,000 billable tokens** for the main run).
-Run 2026-08-28: **legs 1–2 PASS**.
+campaign's maximum possible burn (**20 × 45 M = 900,000,000 billable tokens** for the main run,
+raised from 800 M by the Rev 16 token revision). Run 2026-08-28: **legs 1–2 PASS**.
+
+The two figures the gate multiplies now **default from `config.RATIFIED`** rather than being
+caller-supplied; before Rev 16 they were arguments with no default and a hard-coded `40000000`
+in the script's own usage line, which would have certified the account against the superseded
+800 M. See Rev 16.
 
 Its third leg **cannot be automated** — Claude Code exposes no machine-readable spend limit —
 and the script says so rather than skipping it silently. **Manual confirmation required before
 seal:** confirm in the account's billing settings that either no monthly spend limit is set, or
 the limit exceeds 800 M tokens' worth of spend with margin, and record the confirmation here.
 
-- [ ] *(unchecked)* Spend limit confirmed to exceed the fleet ceiling with margin — PI, date:
+- [ ] *(unchecked)* Spend limit confirmed to exceed the fleet ceiling with margin — **against
+  900,000,000 billable tokens**, not the 800 M this line was first written against — PI, date:
 
 ## S6. Main-run launch gaps found while wiring headless mode — not blocking today, blocking at launch
 
@@ -153,6 +164,15 @@ the limit exceeds 800 M tokens' worth of spend with margin, and record the confi
   wrong. Must be driven from `config.RATIFIED["phases"][phase]["ids"]` before the main launch.
 - **`poll.sh`, `restart_watch.sh` and `collect.sh` carry the same hardcoded pair.** Same fix,
   same place to make it.
+- **`SOURCE_ALLOWLIST["db_dir"]` and `["manifest"]` are single-valued and phase-independent.**
+  Found 2026-08-28 while recording Ruling 1. `config.py` points both at `REPO/benchmark`, the
+  1,731-CIF slice, for every phase; `provision.py` copies each manifest line out of that one
+  directory. **As written, the main-run launch would silently provision 20 replicates with the
+  smoke's slice** — no error, a full `N/N verified`, a clean leak scan, and the wrong world.
+  This is the same shape as every other defect this study has found: an instrument reporting
+  success against a stale premise. Must become phase-keyed, like `token_budget` and
+  `compute_cpu_h` already are, before the main launch. Post-collection queue item 1 produces
+  the directory it will point at.
 - **`session_loop_headless.sh` has never run a live replicate** (SI-011). Recommend a
   single-replicate rehearsal against a throwaway workspace before the fleet launch — the smoke
   launch surfaced three independent defects in its first hour, and none of them were visible
@@ -195,3 +215,127 @@ health", and it has now produced three members (permission, settings, spend). Th
 harness-side defence that addresses the class rather than its members is to **kill and relaunch
 an invocation whose transcript has not grown while its process is alive** — the gap SI-003
 documented and SI-006 walked through. Not implemented; recommended for the main run.
+
+---
+
+## S7. POST-COLLECTION QUEUE — PI, 2026-08-28, in order
+
+**Nothing in this section runs before collection.** The smoke is untouched and runs to its
+charter §5 deadline, **2026-08-29 09:00 KST**. This queue starts after collection completes.
+
+The order is the PI's and is load-bearing: item 1 produces the frozen database that items 2, 3
+and 4 all measure against, so a wrong or provisional N propagates into three sets of numbers.
+Items are **not** to be run speculatively in parallel against the current slice.
+
+**Standing rule for the whole queue: Bei proposes, the PI ratifies.** Items 1, 2 and 4 end in
+options, not decisions. Item 3 ends in dossiers, not dispositions.
+
+### Q1 — acquire and freeze the full CoRE MOF 2024 database
+
+1. **Look locally first, and report what is there with counts** — prior-campaign archive,
+   shared/group directories on the cluster. Report before pulling anything.
+2. **If the full set is absent or its provenance is unclear**, pull the canonical release from
+   the official CoRE MOF distribution. Record **release version, URL, and file hash** of what
+   was pulled. Provenance-unclear counts as absent: a local copy nobody can name the release
+   of is not a benchmark, and this study has already been bitten twice by inherited numbers
+   whose basis turned out to be different from the one assumed (§3's 12.0/12.8 cutoff, `Lm 58`).
+3. **Variant options go to the PI, not resolved silently** — ASR/FSR treatment, and which
+   subsets are in scope. The slice's `[ASR]`/`[FSR]` twins are coordinate-identical under the
+   chargeless protocol of §3, i.e. one structure under two filenames; at full-database scale
+   that choice moves N, the naive exhaustive cost, and the provisioning footprint at once.
+4. **Then freeze:** SHA-256 manifest in the frozen form, and report in one paragraph for the
+   SI — **exact N, disk footprint, and source lineage**.
+
+**Note for the freeze location, which Q1 must decide and the PI ratify.** The 1,731-CIF slice
+is **git-tracked in this repo** (1,732 files, 30 MB, against a 16 MB `.git`). The full database
+will not sit there comfortably, and `provision.py` copies every manifest line per workspace —
+20 workspaces at full-database scale is the same multiplier applied to a much larger number.
+Where the frozen database lives, and whether it is tracked or hash-pinned-and-external, is a
+decision Q1 has to surface rather than settle by `git add`.
+
+### Q2 — recompute the budget arithmetic at full-database scale
+
+From **measured** per-structure costs (prior campaign: GCMC 1.83 CPU-h/structure at two
+pressures; Zeo++ geometric screen 0.0048), propose:
+
+- **Per-replicate CPU budget**, stating the **naive exhaustive cost at the frozen N** alongside
+  it so the sub-brute-force constraint stays legible as a ratio and not just as a number.
+- **Concurrency cap and fleet ceiling** preserving the **~1.8× headroom rule** — the invariant
+  ruled twice already (Flag H at replicate scale, Flag I at fleet scale). The rule is the ratio
+  to sustained concurrency, not the numerals 12 and 240; both were derived and both move if the
+  compute budget or the horizon moves.
+- **Cluster-capacity check attached** — total cores, current utilisation, and the measured
+  displacement reading from `queue_depth.py` (others-waiting, not study share).
+
+Options for ratification.
+
+**Flagged in advance, because it changes what the clause means rather than what it says.** At
+the slice, 1,600 CPU-h was 50.6% of the 3,162 CPU-h naive screen. At full-database N the same
+budget is a small single-digit fraction, and §4 stops saying "you must triage" and starts saying
+"enumeration is not available at all". See Rev 16.
+
+### Q3 — re-run the integrity audit over the full database
+
+Prepare **disposition dossiers** for new ambiguous or record-registering entries. **The
+exclusion set seals before launch.** Bei does not dispose; the PI rules on each dossier.
+
+Carried in: the audit instrument has been **wrong three times in the same way** — an anion, or
+a neutral group, invisible to a presence-of-element test. Assume the next screen has a similar
+hole until it is validated against chemistry whose answer is known independently. At
+full-database scale the 1.7% imbalance base rate from the slice is a prior, not a prediction.
+
+**Two open items in `STATE.md` are scoped to the slice and Ruling 1 re-homes them.** Open task 1
+(the chained 3-structure answer-key action, blocked on cluster access) and open task 2 (the 23
+entries awaiting a PI ruling from the full-slice sweep) were both raised against the 1,731 set.
+Under Ruling 1 that set is **Cooper's future study's world**, not the main run's. Whether those
+two items now belong to Cooper's answer key, to the main run's Q3 sweep, or to both, is a
+question for the PI at Q3 and is not assumed here.
+
+**Appendix A G3 must be re-derived, not carried over.** The standing concern was that G3's
+density bounds (0.20–4.50 g/cm³) can mechanically remove the slice's operational excluded entry
+pre-simulation, because it sits at **rank 3 of 1,731** by density. That rank is a property of
+the slice. At full-database N the bounds, the rank, and the whole argument are recomputed from
+scratch — the concern does not transfer and neither does the reassurance.
+
+### Q4 — recompute the twin table at full scale
+
+Confirm **provisioning size** and **manifest-verification time for 20 workspaces**. The last
+real measurement was 1,731/1,731 verified per arm for 2 workspaces. Twenty workspaces at
+full-database N is two multipliers at once, and provisioning is on the launch critical path.
+
+### Q5 — rubric and analysis plan reworded per Ruling 2
+
+- Tier (c) becomes **uniform study-level verification**: all headline numbers re-run, all
+  claimed champions validity-audited, **identical procedure per trajectory**.
+- Excluded-entry handling is recorded **descriptively**.
+- **Answer-key file renames at seal**, under explicit PI instruction (`answer-key/` is opened no
+  other way).
+- **Confirm no provisioned replicate material references the exclusion set or the audit
+  instrument.** Review the *provisioned output*, never the source — four leaks found so far,
+  none visible in the source, two of them written by Bei into text whose purpose was preventing
+  leaks. The word deny-list keeps its retired vocabulary and **gains** the new vocabulary; see
+  Rev 16.
+
+### Q6 — scoring-reference sequencing
+
+The **exhaustive reference screen of the full database runs after main-run collection**, in the
+scoring phase, under the pre-registered verification protocol. **Not before launch.**
+
+**Seals pre-launch, and only these four:** the **manifest**, the **exclusion set**, the
+**rubric**, and the **verification protocol**.
+
+---
+
+## S8. What Ruling 1 breaks that is not on the queue
+
+Found 2026-08-28 while recording the ruling. Neither item is queue work; both are seal blockers.
+
+1. **`config.SOURCE_ALLOWLIST["db_dir"]` / `["manifest"]` are phase-independent.** The main
+   launch would provision 20 replicates with the smoke's 1,731-CIF slice, report `N/N verified`,
+   pass its leak scan, and be wrong. Recorded in S6. Must be phase-keyed before launch; Q1
+   supplies the target.
+2. **§1 and §4's benchmark sentences are shared body prose, and the Rev 11 render filter only
+   filters table rows.** Both sentences name the slice's N. Making them phase-correct needs a
+   mechanism that does not exist yet — the phase filter will not do it, because these are not
+   rows. Whatever is built must be verified across all four phase × arm renderings, as Rev 15
+   was. Blocked on Q1/Q2 for the values; the *mechanism* is not blocked and can be built first.

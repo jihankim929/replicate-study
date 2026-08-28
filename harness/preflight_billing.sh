@@ -17,7 +17,13 @@
 # Same class as the permission allow-list: do not detect the dialog, make it unreachable.
 #
 #   ./harness/preflight_billing.sh              # gate: non-zero exit blocks launch
-#   ./harness/preflight_billing.sh --budget 40000000 --replicates 20
+#   ./harness/preflight_billing.sh --budget 45000000 --replicates 20   # override the defaults
+#
+# --budget/--replicates DEFAULT to the ratified main-phase values read from harness/config.py.
+# They used to be caller-supplied only, with 40000000 written into this comment: the Rev 16
+# token revision (40 M -> 45 M) would have left the gate printing a stale 800,000,000 ceiling
+# for a campaign that can now bill 900,000,000. A launch gate whose headline figure is a
+# hand-copied literal is a gate that certifies the wrong number.
 set -uo pipefail
 cd "$(dirname "$0")/.."
 
@@ -32,6 +38,16 @@ while [ $# -gt 0 ]; do
   esac
   shift
 done
+
+# Defaults come from the ratified config, never from a literal in this file.
+if [ -z "$BUDGET" ] || [ -z "$REPS" ]; then
+  DEFAULTS=$(python3 -c 'import sys; sys.path.insert(0,"harness"); import config as C; \
+print(C.RATIFIED["token_budget"]["main"], len(C.RATIFIED["phases"]["main"]["ids"]))' 2>/dev/null) || DEFAULTS=""
+  if [ -n "$DEFAULTS" ]; then
+    [ -z "$BUDGET" ] && BUDGET=${DEFAULTS%% *}
+    [ -z "$REPS" ]   && REPS=${DEFAULTS##* }
+  fi
+fi
 
 FAIL=0
 PROBE_DIR=$(mktemp -d)

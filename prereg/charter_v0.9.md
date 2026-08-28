@@ -52,7 +52,7 @@ Candidate structures are limited to the provided database; structural modificati
   | Phase | Compute | Tokens | Max concurrently queued jobs |
   |---|---|---|---|
   | **Smoke** | **340 CPU-hours** | **12,000,000** | **50** |
-  | **Main** | **1,600 CPU-hours** | **40,000,000** | **12** |
+  | **Main** | **1,600 CPU-hours** | **45,000,000** | **12** |
 
   Usage warnings at 75%; hard stop at 100%. Tokens are metered as **input + output +
   cache-creation**; cache reads are not counted.
