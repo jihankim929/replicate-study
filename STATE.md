@@ -172,6 +172,10 @@ replicates. Off-script input from a replicate receives the chartered default res
 ## Standing constraints
 
 - One commit per event; message = one-line finding. Never amend, never rebase. Push after
-  each commit.
+  each commit. **BROKEN SINCE 2026-08-28 (LOG-2026-08-28-06): `git push` returns 403 and `main`
+  is 5 commits ahead of `origin/main`.** All of 2026-08-28's work — Rev 13–16, SI-006–011, the
+  seal notes, the run-limit measurement — is local only. The commits are intact; the credential
+  in `osxkeychain` cannot write to the repo. **PI action: re-authenticate.** Bei does not touch
+  credentials.
 - `answer-key/` read/written only on explicit PI instruction. Its contents never enter a
   replicate workspace, LOG.md, STATE.md, or a commit message.

@@ -1237,3 +1237,40 @@ argument are recomputed from scratch — and so is the reassurance, if there is 
 `./harness/selftest.sh` **74/74** after the change, including 7g (no cross-phase value leaks
 into a provisioned charter). STATE.md had recorded 46/46 and a Dirac blocker that closed two
 days ago; both corrected.
+
+---
+
+## LOG-2026-08-28-06 — The standing "push after each commit" rule has been failing silently for five commits
+
+Found while pushing LOG-2026-08-28-05. `git push origin main` returns **403 — Permission to
+`jihankim929/replicate-study.git` denied to `jihankim929`**, and `main` is **ahead of
+`origin/main` by 5 commits**. The last commit that reached the remote is **98e504d**; everything
+from **d77614e** (2026-08-28 pre-seal revisions) onward is local only:
+
+```
+356327a  charter Rev 16          (today, this batch)
+7876071  charter Rev 15
+29147d3  fleet ceiling 240
+544a4d9  cap 12 / Lm 58 / SI-006
+d77614e  pre-seal revisions
+```
+
+That is **the whole of 2026-08-28's work** — Rev 13 through Rev 16, SI-006 through SI-011, the
+seal notes, and the run-limit measurement. The commits exist; the off-machine copy of the record
+does not.
+
+**Why it matters more here than it would elsewhere.** The standing constraint is one commit per
+event, never amend, never rebase, **push after each commit** — the push is the half that makes
+the record survive this machine. For two days it has not, and nothing said so: `git commit`
+succeeded every time, and the failure is in a separate command whose non-zero exit was not being
+treated as a stop condition. Same shape as `Lm 58`, as the inoperative restart cap, and as the
+collector's filename requirement — a step that reports success while the thing it is supposed to
+guarantee is not happening.
+
+**Not repaired by Bei.** The cause is credential-side: `credential.helper = osxkeychain` holds a
+token that cannot write to this repository, `gh` is not installed, and **credentials never enter
+this repo** (standing rule, `.gitignore`). Re-authenticating is the PI's action, not a harness
+action. Nothing is lost — the five commits are intact and will push once the credential is
+fixed.
+
+**No effect on the smoke.** Collection at 2026-08-29 09:00 KST is unchanged.
