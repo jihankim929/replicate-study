@@ -1290,3 +1290,86 @@ chemistry-known azolate framework to calibrate against.
 **What this does not invalidate.** The other three clusters carry `azolate = 0`, so their net
 charges do not depend on ring enumeration at all, and the slice regression covers them. The
 406-structure headline and the 128-file mechanical disposition stand; only cluster D is affected.
+
+---
+
+## SI-017 — CORRECTION, same day [Bei, 2026-08-29]
+
+**Appended, not rewritten. The entry above stands as filed; this records that its central claim is
+withdrawn and why.**
+
+SI-017 was filed as *"pass 3's ring enumeration is incomplete, and two variants of one framework
+prove it."* The PI ratified a hold on cluster D and asked for the raw evidence instead of the
+numbers. Producing that evidence disproved the entry that requested it.
+
+### The premise was false
+
+The filed evidence was that `2020[Cu][she]3[ASR]1` and `[FSR]1` have **identical atom counts (2,016)
+and identical metal counts (96)** and return azolate counts differing by exactly 2× (128 vs 64).
+Bei checked atom *counts* and never checked atom *composition*. The compositions differ:
+
+| | cell contents | linker, per unit cell | 5-rings with ≥2 N |
+|---|---|---|---|
+| `[ASR]1` | C896 H576 N448 Cu96 | **C14H9N7** × 64 | 128 × `C3N2`, 64 × `C2N3` |
+| `[FSR]1` | C832 H576 N512 Cu96 | **C13H9N8** × 64 | 64 × `C3N2`, 128 × `C2N3` |
+
+The two files differ by one carbon-for-nitrogen swap per linker. **They are not the same framework
+as deposited**, so the fact that they return different ring counts proves nothing about the
+instrument. Equal atom counts made them look identical; they are not.
+
+### The instrument was consistent, and the 2× is arithmetic
+
+Pass 3's rule — *azolate iff ≥1 ring N is metal-bound and no ring N carries an exocyclic H or C* —
+was applied identically to both files, and its output follows deterministically from what each file
+contains:
+
+- `[ASR]1`: 128 `C3N2` rings, every N metal-bound, no exocyclic H → **counted, 128**. 64 `C2N3`
+  rings, each carrying exactly one N–H → **rejected**. Total **128**.
+- `[FSR]1`: 64 `C3N2` → **counted, 64**. 128 `C2N3`, each with one N–H → **rejected**. Total **64**.
+
+The ring populations are swapped 128/64 → 64/128 between the files, so the counts are too. **The
+factor of exactly two is a property of the two depositions, not an instability in Bei's code.** No
+enumeration hole is demonstrated, and the claim that this was *"the fourth hole of the same shape"*
+and that *"the hole is in the fix for the last hole"* is withdrawn. It was neither.
+
+The companion argument — that no cluster-D entry sits near the balanced azolate:metal ratio of 2.00
+— was directionally right and causally wrong. At full deprotonation these frameworks give
+192 azolate / 96 Cu = **exactly 2.00**. The ratio does point at something wrong; what is wrong is
+in the deposited hydrogen, not in the ring enumeration that Bei blamed.
+
+### What is real, and it is a different defect
+
+Pass 3 treats deposited hydrogen as authoritative evidence of protonation state. In this family it
+is not:
+
+1. **The N–H positions are calculated, not refined.** Every N–H in both files is
+   **1.0221 Å, to four decimals, with one distinct value** across all 64 (`[ASR]`) and 128
+   (`[FSR]`) instances. C–H in the same files take three distinct values over 0.9986–1.0732 Å. A
+   single exactly-repeated distance is idealized riding-hydrogen placement.
+2. **The H rides on an assignment the pair itself contradicts.** C and N are near-indistinguishable
+   by X-ray scattering; the two files disagree about which ring positions are which, and the
+   hydrogen follows whichever assignment was made.
+3. **Neither file is self-consistent.** The core is a **1,3,5-trisubstituted benzene** (64 per cell,
+   substituent pattern 1,0,1,0,1,0) carrying three azolyl arms. `[ASR]` assigns those three arms as
+   2 diazolyl + 1 triazolyl; `[FSR]` as 1 + 2. **Three arms on a symmetric 1,3,5 core cannot be two
+   different rings.** Both files are internally inconsistent, independently of each other.
+
+So the defect is **reliance on an unreliable input feature**, not incomplete enumeration. It is
+narrower than SI-017 claimed and it is not in the ring finder. **It remains open** and is now
+carried under this correction rather than under the withdrawn premise.
+
+### Consequence for the batch
+
+`2009[Cd][nan]3[ASR]1` is **removed from cluster D**. Its evidence carries no ambiguity at all:
+one linker type (C6H4N5 × 144), one ring type (144 × `CN4` tetrazole), **no N–H anywhere in the
+file**, and every ring identical — 2 N metal-bound, 2 N free. Its azolate count of 144 is not in
+question, and its residual +48 is a clean missing-anion signature. It belongs with the
+uncompensated clusters, and it is ruleable on the ordinary rule.
+
+Cluster D is therefore **5 files, all `[she]`**, reducing to two distinct chemical descriptions.
+
+**Standing consequence, carried forward.** Bei asserted an instrument defect on a count-level
+coincidence without checking composition, and reported it to the PI as an established fourth hole.
+The check that would have caught it — compare *what the files contain*, not how many atoms they
+contain — cost one command. **Evidence before escalation, including when the escalation is against
+Bei's own instrument.**

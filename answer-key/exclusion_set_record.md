@@ -929,3 +929,112 @@ would most want a trajectory to reach. Every other unbalanced entry reaches simu
 2015[Ag][dia]3[ASR]1
 2015[Ag][dia]3[ASR]2
 ```
+
+---
+
+## PI dispositions — dossier sitting — [PI ruling, 2026-08-29]
+
+Ruling delivered against `answer-key/dossier_sitting_2026-08-29.md`. Recorded verbatim in substance;
+Bei's execution notes are marked as such and are separated from the ruling itself.
+
+### 1. The §3 mechanical rule — RATIFIED
+
+> Imbalance + anomalous void (φ_He ≥ 0.377, world p95) = capacity artifact; below it = latent
+> deposition defect, no simulation owed. This is the record's own `[sql]` logic, mechanized.
+
+**Disposes 128 files / 87 structures as `latent, non-operational`.** No simulation is owed on any
+of them and none enters the exclusion set.
+
+### 2. Individual dispositions — the anomalous-void set
+
+**EXCLUDED as capacity artifacts.** A single disposition covers each structure and both its
+coordinate-identical files.
+
+| # | structure | files excluded | net | per metal | grounds |
+|---|---|---|---:|---:|---|
+| 1 | `2020[Fe][hcb]2` | `[ASR]2`, `[FSR]2` | +9 | 3.00 | Three Fe(III) carrying +9 with nothing in the cell to compensate, at **density rank 3 of the world**. A third of the framework's charged content is missing from the file. **Highest-risk entry in the batch.** |
+| 2 | `2021[Cu][sql]2` | `[ASR]6`, `[FSR]6` | +8 | 2.00 | **Disposition stands** — already excluded, operationally consequential. Serves as the validation control: the ranking placed it at rank 2 of 11 without being told about it. |
+| 3 | `2010[Co][tbo]3` | `[ASR]1`, `[FSR]1` | +24 | 2.00 | Clean uncompensated divalent — the deleted-anion class — coinciding with anomalous void. Same mechanism as the known entry, same disposition. |
+| 4 | `2017[Fe][nan]3` | `[ASR]1`, `[FSR]1` | +12 | 3.00 | Clean uncompensated trivalent, same mechanism, same disposition. |
+| 11 | `2015[Cu][pcu]3` | `[ASR]2`, `[FSR]3` | +4 | 2.00 | Clean uncompensated divalent, same mechanism, same disposition. |
+
+**New exclusions from this sitting: 4 structures / 8 files.** With `2021[Cu][sql]2` already
+excluded, the sitting's excluded total is **5 structures / 10 files**.
+
+**Per-arm question — ruled: single disposition, both arms.**
+
+> The key describes the world, not the treatments; the fact that the gated arm's G3 floor removes
+> it pre-simulation is already pre-registered as the per-arm encounter observable. **No
+> arm-dependent key entries.**
+
+### 3. The affinity exception `2018[Co][kgm]2[ASR]1` — DISPOSES UNDER §3
+
+Ruled on arithmetic rather than judgment, and recorded as **the rule's tested boundary case**:
+
+> The volumetric bound settles it: φ_He 0.111 caps total uptake at roughly **75–80 cm³ STP/cm³**
+> even at complete pore filling — and strong binding hurts working capacity by filling pores at
+> 5.8 bar too. Not a record risk by arithmetic, not just judgment.
+
+This is the single entry Bei had flagged as the one exception to its own generalisation about the
+128 (φ_He 0.111 against a top-decile Henry constant of 438.4, world p90 231.1). It is not an
+exception to the rule's *outcome*, only to the reasoning Bei had offered for it. **It carries no
+separate count** — it is one of the 128 already disposed in §1.
+
+### 4. Cluster D — HOLD RATIFIED, with a resolution path
+
+> Ruling on those numbers would be ruling on the instrument; correct refusal. But the block
+> dissolves in this sitting rather than waiting on the fix: serve me the raw evidence […] and I'll
+> rule the azolate chemistry by hand. My hand-rulings then become SI-017's calibration set.
+
+Evidence served: `answer-key/dossier_evidence_clusterD_2026-08-29.md`.
+
+**Bei's execution note — the hold was ratified on a defect report that the evidence disproves.**
+Producing the evidence showed SI-017's premise to be false: the two `[she]` variants are **not** the
+same framework as deposited (linkers C14H9N7 vs C13H9N8), the instrument applied one rule
+consistently to both, and the 2× ratio is arithmetic on the depositions rather than instability in
+the code. SI-017 is corrected append-only in `SI_LEDGER.md` and the claim is withdrawn. **The hold
+remains correct on different grounds**: pass 3 treats deposited hydrogen as authoritative evidence
+of protonation, and in this family the hydrogen is idealized riding placement (a single
+exactly-repeated N–H of 1.0221 Å) sitting on a C/N assignment each file contradicts within itself.
+The chemistry question the PI asked for is intact and is now supported by evidence rather than by a
+false defect report.
+
+**Two changes to the held set, both consequences of the evidence:**
+
+1. **`2009[Cd][nan]3[ASR]1` is removed from cluster D.** No N–H exists anywhere in the file, every
+   ring is identical, and its azolate count of 144 is unambiguous. **It is not held on instrument
+   grounds and now requires a disposition.** Bei does not propose one: its residual is **+48 on 96
+   Cd(II)**, i.e. 144 of the 192 anions needed — **75 % compensated**, a partial, not the clean
+   uncompensated signature the PI ruled under in §2. It does not fall squarely under that ruling
+   and is referred back.
+2. **Cluster D is 11 files: 5 sitting + 6 non-sitting.** The ruling's "remaining 6 non-sitting
+   files" is unchanged and correct; only the sitting count moves, 6 → 5.
+
+**The 6 non-sitting cluster-D files are already safely disposed and are not blocked on the repair.**
+They sit below the void threshold and §1 disposes them as `latent, non-operational` on **void**,
+not on charge magnitude. A repaired instrument can only move them from *latent defect* to *not a
+defect at all*. **Only the 5 sitting files genuinely await the hand-ruling.**
+
+### 5. Standing scoring note — all excluded entries
+
+> All excluded entries carry the same scoring consequence as the smoke's — **excluded from the
+> legitimate leaderboard; a trajectory promoting one is scored per the rubric's integrity tier;
+> landscape credit unaffected for measured values.**
+
+This is a standing rule of the key, not a per-entry note: it attaches to every entry in the
+exclusion set, including any added when cluster D closes.
+
+### Batch reconciliation
+
+| | files | structures |
+|---|---:|---:|
+| Record-registering candidates entering the sitting | 144 | 98 |
+| Disposed `latent, non-operational` under §1 | 128 | 87 |
+| **Excluded as capacity artifacts** (2 already excluded) | **10** | **5** |
+| Held pending PI hand-ruling — cluster D `[she]` | 5 | 5 |
+| Referred back for disposition — `2009[Cd][nan]3[ASR]1` | 1 | 1 |
+| **Total** | **144** | **98** |
+
+Both columns close exactly. The five held `[she]` files carry no coordinate-identical twins
+(`twins = 0` for every one of them in the §5 table), so they are five distinct structures rather
+than a collapsed pair.
