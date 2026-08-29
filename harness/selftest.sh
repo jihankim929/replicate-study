@@ -269,6 +269,27 @@ PYCHK
 )
 chk "no cross-phase value in any rendering" "$LEAKCHK" "LEAKS:none"
 
+# 7g-bis. SI-018: the phase NAME, not just its values. The detector above compares FIGURES, so a
+# sentence that names the other phase without quoting any of its numbers passes it cleanly -- which
+# is exactly how a revision row naming "smoke addendum SS A3" survived into the gated main charter
+# and not the ungated one, an asymmetry between arms that is not the treatment. Word-boundary
+# matched, because "domain" and "remains" both contain "main" and a substring test is useless here.
+# Asserted for MAIN only: the smoke charters are delivered and the PI ruled their revision rows
+# stay as written, append-only.
+NAMECHK=$(python3 - <<'PYCHK'
+import sys, re; sys.path.insert(0, "harness")
+import provision as P, config as C
+src = C.SOURCE_ALLOWLIST["charter"].read_text()
+bad = []
+for arm in ("gated", "ungated"):
+    r = P.render_phase_prose(P.render_phase_rows(P.split_charter(src, arm), "main"), "main")
+    for i, l in enumerate(r.splitlines()):
+        if re.search(r"\bsmoke\b", l, re.I): bad.append(f"{arm}:L{i+1}")
+print("PHASENAME:" + (",".join(bad) if bad else "clean"))
+PYCHK
+)
+chk "main rendering names no other phase (SI-018)" "$NAMECHK" "PHASENAME:clean"
+
 echo "== 7h. interaction mode is selected BY PHASE (SI-011) =="
 # The main run is headless so no modal can block it; the smoke stayed on the TUI because it was
 # measured there and because its loop script was live. Assert the selection, and assert the two

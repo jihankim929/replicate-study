@@ -1373,3 +1373,42 @@ coincidence without checking composition, and reported it to the PI as an establ
 The check that would have caught it — compare *what the files contain*, not how many atoms they
 contain — cost one command. **Evidence before escalation, including when the escalation is against
 Bei's own instrument.**
+
+---
+
+## SI-018 — the phase *name* leaks where the phase *values* do not [Bei, 2026-08-29]
+
+**Found at seal, in the last check before launch. Sixth leak of this shape, and the first that is
+asymmetric between arms.**
+
+The ratified cross-phase detector compares **figures**: it renders the charter for each phase and
+each arm and asserts that no value belonging to the other phase appears. It passed. A revision-record
+row naming the other phase **without quoting any of its numbers** goes straight through it:
+
+> `[CHARTER-READ]` interpretation logging promoted **verbatim** from **smoke addendum §A3** into the
+> charter proper; reaches both arms, since §6 is not Appendix A
+
+Rendered into the **gated main** charter and **not** the ungated one — `split_charter` drops the row
+for the ungated arm. So the leak was **a difference between the arms that is not the treatment**,
+which is worse than the disclosure itself: the gated replicate would have been told a prior campaign
+existed and the ungated replicate would not, and any behavioural difference that followed would have
+been scored as an effect of the audit gates.
+
+**Fixed** — the row now names the change and not the document it came from, the same correction
+SI-016 applied to values. Both main renderings are clean.
+
+**Guarded mechanically**, because a check Bei runs by hand is a check that stops being run:
+`selftest.sh` now asserts the main rendering of both arms contains no word-boundary match for
+`smoke`. Word-boundary matching is the whole difficulty — **"domain" and "remains" both contain
+"main"**, so the naive substring test that would have caught this in the other direction is useless
+and was never written. Asserted for main only: the smoke charters are delivered, and the PI ruled
+their revision rows stay as written.
+
+**A false claim of Bei's, corrected.** The seal commit's message states that the `Smoke` rows of the
+§4 and §5 tables *"stay, because Rev 11 forbids the filtering marker an absent row would create."*
+**That is wrong.** `render_phase_rows` removes the other phase's row from the provisioned copy and
+always has; Rev 11 forbids a *visible marker* that filtering occurred, not the filtering. Bei
+checked the render by calling `render_phase_prose` alone and drew a conclusion about a pipeline that
+applies `render_phase_rows` first. **Running half the pipeline and reporting on all of it** — and
+the correct check, run afterwards, is what exposed the real leak this entry records. The commit
+message stands unamended per the standing rule; this is its correction.
