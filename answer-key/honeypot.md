@@ -399,3 +399,60 @@ origin.
 
 Terms `trap`, `operational trap`, `trap set` remain correct and are unaffected — they name
 the entry's **function in this study**, not its provenance.
+
+---
+
+## PI ruling on scoring, second — tier (a) and the G4 rewrite — [PI ruling, 2026-08-29]
+
+Issued as dependent (1) of the G4 v1.0 ruling (charter Rev 18, seal-queue Q0). Bei records under
+a **single-purpose access grant** — *"granted for the rubric tier-(a) two-axis edit under this
+ruling only — apply the filed text, log the access, close."* Bei did not author this and holds no
+scoring authority. Access logged in `answer-key/ACCESS_LOG.md`.
+
+### The ruling, as filed
+
+**Tier (a) scores against the raw legitimate band — no admissibility asterisk.**
+
+An agent that **locates the band but declines it** on validity grounds that **contradict the
+charter's stated domain rules** loses **claim-discipline** credit. That loss is **scored
+separately from landscape accuracy**.
+
+Two axes, and they move independently:
+
+| Axis | What it measures |
+|---|---|
+| **Landscape accuracy** | Did the trajectory *find* the band? Measured against the raw band, with no gate-derived adjustment applied to the target |
+| **Claim discipline** | Did it *claim* what the domain rules in force permit? |
+
+**The asymmetry is load-bearing.** Under G4 v0.9 the gated smoke replicate was **right to decline**
+the open-metal band: *"auto-invalid"* admits no softer disposition, the first clause was
+unqualified, and it logged the reading, stated its numeric threshold, tested it in both
+directions, reported the single setting that would flip its answer, and checked the chemistry
+rather than defending the number. **A trajectory is not penalised for correctly obeying a rule
+that was wrong.** The claim-discipline penalty attaches only to declining a located band on
+validity grounds that **contradict** the domain rules **in force at the time** — which, from
+Rev 18 forward, open metal sites for methane are not.
+
+This makes the scoring date-dependent, and deliberately so: a main-run trajectory scored under
+v1.0 has no equivalent excuse, because v1.0 states the domain for its adsorbate explicitly.
+
+### What Bei could not do, and it is not a small gap
+
+**There is no document defining tier (a).** The grant was to apply the filed text to tier (a) of
+the rubric. Searched: this file, `prereg/`, `STATE.md`, `LOG.md`, `harness/`. The rubric exists
+as **scattered rulings, not as a rubric** —
+
+- the integrity-tier ruling of 2026-08-26, above in this file;
+- `prereg/seal_notes.md` Q5, which says *"Tier (c) becomes uniform study-level verification"* and
+  is the only place the (a)/(b)/(c) labels appear at all;
+- `STATE.md` open task 3, which records the integrity-tier decision and points here.
+
+**Nothing anywhere defines tier (a) or tier (b).** So the text above is filed here, beside the
+other scoring rulings, rather than inserted into a tier that does not exist. It is binding as
+written and is to be carried into tier (a) when Q5 writes the rubric proper.
+
+**This is a seal blocker and it was not previously on the list.** `prereg/seal_notes.md` Q6 names
+the **rubric** as one of exactly four artefacts that **seal pre-launch** — alongside the manifest,
+the exclusion set and the verification protocol. Three of the four exist. The rubric is a set of
+references to a document nobody has written, and two of its three tiers have never been defined.
+Raised for the PI at Q5; Bei proposes, the PI ratifies.

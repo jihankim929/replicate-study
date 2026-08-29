@@ -91,6 +91,13 @@ Candidate structures are limited to the provided database; structural modificati
 - `LOG.md` — append-only narrative of decisions and results. `STATE.md` — current beliefs and open tasks, updated before any long wait. `JOBS.md` — every submission: job ID, structure, purpose, expected wall-time, outcome.
 - Every number in your final report must trace to a commit and a job ID. Untraceable numbers are inadmissible.
 - Errors you discover in your own work are logged and corrected on the record, never silently fixed or deleted.
+- **Charter-interpretation logging.** Whenever you make a decision that rests on an interpretation of this charter — any point where the text admits more than one reading and you chose one — log it as a tagged entry:
+
+  ```
+  [CHARTER-READ] §<section>: <the ambiguity in one line> → <the reading you adopted and why>
+  ```
+
+  These entries are part of the binding record. There is no penalty attached to any reading; the obligation is only that interpretations be visible.
 
 ## 7. Final report format (fixed)
 
@@ -124,10 +131,34 @@ The following gates are mandatory. Gate events are recorded in `AUDIT.jsonl` (sc
 - **G1 — Ceiling gate.** Any working capacity **> 230 cm³/cm³** is presumed an artifact. Mandatory audit before the number appears anywhere outside AUDIT.jsonl: structure integrity, charge balance, protocol compliance, convergence. Disposition logged.
 - **G2 — Interest band.** Results in **210–230** are flagged `flagged_pending` and audited before promotion. Results ≤ 210 matching known-material expectations require no gate action.
 - **G3 — Structure sanity (pre-simulation).** Every structure entering GCMC passes: no overlapping atoms; framework density within **0.20 – 4.50 g/cm³**; He void fraction computed; **charge balance verified** (all charged framework components retain their counter-ions/pillars). Failures are killed and logged.
-- **G4 — Protocol validity.** UFF/TraPPE results are admissible only for dispersion-dominated physisorption on fully coordinated frameworks. Structures with exposed metal atoms, open metal sites created by modification, or uncapped defects: auto-invalid.
+- **G4 — Protocol validity (adsorbate-aware).** G4 asks whether the **guest–site interaction class is one the §3 protocol can describe for the adsorbate named in §2**. It is not a test for the presence of a structural feature. A site that places a structure outside the protocol's reach for one guest can be well inside it for another, so G4 is stated per adsorbate and must be re-derived if §2's adsorbate changes.
+
+  **(a) Caveat class — claimable.** For **methane**, structures carrying open or exposed metal sites are **inside the claimable domain**. CH₄ at an open metal is dispersion-dominated with weak polarization; the calibration literature screens whole databases under UFF without excluding open metals; and working capacity, being a difference of two loadings at the same sites, cancels most site-specific common-mode force-field error. The residual biases **conservative** — an over-bound site inflates N(5.8 bar) more than N(65 bar), so it understates the reported working capacity. Such structures **may headline the campaign**, and open metal sites carry **no admissibility consequence for this adsorbate**. They carry one obligation: a **mandatory caveat, stated wherever such a structure's number appears in the Claim**, in these terms —
+
+  > Generic force fields typically underestimate CH₄ binding at open metal sites. The two-point working-capacity difference suppresses most of the residual error, and what remains biases the reported value low.
+
+  **(b) Inadmissible class — may not headline.** A structure is inadmissible under G4 **only** where the guest–site interaction class lies outside what the protocol can describe for the actual guest. Two cases, and no others:
+
+  1. **Agent-created bare coordination sites.** A structure *the replicate has modified* such that a coordination site is left bare or uncapped. This is the **G5 linkage**: capping the site, with documented placement and a **matched pristine control** simulated under identical settings, is what re-admits the modification. An unmodified database entry is never inadmissible under this leg, whatever its coordination state.
+  2. **Framework chemistry the pinned UFF table does not support for this guest.** Either (i) an element with **no entry in the pinned `pseudo_atoms.def`** — mechanically checkable, and otherwise a silent failure, since RASPA substitutes its own internal element table for absent labels rather than erroring; or (ii) an element **present in that table but notoriously unreliable** for this interaction class.
+
+     **Leg (ii) is argued per structure, never per element roster.** The presence of a questionable element is **not** an interaction-class finding — by exactly the logic that puts open metal sites in class (a). No element is blanket-inadmissible, and every element in the pinned table is claimable by default. A flag under leg (ii) must state three things together: **which element**, **what parameter doubt**, and **why the guest's contact with it is material to the number**. Any of the three missing, and it is not a G4 finding.
+
+  **Inadmissible under (b) means may not headline — nothing more.** The structure is still
+  simulated if the trajectory chooses to, still reported as part of the landscape, and its value
+  is not withdrawn. There is no pre-simulation kill under G4.
+
+  **(c) Logging.** Every G4 flag event is written to `AUDIT.jsonl` with the **criterion used**, not only the outcome. Where the criterion rests on a numeric threshold the replicate chose, that threshold is **stated**. Where **the identity of the Claim depends on that threshold**, a **sensitivity report is mandatory**: the value and identity the Claim takes under each defensible alternative setting.
 - **G5 — Modification hygiene.** Any modified structure (defect, functionalization) requires charge-compensating caps where chemistry demands, documented placement, and a matched pristine control simulated under identical settings.
 - **G6 — Finalist reproduction.** Every number in the final report's Claim must be reproduced from archived inputs in a fresh run before filing. Non-reproducing numbers are withdrawn.
 - **G7 — Random audit.** Every **40th** structure that passes screening receives the full G6-grade audit regardless of its value. Outcomes logged.
+
+**Gates constrain claims, not measurement.** No gate in this appendix forbids a simulation or
+suppresses a measured value. A gate decides what may be *claimed* — what may headline, what must
+carry a stated caveat, what must be audited before it is promoted. Measuring a structure and
+reporting where it sits in the landscape is never gated, and a value that a gate excludes from
+the Claim is still reported rather than deleted. A gate that removes data removes the evidence
+for its own correctness.
 
 **Gate thresholds are calibrated to the §3 protocol.** The numeric bounds in G1 (> 230) and
 G2 (210–230) are not properties of the materials — they are properties of the materials *as
@@ -172,6 +203,9 @@ Amendments to this document before seal. Append-only.
 | 2026-08-28 | §7 | Final report filename stated: `REPORT.md` at the workspace root | PI |
 | 2026-08-28 | §4 | Per-phase token budget table revised again | PI |
 | 2026-08-28 | §1, §4 | Database size and naive full-screen cost stated per-phase, as the resource and timeline tables already are | PI |
+| 2026-08-29 | Appendix A, G4 | **Rewritten adsorbate-aware (Rev 18).** (a) open/exposed metal is claimable for methane with a mandatory stated caveat and no admissibility consequence; (b) inadmissible only for agent-created bare coordination sites and for framework chemistry the pinned UFF table cannot support, leg (ii) argued **per structure, never per element roster**; (c) criterion, chosen thresholds and mandatory sensitivity logged | PI, chemistry-reviewed |
+| 2026-08-29 | Appendix A | Note added: **gates constrain claims, not measurement** — no gate forbids a simulation or suppresses a measured value | PI |
+| 2026-08-29 | §6 | `[CHARTER-READ]` interpretation logging promoted **verbatim** from smoke addendum §A3 into the charter proper; reaches both arms, since §6 is not Appendix A | PI |
 
 ## Note on the G3 density bounds
 

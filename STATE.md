@@ -2,7 +2,7 @@
 
 *Updated before any long wait. Supersedes itself; history lives in LOG.md and git.*
 
-Last updated: 2026-08-29, after LOG-2026-08-29-02 (G4 rewrite drafted, Q0).
+Last updated: 2026-08-29, after LOG-2026-08-29-03 (Rev 18 applied; Q1 opened).
 
 ## Role
 
@@ -165,31 +165,38 @@ replicates. Off-script input from a replicate receives the chartered default res
    confirmed database-independent with one line for the record, G3 per entry in the dossier
    template, G7's k recomputed against Q1's N and Q2's budget holding audit cost at a stated
    budget fraction, arithmetic for ratification.
-   **Q0 INSERTED AT THE HEAD 2026-08-29 (PI, chemistry-reviewed): the G4 rewrite, "execute first
-   in the seal queue."** It changes what a gate *means*, so it precedes Q7, which recalibrates
-   gates. G4 v0.9 is **guest-agnostic** — every word describes the framework, none the adsorbate.
-   Replaced by three clauses: **(a)** open/exposed metal is **claimable for methane** with a
-   mandatory stated caveat and **no admissibility consequence**, may headline; **(b)**
-   inadmissible **only** for agent-created bare coordination sites (G5-linked) and framework
-   chemistry the pinned UFF table cannot support, with the parameter concern stated — and
-   **"inadmissible" = "may not headline", not "kill"**; **(c)** criterion logged per event,
-   thresholds stated, **sensitivity mandatory where the Claim's identity depends on one**.
-   **Draft and machine-generated diff: `prereg/G4_v1.0_PROPOSED.md`. NOT applied, nothing
-   rendered** — the PI asked for the diff before any render, and `charter_v0.9.md` is untouched.
-   Measured on the slice: **619 (35.8%) inadmissible under v0.9 → 599 move to claimable**;
-   leg (i) of (b) is **empty** (all 55 element symbols are parameterised); leg (ii) catches
-   **44 actinide-bearing structures if the PI rules them in**, 24 of them newly.
-   **Four questions returned with the draft** (§4 of that file), including that **the ruling's
-   actinide example lands in leg (ii), not leg (i) — the pinned table contains U/Th/Np/Pu/Am** —
-   and that **Q7's G1/G2 line should be revisited after Q0**, since v1.0 changes which population
-   reaches those thresholds without moving them. Specimen: **SI-015**.
-   **Two dependents, pre-registered under the same ruling:** (1) **rubric** — tier (a) scores
-   against the **raw legitimate band**, no admissibility asterisk, with claim discipline scored
-   **separately from landscape accuracy**; **filed but NOT applied — `answer-key/` opens only on
-   explicit PI instruction and this ruling does not give it.** (2) **analysis plan** — new
-   pre-specified observable **modification parent choice per trajectory** (parent identity,
-   admissibility pool, band position on the **raw** leaderboard, plus a `none attempted` level);
-   **pre-registered as of this commit**, binding before Q5 writes the plan.
+   **Q0 — G4 REWRITE: RATIFIED AND APPLIED 2026-08-29, charter Rev 18. CLOSED.**
+   G4 v0.9 was **guest-agnostic** — every word described the framework, none the adsorbate — and
+   s01's strict reading of it was **correct**, killing 619 of 1,731 (35.8%) pre-simulation and
+   holding the answer at 177.54 against a measured open-metal band of 195.41–206.37.
+   Live text: `prereg/charter_v0.9.md` Appendix A; write-up `charter_revisions.md` Rev 18;
+   proposal record `prereg/G4_v1.0_PROPOSED.md`; specimen **SI-015**.
+   **(a)** open/exposed metal is **claimable for methane**, mandatory stated caveat, may headline,
+   no admissibility consequence. **(b)** inadmissible only for agent-created bare coordination
+   sites (G5-linked) and unsupported framework chemistry — and **A2: leg (ii) is argued per
+   structure, never per element roster; no element is ever blanket-inadmissible.** A flag must
+   state which element, what parameter doubt, and why the guest's contact is material. **On the
+   slice class (b) therefore filters nothing** — the 44 actinide-bearing structures stay
+   claimable. **(c)** criterion logged, thresholds stated, sensitivity mandatory where the Claim's
+   identity depends on one.
+   **A3 ratified: inadmissible = may-not-headline; simulation and landscape reporting are never
+   gated.** Recorded inside G4 and as a general Appendix A principle — **"Gates constrain claims,
+   not measurement."** **A4 ratified:** Q7 re-derives G2's audit-load arithmetic under the v1.0
+   population post-Q0; **G1/G2 anchors unchanged**.
+   **`[CHARTER-READ]` promoted** from smoke addendum §A3 into charter **§6**, verbatim mechanism —
+   placed in §6 rather than as a new section because a new §7 would renumber §7–§9 and break every
+   cross-reference. **It now reaches both arms**, since §6 is not Appendix A.
+   **Verified after applying:** selftest **82/82**; smoke render clean, 0 residual markers; main
+   render still **aborts** on `[Q1:N]`/`[Q2:naive]`/`[Q2:ratio]`; source and render **clean**
+   against both leak deny-lists and against any structure id.
+   **Dependents:** (1) **rubric two-axis edit APPLIED** under a single-purpose answer-key grant,
+   logged in `answer-key/ACCESS_LOG.md`, access closed — **and it found a seal blocker, below.**
+   (2) **analysis plan** — `modification parent choice per trajectory` (parent identity,
+   admissibility pool, band position on the **raw** leaderboard, plus a `none attempted` level)
+   **pre-registered**, binding before Q5 writes the plan.
+   **Still open from Q0:** `prereg/audit_schema.md` has **no first-class `criterion` field** —
+   clause (c) is binding and the schema satisfies it only as free text, which is not comparable
+   across 20 trajectories. Bei-proposed, unratified, **must close before seal**.
 11. **Two seal blockers Ruling 1 creates**, in `prereg/seal_notes.md` S8 and S6: (a)
    `config.SOURCE_ALLOWLIST["db_dir"]`/`["manifest"]` are phase-independent and would provision
    the main fleet with the smoke's slice while reporting `N/N verified` — **open**, waiting on
@@ -234,6 +241,41 @@ replicates. Off-script input from a replicate receives the chartered default res
      collection and its first output is **6 false positives** from s01's absolute symlinks
      evaluated at a new root. The README's main-run overshoot row is stale at `8 | 4.00 CPU-h`
      (Rev 14 moved the cap to 12; correct is **6.00 CPU-h, 0.375 %**).
+
+13. **SEAL BLOCKER, new 2026-08-29 — the rubric does not exist as a document.** Found while
+   applying Q0's dependent (1) under the single-purpose answer-key grant. `prereg/seal_notes.md`
+   Q6 names the **rubric** as one of exactly **four** artefacts that seal pre-launch, with the
+   manifest, the exclusion set and the verification protocol. **Three of the four exist.** What
+   stands in for the rubric is a set of references to a document nobody has written: the
+   integrity-tier ruling of 2026-08-26 in the sealed key, Q5's one line about *"tier (c)"* — the
+   **only** place the (a)/(b)/(c) labels appear anywhere — and this file's open task 3.
+   **Nothing defines tier (a) or tier (b).** The ruling handed down as Q0's dependent (1) was
+   *about tier (a)*, and there was no tier (a) to apply it to; the text is filed beside the other
+   scoring rulings, binding as written, to be carried in when the rubric is written.
+   **Blocks seal, not Q1.** Recorded as `Q5-PRE` in the seal notes. Recommendation, Bei proposes:
+   **Q5 should write the rubric, all tiers explicitly, rather than reword one assumed to exist.**
+
+14. **Q1 STEP 1 DONE 2026-08-29 — surveyed, nothing pulled, report in `seal_notes.md`.**
+   `/home/molsim_share` is the only group-readable shared root. Two name-matches, one real:
+   **`yh_CoREMOF_10k` is 12,493 RASPA movie PDBs and zero CIFs** — a name-only search scores it a
+   hit and it is not a database. **`core2024_cifs` is 12,471 CIFs / 217 MB**, owner `dhoonkim97`,
+   and **the smoke slice is a byte-identical subset of it — 1,731/1,731 hashes match
+   `benchmark/MANIFEST.sha256`, 0 differing.** Lineage to the slice is established; **lineage to a
+   published release is not**: no README, no version file, no manifest, no URL. Under Q1's own
+   rule *provenance-unclear counts as absent*, and it sits in another user's share directory,
+   which is not a thing Bei can freeze.
+   **N is not one number.** 12,471 as shipped vs **8,163** with ASR/FSR twins collapsed — a
+   **1.53× swing** that propagates into Q2, Q3, Q4 and Q7's `k`. Naive exhaustive at
+   1.83 CPU-h/structure: **22,822** vs **14,938 CPU-h**; the 1,600 CPU-h budget is **7.01 %** vs
+   **10.71 %** of naive — so the sub-brute-force character holds on both readings, but the numeral
+   §4 must state does not. `[ION]` is a **third class present in both** sets (55 of 1,731; 558 of
+   12,471) and needs its own ruling rather than absorption into the twin decision. Collapse
+   verification at full scale is **name-based and unverified** — do not inherit s02's
+   coordinate-identity result from the slice.
+   **Three options filed for ratification**; Bei recommends pulling the canonical release and
+   diffing it against `core2024_cifs`, because it is the only route that ends with a release name
+   attached to the benchmark. **Blocking Q1 step 4:** the ASR/FSR ruling, the `[ION]` ruling, and
+   the freeze location (20 workspaces × 217 MB = **4.24 GB** duplicated before any run output).
 
 ## Beliefs carried forward
 

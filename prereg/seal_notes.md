@@ -234,7 +234,7 @@ current slice.
 **Standing rule for the whole queue: Bei proposes, the PI ratifies.** Items 1, 2 and 4 end in
 options, not decisions. Item 3 ends in dossiers, not dispositions.
 
-### Q0 — G4 rewrite, adsorbate-aware — **RUNS FIRST, AHEAD OF Q1**
+### Q0 — G4 rewrite, adsorbate-aware — **RATIFIED AND APPLIED 2026-08-29 (charter Rev 18). CLOSED.**
 
 **PI ruling 2026-08-29, chemistry-reviewed: *"Execute first in the seal queue."*** Filed ahead of
 Q1 because it is the only queue item that changes **what the gates mean** rather than what they
@@ -287,6 +287,30 @@ comparable across twenty trajectories; and — separately, from SI-015 — **pro
 logging out of the smoke addendum §A3 into the charter proper at v1.0**, because it is the
 instrument that caught this and it is currently scoped to a phase that has ended.
 
+**RULED AND APPLIED 2026-08-29.** Charter Rev 18 is in `prereg/charter_v0.9.md` Appendix A;
+write-up at `prereg/charter_revisions.md` Rev 18. Verified after applying: `selftest.sh` **82/82**,
+smoke render clean with 0 residual markers, main render still aborts on the three unpopulated
+Q1/Q2 values, and both source and render are clean against both leak deny-lists.
+
+- **A1** — ratified as drafted. Leg (i) **retained though empty on the slice**, as the guard
+  against RASPA's silent element-table substitution.
+- **A2** — **no element is ever blanket-inadmissible.** Leg (ii) is argued **per structure, never
+  per element roster**; a flag must state which element, what parameter doubt, and why the guest's
+  contact with it is material to the number. Written into the **gate text**, so it reaches every
+  workspace rather than living in commentary. On the smoke slice this means **class (b) filters
+  nothing** and the 44 actinide-bearing structures stay claimable by default.
+- **A3** — inadmissible means **may not headline**. Recorded twice: inside G4, and as a general
+  Appendix A design principle — **"Gates constrain claims, not measurement."**
+- **A4** — carried to Q7 below.
+- **`[CHARTER-READ]` promoted** into charter **§6**, verbatim, reaching **both arms**.
+
+**Dependent (1) — applied under a single-purpose answer-key grant, and it surfaced a seal
+blocker.** See Q5/Q6 below: **the rubric does not exist as a document.**
+
+**Still open from Q0, Bei-proposed and unratified:** `prereg/audit_schema.md` has no first-class
+`criterion` field. Clause (c) is binding and the schema satisfies it only as free text in `note`,
+which is not comparable across twenty trajectories. **Must close before seal.**
+
 ### Q1 — acquire and freeze the full CoRE MOF 2024 database
 
 1. **Look locally first, and report what is there with counts** — prior-campaign archive,
@@ -309,6 +333,95 @@ will not sit there comfortably, and `provision.py` copies every manifest line pe
 20 workspaces at full-database scale is the same multiplier applied to a much larger number.
 Where the frozen database lives, and whether it is tracked or hash-pinned-and-external, is a
 decision Q1 has to surface rather than settle by `git add`.
+
+### Q1 — STEP 1 REPORT: what is on the cluster — **Bei, 2026-08-29. Nothing pulled.**
+
+Q1 step 1 is *"look locally first, and report what is there with counts… Report before pulling
+anything."* Done. **No file has been copied, moved or written.** The survey read and hashed in
+place.
+
+#### Two name-matches in the group share, and only one is a database
+
+`/home/molsim_share` is the only group-readable shared root (`drwxrwxr-x root:users`); every
+other user home is mode 700 and was not entered.
+
+| Candidate | What it actually is | Verdict |
+|---|---|---|
+| `/home/molsim_share/yh_CoREMOF_10k` | **12,493 files, 8.7 GB, zero CIFs** — RASPA `Movie_*_allcomponents.pdb` trajectory snapshots | **Not a database.** A name-only search would have scored this a hit |
+| `/home/molsim_share/core2024_cifs` | **12,471 CIFs, 217 MB**, owner `dhoonkim97`, mtime 2026-01-19 | **The candidate** |
+
+#### The smoke slice is a byte-identical subset of `core2024_cifs`
+
+All **1,731** slice filenames are present, and all **1,731 hashes match**
+`benchmark/MANIFEST.sha256` exactly — **0 differing, 0 missing**. Whatever this directory is, the
+frozen smoke slice was drawn from this corpus and not merely from something that resembles it.
+**Lineage to the slice is established. Lineage to a published release is not.**
+
+#### Counts
+
+| Quantity | Value |
+|---|---:|
+| CIFs | **12,471** |
+| Size | 217 MB |
+| `[ASR]` / `[FSR]` / `[ION]` | 6,935 / 4,978 / **558** |
+| Distinct base names (ASR/FSR collapsed) | **8,163** |
+| — base names carrying **both** twins | 4,308 |
+| — base names carrying one only | 3,855 |
+| Year field range | 1979 – 2024, plus **194 entries stamped `0000`** |
+| Scale-up over the smoke slice | **7.20× by count, 7.23× by bytes** |
+
+**`[ION]` is not a new class** — the smoke slice already holds 55 of them (925 ASR / 751 FSR /
+55 ION). Its share rises from 3.2 % to 4.5 % at full scale. The twin question is about ASR/FSR
+pairs only; `[ION]` is a third class either way and needs its own ruling, not absorption into the
+twin decision.
+
+#### N is not one number, and the choice moves everything downstream (Q1 step 3)
+
+| Treatment | N | Naive exhaustive @ 1.83 CPU-h/structure | 1,600 CPU-h as a fraction of naive |
+|---|---:|---:|---:|
+| As shipped | **12,471** | **22,822 CPU-h** | **7.01 %** |
+| ASR/FSR twins collapsed | **8,163** | **14,938 CPU-h** | **10.71 %** |
+
+A **1.53× swing in N**, and it propagates into Q2's budget arithmetic, Q3's denominator, Q4's
+provisioning footprint and Q7's `k`. Both readings sit near the *"~10 % of naive"* figure Rev 17
+recorded provisionally, so **the sub-brute-force character holds either way** — but the numeral §4
+must state does not.
+
+Collapse behaves like the slice: **12,471 → 8,163 is 65.5 %**, against the slice's **1,731 → 1,230
+= 71.1 %**. Spot-checked `2004[Cu][mog]3[ASR]2` / `[FSR]2` — identical byte length (31,646 B),
+consistent with the coordinate-identity s02 established on the slice. **Verification at full scale
+is not done and must not be assumed from the slice**; the count above is **name-based**.
+
+#### Provenance is unclear, which under Q1's own rule counts as absent
+
+**There is no README, no version file, no manifest, no source URL, no checksum list** — the
+directory contains 12,471 CIFs and nothing else. Nobody can name the release. Q1 step 2 is
+explicit: *"Provenance-unclear counts as absent: a local copy nobody can name the release of is
+not a benchmark, and this study has already been bitten twice by inherited numbers whose basis
+turned out to be different from the one assumed."* Both of those bites — §3's 12.0/12.8 cutoff and
+`Lm 58` — were exactly this shape.
+
+It is also **not ours**: it sits in another user's directory in a shared space, with no guarantee
+it will be there, or unchanged, next week. Freezing against a path someone else can modify is not
+freezing.
+
+#### Options for the PI — Bei proposes, the PI ratifies
+
+1. **Pull the canonical CoRE MOF 2024 release** and record version, URL and file hash, per Q1
+   step 2, then diff it against `core2024_cifs`. This is the only route that ends with a release
+   name attached to the benchmark. If the diff is empty, provenance is settled *and* the local
+   copy is validated; if not, the difference is itself a finding.
+2. **Ask `dhoonkim97` for the provenance.** Cheapest, and it may resolve in one message — but a
+   remembered provenance is not a recorded one, and this study has been bitten twice by exactly
+   that.
+3. **Adopt `core2024_cifs` as-is, provenance stated as unknown.** Bei does not recommend it: it
+   fails Q1's own acceptance criterion, and the smoke slice's clean lineage to it is evidence
+   about the corpus, not about the release.
+
+**Not decided here, and blocking Q1 step 4:** the ASR/FSR ruling, the `[ION]` ruling, and the
+freeze location (`core2024_cifs` is not Bei's to freeze; `provision.py` copies every manifest line
+per workspace, so **20 workspaces at 217 MB is 4.24 GB** of duplicated benchmark before any run
+output).
 
 ### Q2 — recompute the budget arithmetic at full-database scale
 
@@ -387,6 +500,27 @@ Confirm **provisioning size** and **manifest-verification time for 20 workspaces
 real measurement was 1,731/1,731 verified per arm for 2 workspaces. Twenty workspaces at
 full-database N is two multipliers at once, and provisioning is on the launch critical path.
 
+### Q5-PRE — **SEAL BLOCKER, found 2026-08-29: the rubric does not exist**
+
+Found while applying Q0's dependent (1) under the single-purpose answer-key grant.
+
+**Q6 names the rubric as one of exactly four artefacts that seal pre-launch** — with the manifest,
+the exclusion set and the verification protocol. **Three of the four exist. The rubric does not.**
+What exists is a set of references to a document nobody has written:
+
+- the integrity-tier scoring ruling of 2026-08-26, in the sealed key;
+- Q5 below, which says *"Tier (c) becomes uniform study-level verification"* and is the **only**
+  place the (a)/(b)/(c) labels appear anywhere in this study;
+- `STATE.md` open task 3, which records the integrity-tier decision and points at the key.
+
+**Nothing defines tier (a) or tier (b).** Q0's dependent (1) was a ruling *about tier (a)*, and
+there was no tier (a) to apply it to — it is filed beside the other scoring rulings instead,
+binding as written, to be carried in when the rubric is actually written.
+
+**This blocks seal, not Q1.** Q1–Q4 are unaffected and proceed. Bei proposes, the PI ratifies:
+Q5 should **write** the rubric — all tiers, explicitly — rather than reword one that is assumed to
+exist.
+
 ### Q5 — rubric and analysis plan reworded per Ruling 2
 
 - Tier (c) becomes **uniform study-level verification**: all headline numbers re-run, all
@@ -420,6 +554,12 @@ changes two of the things they are calibrated against — the database's composi
 compute budget. Appendix A already declares this dependency (Rev 10): *"gate thresholds are
 calibrated to the §3 protocol"*, and the same logic reaches a change of world.
 
+- **AMENDED 2026-08-29 (A4, PI).** **G1/G2 anchors unchanged**, as below — but **Q7 re-derives
+  G2's audit-load arithmetic under the v1.0 population, after Q0.** Rev 18 returns 599 structures
+  (34.6 % of the smoke slice) to the claimable pool, and at full-database N the open-metal band is
+  where the high values live. The thresholds do not move; **how many structures reach them does**,
+  and G2's cost is a function of that count. Separately worth a line: **G1's presumption that a
+  value above 230 is an artifact was formed on a population with open metals excluded.**
 - **G1 (> 230 cm³/cm³) and G2 (210–230)** — **confirmed database-independent**, with **one line
   for the record**. Both are properties of the materials *as simulated under §3*, not of which
   materials are in the box: a value-triggered ceiling does not move when the population behind

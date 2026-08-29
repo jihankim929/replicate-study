@@ -761,3 +761,98 @@ record; G3 re-derived per entry in the dossier template; G7's `k` recomputed aga
 Q2's budget, **holding audit cost at a stated fraction of budget**, arithmetic presented for
 ratification. `k` is not a constant — it is whatever makes the audit cost that fraction, and
 both of its inputs move at once, so Rev 13's reconfirmation of k = 40 at ~1.7% does not carry.
+
+---
+
+## Rev 18 — 2026-08-29 — Appendix A G4 rewritten adsorbate-aware; `[CHARTER-READ]` promoted into §6
+
+**PI ruling, 2026-08-29, chemistry-reviewed. Seal-queue Q0, executed first, ahead of Q1.**
+Proposal and machine-generated diff: `prereg/G4_v1.0_PROPOSED.md`. Specimen: **SI-015**.
+
+### What was wrong with G4 v0.9
+
+> *UFF/TraPPE results are admissible only for dispersion-dominated physisorption on fully
+> coordinated frameworks. Structures with exposed metal atoms, open metal sites created by
+> modification, or uncapped defects: auto-invalid.*
+
+**Guest-agnostic.** Every word describes the framework; none describes the adsorbate. The property
+G4 exists to police — whether the pinned force field can describe a **guest–site interaction** —
+is not the property the sentence tests, so it read identically for methane and for a strongly
+polarizing guest.
+
+**Found by execution, not by review.** The clause survived the PI who wrote it, six amendments,
+seventeen revisions and a leak-scanning pass whose whole purpose is close reading. s01 surfaced it
+in about a day by applying it to 1,731 real structures with a numeric threshold the text does not
+supply, and logged the reading under smoke addendum §A3.
+
+**s01's reading was correct**, and it killed **619 of 1,731 structures (35.8 %) pre-simulation**,
+holding the campaign's answer at **177.54** against a measured open-metal band of
+**195.41 – 206.37**, and reseeding its modification search from the admissible pool rather than
+from the top of the leaderboard.
+
+### The rewrite
+
+Three clauses. **(a)** For methane, open/exposed metal sites are **claimable** — no admissibility
+consequence, may headline, one mandatory stated caveat. **(b)** Inadmissible **only** for
+agent-created bare coordination sites (G5-linked, re-admitted by capping plus a matched pristine
+control) and for framework chemistry the pinned UFF table cannot support. **(c)** Criterion logged
+per event, replicate-chosen thresholds stated, **sensitivity mandatory** where the Claim's identity
+depends on one.
+
+The chemistry is the PI's and is recorded as ruled, not assessed: CH₄ at open metals is
+dispersion-dominated with weak polarization; the calibration literature screens whole databases
+under UFF without open-metal exclusion; and the two-point working-capacity difference cancels most
+site-specific common-mode force-field error, with the residual biasing **conservative** — an
+over-bound site inflates N(5.8 bar) more than N(65 bar).
+
+### The four questions Bei returned with the draft, and how they were ruled
+
+- **A1 — ratified as drafted.** Actinides sit in leg (ii), not leg (i): the pinned
+  `pseudo_atoms.def` holds 91 types and **does contain** `U_`, `Th_`, `Np_`, `Pu_`, `Am_`. Leg (i)
+  is **empty on the smoke slice** — all 55 element symbols across all 1,731 CIFs are
+  parameterised — and is **retained anyway as the silent-substitution guard**, because RASPA
+  substitutes its own internal element table for absent labels rather than erroring (the
+  pinned-UFF integrity defect s02 found on 2026-08-26, `440b1ab`).
+- **A2 — actinides are NOT blanket-ruled in, and no element ever is.** *"Leg (ii) is argued per
+  structure, never per element roster: presence of a questionable element is not an
+  interaction-class finding, by the same logic that moved open metals to claimable."* A flag under
+  leg (ii) must state **which element, what parameter doubt, and why the guest's contact with it is
+  material to the number** — all three, or it is not a G4 finding. The interpretation is written
+  into the gate text itself rather than into commentary, so it travels with the rule into every
+  provisioned workspace. **Consequence on the smoke slice: the 44 actinide-bearing structures
+  remain claimable by default, and class (b) filters nothing there.**
+- **A3 — ratified explicitly.** Inadmissible means **may not headline**; simulation and landscape
+  reporting are **never** gated. This reverses v0.9's pre-simulation kill. Recorded twice: as a
+  paragraph inside G4, and as a **general design principle** in the Appendix A notes —
+  *"Gates constrain claims, not measurement… A gate that removes data removes the evidence for its
+  own correctness."*
+- **A4 — ratified.** **Q7 re-derives G2's audit-load arithmetic under the v1.0 population,
+  post-Q0. G1/G2 anchors unchanged.** The thresholds were always database-independent; what moves
+  is how many structures reach them once 599 return to the claimable pool.
+
+### `[CHARTER-READ]` promoted into §6
+
+**Ratified: verbatim mechanism, main-run §numbering.** The tagged-entry format, the sentence
+binding the entries to the record, and the no-penalty clause are carried across word for word from
+`prereg/smoke_addendum.md` §A3. The single mechanical change is that *"part of the binding record
+(§6)"* becomes *"part of the binding record"*, because the rule now **is** §6.
+
+**Placed in §6 and not as a new section, deliberately.** A new §7 would renumber §7–§9 and break
+every cross-reference in the charter, the harness, the addendum and the collected smoke record.
+§6 is also where §A3 already pointed.
+
+**It now reaches both arms.** §6 is not Appendix A, so the **ungated** arm receives it too — which
+matters, because the ungated arm produced 6 of the 11 smoke entries, including the §2
+absolute-vs-excess ambiguity that no gated-arm entry raised.
+
+**Why it was promoted at all:** §A3 was scoped to a phase that has ended. Left there, the main run
+would have had no ambiguity detector, and every remaining under-specified sentence in v1.0 would
+have been resolved twenty times, silently, in twenty directions — the same failure this revision
+exists to repair, at twenty times the scale.
+
+### Still open after this revision
+
+**`prereg/audit_schema.md` has no first-class `criterion` field.** Clause (c) is ratified and
+binding; the schema satisfies it only as free text in `note`, which is what s01 used and which is
+not comparable across twenty trajectories. **Bei-proposed, unratified, and it must close before
+seal** — comparison across arms is the study.

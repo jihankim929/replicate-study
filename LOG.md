@@ -1644,3 +1644,109 @@ exactly like twenty agreeing on a right one.
 against `LEAK_DENY_HARD` (9 terms) and `LEAK_DENY_WARN` (6). The proposal document names structure
 ids in its *rationale*; the gate text that would render into a workspace does not, and that was
 checked rather than assumed.
+
+---
+
+## LOG-2026-08-29-03 — Rev 18 applied and verified; the rubric that seals pre-launch turns out not to exist; and Q1 finds the full database sitting in someone else's directory with no release name on it
+
+**All four G4 questions ruled, plus the `[CHARTER-READ]` promotion and a single-purpose answer-key
+grant.** Charter Rev 18 is applied to the source. Q0 closed. Q1 step 1 done.
+
+### What was applied
+
+**A2 went into the gate text, not into commentary.** The ruling — *"leg (ii) is argued per
+structure, never per element roster; presence of a questionable element is not an interaction-class
+finding"* — is a rule about how a flag must be argued, so it has to reach the replicate. Commentary
+in Appendix A's notes block would have stayed with Bei. Three things are now required together for
+any leg (ii) flag: **which element, what parameter doubt, and why the guest's contact with it is
+material to the number.** Any one missing and it is not a G4 finding. **On the smoke slice this
+means class (b) filters nothing** — the 44 actinide-bearing structures stay claimable.
+
+**A3 is recorded twice, deliberately.** Once inside G4 as the disposition, and once in the Appendix
+A notes as a principle covering every gate: *"Gates constrain claims, not measurement… A gate that
+removes data removes the evidence for its own correctness."* v0.9's pre-simulation kill destroyed
+619 structures' worth of landscape before anything could be measured, and dependent (1) cannot
+score landscape accuracy against data a gate deleted.
+
+**`[CHARTER-READ]` went into §6, not into a new §7.** A new section would renumber §7–§9 and break
+every cross-reference in the charter, the harness, the addendum and the collected smoke record —
+including the `§7 format` the final report is filed under. §6 is also where §A3 already pointed
+(*"part of the binding record (§6)"*), and the only change to the promoted text is dropping that
+now-self-referential parenthesis. **It reaches both arms**, because §6 is not Appendix A — which
+matters: the ungated arm produced 6 of the 11 smoke entries, including the §2 absolute-vs-excess
+ambiguity no gated entry raised.
+
+**Verified after applying, not assumed:** `selftest.sh` **82/82**; the smoke render carries all
+three additions with **0 residual `{{` markers**; the main render still **aborts** on `[Q1:N]`,
+`[Q2:naive]`, `[Q2:ratio]`; and both the source and the smoke render are **clean** against
+`LEAK_DENY_HARD` (9), `LEAK_DENY_WARN` (6) and any structure id — the proposal document names
+structure ids in its rationale, the gate text that renders does not.
+
+**Running the selftest meant backing up the escalation ledgers first**, because SI-014's `rm` is
+inside the suite. Backed up, ran, restored, verified no diff. That is the cost of SI-014 measured
+in the only way that matters: it makes the 82-check suite unsafe to run against a live record.
+
+### The answer-key grant found a seal blocker
+
+Access granted for one thing — apply the filed tier-(a) two-axis text, log, close. Opened, applied,
+logged in `answer-key/ACCESS_LOG.md` (created; no such ledger existed), closed. Nothing was read
+out: no key content is in this file, `STATE.md`, this commit message, or anywhere outside
+`answer-key/`.
+
+**But there is no tier (a) to apply it to.** Searched the key, `prereg/`, `STATE.md`, `LOG.md`,
+`harness/`. **The rubric does not exist as a document.** What stands in for it is three references
+to something nobody has written: the integrity-tier ruling of 2026-08-26 in the key, Q5's single
+line about *"tier (c)"* — **the only place the (a)/(b)/(c) labels appear anywhere in this study** —
+and `STATE.md` open task 3. **Nothing defines tier (a) or tier (b).**
+
+`prereg/seal_notes.md` Q6 names the rubric as one of exactly **four** artefacts that seal
+pre-launch, with the manifest, the exclusion set and the verification protocol. **Three of the four
+exist.** Filed as `Q5-PRE`; the recommendation is that Q5 **write** the rubric rather than reword
+one that is assumed to exist. The ruling's text is filed beside the other scoring rulings, binding
+as written, to be carried in when there is somewhere to carry it to.
+
+### Q1 step 1 — surveyed, nothing pulled
+
+**Two name-matches in the group share, and only one is a database.** `yh_CoREMOF_10k` is **12,493
+files, 8.7 GB, and zero CIFs** — RASPA `Movie_*_allcomponents.pdb` trajectory snapshots. A
+name-only search scores it a hit. This is the second time today a name has stood in for a thing
+that was not there.
+
+**`core2024_cifs`: 12,471 CIFs, 217 MB**, owner `dhoonkim97`, mtime 2026-01-19. **The smoke slice
+is a byte-identical subset of it — 1,731 filenames present, 1,731 hashes matching
+`benchmark/MANIFEST.sha256`, zero differing.** So lineage from the slice to this corpus is
+established by measurement.
+
+**Lineage from this corpus to a published release is not.** No README, no version file, no
+manifest, no URL, no checksum list — 12,471 CIFs and nothing else. Under Q1's own rule,
+*provenance-unclear counts as absent*. And it is **not ours**: another user's directory in a shared
+space, which is not something Bei can freeze.
+
+**N is not one number.** 12,471 as shipped against **8,163** with ASR/FSR twins collapsed — a
+**1.53× swing** that propagates into Q2's arithmetic, Q3's denominator, Q4's footprint and Q7's
+`k`. Naive exhaustive at the measured 1.83 CPU-h/structure: **22,822** vs **14,938 CPU-h**, making
+the 1,600 CPU-h budget **7.01 %** or **10.71 %** of naive. **The sub-brute-force character holds on
+both readings** — Rev 17's provisional *"~10 % of naive"* survives — but the numeral §4 has to
+state does not, and that is exactly the sentence the phase-prose mechanism is waiting on.
+
+**`[ION]` is a third variant class present in both sets** — 55 of 1,731, 558 of 12,471 — not a new
+one, and it needs its own ruling rather than absorption into the twin decision. The 12,471 → 8,163
+collapse is **name-based**; the slice's coordinate-identity finding must not be inherited at scale,
+though a spot-check (`2004[Cu][mog]3[ASR]2`/`[FSR]2`, identical 31,646 B) is consistent with it.
+
+**Three options filed.** Bei recommends pulling the canonical release and diffing it against
+`core2024_cifs` — the only route that ends with a release name attached to the benchmark, and if
+the diff is empty it settles provenance and validates the local copy at once. Asking
+`dhoonkim97` is cheaper but a remembered provenance is not a recorded one, and this study has
+been bitten twice by exactly that shape: §3's 12.0/12.8 cutoff, and `Lm 58`.
+
+**Blocking Q1 step 4:** the ASR/FSR ruling, the `[ION]` ruling, and where the frozen database
+lives — `provision.py` copies every manifest line per workspace, so **20 workspaces × 217 MB =
+4.24 GB** of duplicated benchmark before a single run output exists.
+
+### Still open from Q0
+
+`prereg/audit_schema.md` has **no first-class `criterion` field**. Clause (c) is ratified and
+binding, and the schema satisfies it only as free text in `note` — which is what s01 used, and
+which is not comparable across twenty trajectories. Bei-proposed, unratified, must close before
+seal. Comparison across arms is the study.
