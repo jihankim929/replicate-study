@@ -1412,3 +1412,66 @@ checked the render by calling `render_phase_prose` alone and drew a conclusion a
 applies `render_phase_rows` first. **Running half the pipeline and reporting on all of it** — and
 the correct check, run afterwards, is what exposed the real leak this entry records. The commit
 message stands unamended per the standing rule; this is its correction.
+
+---
+
+## SI-019 — the watchdog would have run all week, on the wrong replicates [Bei, 2026-08-29]
+
+**Found at launch, while verifying that rep01 was actually being watched.** Two independent faults,
+either of which alone reproduces SI-012's outcome — a campaign running unobserved — while looking
+healthy from the outside.
+
+**1. The roster was baked into the poller.** `poll.sh` iterated `for REP in s01 s02` in six
+separate loops, and `restart_watch.sh` in one more. After the smoke, those two workspaces are
+finished and their sessions are dead. The watchdog would have fired on schedule every 30 minutes,
+polled two corpses, found nothing wrong with them, and refreshed a panel — **while rep01 ran with
+no liveness check, no budget enforcement and no transcript audit for seven days.** Worse than a
+silent watchdog: a *loud* one, reporting health, about replicates nobody was running.
+`restart_watch.sh` was the sharper edge — it holds a restart budget and was pointed at two
+workspaces whose sessions Bei had deliberately retired an hour earlier.
+
+**2. Neither scheduled agent was loaded.** `launchctl list` showed only `study.pollprobe` — the
+*probe* that exists to prove the poller fires. **`study.poll` and `study.spend` were not loaded at
+all.** The plists were written, committed, and never installed. The spend agent is the one that
+enforces the ratified $280 cap at a 2-minute cadence, and the entire billing-preflight assertion
+(`$4,491` against `$4,500`, $9 of headroom) is arithmetic that **assumes a 2-minute poll**. At no
+poll, the overshoot bound is not $0.70 per replicate; it is unbounded.
+
+**Fixed.** Both pollers read `harness/state/active_replicates`, which `launch_sessions.sh` appends
+to at launch — the registry is written by the thing that knows, not by an editor. Both agents are
+installed and loaded, and both were then *verified to produce output* rather than assumed to:
+watchdog `rep01 T-168.0h liveness=alive`, spend `$0.79 / $280.00 0.3% OK`.
+
+**The pattern, stated once more.** SI-012 was "nothing ever ran the poller." This is "the poller
+runs and watches the wrong thing," and "the agent exists but was never loaded." Three shapes, one
+lesson: **a monitor is not in place until it has been observed monitoring the actual subject.**
+
+---
+
+## SI-020 — the document that OVERRIDES the charter shipped with its values unset [Bei, 2026-08-29]
+
+The addendum's own header says it *"overrides the charter."* Both smoke replicates received it
+reading, verbatim:
+
+> - Campaign ends at **T = [launch date + 3 days, HH:MM KST]**.
+> - Total compute budget: **[X] CPU-hours**. Token/session budget: **[X]**.
+
+**Unpopulated placeholders, in the overriding document, delivered to both arms.** Confirmed against
+the delivered copy in `reps/smoke/s01/CHARTER_ADDENDUM.md`, not inferred from the source.
+
+**Why nothing caught it.** The phase-span renderer aborts on an unpopulated `{{smoke=…|main=…}}`
+span — that hard stop is ratified and it works. Square-bracket placeholders are not spans, so they
+rendered as literal text into a governed document and no check existed that looked for them.
+`charter_v0.9.md` had been cleared of `[brackets]` by hand; the addendum had not, and "by hand" is
+the whole defect.
+
+**Bearing on the smoke.** Both replicates had to fall back to `WORKSPACE.json` and charter §4 for
+figures the overriding document declined to give them. Any smoke behaviour that turns on budget
+interpretation has this as a live candidate cause, and it applies to **both arms equally** — it is
+not a confound between them, but it is a floor on how precisely either arm was instructed.
+
+**Fixed for main.** The addendum is now phase-aware (`prereg/charter_addendum.md`, renamed from
+`smoke_addendum.md`), sets no budget of its own, and defers to charter §4 and `WORKSPACE.json` —
+one authority per number, so there is nothing left to leave unset. `selftest.sh` now asserts that
+**no unpopulated placeholder survives into any provisioned rendering of the charter or the
+addendum**, across both phases and both arms.

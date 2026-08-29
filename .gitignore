@@ -15,3 +15,4 @@ known_hosts*
 # reps/smoke/PULLED_MANIFEST.sha256. The COLLECTED record under reps/smoke/collected/ IS tracked.
 reps/smoke/s01/
 reps/smoke/s02/
+reps/main/*/

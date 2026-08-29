@@ -5,11 +5,16 @@
 set -uo pipefail
 cd "$(dirname "$0")/.."
 echo "=========== poll $(date -u +%FT%TZ) ==========="
-for REP in s01 s02; do
+# Active replicates come from the registry that launch_sessions.sh writes, never from a list
+# baked into this file. See SI-019.
+ACTIVE=$(cat harness/state/active_replicates 2>/dev/null | tr '\n' ' ')
+[ -n "$ACTIVE" ] || { echo "[poll] no active replicates registered — nothing to watch"; exit 0; }
+
+for REP in $ACTIVE; do
   ./harness/harvest_cput.sh "$REP" 2>/dev/null || echo "  [harvest] $REP unreachable"
   ./harness/meter_compute.sh "$REP" 2>/dev/null || echo "  [meter-compute] $REP unreachable"
 done
-for REP in s01 s02; do
+for REP in $ACTIVE; do
   # Transcript dir is keyed on the session's LOCAL cwd, not the remote workspace. The first
   # version derived it from the remote path and therefore silently metered nothing.
   CWD="$PWD/harness/sessions/$REP"
@@ -22,18 +27,18 @@ for REP in s01 s02; do
   fi
 done
 echo "  --- replicate escalations ---"
-for REP in s01 s02; do
+for REP in $ACTIVE; do
   ./harness/escalate_remote.sh "$REP" 2>/dev/null | sed "s/^/  /" \
     || echo "  [escalate] $REP: could not read workspace"
 done
-for REP in s01 s02; do
+for REP in $ACTIVE; do
   ssh -o BatchMode=yes -o ConnectTimeout=25 dirac-bei "cat /home1/users/Bei/ws/$REP/usage.json 2>/dev/null" \
     | sed "s/^/  [$REP usage] /"
 done
 echo "  --- watchdog (charter section 4: budgets, liveness) ---"
-for REP in s01 s02; do ./harness/watchdog_remote.sh "$REP" 2>&1 | sed 's/^/  /'; done
+for REP in $ACTIVE; do ./harness/watchdog_remote.sh "$REP" 2>&1 | sed 's/^/  /'; done
 echo "  --- transcript audit (charter section 4) ---"
-for REP in s01 s02; do python3 harness/audit_transcript.py "$REP" 2>/dev/null | sed 's/^/  /'; done
+for REP in $ACTIVE; do python3 harness/audit_transcript.py "$REP" 2>/dev/null | sed 's/^/  /'; done
 ./harness/restart_watch.sh 2>/dev/null | sed 's/^/  /'
 echo "  --- escalations ---"
 python3 harness/escalate.py --queue 2>/dev/null | sed 's/^/  /'

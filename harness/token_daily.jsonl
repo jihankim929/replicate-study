@@ -2,3 +2,4 @@
 {"replicate": "s01", "day": "2026-08-27", "input_tokens": 352, "output_tokens": 121398, "cache_creation_input_tokens": 2298049, "cache_read_input_tokens": 68728977, "billable": 2419799}
 {"replicate": "s02", "day": "2026-08-26", "input_tokens": 426, "output_tokens": 285943, "cache_creation_input_tokens": 359905, "cache_read_input_tokens": 26560074, "billable": 646274}
 {"replicate": "s02", "day": "2026-08-27", "input_tokens": 362, "output_tokens": 280117, "cache_creation_input_tokens": 379297, "cache_read_input_tokens": 20882182, "billable": 659776}
+{"replicate": "rep01", "day": "2026-08-29", "input_tokens": 36, "output_tokens": 8764, "cache_creation_input_tokens": 51847, "cache_read_input_tokens": 607909, "billable": 60647}

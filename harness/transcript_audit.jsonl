@@ -74,3 +74,6 @@
 {"replicate": "s02", "tool_calls": 201, "findings": 0, "detail": []}
 {"replicate": "s01", "tool_calls": 305, "findings": 0, "detail": []}
 {"replicate": "s02", "tool_calls": 201, "findings": 0, "detail": []}
+{"replicate": "rep01", "tool_calls": 10, "findings": 0, "detail": []}
+{"replicate": "rep01", "tool_calls": 10, "findings": 0, "detail": []}
+{"replicate": "rep01", "tool_calls": 10, "findings": 0, "detail": []}

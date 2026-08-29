@@ -290,6 +290,29 @@ PYCHK
 )
 chk "main rendering names no other phase (SI-018)" "$NAMECHK" "PHASENAME:clean"
 
+# SI-020: no UNPOPULATED placeholder may survive into a provisioned document. The addendum
+# OVERRIDES the charter, and it shipped to both smoke replicates saying the compute budget was
+# "[X] CPU-hours" and the campaign ended at "[launch date + 3 days, HH:MM KST]". Nothing checked,
+# because the phase-span renderer aborts on an unpopulated {{...}} span and square-bracket
+# placeholders are simply not spans.
+HOLDCHK=$(python3 - <<'PYCHK'
+import sys, re; sys.path.insert(0, "harness")
+import provision as P, config as C
+bad = []
+for key in ("charter", "addendum"):
+    src = C.SOURCE_ALLOWLIST[key].read_text()
+    for phase in ("smoke", "main"):
+        for arm in ("gated", "ungated"):
+            r = P.render_phase_prose(P.render_phase_rows(src, phase), phase)
+            if key == "charter":            # only the charter carries the appendix split
+                r = P.split_charter(r, arm)
+            for m in re.finditer(r"\[(X|TBD|Q\d+:[^\]]*|launch date[^\]]*)\]", r):
+                bad.append(f"{key}/{phase}/{arm}:{m.group(0)}")
+print("PLACEHOLDER:" + (",".join(sorted(set(bad))) if bad else "none"))
+PYCHK
+)
+chk "no unpopulated placeholder is provisioned (SI-020)" "$HOLDCHK" "PLACEHOLDER:none"
+
 echo "== 7h. interaction mode is selected BY PHASE (SI-011) =="
 # The main run is headless so no modal can block it; the smoke stayed on the TUI because it was
 # measured there and because its loop script was live. Assert the selection, and assert the two

@@ -24,7 +24,9 @@ STALE_MIN=30
 LEDGER=harness/restarts.jsonl
 DRY="${1:-}"
 
-for REP in s01 s02; do
+ACTIVE=$(cat harness/state/active_replicates 2>/dev/null | tr '\n' ' ')
+[ -n "$ACTIVE" ] || { echo "  no active replicates registered"; exit 0; }
+for REP in $ACTIVE; do
   WS="/home1/users/Bei/ws/$REP"; SESSION="rep-$REP"
   ALIVE=$(printf '%s' "$(screen -ls 2>/dev/null || true)" | grep -c "$SESSION" || true)
   # DECIDING signal: minutes since the agent's own transcript last grew. -1 = no transcripts.
