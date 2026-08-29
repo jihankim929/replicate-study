@@ -23,3 +23,8 @@ reps/main/*/
 # attestations and ARCHIVE_NOTE.md ARE tracked, so the record states what is held and how to
 # verify it; the payload lives beside the repo.
 archive/**/*.tar.gz
+
+# 25,598 pre-generated RASPA decks: derived artifacts, reproducible from
+# harness/screen_gen_decks.py + screen/screen_meta_12499.json. The hash manifest IS tracked, so
+# the decks the screen submits are attested without carrying 25k files in the record.
+screen/decks/
