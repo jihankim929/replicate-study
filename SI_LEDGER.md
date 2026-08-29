@@ -1239,3 +1239,54 @@ existing resource table**, so every phase renders exactly one row and there is n
 **Verified after the fix:** both renders clean — 0 residual span markers, **0 cross-phase values in
 either direction**, 0 hits against `LEAK_DENY_HARD` (9 terms) and `LEAK_DENY_WARN` (6), no
 structure ids; selftest **85/85**.
+
+---
+
+## SI-017 — Pass 3's ring enumeration is incomplete, and two variants of one framework prove it
+
+**Found:** 2026-08-29, while preparing the dossier sitting — not by a test, by looking at the
+numbers the instrument produced and noticing they could not both be true.
+**Phase:** main (pre-launch). **Status:** open; the affected entries are **held, not ruled.**
+
+**The evidence is internal, which is why it is conclusive.**
+
+| | `2020[Cu][she]3[ASR]1` | `2020[Cu][she]3[FSR]1` |
+|---|---:|---:|
+| atoms | 2,016 | 2,016 |
+| metals | 96 | 96 |
+| **azolate rings detected** | **128** | **64** |
+| net charge | +64 | +128 |
+| azolate : metal | 1.33 | 0.67 |
+
+These are the ASR and FSR variants of **one framework**, with identical atom and metal counts, and
+the instrument reports ring counts differing by **exactly a factor of two**. Two variants of the
+same framework do not differ twofold in how many rings they contain. This is **incomplete
+enumeration in `charge_audit.rings5`**, and it propagates directly into `net_charge`, which is
+computed as `Σ(metal × oxidation) − n_azolate`.
+
+**A second, independent check agrees.** A charge-balanced M(II) azolate framework has an
+azolate:metal ratio of exactly **2.00** — the sealed record's own validation, where 70 structures
+landed on that ratio and on net 0 simultaneously. **No cluster-D entry is near 2.00**, and the
+ratios are not even self-consistent between variants of one structure. A ratio that is neither the
+balanced value nor stable under a solvent change is a measurement artifact.
+
+**This is the fourth hole of the same shape, and the instrument's own docstring predicted it.**
+Pass 1 could not see cyanide. Pass 2 could not see neutral-context heteroatoms. Pass 3 was built
+because passes 1 and 2 could not see azolates at all. The standing warning attached to all three —
+*"assume the next screen has a similar hole until it is validated against chemistry whose answer is
+known independently"* — now applies to pass 3 itself. **The hole is in the fix for the last hole.**
+
+**Scope: 12 files / 10 structures** of the 144 record-registering candidates, 6 files of which sit
+in the anomalous-void set that was to be ruled today. **Bei proposed they be held rather than
+ruled**, because ruling them would be ruling on an artifact of Bei's code rather than on chemistry.
+
+**Not repaired today, deliberately.** The regression that validates this instrument is the
+1,731-slice result, and that regression **passes** — the slice contains no cluster-D case, so it
+cannot detect this. Repairing the enumeration means re-running the sweep and re-validating against
+a case whose answer is known independently, which does not yet exist. **A fix without that
+validation would be the same mistake at one more remove.** What is needed first is a
+chemistry-known azolate framework to calibrate against.
+
+**What this does not invalidate.** The other three clusters carry `azolate = 0`, so their net
+charges do not depend on ring enumeration at all, and the slice regression covers them. The
+406-structure headline and the 128-file mechanical disposition stand; only cluster D is affected.
