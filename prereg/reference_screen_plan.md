@@ -1,5 +1,14 @@
-# REFERENCE SCREEN — EXECUTION PLAN — DRAFT FOR RATIFICATION
-*(Bei, 2026-08-29. Seals on the PI's reply. Executes post-collection only.)*
+# REFERENCE SCREEN — EXECUTION PLAN — **SEALED**
+*(Sealed 2026-08-29 by PI ruling. Executes post-collection only. No cycle count, stage
+definition, sample size or decision rule in this document changes after this line.)*
+
+**Rulings applied at seal:** Δ is the sealed estimator derived from Stage 0, not a number fixed in
+advance; **Stage 0 exists and is drawn independently of Stage 3**; Stage 2 runs **2 independent
+seeds** per promoted structure; **the concavity prune and the Langmuir pre-filter are withdrawn**,
+with the evaluation retained as Appendix A — evaluated, not activated; the cycle-convergence
+analysis (`prereg/convergence_analysis_2026-08-29.md`) is filed as **the floor definition's freezing
+record**; cycle tiers unchanged at 2,000 + 10,000 (floor) and 10,000 + 50,000 (claim); concurrency
+ceiling revised to **480** post-collection.
 
 The reference screen produces the **independent capacity landscape** the leaderboard derives from:
 the number each replicate's claim is scored against, computed by the harness under the same pinned
@@ -70,7 +79,229 @@ for a claim about systematic offset; the plan makes no such claim.
 
 ---
 
-## 2. Stage 1 — full-census floor screen, restructured by pressure *(PI amendment, 2026-08-29)*
+## 2. Stage 1 — full-census floor screen
+
+| | |
+|---|---|
+| **Cycles** | **2,000 init + 10,000 production**, both pressures (5.8 and 65 bar), in one pass |
+| **Population** | all **12,499** structures; membership = the published SHA-256 manifest |
+| **Replication** | 1 run per structure per pressure |
+| **Cost** | 12,499 × 1.830 = **22,873 CPU-h** |
+| **Basis** | measured: 1,072 structures / 2,144 runs / 1,957.9 CPU-h → 0.913 CPU-h per run |
+
+**The pressure-ordered restructure and its concavity prune are withdrawn** (PI ruling, 2026-08-29).
+The evaluation is retained in **Appendix A** because it is a measured negative result: the bound is
+sound, and it removes 3.2 % of the 65 bar runs for 366 CPU-h while its own audit costs 915 and it
+serialises Stage 1 behind a full-census barrier. Stage 1 therefore runs as a single pass and retires
+each structure's two pressures together, with no barrier.
+
+**Stage 1 is the naive basis exactly.** The charter's 22,873 CPU-h figure is a **floor-grade**
+exhaustive pass, not a claim-grade one — worth stating because "1.83 CPU-h per structure" appears in
+§4 beside the word *exhaustive*. Claim grade is **9.15 CPU-h per structure**; an exhaustive
+claim-grade pass would be **114,365 CPU-h**, which is what the funnel exists to avoid.
+
+## 3. Stage 2 — claim-grade promotion
+
+Two disjoint populations, unioned:
+
+**(a) Margin promotions.** Every structure whose Stage 1 floor value satisfies
+`floor ≥ (provisional band top) − Δ`, with Δ from Stage 0 and the band top being the highest
+Stage 1 floor value in the census.
+
+**(b) Claimed structures, unconditionally.** Every structure named in the Claim of any replicate's
+final report, at any value, whether or not it is anywhere near the band. **This population is not
+knowable until collection completes**, and it is the one place the screen's scope depends on
+trajectory content — see §7 for how that is kept blind.
+
+| | |
+|---|---|
+| **Cycles** | **10,000 + 50,000**, both pressures |
+| **Replication** | **2 independent runs per structure**, distinct seeds, for population (a); the pair is a G6-grade reproduction and both values are reported. Population (b) also 2 runs, so a replicate's claim is checked against a reproduced number, not a single one |
+| **Cost, central** | (a) ~60 structures + (b) ≤ 80 claimed = 140 × 2 × 9.13 ≈ **2,556 CPU-h** |
+| **Cost, envelope** | 400 structures × 2 × 9.13 = **7,304 CPU-h** |
+
+**Why the count is an estimate and not a number.** Promotion depends on Δ, which does not exist
+yet, and on the *floor-grade* density near the band top, which has never been measured — the only
+full landscape is scout grade at 15.4 % median error. Extrapolating that landscape gives ~14
+structures within 10 cm³/cm³ of the top when scaled to 12,499, but at 15.4 % error near a top value
+of ~190 cm³/cm³ the scout ranking cannot resolve a 10 cm³/cm³ band at all. **The envelope is sized
+at 400 structures — roughly 30× the naive extrapolation — because the honest statement is that the
+promotion count is unknown until Stage 1 finishes.**
+
+---
+
+## 4. Stage 3 — random audit of the non-promoted set
+
+Two populations, reported as two separate rates.
+
+### 4.1 False-exclusion audit — non-promoted, unpruned
+
+| | |
+|---|---|
+| **Cycles** | **10,000 + 50,000**, both pressures |
+| **Population** | **300** drawn at random from the non-promoted set that received both floor runs |
+| **Stratification** | 150 from the band immediately below the promotion threshold (threshold − 3Δ to threshold), where a false exclusion is plausible; 150 uniformly from the remainder, so the design can detect a surprise rather than assuming where it lives |
+| **Replication** | 1 claim-grade run per structure per pressure |
+| **Cost** | 300 × 9.13 = **2,739 CPU-h** |
+
+With zero false exclusions in 300 draws, the rule of three gives a **95 % upper bound of 1.0 %** on
+the false-exclusion rate. If any are found, the empirical rate is reported with a Wilson interval,
+**Δ is re-derived at the larger value implied, and Stage 2 is re-run over the newly promoted set** —
+pre-registered here so it cannot become a judgment call later.
+
+### 4.2 Bound-violation audit — withdrawn
+
+Withdrawn with the prune it audited (PI ruling, 2026-08-29). With no pruned set there is no
+bound to violate. Retained in Appendix A as part of the evaluated-not-activated record.
+
+## 5. Compute budget against the naive basis
+
+| stage | structures | grade | runs each | CPU-h | vs 22,873 naive |
+|---|---:|---|---:|---:|---:|
+| 0 — calibration | 300 | claim | 1 | 2,745 | 12.0 % |
+| **1 — full census** | **12,499** | floor | 1 | **22,873** | 100.0 % |
+| 2 — promotion, central | ~140 | claim | 2 | 2,562 | 11.2 % |
+| 3 — false-exclusion audit | 300 | claim | 1 | 2,745 | 12.0 % |
+| retries @ 5 % | — | — | — | 1,546 | 6.8 % |
+| **total, central** | | | | **32,471** | **1.42 ×** |
+| **total, envelope** (Stage 2 at 400) | | | | **37,229** | **1.63 ×** |
+
+*Costed at the naive basis's own arithmetic — 22,873 / 12,499 = **1.830 CPU-h per structure**,
+**0.915 per run**, **9.150 at claim grade** (5× cycles), so the rows sum to the naive figure exactly.
+Separately measured figures elsewhere in this study are 1.83 and 9.13; the 0.2 % difference is
+rounding in the source.*
+
+**This table reflects the withdrawal exactly.** Against the pruned variant it is **577 CPU-h
+lower**: the prune's 366 CPU-h saving is given up and its 915 CPU-h audit is not incurred, with the
+balance in the retry base. The screen costs **1.42–1.63× a naive floor pass** and **28.4–32.6 % of
+an exhaustive claim-grade pass** (114,365 CPU-h).
+
+## 6. Wave sizing and concurrency
+
+**Measured ceilings.** PBS per-user running-job limit **580** (measured 2026-08-28, not assumed).
+The harness fleet ceiling of **240** was a courtesy limit set from measured displacement of other
+users *during the campaign week*.
+
+**Post-collection revision (PI ruling, 2026-08-29):** the 240 ceiling existed to protect group
+members while the fleet ran; from the last collection onward the PI coordinates directly with the
+group, and the screen may run at **up to 480 concurrent**.
+
+| | central (32,471) | envelope (37,229) |
+|---|---:|---:|
+| at **240** — perfect packing | 135.3 h | 155.1 h |
+| at **240** — 70 % packing | 193.3 h (**8.1 d**) | 221.6 h (9.2 d) |
+| at **480** — perfect packing | **67.6 h** | 77.6 h |
+| at **480** — 70 % packing | **96.6 h (4.0 d)** | 110.8 h (4.6 d) |
+
+**The revision halves the screen's wall clock: 8.1 days → 4.0 days at the central budget.**
+
+**Standing contention rules, kept in force at the higher ceiling:**
+
+1. **Whole-queue depth is logged at every poll** — total running and queued across all users, not
+   just this study's share, as the smoke's crowding covariate already records.
+2. **Automatic back-off to 240 on sustained third-party queueing.** "Sustained" is defined
+   mechanically so it is not a judgment: any third-party job queued and not running across **three
+   consecutive polls**. Back-off holds until two consecutive polls are clear.
+3. **Every excursion above 240 is logged** with its start, end, peak concurrency and the queue
+   state that justified it, so the 480 window is auditable rather than assumed.
+
+**Packing efficiency is the risk, and it is measured.** Per-structure cost spans **45 s to 15,190 s
+(338×)** in the prior campaign and **p99/median = 18.3×** in the smoke's own screen. A batch
+finishes when its slowest member finishes, so **waves are sized by predicted cost, not by count**:
+structures are ordered by a cost proxy (atoms × simulation-cell replication, both computable before
+any run), binned into quartiles, and batched within a quartile. Batch sizes 40 for the cheapest
+quartile, 8 for the most expensive.
+
+## 7. Blindness, ordering, and the write barrier
+
+**Ratified constraints, restated as mechanism rather than intention:**
+
+1. **No screen output is written to the cluster before the last collection completes.** Enforced by
+   the screen refusing to start: its first action reads `reps/main/collected/COLLECTION.md` for all
+   16 replicates and exits non-zero if any is missing. It cannot write a byte before that check
+   passes, because the check precedes workspace creation.
+2. **The screen runs in `/home1/users/Bei/screen/`, created at start**, never inside any replicate
+   workspace, and no replicate workspace is readable by it — they are archived off-cluster at
+   collection, as the smoke workspaces already are.
+3. **Stages 0–1 and 3 are blind by construction** — their populations are the manifest and a random
+   draw, neither of which can encode trajectory content.
+4. **Stage 2(b) is the single point where trajectory content enters.** It is confined to a list of
+   structure identifiers extracted mechanically from the Claim section of each final report by a
+   parser, with **no capacity values read** — the identifier list is the only thing that crosses.
+   The parser's output is committed before Stage 2 runs, so what crossed is auditable.
+
+---
+
+## 8. Failure, retry, and completeness accounting for the full census
+
+**Completeness is asserted against the manifest, not against a count of successes.** The failure the
+accounting exists to catch is the one this study has already met three times: a stage that reports
+success on a subset and looks complete.
+
+- Every stage writes one ledger row per **manifest entry attempted**, including failures, with an
+  explicit `status` of `ok | failed | retried_ok | abandoned`.
+- **Retry policy:** up to **3 attempts** per run. Attempt 2 resubmits unchanged (transient
+  scheduler and node failures dominated the smoke). Attempt 3 resubmits with the simulation cell
+  re-derived, which is the one input the smoke found capable of failing deterministically.
+- **A run that exits 0 having written no output is a failure, not a success.** RASPA on this build
+  returns 0 whether or not it succeeds — measured both ways on 2026-08-29 — so status is decided by
+  the presence and parseability of the output file, never by exit code.
+- **Abandoned runs are reported by name.** The final ledger states `12,499 = ok + retried_ok +
+  abandoned` as an identity that must hold exactly, and the leaderboard states the abandoned count
+  beside it. A screen that silently covered 12,400 structures and called itself the landscape would
+  reproduce SI-020's shape at study scale.
+
+---
+
+## 9. Output ledger format — what the leaderboard derives from
+
+`screen_ledger.csv`, one row per structure per stage, append-only:
+
+```
+stem, stage, grade, init_cycles, prod_cycles, seed, n_05bar, err_05bar, n_65bar, err_65bar,
+wc, wc_err, cpu_s, attempt, status, node, started_utc, finished_utc, raspa_sha256, uff_sha256
+```
+
+`screen_landscape.csv`, one row per structure, the leaderboard's direct input:
+
+```
+stem, floor_n05, floor_n05_err, pruned, prune_bound_wc, floor_wc, floor_err, promoted,
+promotion_reason, claim_wc_1, claim_wc_2, claim_wc_mean, claim_wc_spread, reference_wc,
+reference_grade, audit_sampled, audit_class, bound_violated, status
+```
+
+**A pruned structure carries no `floor_wc` and must never be given one.** Its row records
+`floor_n05`, `pruned = true`, and `prune_bound_wc = 10.2069 × floor_n05` — the *upper bound* that
+justified skipping its 65 bar run, explicitly labelled as a bound and not a measurement. Writing a
+bound into the `floor_wc` column would put a number in the landscape that no simulation produced,
+which is the failure the two-column rule in the paragraph below exists to prevent.
+`bound_violated` is populated only for audited pruned structures and is the §4.2 rate's source.
+
+`reference_wc` is the number a claim is scored against: the mean of the two claim-grade runs where
+they exist, the floor value otherwise, with `reference_grade` naming which. **The two columns are
+never merged**, so no reader can mistake a floor number for a claim-grade one — which is the
+mistake the smoke made in the other direction when it reported a scout-grade landscape without the
+error column that would have shown 15.4 % median error.
+
+---
+
+## 10. Ruling record
+
+All items are ruled. Retained as the record of what was decided and on what basis.
+
+| # | item | ruling |
+|---|---|---|
+| 1 | Δ as a rule rather than a number | **Sealed estimator from Stage 0.** No number was invented; the archive holds two paired floor↔claim points, both the same framework. |
+| 2 | Stage 0 exists at all | **Yes, and drawn independently of Stage 3.** Adds 2,745 CPU-h; the alternative was a Δ with no empirical basis. |
+| 3 | Stage 2 replication at 2 runs | **Ratified.** The reference number is a reproduced one. |
+| 4 | 240 vs 580 concurrent | **Superseded**: 480 post-collection, contention rules kept (§6). |
+| 5 | Stage 3 contingency | **Ratified.** False exclusions re-derive Δ and re-run Stage 2 — fixed in advance so it cannot become a judgment call. |
+| 6 | the prune | **Withdrawn**, appendix retained. Budget reflects the withdrawal: **577 CPU-h lower** than the pruned variant. |
+| 7 | bound-violation audit size | **Moot** — withdrawn with the prune. |
+| 8 | 3σ noise allowance | **Moot** — withdrawn with the prune. |
+| 9 | cheaper floor tier | **Refused on measurement.** The floor sits at the elbow: below it error runs 3.6× worse than 1/√cycles predicts. |
+
+## Appendix A — the concavity prune: evaluated, not activated
 
 ### 2.1 The bound and its derivation
 
@@ -175,235 +406,3 @@ the word *exhaustive* and is easily read as the cost of a definitive number. It 
 is **9.13 CPU-h per structure**; an exhaustive claim-grade pass would be **114,116 CPU-h**, which is
 what the funnel exists to avoid.
 
-## 3. Stage 2 — claim-grade promotion
-
-Two disjoint populations, unioned:
-
-**(a) Margin promotions.** Every structure whose Stage 1 floor value satisfies
-`floor ≥ (provisional band top) − Δ`, with Δ from Stage 0 and the band top being the highest
-Stage 1 floor value in the census.
-
-**(b) Claimed structures, unconditionally.** Every structure named in the Claim of any replicate's
-final report, at any value, whether or not it is anywhere near the band. **This population is not
-knowable until collection completes**, and it is the one place the screen's scope depends on
-trajectory content — see §7 for how that is kept blind.
-
-| | |
-|---|---|
-| **Cycles** | **10,000 + 50,000**, both pressures |
-| **Replication** | **2 independent runs per structure**, distinct seeds, for population (a); the pair is a G6-grade reproduction and both values are reported. Population (b) also 2 runs, so a replicate's claim is checked against a reproduced number, not a single one |
-| **Cost, central** | (a) ~60 structures + (b) ≤ 80 claimed = 140 × 2 × 9.13 ≈ **2,556 CPU-h** |
-| **Cost, envelope** | 400 structures × 2 × 9.13 = **7,304 CPU-h** |
-
-**Why the count is an estimate and not a number.** Promotion depends on Δ, which does not exist
-yet, and on the *floor-grade* density near the band top, which has never been measured — the only
-full landscape is scout grade at 15.4 % median error. Extrapolating that landscape gives ~14
-structures within 10 cm³/cm³ of the top when scaled to 12,499, but at 15.4 % error near a top value
-of ~190 cm³/cm³ the scout ranking cannot resolve a 10 cm³/cm³ band at all. **The envelope is sized
-at 400 structures — roughly 30× the naive extrapolation — because the honest statement is that the
-promotion count is unknown until Stage 1 finishes.**
-
----
-
-## 4. Stage 3 — random audit of the non-promoted set, and of the pruned set
-
-Two populations, reported as two separate rates.
-
-### 4.1 False-exclusion audit — non-promoted, unpruned
-
-| | |
-|---|---|
-| **Cycles** | **10,000 + 50,000**, both pressures |
-| **Population** | **300** drawn at random from the non-promoted set that received both floor runs |
-| **Stratification** | 150 from the band immediately below the promotion threshold (threshold − 3Δ to threshold), where a false exclusion is plausible; 150 uniformly from the remainder, so the design can detect a surprise rather than assuming where it lives |
-| **Replication** | 1 claim-grade run per structure per pressure |
-| **Cost** | 300 × 9.13 = **2,739 CPU-h** |
-
-With zero false exclusions in 300 draws, the rule of three gives a **95 % upper bound of 1.0 %** on
-the false-exclusion rate. If any are found, the empirical rate is reported with a Wilson interval,
-**Δ is re-derived at the larger value implied, and Stage 2 is re-run over the newly promoted set** —
-pre-registered here so it cannot become a judgment call later.
-
-### 4.2 Bound-violation audit — the pruned set *(PI amendment)*
-
-| | |
-|---|---|
-| **Cycles** | **10,000 + 50,000**, **both pressure points** — a pruned structure has no `N(65)` at all, so the audit must run the pair |
-| **Population** | **100** drawn at random from the pruned set |
-| **Reported** | the **empirical bound-violation rate**: the fraction whose measured `WC` exceeds `10.2069 · N(5.8)`. **Expected zero.** |
-| **Cost** | 100 × 9.13 = **913 CPU-h** |
-
-**What 100 buys, and what it does not.** Zero violations in 100 draws bounds the violation rate at
-**3.0 % (95 %, rule of three)** — weaker than the 1.0 % the false-exclusion audit achieves, because
-the pruned set is small (~400 structures at the 3σ threshold) and auditing it more heavily would
-cost several times what the prune saves. **Bei flags the asymmetry rather than hiding it in a
-sample size:** the prune's own audit is the least powerful check in the plan. If the PI wants the
-violation rate bounded at 1 %, that is 300 draws and **2,739 CPU-h**, and the prune then costs
-**~2,374 CPU-h net**.
-
-**A violation found is not a tuning signal.** Any structure whose measured `WC` exceeds the bound is
-reported by name with its full isotherm pair, and **the prune is withdrawn from the plan entirely**
-for the affected regime rather than adjusted — a bound that has been observed to fail is not a bound
-with a different constant, it is a premise that does not hold.
-
-## 5. Compute budget against the naive basis — restated under the restructure
-
-| stage | structures | grade | pressures | runs each | CPU-h | vs 22,873 naive |
-|---|---:|---|---|---:|---:|---:|
-| 0 — calibration | 300 | claim | both | 1 | 2,745 | 12.0 % |
-| **1a — full census, 5.8 bar** | **12,499** | floor | 5.8 only | 1 | **11,436** | 50.0 % |
-| **1b — survivors, 65 bar** | **12,099** | floor | 65 only | 1 | **11,071** | 48.4 % |
-| *(prune saving)* | *400* | — | — | — | *−366* | *−1.6 %* |
-| 2 — promotion, central | ~140 | claim | both | 2 | 2,562 | 11.2 % |
-| 3.1 — false-exclusion audit | 300 | claim | both | 1 | 2,745 | 12.0 % |
-| 3.2 — bound-violation audit | 100 | claim | both | 1 | 915 | 4.0 % |
-| retries @ 5 % | — | — | — | — | 1,574 | 6.9 % |
-| **total, central** | | | | | **33,048** | **1.44 ×** |
-| **total, envelope** (Stage 2 at 400) | | | | | **37,806** | **1.65 ×** |
-
-*Costed at the naive basis's own arithmetic — 22,873 / 12,499 = **1.830 CPU-h per structure**,
-**0.915 per run**, **9.150 at claim grade** (5× cycles). The separately measured figures quoted
-earlier in this study are 1.83 and 9.13; the 0.2 % difference is rounding in the source, and this
-table uses the basis-consistent values so its rows sum to the naive figure exactly rather than
-approximately.*
-
-**Against the pre-amendment plan the total rises by 576 CPU-h**: the prune saves **366** and its
-audit costs **915**, with the rest in the retry base. The screen still costs **1.44–1.65× a naive
-floor pass** and **28.9–33.1 % of an exhaustive claim-grade pass** (114,365 CPU-h).
-
-**One ordering consequence of the restructure worth naming.** The prune threshold depends on the
-**provisional band top**, which is not known until Stage 1a has run over all 12,499 — so Stage 1a
-must complete in full before any 65 bar run starts. The two sub-stages cannot be interleaved, and
-Stage 1b's wave planning cannot begin until 1a's census is closed. That is a scheduling cost, not a
-compute cost, and it is why §6's wall-clock figures assume two sequential passes rather than one.
-
-## 6. Wave sizing against post-collection cluster availability
-
-**Measured ceilings.** PBS per-user running-job limit **580** (measured 2026-08-28, not assumed);
-harness fleet ceiling **240** (ratified, Flag I). Post-collection the 16 replicates are finished, so
-nothing of this study competes with the screen — but the cluster is shared, and the smoke measured
-**210 running jobs across 3 other users** at a single sample.
-
-**Bei proposes running at the ratified 240, not the PBS 580.** The 240 ceiling was set from measured
-displacement of other users, and post-collection convenience is not a reason to discard a limit
-adopted for a courtesy reason. At 240 concurrent:
-
-| | central | envelope |
-|---|---:|---:|
-| total CPU-h | 33,048 | 37,806 |
-| wall-clock at 240 concurrent, perfect packing | **138 h (5.7 d)** | 158 h (6.6 d) |
-| at 70 % packing efficiency | **197 h (8.2 d)** | 225 h (9.4 d) |
-
-**The restructure adds a hard barrier, not just cost.** The prune threshold needs the provisional
-band top, which does not exist until Stage 1a has run over all 12,499 — so **1a must close
-completely before any 65 bar run starts**. The two sub-stages cannot interleave, and 1a's tail is
-its slowest structure, not its median. At 240 concurrent, 1a alone is ~48 h perfectly packed and
-~68 h at 70 %, and the whole of 1b waits on it. A single-pass Stage 1 had no such barrier: it could
-retire a structure's two pressures together and never wait on the census. **This is the real price
-of the amendment — a serialisation point — and it is larger than the 576 CPU-h.**
-
-**Packing efficiency is the risk, and it is measured.** Per-structure cost spans **45 s to 15,190 s
-(338×)** in the prior campaign, and **p99/median = 18.3×** in the smoke's own screen. A wave of
-fixed-size batches finishes when its slowest member finishes, so naive batching wastes most of a
-wave. **Waves are therefore sized by predicted cost, not by count**: structures are ordered by a
-cost proxy (atoms × simulation-cell replication, both in `descriptors.csv` and both computable
-before any run), binned into quartiles, and batched within a quartile so batch members have similar
-runtimes. Batch sizes: 40 for the cheapest quartile, 8 for the most expensive.
-
----
-
-## 7. Blindness, ordering, and the write barrier
-
-**Ratified constraints, restated as mechanism rather than intention:**
-
-1. **No screen output is written to the cluster before the last collection completes.** Enforced by
-   the screen refusing to start: its first action reads `reps/main/collected/COLLECTION.md` for all
-   16 replicates and exits non-zero if any is missing. It cannot write a byte before that check
-   passes, because the check precedes workspace creation.
-2. **The screen runs in `/home1/users/Bei/screen/`, created at start**, never inside any replicate
-   workspace, and no replicate workspace is readable by it — they are archived off-cluster at
-   collection, as the smoke workspaces already are.
-3. **Stages 0–1 and 3 are blind by construction** — their populations are the manifest and a random
-   draw, neither of which can encode trajectory content.
-4. **Stage 2(b) is the single point where trajectory content enters.** It is confined to a list of
-   structure identifiers extracted mechanically from the Claim section of each final report by a
-   parser, with **no capacity values read** — the identifier list is the only thing that crosses.
-   The parser's output is committed before Stage 2 runs, so what crossed is auditable.
-
----
-
-## 8. Failure, retry, and completeness accounting for the full census
-
-**Completeness is asserted against the manifest, not against a count of successes.** The failure the
-accounting exists to catch is the one this study has already met three times: a stage that reports
-success on a subset and looks complete.
-
-- Every stage writes one ledger row per **manifest entry attempted**, including failures, with an
-  explicit `status` of `ok | failed | retried_ok | abandoned`.
-- **Retry policy:** up to **3 attempts** per run. Attempt 2 resubmits unchanged (transient
-  scheduler and node failures dominated the smoke). Attempt 3 resubmits with the simulation cell
-  re-derived, which is the one input the smoke found capable of failing deterministically.
-- **A run that exits 0 having written no output is a failure, not a success.** RASPA on this build
-  returns 0 whether or not it succeeds — measured both ways on 2026-08-29 — so status is decided by
-  the presence and parseability of the output file, never by exit code.
-- **Abandoned runs are reported by name.** The final ledger states `12,499 = ok + retried_ok +
-  abandoned` as an identity that must hold exactly, and the leaderboard states the abandoned count
-  beside it. A screen that silently covered 12,400 structures and called itself the landscape would
-  reproduce SI-020's shape at study scale.
-
----
-
-## 9. Output ledger format — what the leaderboard derives from
-
-`screen_ledger.csv`, one row per structure per stage, append-only:
-
-```
-stem, stage, grade, init_cycles, prod_cycles, seed, n_05bar, err_05bar, n_65bar, err_65bar,
-wc, wc_err, cpu_s, attempt, status, node, started_utc, finished_utc, raspa_sha256, uff_sha256
-```
-
-`screen_landscape.csv`, one row per structure, the leaderboard's direct input:
-
-```
-stem, floor_n05, floor_n05_err, pruned, prune_bound_wc, floor_wc, floor_err, promoted,
-promotion_reason, claim_wc_1, claim_wc_2, claim_wc_mean, claim_wc_spread, reference_wc,
-reference_grade, audit_sampled, audit_class, bound_violated, status
-```
-
-**A pruned structure carries no `floor_wc` and must never be given one.** Its row records
-`floor_n05`, `pruned = true`, and `prune_bound_wc = 10.2069 × floor_n05` — the *upper bound* that
-justified skipping its 65 bar run, explicitly labelled as a bound and not a measurement. Writing a
-bound into the `floor_wc` column would put a number in the landscape that no simulation produced,
-which is the failure the two-column rule in the paragraph below exists to prevent.
-`bound_violated` is populated only for audited pruned structures and is the §4.2 rate's source.
-
-`reference_wc` is the number a claim is scored against: the mean of the two claim-grade runs where
-they exist, the floor value otherwise, with `reference_grade` naming which. **The two columns are
-never merged**, so no reader can mistake a floor number for a claim-grade one — which is the
-mistake the smoke made in the other direction when it reported a scout-grade landscape without the
-error column that would have shown 15.4 % median error.
-
----
-
-## 10. What Bei needs ruled
-
-1. **Δ as a rule rather than a number** (§0, §1) — or, if the PI wants Δ fixed now, it will be a
-   judgment, and the plan should say so rather than call it measured.
-2. **Stage 0 exists at all.** It adds 2,739 CPU-h (12 % of the naive basis) that the ruling did not
-   ask for. The alternative is a Δ with no empirical basis.
-3. **Stage 2 replication at 2 runs**, which doubles that stage's cost and is what makes the
-   reference number a reproduced one.
-4. **240 concurrent rather than the available 580** (§6), costing roughly 2.4× the wall clock.
-5. **The Stage 3 contingency** — that discovering false exclusions re-derives Δ and re-runs
-   Stage 2 — which is pre-registered here precisely so it cannot become a judgment call later.
-6. **The prune, on its merits rather than its saving** (§2.4). It removes 3.2 % of the 65 bar runs
-   for **366 CPU-h**, its audit costs **915**, and it serialises Stage 1 behind a full-census
-   barrier. It buys a landscape whose completeness is verified rather than argued. Bei recommends
-   ratifying it for that reason and records that it does not pay for itself in compute.
-7. **The bound-violation audit at 100 rather than 300** (§4.2) — 100 bounds the violation rate at
-   3.0 %, 300 bounds it at 1.0 % and costs 2,745, making the prune **~2,380 CPU-h net**. The
-   prune's own audit is the least powerful check in the plan and the PI should choose its power
-   deliberately.
-8. **The 3σ noise allowance on the prune** (§2.2). Without it the prune uses point estimates, saves
-   366 more CPU-h, and admits exactly the failure mode §2.3 measured: six of 1,792 smoke runs
-   exceed the bound, all at near-zero loading where the point estimate is unreliable.
