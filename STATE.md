@@ -389,13 +389,13 @@ replicates. Off-script input from a replicate receives the chartered default res
 ## Standing constraints
 
 - One commit per event; message = one-line finding. Never amend, never rebase. Push after
-  each commit. **CLEARED 2026-08-29 at collection.** The 403 recorded here since 2026-08-28
-  (LOG-2026-08-28-06) is resolved: `git fetch` succeeds and `origin/main` is at `db78835`, the
-  same commit as local `main` — 0 ahead. All of 2026-08-28's work (Rev 13–17, SI-006–011, the
-  seal notes, the run-limit measurement) **is on the remote**; the credential was re-authorised
-  outside this record and Bei did not touch it. **This line stood stale for the whole of the
-  outage's repair** — it kept asserting "5 commits ahead" and "PI action: re-authenticate" after
-  both had ceased to be true, which is the same class as the SI-008 stale-guard finding and the
-  README's stale main-run row (SI-012 §Proposed 5). Verify state, do not carry an assertion.
+  each commit. **The 403 outage (LOG-2026-08-28-06, 2026-08-28) is resolved** — the credential was
+  re-authorised outside this record and Bei did not touch it. All of 2026-08-28's work (Rev 13–17,
+  SI-006–011, the seal notes, the run-limit measurement) reached the remote. **This line no longer
+  names a commit or an ahead-count**, because it has now gone stale twice on exactly that: it
+  asserted "5 commits ahead" and "PI action: re-authenticate" through the whole of the outage's
+  repair, and the correction that replaced it pinned a hash that the next commit invalidated. Same
+  class as the SI-008 stale guard and the README's stale main-run row (SI-012 §Proposed 5).
+  **Verify push state at the commit; do not carry an assertion about it here.**
 - `answer-key/` read/written only on explicit PI instruction. Its contents never enter a
   replicate workspace, LOG.md, STATE.md, or a commit message.
