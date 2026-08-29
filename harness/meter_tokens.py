@@ -12,6 +12,7 @@ Budgets in force: smoke 12 M (warn 9 M), main 40 M (warn 30 M) — see config.ho
 The main figure was re-set from 57 M on 2026-08-28 against this meter's own smoke output; the
 caveat on how far that output can be trusted is SI-005 in SI_LEDGER.md.
 """
+import os
 import argparse, glob, json, os, sys
 from pathlib import Path
 
@@ -82,7 +83,7 @@ def main():
     # daily ledger -- append-only, one line per (replicate, day), rewritten in place per day
     rep = a.remote_ws.rstrip("/").split("/")[-1]
     days = per_day(sd)
-    led = Path(__file__).parent / "token_daily.jsonl"
+    led = Path(os.environ.get("HARNESS_STATE_DIR", Path(__file__).parent)) / "token_daily.jsonl"
     existing = []
     if led.exists():
         for line in open(led):

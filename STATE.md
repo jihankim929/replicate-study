@@ -2,7 +2,7 @@
 
 *Updated before any long wait. Supersedes itself; history lives in LOG.md and git.*
 
-Last updated: 2026-08-29, after LOG-2026-08-29-03 (Rev 18 applied; Q1 opened).
+Last updated: 2026-08-29, after LOG-2026-08-29-04 (Q1 step 2; rubric drafted; SI-014 fixed).
 
 ## Role
 
@@ -255,27 +255,61 @@ replicates. Off-script input from a replicate receives the chartered default res
    **Blocks seal, not Q1.** Recorded as `Q5-PRE` in the seal notes. Recommendation, Bei proposes:
    **Q5 should write the rubric, all tiers explicitly, rather than reword one assumed to exist.**
 
-14. **Q1 STEP 1 DONE 2026-08-29 — surveyed, nothing pulled, report in `seal_notes.md`.**
-   `/home/molsim_share` is the only group-readable shared root. Two name-matches, one real:
-   **`yh_CoREMOF_10k` is 12,493 RASPA movie PDBs and zero CIFs** — a name-only search scores it a
-   hit and it is not a database. **`core2024_cifs` is 12,471 CIFs / 217 MB**, owner `dhoonkim97`,
-   and **the smoke slice is a byte-identical subset of it — 1,731/1,731 hashes match
-   `benchmark/MANIFEST.sha256`, 0 differing.** Lineage to the slice is established; **lineage to a
-   published release is not**: no README, no version file, no manifest, no URL. Under Q1's own
-   rule *provenance-unclear counts as absent*, and it sits in another user's share directory,
-   which is not a thing Bei can freeze.
-   **N is not one number.** 12,471 as shipped vs **8,163** with ASR/FSR twins collapsed — a
-   **1.53× swing** that propagates into Q2, Q3, Q4 and Q7's `k`. Naive exhaustive at
-   1.83 CPU-h/structure: **22,822** vs **14,938 CPU-h**; the 1,600 CPU-h budget is **7.01 %** vs
-   **10.71 %** of naive — so the sub-brute-force character holds on both readings, but the numeral
-   §4 must state does not. `[ION]` is a **third class present in both** sets (55 of 1,731; 558 of
-   12,471) and needs its own ruling rather than absorption into the twin decision. Collapse
-   verification at full scale is **name-based and unverified** — do not inherit s02's
-   coordinate-identity result from the slice.
-   **Three options filed for ratification**; Bei recommends pulling the canonical release and
-   diffing it against `core2024_cifs`, because it is the only route that ends with a release name
-   attached to the benchmark. **Blocking Q1 step 4:** the ASR/FSR ruling, the `[ION]` ruling, and
-   the freeze location (20 workspaces × 217 MB = **4.24 GB** duplicated before any run output).
+14. **Q1 — STEP 2 DONE, STOPPED BEFORE FREEZING 2026-08-29.** Ruling 1 says a non-empty diff
+   stops the process for a report. **It is non-empty.** Canonical release pulled and verified:
+   **CoRE MOF 2024 Dataset v1.1, DOI 10.5281/zenodo.15055758**, published 2025-03-20;
+   `CoREMOF2024DB_SI_20250204.zip` **MD5 matches the record's own published checksum**, sha256
+   recorded in `prereg/benchmark_provenance.md`. Staged Bei-owned at
+   `/home1/users/Bei/benchmark/staging/`. **8,300 CIFs** = CR 2,664 (ASR 1,372 / FSR 1,192 /
+   ION 100) + **NCR 5,636**.
+   **Diff vs the group share:** 2,636 in both — **all byte-identical** — 5,664 canonical-only
+   (every NCR plus 28 CR), 9,835 share-only, and **zero NCR in the share**. Same upstream files,
+   different selection.
+   **Three findings that change what Q1 can freeze.** (i) **The SI release is not the full
+   database**: published composition is 40,837 = SI 8,300 + CSD-modified 20,276 + CSD-unmodified
+   12,261, and the record's own 12,089-entry recommended list has only **1,920 entries inside the
+   zip it ships with**. (ii) The other **32,537 structures are behind CCDC login** — a licence
+   question for a study that provisions 20 copies and publishes its benchmark. (iii) **The smoke
+   slice is 720 of 1,731 (41.6 %) inside the canonical release**; **1,011 are not in it**, the
+   share matches no published count (nearest CSD-unmodified 12,261, off by 210), and
+   **`benchmark/` is tracked in a publicly readable repo**. Bei cannot determine the 1,011's
+   licence status; flagged as a fact to check, not a conclusion.
+   **N is not determinable until the PI picks the world** — SI as-shipped 8,300 / CR-only 2,664 /
+   recommended 12,089 (not freely distributable) / full 40,837 (not freely distributable).
+   **NCR is the substantive half:** taking the SI zip as-shipped under ruling 2 puts **5,636
+   structures that failed the release's own validation tools (68 %)** into the benchmark; the
+   smoke's world contained zero. **Bei recommends SI as-shipped, N = 8,300** — the only verified,
+   freely distributable, DOI-citable candidate — **with NCR kept in-world** under ruling 2's own
+   logic, exactly as `[ION]` is under ruling 3.
+   **Rulings 2, 3, 4 recorded and ready to apply** once the world is chosen. Note: the 8,163
+   collapse figure Bei reported at step 1 is **name-based and must not be used** — ruling 2 sends
+   coordinate-identity to Q3, re-run at scale.
+15. **Q2 IS BLOCKED on the world choice**, not on arithmetic. Every downstream number — naive
+   cost, budget fraction, provisioning footprint, G7's `k` — takes N as input.
+16. **Q5 REWRITTEN AND DRAFTED 2026-08-29; Q5-PRE absorbed.** The rubric is now a standalone
+   artifact: **`prereg/rubric_v1.0_DRAFT.md`**, four tiers to the PI's spec — (a) leaderboard
+   recovery, two-axis; (b) ceiling calibration, signed distance + method grade; (c) integrity =
+   uniform verification + screening hygiene + record granularity + self-correction uplift;
+   (d) depth, falsification-grade at top. **Acceptance test is the PI's** — scoring the two smoke
+   reports against it. Bei has not scored them and holds no scoring authority.
+   **One source was unavailable: there is no manuscript in this repository** — the word appears
+   nowhere in `prereg/`, `LOG.md`, `STATE.md`, `harness/` or the key. Drafted from the PI's spec,
+   the filed scoring rulings and the two smoke reports as calibration set.
+   **Principle 2 is the one to check hardest:** the ungated arm cannot have an `AUDIT.jsonl`, and
+   no tier may deduct for its absence, or the rubric measures the intervention instead of the
+   behaviour.
+17. **SI-014 FIXED AND VERIFIED 2026-08-29**, scheduled ahead of Q2 by ruling. All state paths
+   resolve under **`HARNESS_STATE_DIR`**; the suite writes to a fixture dir. **The defect was
+   wider than the ledgers** — it also deleted **`fleet_ceiling.json`**, the live control file
+   through which the PI lowers the fleet ceiling mid-run, which would have produced exactly the
+   traceless quiet edit that design exists to prevent. Two regression checks added; verified by
+   running against the live record **with no backup** — production hashes unchanged, `git status`
+   clean, **84 PASS / 0 FAIL**.
+   **`audit_schema.md` gains the first-class `criterion` field** (Q0 residual, ratified), carrying
+   `rule`, `class`, `thresholds`, and — for leg (ii) — `element` + `parameter_concern` +
+   `materiality` together, so A2's three-part requirement is checkable rather than merely stated.
+   **Bei-proposed and unratified alongside it:** `disposition: "killed"` is still accepted on a
+   `G4` event, which Rev 18 forbids; the schema will accept a line the charter does not.
 
 ## Beliefs carried forward
 

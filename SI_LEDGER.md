@@ -980,7 +980,7 @@ delivered mechanically. It was the two categories that need a human that went un
 ## SI-014 — The selftest deletes the binding escalation ledger and refills it with test data
 
 **Found:** 2026-08-29, at collection, while reconstructing SI-013's timeline.
-**Phase:** harness, all phases. **Status:** open.
+**Phase:** harness, all phases. **Status:** **FIXED AND VERIFIED 2026-08-29** — see the closing section.
 
 `harness/selftest.sh:158`:
 
@@ -1153,3 +1153,43 @@ run's charter or addendum, the main run has no ambiguity detector at all**, and 
 under-specified sentence in v1.0 will be resolved twenty times, silently, in twenty different
 directions. Recommend §A3 be promoted into the charter proper at v1.0, not re-issued as a
 phase addendum. Bei proposes; the PI ratifies.
+
+
+### Fixed 2026-08-29 — PI ruling: *"separate test fixtures from production paths; the suite must be runnable against a live record without a manual backup step"*
+
+**Scheduled ahead of Q2 by the PI, on the strength of its own measurement.** Writing SI-012 and
+SI-013 required running the 82-check suite after a charter edit, and doing that safely required
+backing the ledgers up by hand first. That manual step *was* the evidence: a test suite you cannot
+run against the live record is not a safety net, it is a second thing to be careful about.
+
+**The defect was wider than the escalation ledgers.** Four more production paths were being
+written or deleted at their real locations:
+
+| Path | What it is | What the suite did |
+|---|---|---|
+| `harness/escalations.jsonl`, `escalation_queue.jsonl` | the binding §6 escalation record | `rm -f`, then refilled with synthetic entries |
+| `harness/.seen-s01` | escalation de-duplication state | `rm -f` |
+| **`harness/fleet_ceiling.json`** | **a live control file** — the PI's standing authority to lower the fleet ceiling mid-run | written, then `rm -f` |
+| `harness/watchdog.jsonl`, `transcript_audit.jsonl`, `token_daily.jsonl` | append-only measurement ledgers | appended to |
+
+**`fleet_ceiling.json` is the one that could have cost a run.** S2 records it as the mechanism by
+which the PI lowers the ceiling mid-campaign, *"as a logged, uniform infrastructure event"*, with
+the timestamp and reason mandatory because *"a quiet edit would confound every arm at once and
+leave no trace of when."* **Running the selftest during a main campaign would have deleted a
+ratified mid-run ceiling and left exactly the traceless quiet edit that design existed to
+prevent.**
+
+**The fix.** Every component that writes state resolves it under **`HARNESS_STATE_DIR`**,
+defaulting to `harness/` in production: `escalate.py` (ledgers, queue, `.seen-*`), `config.py`
+(`FLEET_CEILING_OVERRIDE`), `watchdog.py`, `audit_transcript.py`, `meter_tokens.py`.
+`selftest.sh` exports it to a directory under its own mock tree, which the existing `trap` already
+removes on exit.
+
+**Two regression checks added, and they are the point.** The suite now fingerprints all six
+production state files before it runs and asserts they are **unchanged** after — and separately
+asserts the fixture directory was **actually used**, so the first check cannot pass by the suite
+quietly doing nothing.
+
+**Verified the only way that means anything: run against the live record with no backup.**
+Production hashes taken independently before and after: **unchanged**, `git status` clean, and the
+suite reports **84 PASS / 0 FAIL** (82 + the two new checks).

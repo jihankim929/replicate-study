@@ -9,6 +9,7 @@ Enforces:
 The watchdog NEVER answers science and never edits a replicate's files except INBOX.md,
 which is the one channel the harness owns. Charter section 8: Bei handles infrastructure.
 """
+import os
 import argparse, json, os, subprocess, sys, time
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
@@ -257,7 +258,7 @@ def run(ws_path, repo, dry_run=False, once=True, json_out=False, isolation=True)
     if msgs:
         notify(ws, msgs, dry_run)
 
-    log = Path(__file__).parent / "watchdog.jsonl"
+    log = Path(os.environ.get("HARNESS_STATE_DIR", Path(__file__).parent)) / "watchdog.jsonl"
     if not dry_run:
         with open(log, "a") as fh:
             fh.write(json.dumps(report) + "\n")

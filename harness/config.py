@@ -5,6 +5,7 @@ ruled on are NOT usable for a real launch: `require_ratified()` refuses. This is
 mechanical expression of "proposed, not ratified" — the harness cannot quietly launch a
 campaign on a number Bei invented.
 """
+import os
 import json
 from pathlib import Path
 
@@ -173,7 +174,11 @@ def fleet_reachability(per_user_run_limit: int, phase: str = "main") -> dict:
             "reachable": governing >= sustained}
 
 
-FLEET_CEILING_OVERRIDE = REPO / "harness" / "fleet_ceiling.json"
+# SI-014: a LIVE control file — the PI's standing authority to lower the fleet ceiling
+# mid-run. The selftest used to write and then delete it at this path, so running the
+# suite during a campaign would have silently discarded a ratified mid-run ceiling.
+# Overridable so tests exercise the guard against a fixture instead.
+FLEET_CEILING_OVERRIDE = Path(os.environ.get("HARNESS_STATE_DIR", REPO / "harness")) / "fleet_ceiling.json"
 
 
 def fleet_max_queued_jobs() -> tuple:

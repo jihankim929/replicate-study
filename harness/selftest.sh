@@ -6,6 +6,17 @@ cd "$(dirname "$0")/.."
 MOCK="${TMPDIR:-/tmp}/harness-selftest.$$"
 trap 'rm -rf "$MOCK"' EXIT
 mkdir -p "$MOCK"
+# SI-014 (PI ruling 2026-08-29): test fixtures are separated from production paths, so this
+# suite is runnable against a live record with no manual backup step. Every harness component
+# that writes state resolves it under HARNESS_STATE_DIR, defaulting to harness/ in production.
+# Before this, the suite `rm -f`d the binding escalation ledgers and the live fleet-ceiling
+# override at their real paths.
+export HARNESS_STATE_DIR="$MOCK/_state"
+mkdir -p "$HARNESS_STATE_DIR"
+# Fingerprint the production state files so the suite can prove it did not touch them.
+PROD_STATE="harness/escalations.jsonl harness/escalation_queue.jsonl harness/fleet_ceiling.json harness/watchdog.jsonl harness/transcript_audit.jsonl harness/token_daily.jsonl"
+prod_fingerprint(){ for f in $PROD_STATE; do if [ -f "$f" ]; then shasum -a 256 "$f" 2>/dev/null; else echo "ABSENT $f"; fi; done; }
+PROD_BEFORE="$(prod_fingerprint)"
 PASS=0; FAIL=0
 ok(){ echo "  PASS  $1"; PASS=$((PASS+1)); }
 no(){ echo "  FAIL  $1"; FAIL=$((FAIL+1)); }
@@ -87,7 +98,7 @@ if [ "$FIND" -ge 2 ]; then ok "symlink escape + git remote both caught ($FIND fi
 rm "$MOCK/s02/escape"; git -C "$MOCK/s02" remote remove origin
 
 echo "== 6. escalation router, section 8 verbatim =="
-rm -f harness/.seen-s01
+rm -f "$HARNESS_STATE_DIR/.seen-s01"
 cat >> "$MOCK/s01/ESCALATIONS.md" <<'ESCEOF'
 [ESC: scientific / is this ambiguity mine to resolve?]
 [ESC: infra / job exited 0 with no output]
@@ -148,21 +159,21 @@ python3 harness/watchdog.py --fleet "$MOCK" >/dev/null 2>&1; chk "under ceiling 
 echo "{\"cpu_h\":1,\"tokens\":1,\"queued_jobs\":$OVER}" > "$MOCK/s01/usage.json"
 python3 harness/watchdog.py --fleet "$MOCK" >/dev/null 2>&1; chk "over ceiling breaches" "$?" "1"
 # the PI's standing authority to LOWER mid-run, and its one-way guard
-printf '{"ceiling":%d,"ts":"2026-01-01T00:00:00Z","reason":"selftest"}\n' "$UNDER" > harness/fleet_ceiling.json
+printf '{"ceiling":%d,"ts":"2026-01-01T00:00:00Z","reason":"selftest"}\n' "$UNDER" > "$HARNESS_STATE_DIR/fleet_ceiling.json"
 chk "override may lower"      "$(python3 -c 'import sys;sys.path.insert(0,"harness");import config as C;print(C.fleet_max_queued_jobs()[0])')" "$UNDER"
-printf '{"ceiling":%d,"ts":"2026-01-01T00:00:00Z","reason":"selftest"}\n' "$(( CEIL * 2 ))" > harness/fleet_ceiling.json
+printf '{"ceiling":%d,"ts":"2026-01-01T00:00:00Z","reason":"selftest"}\n' "$(( CEIL * 2 ))" > "$HARNESS_STATE_DIR/fleet_ceiling.json"
 chk "override may NOT raise"  "$(python3 -c 'import sys;sys.path.insert(0,"harness");import config as C;print(C.fleet_max_queued_jobs()[0])')" "$CEIL"
-rm -f harness/fleet_ceiling.json "$MOCK/s01/usage.json" "$MOCK/s02/usage.json"
+rm -f "$HARNESS_STATE_DIR/fleet_ceiling.json" "$MOCK/s01/usage.json" "$MOCK/s02/usage.json"
 
 echo "== 7d. escalation latency is on the record =="
-rm -f harness/.seen-s01 harness/escalation_queue.jsonl harness/escalations.jsonl
+rm -f "$HARNESS_STATE_DIR/.seen-s01" "$HARNESS_STATE_DIR/escalation_queue.jsonl" "$HARNESS_STATE_DIR/escalations.jsonl"
 python3 harness/escalate.py "$MOCK/s01" >/dev/null 2>&1
 chk "queued item recorded with queued_at" "$(python3 -c '
-import json;print(sum(1 for l in open("harness/escalation_queue.jsonl") if json.loads(l).get("queued_at")))' 2>/dev/null)" "2"
+import json,os;print(sum(1 for l in open(os.environ["HARNESS_STATE_DIR"]+"/escalation_queue.jsonl") if json.loads(l).get("queued_at")))' 2>/dev/null)" "2"
 python3 harness/escalate.py "$MOCK/s01" --answer "grid" --text "test answer" >/dev/null 2>&1
 chk "answer closes latency"  "$(python3 -c '
-import json;rs=[json.loads(l) for l in open("harness/escalations.jsonl")];print("yes" if any(r["disposition"]=="answered" and r.get("latency_h") is not None for r in rs) else "no")' 2>/dev/null)" "yes"
-chk "queue shrinks after answer" "$(wc -l < harness/escalation_queue.jsonl | tr -d ' ')" "1"
+import json,os;rs=[json.loads(l) for l in open(os.environ["HARNESS_STATE_DIR"]+"/escalations.jsonl")];print("yes" if any(r["disposition"]=="answered" and r.get("latency_h") is not None for r in rs) else "no")' 2>/dev/null)" "yes"
+chk "queue shrinks after answer" "$(wc -l < "$HARNESS_STATE_DIR/escalation_queue.jsonl" | tr -d ' ')" "1"
 
 echo "== 7e. liveness: death detection fails safe (PI ruling 2026-08-27) =="
 # This exit code authorises restarting a running campaign. Anything short of positive evidence
@@ -327,6 +338,11 @@ chk "report under another name collects" "$(echo "$C" | grep -c 'filed as REPORT
 chk "no false missing-report finding"    "$(echo "$C" | grep -c 'FINDING: no final report')" "0"
 chk "empty AUDIT.jsonl is a finding" "$(echo "$C" | grep -c 'AUDIT.jsonl empty while a report was filed')" "1"
 chk "collection reaches BOTH replicates"  "$(echo "$C" | grep -c '^=== collect s0')" "2"
+
+echo "== 9. SI-014 regression: the suite must not touch the production record =="
+PROD_AFTER="$(prod_fingerprint)"
+chk "production state files unchanged by this run" "$([ "$PROD_BEFORE" = "$PROD_AFTER" ] && echo same || echo CHANGED)" "same"
+chk "fixture state dir was actually used"          "$([ -f "$HARNESS_STATE_DIR/escalations.jsonl" ] && echo y || echo n)" "y"
 
 echo
 echo "=================================="

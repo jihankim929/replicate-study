@@ -20,7 +20,7 @@ the only category it answers. The other two are QUEUED, because:
 
 A malformed escalation gets the format back, not a guess at what was meant.
 """
-import argparse, json, re, sys
+import argparse, json, os, re, sys
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
@@ -29,8 +29,15 @@ import config as C
 
 KST = timezone(timedelta(hours=9))
 ESC_RE = re.compile(r"\[ESC:\s*([A-Za-z]+)\s*/\s*(.+?)\s*\]", re.S)
-LEDGER = Path(__file__).parent / "escalations.jsonl"
-QUEUE = Path(__file__).parent / "escalation_queue.jsonl"
+# SI-014: these are the BINDING escalation record (charter section 6). The selftest used to
+# `rm -f` them at the production paths and refill them with synthetic entries, which destroyed
+# the evidence that would have settled SI-013's ingestion timeline and made the 82-check suite
+# unsafe to run against a live campaign without a manual backup. The paths are now overridable,
+# so tests write to a fixture directory and the production ledger is never a test target.
+# A test that destroys the evidence it is testing for is a worse instrument than no test.
+STATE_DIR = Path(os.environ.get("HARNESS_STATE_DIR", Path(__file__).parent))
+LEDGER = STATE_DIR / "escalations.jsonl"
+QUEUE = STATE_DIR / "escalation_queue.jsonl"
 
 MALFORMED_REPLY = (
     "Malformed escalation. The fixed format is `[ESC: category / one-line question]` and the "
@@ -60,7 +67,7 @@ def process(ws_path, dry_run=False):
     ws = Path(ws_path).resolve()
     meta = json.loads((ws / "WORKSPACE.json").read_text())
     esc_file = ws / "ESCALATIONS.md"
-    seen_file = Path(__file__).parent / f".seen-{meta['replicate_id']}"
+    seen_file = STATE_DIR / f".seen-{meta['replicate_id']}"
     seen = set(seen_file.read_text().splitlines()) if seen_file.exists() else set()
 
     results = []
@@ -97,6 +104,7 @@ def process(ws_path, dry_run=False):
                 fh.write(block)
 
     if not dry_run:
+        STATE_DIR.mkdir(parents=True, exist_ok=True)
         seen_file.write_text("\n".join(sorted(seen)) + "\n")
         with open(LEDGER, "a") as fh:
             for rec in results:

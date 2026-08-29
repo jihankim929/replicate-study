@@ -1750,3 +1750,119 @@ lives — `provision.py` copies every manifest line per workspace, so **20 works
 binding, and the schema satisfies it only as free text in `note` — which is what s01 used, and
 which is not comparable across twenty trajectories. Bei-proposed, unratified, must close before
 seal. Comparison across arms is the study.
+
+---
+
+## LOG-2026-08-29-04 — The canonical release is verified and is not the full database; the smoke's own benchmark is 41.6% inside it and 1,011 structures have no established licence; SI-014 fixed and the rubric drafted
+
+**Four rulings executed, one stopped by its own terms, and two scheduled items delivered.**
+
+### Q1 step 2 — pulled, verified, and stopped
+
+Ruling 1: *"non-empty = report the delta before anything freezes."* **The diff is non-empty.**
+Nothing has been frozen, manifested or provisioned.
+
+**The pull is authentic and that part is settled.** CoRE MOF 2024 Dataset **v1.1**, DOI
+**10.5281/zenodo.15055758**, published 2025-03-20. `CoREMOF2024DB_SI_20250204.zip` **MD5
+`240444c92c…` matches the record's own published checksum**, as does the screening list's. Staged
+Bei-owned per ruling 4. Recorded with sha256 in `prereg/benchmark_provenance.md`.
+
+**8,300 CIFs**: CR 2,664 (ASR 1,372 / FSR 1,192 / ION 100) + **NCR 5,636**.
+
+**Against the group share:** 2,636 names in common and **every one byte-identical** — so the share
+is built from these upstream files, not from something that resembles them. But 5,664 canonical
+structures are absent from it (every NCR, plus 28 CR), 9,835 share structures are absent from the
+release, and **the share holds no NCR at all**.
+
+### Three findings, and the third is the one to look at
+
+**The SI release is not the full database.** Published composition: **40,837 = SI 8,300 +
+CSD-modified 20,276 + CSD-unmodified 12,261.** The clincher is internal to the record: the
+`12089-recommended-screening-list.csv` that ships *with this zip* names 12,089 structures of which
+only **1,920 are inside the zip**. A release whose own recommended list points 84 % outside itself
+is a supporting-information subset, not a database.
+
+**The other 32,537 structures are behind CCDC login.** That is a licence question, not a download
+problem, and it lands on a study that provisions **20 per-replicate copies** and publishes its
+benchmark.
+
+**The smoke slice is mostly outside the canonical release.** **720 of 1,731 (41.6 %)** are in it,
+all in CR; **1,011 are not.** The share's 12,471 matches no published count — nearest is
+CSD-unmodified at 12,261, off by 210, which is *suggestive of a CCDC-derived pull and not evidence
+of one.* Stated because it should be checked: **`benchmark/` holds 1,732 tracked files and this
+repository is publicly readable** (unauthenticated GitHub API returns 200). If any of the 1,011
+are CCDC-derived they are already published. **Bei cannot determine their status** — the share
+carries no provenance of any kind — and that determination belongs before the freeze, not after.
+
+### What is actually blocked, and it is not arithmetic
+
+Rulings 2, 3 and 4 all take *"the release as provided"* as input, and it now has four referents:
+
+| World | N | Freely distributable | Smoke slice inside |
+|---|---:|---|---:|
+| SI, as shipped | **8,300** | **yes, verified** | 720 (41.6 %) |
+| SI, CR only | 2,664 | yes | 720 |
+| Recommended list | 12,089 | no | 1,277 (73.8 %) |
+| Full CoRE MOF DB | 40,837 | no | unknown |
+
+**NCR is the substantive half of that choice.** *Not computation-ready* means the structures
+failed the release's own validation tools. Taking the zip as-shipped under ruling 2 puts **5,636
+of them — 68 % of the benchmark** — into a GCMC world whose smoke predecessor contained **zero**.
+
+**Bei recommends SI as-shipped, N = 8,300**: the only candidate that is verified, freely
+distributable, DOI- and version-citable, and reproducible by anyone. And **NCR kept in-world**,
+under ruling 2's own logic — the world ships as-shipped, discovery is replicate skill, and a
+structure that a validation tool rejects is exactly the sort of thing a trajectory should find for
+itself. That is the same reasoning ruling 3 applies to `[ION]`. **Bei recommends and does not
+decide.**
+
+One correction to Bei's own step-1 report: the **8,163** collapse figure was **name-based** and
+must not be used. Ruling 2 sends coordinate-identity to Q3, re-run at scale, and explicitly
+forbids inheriting the name-based result.
+
+### SI-014 — fixed, and it was wider than the ledgers
+
+Scheduled ahead of Q2 by ruling, *"its own measurement made the case"* — writing SI-012 required
+running the suite after a charter edit, and that required backing the ledgers up by hand.
+
+**Four more production paths were being written or deleted at their real locations**, and one of
+them matters more than the escalation ledgers: **`harness/fleet_ceiling.json`**, the live control
+file through which the PI lowers the fleet ceiling mid-run. S2 specifies its timestamp and reason
+as mandatory because *"a quiet edit would confound every arm at once and leave no trace of when."*
+**Running the selftest during a main campaign would have deleted a ratified mid-run ceiling and
+produced precisely that traceless edit.**
+
+Every component now resolves state under **`HARNESS_STATE_DIR`**, defaulting to `harness/` in
+production — `escalate.py`, `config.py`, `watchdog.py`, `audit_transcript.py`, `meter_tokens.py` —
+and the suite exports it into its own mock tree. **Two regression checks added**: production state
+files fingerprinted before and asserted unchanged after, *and* a separate assertion that the
+fixture dir was actually used, so the first cannot pass by the suite doing nothing.
+
+**Verified the only way that means anything — run against the live record with no backup.**
+Independent hashes before and after: unchanged. `git status`: clean. **84 PASS / 0 FAIL.**
+
+### The rubric exists now
+
+`prereg/rubric_v1.0_DRAFT.md`, four tiers to the PI's spec. The design decisions worth checking:
+(a2) grades declining a band on grounds *consistent with the rules then in force* as
+**Sound-but-costly** with full discipline credit, so the cost lands in (a1) where it belongs;
+(b1) scores **signed** distance, because over- and under-claiming a ceiling are different failures;
+(c3) reads record granularity from `LOG.md`/`JOBS.md`/commits and **never** from `AUDIT.jsonl`;
+(d) reserves the top grade for a test that **could have refuted the trajectory's own mechanism**.
+
+**Principle 2 is the one to attack at ratification.** The ungated arm cannot have an
+`AUDIT.jsonl`, and if any tier deducts for its absence the rubric measures the intervention
+instead of the behaviour — which would invalidate the comparison the whole study is for.
+
+**There is no manuscript in this repository.** The ruling directs drafting from *"the manuscript's
+Results section and the filed scoring rulings"*; the word appears nowhere in `prereg/`, `LOG.md`,
+`STATE.md`, `harness/` or the key. Drafted from the other three sources. Same shape as the rubric
+finding a day earlier: a referenced artifact that the record does not contain.
+
+### Also done
+
+`audit_schema.md` gains the ratified first-class **`criterion`** field, carrying `rule`, `class`,
+`thresholds`, and for leg (ii) **`element` + `parameter_concern` + `materiality` together** — so
+A2's three-part requirement is checkable rather than merely stated. **Flagged, unratified:**
+`disposition: "killed"` is still accepted on a `G4` event, which Rev 18 forbids. The schema will
+accept a line the charter does not.

@@ -13,6 +13,7 @@ keeps none.
 This audits the RECORD, not the filesystem. It cannot see an access made outside the session.
 That limit is stated rather than papered over.
 """
+import os
 import argparse, json, glob, os, re, sys
 from pathlib import Path
 
@@ -90,7 +91,7 @@ def main():
         for f in findings:
             print(f"    {f['ts']}  {f['kind']:<7} {f['what']}")
             print(f"        {f['tool']}: {f['excerpt'][:140]}")
-    led = Path(__file__).parent / "transcript_audit.jsonl"
+    led = Path(os.environ.get("HARNESS_STATE_DIR", Path(__file__).parent)) / "transcript_audit.jsonl"
     with open(led, "a") as fh:
         fh.write(json.dumps({"replicate": a.rep, "tool_calls": calls,
                              "findings": len(findings), "detail": findings}) + "\n")

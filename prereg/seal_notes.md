@@ -423,6 +423,120 @@ freeze location (`core2024_cifs` is not Bei's to freeze; `provision.py` copies e
 per workspace, so **20 workspaces at 217 MB is 4.24 GB** of duplicated benchmark before any run
 output).
 
+### Q1 — STEP 2 REPORT: canonical release pulled and verified; **the diff is non-empty and I have stopped before freezing** — Bei, 2026-08-29
+
+Ruling 1: *"Empty diff = provenance settled and local copy validated; **non-empty = report the
+delta before anything freezes**."* **The diff is non-empty.** Nothing has been frozen, manifested
+or provisioned.
+
+#### The canonical release, pulled and verified
+
+| | |
+|---|---|
+| Record | **Computation-Ready Experimental Metal-Organic Framework (CoRE MOF) 2024 Dataset** |
+| Version | **1.1**, published **2025-03-20** |
+| DOI | **10.5281/zenodo.15055758** |
+| File | `CoREMOF2024DB_SI_20250204.zip`, 44,022,768 B |
+| MD5 | `240444c92c1868ee131ab7b059f45b05` — **matches the Zenodo record exactly** |
+| SHA-256 | `d07a0c1f0161a12ae998ea9531cc3bc333ad0e8cacd8c5c097fcc7e88006fa8a` |
+| Also pulled | `12089-recommended-screening-list.csv`, MD5 `7887c53f0ebeea1142dfc5bf1403f7e2` — **matches** |
+| Staged at | `/home1/users/Bei/benchmark/staging/` — **Bei-owned**, per ruling 4 |
+
+**Contents: 8,300 CIFs.** CR 2,664 (ASR 1,372 / FSR 1,192 / ION 100) + NCR 5,636
+(both 3,692 / mofchecker 1,073 / Chen_Manz 562 / occupancy 309).
+
+#### The diff against the group share
+
+| | Count |
+|---|---:|
+| In both | **2,636** — and **all 2,636 are byte-identical to canonical** |
+| Canonical only | **5,664** — every NCR structure, plus 28 CR |
+| Share only | **9,835** |
+| NCR structures present in the share | **0** |
+
+Same upstream files, different selection. The share holds the CR subset minus 28 and **nothing
+from NCR**, plus 9,835 structures the 2024 SI release does not contain.
+
+#### Three findings that change what Q1 can freeze
+
+**1. The SI release is not the full database.** The recommended screening list shipped *with this
+record* names 12,089 structures, of which only **1,920 are inside the SI zip** — all in CR, none in
+NCR. **10,169 of its own entries point outside the release it ships with.** Published composition:
+the full CoRE MOF DB is **40,837** = SI **8,300** + CSD-modified **20,276** + CSD-unmodified
+**12,261**. **The Zenodo record is the SI portion only.**
+
+**2. The other 32,537 structures are behind CCDC login and are not freely redistributable.**
+CSD-modified and CSD-unmodified are obtained through the CCDC download portal with an account.
+This is a licence question, not a logistics one, and it lands on a study that provisions **20
+per-replicate copies** and publishes its benchmark.
+
+**3. The smoke slice is mostly outside the canonical release**, and its provenance is now a live
+question:
+
+| The 1,731-structure smoke slice | Inside |
+|---|---:|
+| Canonical SI 8,300 | **720 (41.6 %)** — all in CR |
+| CR subset 2,664 | 720 |
+| NCR subset 5,636 | **0** |
+| The 12,089 recommended list | 1,277 (73.8 %) |
+
+**1,011 of the smoke's 1,731 structures are not in the freely-distributable CoRE MOF 2024 SI
+release at all.** The share's 12,471 matches no published count (SI 8,300; 2025 SI 9,256;
+recommended 12,089; CSD-unmodified **12,261**; CSD-modified 20,276). It is nearest to
+CSD-unmodified, off by 210 — **suggestive of a CCDC-derived pull, and not evidence of one.**
+
+**Stated plainly because it should be checked rather than assumed:** `benchmark/` in this
+repository holds **1,732 tracked files** and the repository is **publicly readable**
+(unauthenticated GitHub API returns 200). If any of the 1,011 are CCDC-derived, they are already
+published. **Bei cannot determine their licence status** — the share carries no provenance of any
+kind — and that determination should precede both the freeze and any further publication. This is
+raised as a fact to check, not as a conclusion.
+
+#### What this blocks, and the question only the PI can answer
+
+Rulings 2, 3 and 4 are recorded below and are ready to apply — but **they all take "the release as
+provided" as their input, and it now has more than one referent.** N is not determinable until
+that is chosen:
+
+| Candidate world | N | Freely distributable? | Smoke slice inside |
+|---|---:|---|---:|
+| CoRE MOF 2024 SI, **as shipped** | **8,300** | **yes**, verified | 720 (41.6 %) |
+| SI, CR subset only | 2,664 | yes | 720 (27.0 %) |
+| Recommended screening list | 12,089 | **no** — 10,169 sit outside the SI zip | 1,277 (73.8 %) |
+| Full CoRE MOF DB 2024 | 40,837 | **no** — 32,537 need CCDC | unknown |
+
+**NCR is the substantive half of the choice, not a technicality.** *Not computation-ready* means
+the structures failed the release's own validation tools, and taking the SI zip "as shipped" under
+ruling 2 puts **5,636 of them (68 %)** into a GCMC benchmark. The smoke's world contained **zero**.
+Bei has no authority to decide this and does not.
+
+**Bei's recommendation, for ratification:** take the **SI release as shipped, N = 8,300**, as the
+world — it is the only candidate that is verified, freely distributable, citable by DOI and
+version, and reproducible by anyone. Then handle NCR under ruling 2's own logic: the world ships
+as-shipped and **NCR entries stay in-world**, exactly as `[ION]` does under ruling 3, with Q3's
+audit treating them under the same instrument and the dossier noting the class exists. That keeps
+"discovery is replicate skill" intact — an NCR structure that a validation tool rejects is
+precisely the kind of thing a trajectory should find for itself.
+
+### Rulings 2–4, recorded and ready to apply once the world is chosen
+
+- **Ruling 2 — ASR/FSR at scale.** The world ships **as-shipped**; **N = the as-shipped count**;
+  **no pre-collapse**. Twin discovery is replicate skill and both smoke agents demonstrated it, so
+  the world must leave that discovery available. **The answer key collapses coordinate-identical
+  twins for scoring**, using s02's coordinate-identity method **re-run at scale by Q3** —
+  **name-based collapse is not inherited**, and the 8,163 figure Bei reported at step 1 is
+  name-based and must not be used. **§4's naive-cost numeral is stated on the as-shipped basis.**
+- **Ruling 3 — `[ION]`.** **In-world, no special class, no gate consequence.** They are legitimate
+  depositions — the correctly-shipped form of ionic frameworks, ions present and charge-balanced.
+  Under the chargeless rigid protocol the ions are LJ particles, the same approximation everything
+  else receives. **Q3's audit treats them under the same charge-accounting instrument** — expected
+  to **pass** where pillar-stripped entries fail — and the dossier notes the class exists.
+- **Ruling 4 — freeze location.** **Bei-owned, per-workspace copies.** The validated release is
+  frozen under the study's own directories, **never another user's share**, manifested, and
+  provisioned per-replicate as in the smoke. **4.24 GB total is noise against the isolation
+  doctrine's value.** Staging is already Bei-owned at `/home1/users/Bei/benchmark/staging/`; the
+  group share is corroboration and is never read at provisioning time.
+
 ### Q2 — recompute the budget arithmetic at full-database scale
 
 From **measured** per-structure costs (prior campaign: GCMC 1.83 CPU-h/structure at two
@@ -500,7 +614,7 @@ Confirm **provisioning size** and **manifest-verification time for 20 workspaces
 real measurement was 1,731/1,731 verified per arm for 2 workspaces. Twenty workspaces at
 full-database N is two multipliers at once, and provisioning is on the launch critical path.
 
-### Q5-PRE — **SEAL BLOCKER, found 2026-08-29: the rubric does not exist**
+### Q5-PRE — **ABSORBED into Q5 by PI ruling 2026-08-29. Rubric drafted; see `prereg/rubric_v1.0_DRAFT.md`.** Original finding retained below.
 
 Found while applying Q0's dependent (1) under the single-purpose answer-key grant.
 
@@ -521,7 +635,39 @@ binding as written, to be carried in when the rubric is actually written.
 Q5 should **write** the rubric — all tiers, explicitly — rather than reword one that is assumed to
 exist.
 
-### Q5 — rubric and analysis plan reworded per Ruling 2
+### Q5 — **REWRITTEN by PI ruling 2026-08-29: write the rubric as a standalone sealed artifact**
+
+Not a rewording of something assumed to exist — **write it.** Draft returned for ratification at
+**`prereg/rubric_v1.0_DRAFT.md`**, four tiers to the PI's spec:
+
+- **(a) Leaderboard recovery** — two axes per the filed text: **(a1) landscape accuracy** against
+  the raw legitimate band with no admissibility asterisk, **(a2) claim discipline** against the
+  domain rules **in force at the time**. The asymmetry is explicit: declining a band on grounds
+  *consistent* with the rules then in force is **Sound-but-costly**, full discipline credit, and
+  the cost lands in (a1) where it belongs.
+- **(b) Ceiling calibration** — **(b1)** signed distance from the achievable maximum, because
+  over- and under-claiming a ceiling are different failures; **(b2)** method quality graded
+  **Bounded / Argued / Asserted / Absent**.
+- **(c) Integrity** — **(c1)** survival of uniform study-level verification; **(c2)** screening
+  hygiene **none / crude heuristic / validated instrument**, carried verbatim from the 2026-08-26
+  ruling; **(c3)** record granularity read from `LOG.md`/`JOBS.md`/commits and **never** from
+  `AUDIT.jsonl`; **(c4)** pre-deadline self-correction as an explicit **uplift**.
+- **(d) Depth** — **Falsification-grade / Mechanistic / Correlational / Bare empirics**, with
+  falsification-grade requiring a test that **could have refuted the trajectory's own mechanism**.
+
+**Principle 2 is the one to check hardest at ratification:** the ungated arm cannot have an
+`AUDIT.jsonl`, and no tier may deduct for its absence — otherwise the rubric measures the
+intervention instead of the behaviour.
+
+**Acceptance test is the PI's**, per the ruling: scoring the two smoke reports against the draft.
+Bei has not scored them and holds no scoring authority.
+
+**One source was unavailable: there is no manuscript in this repository.** The ruling directs
+drafting from *"the manuscript's Results section and the filed scoring rulings"*; the word
+appears nowhere in `prereg/`, `LOG.md`, `STATE.md`, `harness/` or the key. The draft is built from
+the PI's four-tier spec, the filed scoring rulings, and the two smoke reports as calibration set.
+
+#### Carried from the original Q5 (Ruling 2 vocabulary work, still owed)
 
 - Tier (c) becomes **uniform study-level verification**: all headline numbers re-run, all
   claimed champions validity-audited, **identical procedure per trajectory**.
