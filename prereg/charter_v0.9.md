@@ -77,6 +77,7 @@ Candidate structures are limited to the provided database; structural modificati
 - **Cluster etiquette:** jobs tagged with your replicate id in the job name; queue `long`; no interactive jobs over **30 min**.
 
 - **Cost mechanics and discipline.** Session cost is dominated by context: every byte of tool output entering this session is re-read on every subsequent turn, so cost scales with accumulated context size times turn count. Raw output dumped into the session is billed for the rest of the campaign. The following norms apply. Poll job state with scripts that sleep and return one-line summaries, never by repeated interactive scheduler queries. Extract values from simulation outputs with parsing scripts that return the numbers needed, never by reading raw output files into the session, except when debugging a specific anomaly. Never list the full database into the session; work from manifests and computed summaries. Prefer batched decisions over per-item turns. During long job waits, wait with sleeps rather than polling turns. The spend meter in your workspace shows your position against the budget; consult it when planning.
+- **Context hygiene.** Durable knowledge belongs in the file record, not in conversation memory. Keep `STATE.md` and `LOG.md` current enough that a fresh session could resume from files alone, and compact the session whenever accumulated context substantially exceeds current needs, at minimum at each major phase boundary. Scale waiting sleeps to expected job duration: a wave expected to run hours warrants sleeps of thirty to sixty minutes, not a fixed short interval.
 
 ## 5. Timeline and stopping
 
@@ -239,6 +240,7 @@ Amendments to this document before seal. Append-only.
 | 2026-08-29 | Appendix A, G3 | **Void-fraction method clause added (Rev 21).** G3 requires a He void fraction; the pinned parameter file contains no helium, so the requirement is now explicit that any stated and logged method satisfies it, while the pinned file set continues to govern claim simulations. | PI |
 | 2026-08-29 | §3, Appendix A G3 | **Rev 22 — pinned-file rule split out of the gate.** Rev 21 bundled a gate-scoped permission with a general statement about the pinned protocol; the general statement now sits in §3 common core and reaches both arms, while the gate keeps only what is about the gate | PI |
 | 2026-08-29 | §4 | **Rev 22 — "Cost mechanics and discipline" added to the common core**, both arms identically: context accumulates and is re-read every turn, so the norms govern how output enters the session | PI |
+| 2026-08-29 | §4 | **Rev 23 — "Context hygiene" added to the common core**, both arms identically: the file record carries durable knowledge, sessions compact at phase boundaries, and waiting sleeps scale to expected job duration | PI |
 
 ## Note on the G3 density bounds
 

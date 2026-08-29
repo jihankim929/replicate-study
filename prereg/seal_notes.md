@@ -1114,3 +1114,38 @@ Found 2026-08-28 while recording the ruling. Neither item is queue work; both ar
    **The in-flight smoke is provably unaffected:** the smoke rendering of the new master is
    **byte-identical** to the pre-span master's, verified for both arms against `git show`.
    Remaining: populate the three values at Q1/Q2. Charter Rev 17.
+
+### Analysis plan — third pre-specified observable: per-arm cost decomposition
+
+**PI ruling 2026-08-29, pre-registered before any wave launched and before any per-arm cost was
+compared.**
+
+Per-arm spend must not be reported as a single number, because a difference between the arms is
+guaranteed by construction before either arm acts. Appendix A is the treatment, and it is text: the
+gated arm's rendered charter is **28,929 bytes** against the ungated arm's **13,109** — a
+**15,820-byte structural overhead**, mandatory reading under §1, entering context on turn 1 and
+re-read on every turn thereafter. At the cache-read rates this campaign is billed at, that overhead
+is charged for the whole 168 hours whether or not the gated replicate ever consults a gate.
+
+Spend is therefore decomposed into two terms and reported separately:
+
+1. **Mechanical charter-carrying cost.** The cost attributable to the treatment text itself:
+   the byte differential above, carried across the turn count each replicate actually takes.
+   Computable exactly from the rendered charters and each transcript's turn count — no behavioural
+   inference in it.
+2. **Behavioural spend.** Everything else — what the replicate chose to put into its context and
+   how often it turned.
+
+**Only term 2 is comparable across arms.** Term 1 is an artifact of how the treatment is
+administered, not a result about it. Reporting a combined figure would let the gated arm's charter
+being longer read as the gated arm being more expensive to run, which is a different and much more
+interesting claim than the evidence supports.
+
+**Method note, stated now rather than chosen later.** The decomposition uses the same attribution
+as `harness/context_composition.py`: measured cache-read tokens apportioned by
+`bytes × turns-that-follow`, so the two terms sum to the measured bill and only the *share* is
+modelled. The instrument existed and was validated before this observable was registered.
+
+**Discovered, not designed.** This asymmetry surfaced from the context-composition analysis ordered
+at the 4-hour gate, not from foresight at seal. It is registered here before any wave replicate has
+produced a single turn of spend.
