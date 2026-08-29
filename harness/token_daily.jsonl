@@ -2,4 +2,12 @@
 {"replicate": "s01", "day": "2026-08-27", "input_tokens": 352, "output_tokens": 121398, "cache_creation_input_tokens": 2298049, "cache_read_input_tokens": 68728977, "billable": 2419799}
 {"replicate": "s02", "day": "2026-08-26", "input_tokens": 426, "output_tokens": 285943, "cache_creation_input_tokens": 359905, "cache_read_input_tokens": 26560074, "billable": 646274}
 {"replicate": "s02", "day": "2026-08-27", "input_tokens": 362, "output_tokens": 280117, "cache_creation_input_tokens": 379297, "cache_read_input_tokens": 20882182, "billable": 659776}
-{"replicate": "rep01", "day": "2026-08-29", "input_tokens": 572, "output_tokens": 284456, "cache_creation_input_tokens": 386923, "cache_read_input_tokens": 40928989, "billable": 671951}
+{"replicate": "rep01", "day": "2026-08-29", "input_tokens": 578, "output_tokens": 286271, "cache_creation_input_tokens": 388074, "cache_read_input_tokens": 41643731, "billable": 674923}
+{"replicate": "rep02", "day": "2026-08-29", "input_tokens": 28, "output_tokens": 5959, "cache_creation_input_tokens": 48700, "cache_read_input_tokens": 392042, "billable": 54687}
+{"replicate": "rep03", "day": "2026-08-29", "input_tokens": 20, "output_tokens": 7616, "cache_creation_input_tokens": 37867, "cache_read_input_tokens": 263678, "billable": 45503}
+{"replicate": "rep04", "day": "2026-08-29", "input_tokens": 26, "output_tokens": 5645, "cache_creation_input_tokens": 40266, "cache_read_input_tokens": 360414, "billable": 45937}
+{"replicate": "rep05", "day": "2026-08-29", "input_tokens": 30, "output_tokens": 4033, "cache_creation_input_tokens": 55270, "cache_read_input_tokens": 494342, "billable": 59333}
+{"replicate": "rep06", "day": "2026-08-29", "input_tokens": 30, "output_tokens": 12388, "cache_creation_input_tokens": 91745, "cache_read_input_tokens": 485166, "billable": 104163}
+{"replicate": "rep07", "day": "2026-08-29", "input_tokens": 28, "output_tokens": 9367, "cache_creation_input_tokens": 68887, "cache_read_input_tokens": 436884, "billable": 78282}
+{"replicate": "rep08", "day": "2026-08-29", "input_tokens": 38, "output_tokens": 7056, "cache_creation_input_tokens": 72475, "cache_read_input_tokens": 693938, "billable": 79569}
+{"replicate": "rep09", "day": "2026-08-29", "input_tokens": 22, "output_tokens": 5882, "cache_creation_input_tokens": 48337, "cache_read_input_tokens": 281193, "billable": 54241}

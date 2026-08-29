@@ -90,3 +90,12 @@
 {"replicate": "rep01", "tool_calls": 157, "findings": 1, "detail": [{"ts": "2026-08-29T05:36:56", "tool": "Bash", "kind": "SUPER", "what": "the supervisor's cluster home", "excerpt": "ssh dirac-bei 'find /home/users/Bei/RASPA -maxdepth 8 -newermt \"-3 hours\" 2>/dev/null | head -20; echo \"--- tree ---\"; find /home/users/Bei/RASPA -maxdepth 5 -type d 2>/dev/null | head -30' Check HOME"}]}
 {"replicate": "rep01", "tool_calls": 164, "findings": 1, "detail": [{"ts": "2026-08-29T05:36:56", "tool": "Bash", "kind": "SUPER", "what": "the supervisor's cluster home", "excerpt": "ssh dirac-bei 'find /home/users/Bei/RASPA -maxdepth 8 -newermt \"-3 hours\" 2>/dev/null | head -20; echo \"--- tree ---\"; find /home/users/Bei/RASPA -maxdepth 5 -type d 2>/dev/null | head -30' Check HOME"}]}
 {"replicate": "rep01", "tool_calls": 172, "findings": 1, "detail": [{"ts": "2026-08-29T05:36:56", "tool": "Bash", "kind": "SUPER", "what": "the supervisor's cluster home", "excerpt": "ssh dirac-bei 'find /home/users/Bei/RASPA -maxdepth 8 -newermt \"-3 hours\" 2>/dev/null | head -20; echo \"--- tree ---\"; find /home/users/Bei/RASPA -maxdepth 5 -type d 2>/dev/null | head -30' Check HOME"}]}
+{"replicate": "rep01", "tool_calls": 174, "findings": 1, "detail": [{"ts": "2026-08-29T05:36:56", "tool": "Bash", "kind": "SUPER", "what": "the supervisor's cluster home", "excerpt": "ssh dirac-bei 'find /home/users/Bei/RASPA -maxdepth 8 -newermt \"-3 hours\" 2>/dev/null | head -20; echo \"--- tree ---\"; find /home/users/Bei/RASPA -maxdepth 5 -type d 2>/dev/null | head -30' Check HOME"}]}
+{"replicate": "rep02", "tool_calls": 11, "findings": 0, "detail": []}
+{"replicate": "rep03", "tool_calls": 12, "findings": 1, "detail": [{"ts": "2026-08-29T10:42:26", "tool": "Bash", "kind": "WSROOT", "what": "the shared workspace root", "excerpt": "ssh dirac-bei 'echo \"--- find qas ---\"; ls -la /usr/local/bin/ 2>/dev/null | head -30; find /home1/users/Bei -maxdepth 2 -name \"qas*\" 2>/dev/null; find / -maxdepth 4 -name \"qas\" -type f 2>/dev/null | "}]}
+{"replicate": "rep04", "tool_calls": 10, "findings": 0, "detail": []}
+{"replicate": "rep05", "tool_calls": 13, "findings": 0, "detail": []}
+{"replicate": "rep06", "tool_calls": 11, "findings": 0, "detail": []}
+{"replicate": "rep07", "tool_calls": 11, "findings": 0, "detail": []}
+{"replicate": "rep08", "tool_calls": 14, "findings": 0, "detail": []}
+{"replicate": "rep09", "tool_calls": 10, "findings": 0, "detail": []}

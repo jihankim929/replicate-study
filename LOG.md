@@ -2188,3 +2188,27 @@ the same wall with no text telling it an auxiliary parameter file is acceptable 
 edits a pinned file, which §3 forbids, or forgoes the descriptor. **The gated arm has been given a
 permission about the pinned files that the ungated arm has not**, which is a difference between the
 arms that is not the audit gates. Filed for the PI; Bei has not moved the clause.
+
+### LOG-2026-08-29-13 — wave A launched; 9 of 16 running
+
+Rev 23 rendered into all 15 wave workspaces (0 mismatches) and delivered to rep01 as a chartered
+notice before any wave released, as ordered. Per-arm cost decomposition pre-registered in
+`seal_notes.md` **before any wave replicate produced a turn of spend** — the gated charter is
+**28,929 bytes** against the ungated arm's **13,109**, so **15,820 bytes** of treatment text enter
+context on turn 1 and are re-read for 168 hours.
+
+**Wave A: 4 gated (rep05–08) + 4 ungated (rep02, 03, 04, 09), all launched and working.** Waves are
+arm-balanced deliberately: an unbalanced wave that failed part-way would have produced an arm
+imbalance created by launch order rather than by the treatment. Wave B (3 gated + 4 ungated) is
+scheduled one hour out per the standing order.
+
+Every deadline is stamped **at launch**, not at provisioning — rep01 14:12:32, wave A 19:40–19:41,
+each `launch + 168 h exactly`.
+
+**Launched past the spend envelope on PI instruction.** The 02:12 trailing-burn verdict was the
+standing gate; the PI ruled *"Launch 16"* with rep01's trailing rate at ~$3.7/h against a $2.50/h
+threshold. Recorded here as an instructed override rather than a passed gate, because the record
+should not later read as though the envelope was met.
+
+Fleet spend at launch: **$40.56 across 9**, of which rep01 is $30.41 — the other eight are at
+$0.93–$1.55 each, having just read their charters.
