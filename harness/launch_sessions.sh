@@ -27,9 +27,17 @@ esac
 echo "  phase=$PHASE  loop=$(basename "$LOOP")"
 FAILED=0
 DRY=""
-[ "${1:-}" = "--dry-run" ] && DRY=1
+[ "${1:-}" = "--dry-run" ] && { DRY=1; shift; }
 
-for REP in s01 s02; do
+# Replicate list: explicit arguments win, otherwise the phase's roster from config.py. This was
+# `s01 s02` inline, which cannot express a one-replicate gate or a wave.
+REPS="$*"
+if [ -z "$REPS" ]; then
+  REPS=$(python3 -c "import sys;sys.path.insert(0,'harness');import config as C;print(' '.join(C.RATIFIED['phases']['$PHASE']['ids']))")
+fi
+echo "  replicates:$REPS"
+
+for REP in $REPS; do
   WS="/home1/users/Bei/ws/$REP"
   SESSION="rep-$REP"
   LOG="harness/sessions/$REP.loop.log"

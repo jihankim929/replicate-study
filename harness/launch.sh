@@ -9,31 +9,42 @@
 # Usage:
 #   ./harness/launch.sh --dry-run                 # local mock, 25 structures, nothing real
 #   ./harness/launch.sh --dest reps/smoke         # real provisioning (refuses on unratified budgets)
+#   ./harness/launch.sh --phase main --reps rep01 # the gate replicate alone, main phase
+#
+# The replicate list is NOT hardcoded any more. It was `s01 s02` inline, which is correct for a
+# two-replicate smoke and silently wrong for anything else: the main phase launches in waves, and
+# the gate launches exactly one. With no list given, the phase's own roster in config.py is used.
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
-DEST="reps/smoke"; DRY=""; DBLIMIT=""; FORCE=""
+DEST=""; DRY=""; DBLIMIT=""; FORCE=""; PHASE="smoke"; REPS=""
 while [ $# -gt 0 ]; do
   case "$1" in
     --dry-run) DRY="--dry-run"; DBLIMIT="--db-limit 25";;
     --dest)    DEST="$2"; shift;;
     --force)   FORCE="--force";;
+    --phase)   PHASE="$2"; shift;;
+    --reps)    shift; while [ $# -gt 0 ] && [ "${1#--}" = "$1" ]; do REPS="$REPS $1"; shift; done; continue;;
     *) echo "unknown arg: $1" >&2; exit 2;;
   esac
   shift
 done
 
-echo "=== launch: smoke phase, replicates s01 (gated) + s02 (ungated) ==="
+[ -n "$DEST" ] || DEST="reps/$PHASE"
+if [ -z "$REPS" ]; then
+  REPS=$(python3 -c "import sys;sys.path.insert(0,'harness');import config as C;print(' '.join(C.RATIFIED['phases']['$PHASE']['ids']))")
+fi
+echo "=== launch: $PHASE phase — provisioning:$REPS ==="
 [ -n "$DRY" ] && echo "=== DRY RUN — mock workspaces, 25-structure database, no cluster ==="
 
-for REP in s01 s02; do
+for REP in $REPS; do
   echo
   python3 harness/provision.py "$REP" --dest "$DEST" $DRY $DBLIMIT $FORCE
 done
 
 echo
 echo "=== post-provision verification ==="
-for REP in s01 s02; do
+for REP in $REPS; do
   WS="$DEST/$REP"
   python3 harness/watchdog.py "$WS" --dry-run | sed "s/^/  /"
 done

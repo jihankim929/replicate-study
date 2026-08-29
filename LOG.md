@@ -2141,3 +2141,21 @@ exact schedule with **0 missed intervals**, but **the host has not slept during 
 window** — it stays awake while work runs — so the wake-catchup property, which is the whole
 reason for choosing launchd over cron, is **observed-pending rather than verified**. The probe
 keeps logging and will have the evidence at the next idle period.
+
+### LOG-2026-08-29-11 — smoke sessions retired at seal; not a spend anomaly
+
+Before launching the main phase, both smoke sessions were found **still alive** — `rep-s01` for
+2 d 22 h in a *single* `claude` invocation (its loop log never reached iteration 2), `rep-s02` for
+1 d 6 h. Both past the 09:00 KST deadline that had already been collected against.
+
+**Checked before escalating.** Their transcript files carried today's mtimes (13:20, 13:37), which
+looks exactly like two post-deadline sessions burning budget against the account the main run's
+$4,500 limit is priced from — the PI's halt-and-report condition. Metering the transcripts by
+timestamp instead of by file mtime: **$0.00 post-deadline across 0 turns for both.** The last model
+turn in either was **2026-08-27**, roughly 36 h *before* the deadline, and the lifetime totals
+reproduce the validated figures exactly ($135.99 / $42.50). The mtimes were file touches, not model
+turns. **A halt would have been called on a filesystem timestamp.**
+
+They were hung, not working — the same silent-stall the collection recorded at 25.4 h and 15.5 h of
+transcript stagnation, now at ~60 h. Retired at seal: the smoke is collected, hashed and sealed, and
+a hung session that woke up would write into a workspace whose collection is already attested.
