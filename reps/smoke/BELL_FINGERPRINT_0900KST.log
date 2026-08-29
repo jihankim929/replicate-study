@@ -1,0 +1,34 @@
+FIRED 2026-08-29T00:00:03Z / 2026-08-29 09:00:03 KST epoch=1787961603
+=== s01 ===
+-- git HEAD --
+-- git status --
+-- commit count --
+-- record hashes --
+d42f97262ca0d9727799371d31b8274caa1b435231407ec0dd2e96de05f77d34  /home1/users/Bei/ws/s01/REPORT.md
+1c1b90efcb7e54aee6c5f63b401711cd1bff2c767ac021c644cb93cfa796b9c8  /home1/users/Bei/ws/s01/LOG.md
+437f6ab0599912df602b8a30150ec8dbff20710c5a630fe73c0b1a1ddcf15770  /home1/users/Bei/ws/s01/STATE.md
+2ecb11f27992a8a76f5212ee8d4b54a1e50cb23b4f81e88864e8166571571b83  /home1/users/Bei/ws/s01/JOBS.md
+0bded4d350542a22ebf97041cd85156487aa04a39ca7025f5a1b855465268d4e  /home1/users/Bei/ws/s01/AUDIT.jsonl
+47210bc28bae3851e48b9509cc7f60218c3d9b1c3cf1aba66a941dac2b705b9a  /home1/users/Bei/ws/s01/ESCALATIONS.md
+f9195f2f7f5490b428dbab3d6124b37226c1a2509dba1fcecb5b9a2107422c98  /home1/users/Bei/ws/s01/INBOX.md
+b7351d90212292a22cff984f2f4e38bc7537b048a1c82898f4d12d2f8b5a3d12  /home1/users/Bei/ws/s01/WORKSPACE.json
+d0e0ff2f23870dfcf1d08a9102bba03745a3412508f71069af8554232d2991ff  /home1/users/Bei/ws/s01/usage.json
+-- usage.json --
+{"cpu_h": 300.741, "queued_jobs": 17, "tokens": 4200806, "cpu_h_basis": "job-records (single-core elapsed per finished run)", "cpu_h_scheduler": 5.319, "cpu_h_runs_accounted": 3620}=== s02 ===
+-- git HEAD --
+-- git status --
+-- commit count --
+-- record hashes --
+b211aa15aef9efa8be4080414a74a2abd97b6ae2d43e5b0c583406d8be7b9e21  /home1/users/Bei/ws/s02/REPORT.md
+60803008be07343db4e054305295a4023d615eaa617a18144e3723954423b0b1  /home1/users/Bei/ws/s02/LOG.md
+15d3629e8df91e615dacaae2f3b47be757e3a66a2782cde9dd10eb945288be84  /home1/users/Bei/ws/s02/STATE.md
+578f4ba4812632ec7b42a4cabaf5413d73796e0c5b51c6301e7202fca58a1551  /home1/users/Bei/ws/s02/JOBS.md
+ABSENT  AUDIT.jsonl
+f4023bcd9d597010a367d74ff9f05f240d969aaf8749f51bc067675ea751b065  /home1/users/Bei/ws/s02/ESCALATIONS.md
+585c623717528499c3541aa74ef37c656667fb75e1a8fde2184478430ac74ebb  /home1/users/Bei/ws/s02/INBOX.md
+bff7f96e3ed9f29a07d8f180da9a9f3199912a40f3e78836d34395b0a0f5478e  /home1/users/Bei/ws/s02/WORKSPACE.json
+d99b471cf4d4ad34385433a46635cc01c110b1dd6347628bbb972f53d6a7520f  /home1/users/Bei/ws/s02/usage.json
+-- usage.json --
+{"cpu_h": 796.754, "queued_jobs": 7, "tokens": 646274, "cpu_h_basis": "job-records (single-core elapsed per finished run)", "cpu_h_scheduler": 94.937, "cpu_h_runs_accounted": 1606}=== qstat (study jobs still alive at the bell) ===
+=== remote clock ===
+2026-08-29T00:00:03Z
