@@ -12,6 +12,8 @@ unlogged access is a defect even if it was authorised.
 message, a replicate workspace, or any document outside `answer-key/`. The entry above describes
 the *access*, not the key.
 
+| 2 | 2026-08-29 ~14:0x | PI ruling 2026-08-29, Q3 instrument rebuild + filename rename under the same grant | Rebuild the integrity instrument from the method section; rename the file per Ruling 2 | Read the Method / Instrument-changes / pass-3 sections and rebuilt the three-pass charge audit as **`harness/charge_audit.py`**, **committed to the open repo** per the ruling that instrument code is methodology and only its outputs stay sealed. Regression against the sealed slice result **passes on all four counts** (100 pass-2, 70 azolate-balanced, 30 unbalanced, 7 in the `[sql]` subset). Renamed `honeypot.md` → `exclusion_set_record.md`. Ran the sweep over the frozen 12,499-structure world; **outputs written here, not to the open repo.** | **yes** |
+
 **Entries before this log existed.** This ledger starts at access 1 because it was created at that
 access; earlier openings, if any, are not recoverable from it. That limitation is stated rather
 than implied — the same reason the resubmission ledger in `STATUS.md` declares its own start.

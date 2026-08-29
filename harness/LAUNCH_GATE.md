@@ -190,3 +190,60 @@ should decide which of the two the $3,000 is meant to be.
 **The gate does not propose a fix — that is the PI's.** The levers, stated without recommendation:
 lower the token cap; add cache reads to the metered basis (they are the dominant term); raise the
 limit to cover the worst case; or cap the fleet at the replicate count $3,000 actually funds.
+
+---
+
+# Fleet launch — waves, and the day-1 watch
+
+**PI ruling 2026-08-29**, accepting that the fleet-scale launch has no gate by nature. This is the
+mitigation, and it is deliberately weaker than a gate: it does not prove the fleet works, it
+**bounds how much of the fleet can be wrong at once.**
+
+## The wave plan (N = 16)
+
+| Step | What launches | When | What must hold before the next step |
+|---|---|---|---|
+| **0** | **rep01** — a fleet member, gated arm | on the seal commit | the **6-hour gate**, all 9 assertions PASS |
+| **1** | **wave A — 7 or 8 replicates** | on gate pass | Bei watches **A1 (transcripts growing)** and **A4 (jobs submitting)** for every member |
+| **2** | **wave B — the remainder** | **≥ 1 h after wave A** | — |
+
+**rep01 continues; it is not relaunched.** It is a fleet member that happened to go first, so its
+6 hours count toward its own 168.
+
+**Before releasing wave B**, Bei checks only two assertions per wave-A member, and they are the two
+that fail fastest and loudest: **transcripts growing** and **jobs submitting**. Anything else is
+day-1-watch material, not a release gate — a wave-B hold should be triggered by a member that is
+not working, not by one that is working oddly.
+
+**Any wave-A member failing either check halts wave B.** Not "halts that member" — halts the wave.
+A defect that stops one replicate from submitting is far more likely to be the harness than the
+replicate, and the whole point of the hour is to find that out on 8 workspaces rather than 16.
+
+## Day-1 fleet watch — 4 h and 12 h
+
+Two readings, per replicate, at **t+4 h** and **t+12 h** from each member's own launch:
+
+| Reading | Source | What is anomalous |
+|---|---|---|
+| **Burn ledger** | `meter_spend.py --all` + `usage.json` | any replicate past **75 %** of any budget on day 1 of 7; any replicate at **$0.00** spend with a live transcript (the meter is broken, not the replicate); spend-rate outliers beyond the measured $20.54–$32.54 per M billable band |
+| **Liveness** | `watchdog.py` liveness, transcript-growth basis | `stale` or `dead`; a transcript that has not grown since launch; a heartbeat advancing while the transcript does not (SI-006's exact signature) |
+
+**Anomalies escalate to the PI. Bei does not intervene in a replicate** — the standing role is
+harness, not supervisor, and a first-day intervention on scientific grounds would contaminate the
+arm it touched. Infrastructure repair is Bei's; everything else is a report.
+
+**Why 4 h and 12 h specifically.** 4 h is roughly the earliest point at which a replicate that
+started correctly and then stopped is distinguishable from one still on its first long turn — the
+smoke's stalled arm was indistinguishable from a working one for far longer than that, and 39 h
+elapsed before anyone knew. 12 h is inside the first sleep-heavy overnight window, which is when
+the launchd catch-up behaviour (SI-012) is first genuinely exercised.
+
+## What this mitigation does not do
+
+- **It does not gate the fleet.** Two assertions on 8 replicates for one hour is a smoke alarm, not
+  a test — a defect whose period is longer than an hour passes it.
+- **It does not cover account-level limits**, which are the failure mode that *scales with N* and
+  the one SI-006 came from. Sixteen replicates on one account is the first real test of that, and
+  nothing here exercises it in advance.
+- **It does not make the second wave safe.** A conditional +4 (rep14/18/19/20) would take the fleet
+  to N = 20 and the spend to **$5,600 against a $4,500 limit** — a limit raise, not just a trigger.
