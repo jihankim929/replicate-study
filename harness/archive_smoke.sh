@@ -79,8 +79,11 @@ fi
 # --- 5. destructive step, last, and only now ---------------------------------------------
 say "5. removing the smoke workspaces from the cluster"
 for R in $REPS; do
-  ssh -o BatchMode=yes -o ConnectTimeout=60 dirac-bei \
-      "rm -rf /home1/users/Bei/ws/$R && rm -f /home1/users/Bei/tmp/$R.tar.gz && echo removed"
+  # The toolchain trees are provisioned read-only (dr-xr-xr-x), and rm cannot unlink inside a
+  # directory it has no write bit on -- the first removal pass died on 494 permission-denied
+  # files and left s01 stripped to its toolchain. Make the tree writable first, then remove.
+  ssh -o BatchMode=yes -o ConnectTimeout=120 dirac-bei \
+      "chmod -R u+w /home1/users/Bei/ws/$R 2>/dev/null; rm -rf /home1/users/Bei/ws/$R && rm -f /home1/users/Bei/tmp/$R.tar.gz && echo removed"
   ssh -o BatchMode=yes -o ConnectTimeout=60 dirac-bei "[ -d /home1/users/Bei/ws/$R ]" \
       && { echo "  ABORT: $R still present after removal" >&2; exit 9; }
   say "   $R removed and confirmed absent"

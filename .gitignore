@@ -16,3 +16,10 @@ known_hosts*
 reps/smoke/s01/
 reps/smoke/s02/
 reps/main/*/
+
+# Archive tarballs are DATA, not record: 1.19 GB of binaries that GitHub hard-rejects at 100 MB
+# per file. Committing them made the branch permanently unpushable and would have stranded the
+# day's record on this machine -- the same failure as the 403 outage, self-inflicted. The .sha256
+# attestations and ARCHIVE_NOTE.md ARE tracked, so the record states what is held and how to
+# verify it; the payload lives beside the repo.
+archive/**/*.tar.gz
