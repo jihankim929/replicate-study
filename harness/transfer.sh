@@ -32,7 +32,11 @@ echo "=== transfer $REP ($PHASE) -> $WS ==="
 # "Non-empty" is the wrong test: provision.py writes a LOG.md header, so a transfer that failed
 # part-way leaves one behind and the retry refuses itself. The question is not whether LOG.md has
 # bytes in it, but whether a REPLICATE has written to it — so compare against the local copy.
-REMOTE_LOG=$(ssh -o BatchMode=yes -o ConnectTimeout=30 dirac-bei "cat $WS/LOG.md 2>/dev/null" | shasum -a 256 | cut -d' ' -f1)
+# `|| true` is load-bearing: on a workspace that does not exist yet -- the normal case for every
+# replicate after the first -- `cat` exits 1, and under `set -e` with `pipefail` that killed this
+# script silently, after printing its header and before doing anything. The guard aborted on the
+# case it exists to permit.
+REMOTE_LOG=$( { ssh -o BatchMode=yes -o ConnectTimeout=30 dirac-bei "cat $WS/LOG.md 2>/dev/null" || true; } | shasum -a 256 | cut -d' ' -f1)
 LOCAL_LOG=$(shasum -a 256 < "$LOCAL/LOG.md" | cut -d' ' -f1)
 EMPTY_LOG=$(printf '' | shasum -a 256 | cut -d' ' -f1)
 if [ "$REMOTE_LOG" != "$EMPTY_LOG" ] && [ "$REMOTE_LOG" != "$LOCAL_LOG" ]; then
