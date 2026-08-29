@@ -1,16 +1,15 @@
 # CHARTER ADDENDUM — Campaign Parameters
-*(Supplements the Research Charter. Where this addendum sets a parameter, it overrides the charter's placeholder. All other charter provisions apply unchanged.)*
+*(Supplements the Research Charter. Where this addendum sets a parameter, it overrides the charter. All other charter provisions apply unchanged.)*
 
 ## A1. Campaign duration
 
-- Campaign ends at **T = [launch date + 3 days, HH:MM KST]**.
+- Campaign ends at **T = the `deadline_kst` field of `WORKSPACE.json`**, which is {{smoke=launch + 72 h|main=launch + 168 h}} exactly, as charter §5 states.
 - The §5 mandatory final report and early-filing provisions apply at this deadline.
-- The §8 day-7 interim status does not apply (campaign is shorter than 7 days).
+- {{smoke=The §8 day-7 interim status does not apply — this campaign is shorter than 7 days.|main=The §8 day-7 interim status falls on the deadline itself, and the §7 final report satisfies it. No separate interim document is owed.}}
 
 ## A2. Budgets
 
-- Total compute budget: **[X] CPU-hours** (set from measured prior-campaign burn, scaled to horizon).
-- Token/session budget: **[X]**.
+- Your compute, token and spend budgets are the figures in charter §4 and in `WORKSPACE.json`. **This addendum sets no budget of its own.**
 - Warning at 75%, hard stop at 100%, per charter §4.
 
 ## A3. Charter-interpretation logging

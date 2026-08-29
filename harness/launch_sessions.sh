@@ -75,7 +75,9 @@ Your workspace_root is: $WS"
     echo "  $REP: session already running, skipping"
     continue
   fi
-  DEADLINE=$(python3 -c "import json;from datetime import datetime;print(int(datetime.fromisoformat(json.load(open('/dev/stdin'))['deadline_kst']).timestamp()))" < <(ssh -o BatchMode=yes -o ConnectTimeout=20 dirac-bei "cat $WS/WORKSPACE.json"))
+  # Deadline is stamped HERE, at launch, not at provisioning -- "launch + N h exactly" (Rev 20).
+  # Reading a provision-time deadline would silently shorten every wave by its own queue time.
+  DEADLINE=$(python3 harness/stamp_deadline.py "$REP" | tail -1)
   # macOS ships screen 4.00.03 (2006), which has no -Logfile. Start screen FROM the session
   # directory instead, so its `-L` log (screenlog.0) lands there and the two replicates do not
   # collide on one file in the repo root.

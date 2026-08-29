@@ -230,7 +230,7 @@ Amendments to this document before seal. Append-only.
 | 2026-08-29 | §5 | **Main horizon shortened (Rev 20)**; T remains launch + N × 24 h exactly | PI |
 | 2026-08-29 | §4 | Main compute and token budgets re-derived **pro-rata to the shorter horizon**, preserving the spendability duty cycle; the ratio to naive full-screen cost restated accordingly | PI |
 | 2026-08-29 | §4 | **Spend budget added**, warned at 75% and stopped at 100% like the others. It is metered at published list rates **including cache reads**, which the token basis excludes — the reason it can bind first | PI |
-| 2026-08-29 | header | **Charter sealed at v1.0.** All prior revisions ratified; the exclusion set, the manifest, the rubric and the verification protocol are sealed alongside it. No value in this document changes after this row. | PI |
+| 2026-08-29 | header | **Charter sealed at v1.0.** All prior revisions ratified; the pre-registered artefacts are sealed alongside it. No value in this document changes after this row. | PI |
 
 ## Note on the G3 density bounds
 

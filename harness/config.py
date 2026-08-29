@@ -17,13 +17,39 @@ REPO = Path(__file__).resolve().parent.parent
 # unreachable. Charter clause: study constitution, "answer-key is sealed material".
 SOURCE_ALLOWLIST = {
     "charter":   REPO / "prereg" / "charter_v0.9.md",
-    "addendum":  REPO / "prereg" / "smoke_addendum.md",
+    "addendum":  REPO / "prereg" / "charter_addendum.md",
     "audit_schema": REPO / "prereg" / "audit_schema.md",   # gated arm only
-    "db_dir":    REPO / "benchmark",
-    "manifest":  REPO / "benchmark" / "MANIFEST.sha256",
+    "addendum_note": "phase-aware; see DB_SOURCE and db_source() below",
     "conventions": REPO / "harness" / "replicate_CLAUDE.md",
 }
 FORBIDDEN_DIRS = {"answer-key", "reps", "harness", ".git"}
+
+# --- the world is PHASE-DEPENDENT, and it was not ---------------------------------------
+# `db_dir` and `manifest` sat in SOURCE_ALLOWLIST as single values pointing at the smoke's
+# 1,731-structure slice. Recorded at Rev 16 and left unfixed because the main phase's world did
+# not exist yet; Q1 froze it, so it exists now. Left as it was, the main launch would have
+# provisioned every replicate with the smoke's slice and reported "1,731/1,731 checksums
+# verified" -- a green line, against the wrong world, under a charter that says 12,499.
+#
+# The main world lives on the cluster and is never copied through this machine: 12,499 files
+# times 16 workspaces is not a local operation. Its manifest IS copied here, because membership
+# is defined by the manifest (PI ruling, Q1) and Bei must be able to state the world without
+# asking the cluster.
+DB_SOURCE = {
+    "smoke": {"kind": "local",
+              "dir":  REPO / "benchmark",
+              "manifest": REPO / "benchmark" / "MANIFEST.sha256"},
+    "main":  {"kind": "remote",
+              "dir":  "/home1/users/Bei/benchmark/frozen/CoRE_MOF_2024_CR_united",
+              "manifest": REPO / "benchmark_frozen" / "MANIFEST.sha256"},
+}
+
+
+def db_source(phase: str) -> dict:
+    """The database this phase provisions from. Unknown phase raises rather than defaulting."""
+    if phase not in DB_SOURCE:
+        raise RuntimeError(f"db_source: unknown phase {phase!r}")
+    return DB_SOURCE[phase]
 
 # The literal marker that separates the shared charter from the gated-arm appendix.
 # Charter clause: Appendix A header, "gated arm only; omitted verbatim from the other arm".

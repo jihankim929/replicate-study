@@ -320,23 +320,44 @@ def provision(rep_id, dest_root, dry_run=False, db_limit=None, force=False, remo
         (ws / "AUDIT.jsonl").write_text("")
 
     # --- 2. database + checksum verification on arrival ---------------------------------
-    manifest = {}
-    for line in C.SOURCE_ALLOWLIST["manifest"].read_text().splitlines():
+    # The source is phase-dependent (see config.DB_SOURCE). The manifest may name files under
+    # subdirectories (ASR/, FSR/, Ion/); the workspace db/ is FLAT, as the charter describes it,
+    # and the 12,499 basenames were checked to be collision-free before this was relied on.
+    src = C.db_source(phase)
+    manifest, srcpath = {}, {}
+    for line in Path(src["manifest"]).read_text().splitlines():
         if line.strip():
             digest, name = line.split(None, 1)
-            manifest[name.strip()] = digest
+            rel = name.strip()
+            flat = rel.split("/")[-1]
+            if flat in manifest:
+                raise SystemExit(f"MANIFEST COLLISION: two entries flatten to {flat!r}")
+            manifest[flat], srcpath[flat] = digest, rel
     names = sorted(manifest)
     if db_limit:
         names = names[:db_limit]
-    for n in names:
-        shutil.copy2(C.SOURCE_ALLOWLIST["db_dir"] / n, ws / "db" / n)
     (ws / "db" / "MANIFEST.sha256").write_text(
         "".join(f"{manifest[n]}  {n}\n" for n in names))
 
-    bad = [n for n in names if sha256(ws / "db" / n) != manifest[n]]
-    if bad:
-        raise SystemExit(f"CHECKSUM FAILURE on arrival for {len(bad)} file(s): {bad[:5]}")
-    print(f"[provision] db: {len(names)} files copied, {len(names)}/{len(names)} checksums verified")
+    if src["kind"] == "local":
+        for n in names:
+            shutil.copy2(Path(src["dir"]) / srcpath[n], ws / "db" / n)
+        bad = [n for n in names if sha256(ws / "db" / n) != manifest[n]]
+        if bad:
+            raise SystemExit(f"CHECKSUM FAILURE on arrival for {len(bad)} file(s): {bad[:5]}")
+        print(f"[provision] db: {len(names)} files copied, {len(names)}/{len(names)} checksums verified")
+    else:
+        # Remote world: the files are populated and verified ON THE CLUSTER by transfer.sh,
+        # because routing 12,499 files x 16 workspaces through this machine is not a sane
+        # operation. The workspace is deliberately left with a manifest and NO db files, and a
+        # marker says so out loud -- an empty db/ that merely looked provisioned would be the
+        # same silent-success failure that made this whole change necessary.
+        (ws / "db" / "POPULATE_REMOTELY").write_text(
+            f"source: {src['dir']}\nfiles: {len(names)}\n"
+            "This workspace's db/ is populated and checksum-verified on the cluster by\n"
+            "harness/transfer.sh. Until that runs, db/ holds only MANIFEST.sha256.\n")
+        print(f"[provision] db: {len(names)} entries in manifest; population DEFERRED to the "
+              f"cluster (source {src['dir']})")
 
     # --- 3. workspace record files ------------------------------------------------------
     # SECTION 5 DAY-COUNT FIX (PI, 2026-08-29). This used to be `now + days` snapped back to
