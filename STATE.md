@@ -2,7 +2,7 @@
 
 *Updated before any long wait. Supersedes itself; history lives in LOG.md and git.*
 
-Last updated: 2026-08-29, after LOG-2026-08-29-07 (world frozen; Rev 19; pre-seal queue).
+Last updated: 2026-08-29, after LOG-2026-08-29-08 (7-day budgets; spend cap; Q3 closed).
 
 ## Role
 
@@ -12,33 +12,32 @@ replicates. Off-script input from a replicate receives the chartered default res
 
 ## Study state
 
-- Phase: **PRE-SEAL. World FROZEN 2026-08-29 at N = 12,499; charter Rev 18 + Rev 19 applied;
-  awaiting PI ratification of the v1.0 assembly diff, then the launch gate.**
-  Frozen source `/home1/users/Bei/benchmark/frozen/CoRE_MOF_2024_CR_united/`, read-only, 0
-  writable files; manifest **12,499 lines**, sha256 `4777fc4f…a520`, re-verified 12,499/12,499.
-  **Uniform validation: 0 exceptions** — 2,664 byte-match against the verified SI zip, 9,835
-  structural, no unparameterised elements across 73 species. **The manifest is the published
-  membership definition.**
-  **Q2 inside the pre-ratified envelope**: budget **2,300 CPU-h** (10.06% of the 22,873 CPU-h
-  naive pass), concurrency 12, fleet 240, cluster 580 ncpus → **2.42× headroom**, tokens 45 M,
-  **G7 k = 40 at 1.7%** — and k is *algebraically invariant* (k = α/f contains neither N nor B).
-  **Q4 collapsed scoring denominator = 9,167** by coordinate identity, against 8,191 by name — a
-  **976-structure difference**, because name-based both over-merges ASR/FSR pairs and misses 80
-  same-variant duplicate groups. **Q3 BLOCKED** — the integrity instrument was never committed
-  (the key records its scripts as "session-local, not committed") and rebuilding it needs a key
-  grant; its G3-interaction half is done and removes **4 of 12,499**.
-  **In flight:** descriptor pass (40 jobs, 0 errors) → then floor-GCMC top-50 by φ_He →
-  ceiling verdict. **Pending:** launchd sleep-cycle observation (agent fires exactly on schedule,
-  0 missed, but the host has not slept during the window).
-- Smoke: **COLLECTED 2026-08-29 09:00:00 KST.** The charter §5 deadline was the sole
-  terminator; no hard budget stop fired. **Both arms filed a compliant §7 report** — s01
-  13,423 B / 32 commits / `AUDIT.jsonl` 688 lines, s02 27,366 B / 13 commits / no `AUDIT.jsonl`
-  (correct, ungated). Transcript audit **0 findings** in both. The collected record is
-  `reps/smoke/collected/` and is **hash-attested to the bell**: a remote `sha256` fingerprint
-  taken at 09:00:03 KST matches the local copy **17/17**, so the collection is provably a
-  snapshot of 09:00 and not of whenever the 3.6 GB transfer finished. Procedure, contents and
-  the three unreconciled disagreements are in `reps/smoke/collected/COLLECTION.md`.
-  Main run remains pre-launch and pre-seal. **The post-collection queue Q1…Q7 is now unblocked.**
+- Phase: **PRE-SEAL, N = 16 (8v8), 7-day horizon. Charter Rev 20 applied; hunks returned for
+  ratification at `prereg/charter_rev20.diff`. Launch gate PASSES.**
+  **Budgets, pro-rata to 168 h:** compute **1,610 CPU-h** (the 240 h duty cycle of 79.86%
+  preserved exactly, because the cap did not move), tokens **32 M**, and a new **US$280
+  per-replicate spend cap** — warned at 75%, stopped at 100%, metered from local transcripts at
+  published rates **with cache reads**. Ratio to naive is now **7.04%**, not the ~10% Rev 17
+  recorded. Deadline verified at **exactly 168.0000 h**.
+  **Spend is the budget that binds.** The token basis excludes cache reads; cache reads were
+  **59.2%** of the smoke's actual bill. $280 is reached at **8.6–13.6 M billable = 27–43% of the
+  32 M token cap**. The meter reproduces the independently-computed smoke costs exactly
+  ($135.99 / $42.50; $20.54 / $32.54 per M billable).
+  **The gate passes only because spend polls locally every 2 minutes.** Enforcement is polled, so
+  the fleet maximum is N × (cap + peak_rate × interval): **$4,491 of $4,500, $9 spare** at 2 min;
+  at the 30-min cluster cadence the overshoot alone is **$168** and $280 does **not** fit.
+  **Second wave = +4** (rep14/18/19/20, arm-balanced, no new draw) — but at N=20 spend is
+  **$5,600 vs a $4,500 limit**, so it needs a limit raise, not just a trigger.
+  **Q3 CLOSED.** Instrument rebuilt as `harness/charge_audit.py`, **committed to the open repo**;
+  regression against the sealed slice passes on all four counts. Sweep over the frozen world:
+  **12,499 parsed, 0 errors, 406 unbalanced (3.25%)** against a 1.73% prior. Dossier batch sealed:
+  **262 auto-dispositioned, 144 record-registering for PI disposition**, and **G3's lower bound
+  removes exactly the 2 lowest-density unbalanced entries — rank 3 and 4 of 12,499.**
+  **SI-016:** the revision record leaked main-phase values into every arm's charter — fifth leak,
+  fourth of the same shape, caught by the cross-phase detector. Closed.
+  **Still pending:** the launchd **sleep-cycle** verification — 51 probe fires, exact intervals,
+  0 gaps, but **no sleep has occurred** and `pmset schedule wake` needs root, so Bei will not sleep
+  the host without a guaranteed wake.
 - **Standing frame (PI, 2026-08-26): the smoke test exists to change the main run.** Charter
   v0.9, all placeholder values, the harness and the scoring assumptions are **provisional**.
   Expect revisions, make them cheap, keep every one on the record. Sequence:

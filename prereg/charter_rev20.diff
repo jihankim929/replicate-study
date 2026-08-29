@@ -1,0 +1,65 @@
+--- prereg/charter_v0.9.md  (before Rev 20)
++++ prereg/charter_v0.9.md  (PROPOSED — Rev 20)
+@@ -49,17 +49,26 @@
+ 
+ - **Compute and tokens** are set per phase. Yours are stated in `WORKSPACE.json`.
+ 
+-  | Phase | Compute | Tokens | Max concurrently queued jobs |
+-  |---|---|---|---|
+-  | **Smoke** | **340 CPU-hours** | **12,000,000** | **50** |
+-  | **Main** | **2,300 CPU-hours** | **45,000,000** | **12** |
++  | Phase | Compute | Tokens | Spend | Max concurrently queued jobs |
++  |---|---|---|---|---|
++  | **Smoke** | **340 CPU-hours** | **12,000,000** | not metered | **50** |
++  | **Main** | **1,610 CPU-hours** | **32,000,000** | **US$280** | **12** |
+ 
+   Usage warnings at 75%; hard stop at 100%. Tokens are metered as **input + output +
+   cache-creation**; cache reads are not counted.
++
++- **The spend budget is the one most likely to bind**, and it is warned and stopped on the same
++  terms as compute and tokens. **Spend is metered
++  at published list rates over your own usage records, and unlike the token meter it counts cache
++  reads.** That difference is the reason this budget exists: cache reads are excluded from the
++  token basis above but are charged in full, and in the campaign this budget was calibrated on
++  they were **59% of the actual cost**. A run can therefore sit comfortably inside its token cap
++  and still exhaust its spend. **Read the spend figure, not the token figure, when judging how
++  much room you have left.**
+ 
+ - **The compute budget is deliberately set below the cost of screening the whole database.**
+   At measured cost — 1.83 CPU-hours per structure at two pressures — an exhaustive GCMC pass
+-  over all {{smoke=1,731|main=12,499}} structures would cost **{{smoke=3,162|main=22,873}} CPU-hours**. Your budget is {{smoke=about half that|main=about 10% of that}},
++  over all {{smoke=1,731|main=12,499}} structures would cost **{{smoke=3,162|main=22,873}} CPU-hours**. Your budget is {{smoke=about half that|main=about 7% of that}},
+   and it must also cover report-grade runs and reproduction. **You cannot screen everything,
+   and you are not expected to.** How you narrow the field is yours to choose and to justify
+   under §2.
+@@ -73,12 +82,12 @@
+   | Phase | Length | Ends at |
+   |---|---|---|
+   | **Smoke** | **3 days** | launch + 72 h exactly |
+-  | **Main** | **10 days** | launch + 240 h exactly |
++  | **Main** | **7 days** | launch + 168 h exactly |
+ 
+   **T is launch plus the stated number of hours, to the hour.** It is not "09:00 on the n-th
+   day": a launch at any other clock time would then give you less than the stated length, and
+   the difference is real — a 15:28 launch against a 09:00 deadline costs 6.5 h of a 3-day
+-  campaign and the same 6.5 h of a 10-day one. Your exact deadline, as an absolute timestamp,
++  campaign and the same 6.5 h of a 7-day one. Your exact deadline, as an absolute timestamp,
+   is `deadline_kst` in `WORKSPACE.json`. **Work from that timestamp, never from the day count.**
+ 
+ - Your campaign ends at the **T** for your own phase above, or when a hard budget stop fires,
+@@ -213,11 +222,14 @@
+ | 2026-08-29 | Appendix A, G4 | **Rewritten adsorbate-aware (Rev 18).** (a) open/exposed metal is claimable for methane with a mandatory stated caveat and no admissibility consequence; (b) inadmissible only for agent-created bare coordination sites and for framework chemistry the pinned UFF table cannot support, leg (ii) argued **per structure, never per element roster**; (c) criterion, chosen thresholds and mandatory sensitivity logged | PI, chemistry-reviewed |
+ | 2026-08-29 | Appendix A | Note added: **gates constrain claims, not measurement** — no gate forbids a simulation or suppresses a measured value | PI |
+ | 2026-08-29 | §6 | `[CHARTER-READ]` interpretation logging promoted **verbatim** from smoke addendum §A3 into the charter proper; reaches both arms, since §6 is not Appendix A | PI |
+-| 2026-08-29 | §1, §4 | **World frozen (Rev 19).** `[Q1:N]` → **12,499**, `[Q2:naive]` → **22,873 CPU-hours**, `[Q2:ratio]` → **about 10% of that**. Membership is the published SHA-256 manifest | PI |
++| 2026-08-29 | §1, §4 | **World frozen (Rev 19).** The three phase-dependent values — database size, naive full-screen cost, and the budget's ratio to it — are populated for the main phase. Membership is the published SHA-256 manifest | PI |
+ | 2026-08-29 | §4 | Main compute budget **1,600 → 2,300 CPU-hours** (≈10% of naive at the frozen N); tokens 45 M and concurrency 12 unchanged | PI, inside pre-ratified envelope |
+ | 2026-08-29 | §2 | Working capacity stated as **absolute**, not excess, with the two protocol reasons given — adopted from a replicate's filed `[CHARTER-READ]` | PI |
+ | 2026-08-29 | §5 | **T = launch + N × 24 h exactly**, never "09:00 on the n-th day"; the `WORKSPACE.json` timestamp is authoritative over the day count | PI |
+ | 2026-08-29 | §8 | **Rewritten.** The channel no longer promises repair or answers: escalations are logged and read at collection points, an answer within the campaign is not guaranteed, and absent one the replicate acts on its best reading and logs it as `[CHARTER-READ]` | PI |
++| 2026-08-29 | §5 | **Main horizon shortened (Rev 20)**; T remains launch + N × 24 h exactly | PI |
++| 2026-08-29 | §4 | Main compute and token budgets re-derived **pro-rata to the shorter horizon**, preserving the spendability duty cycle; the ratio to naive full-screen cost restated accordingly | PI |
++| 2026-08-29 | §4 | **Spend budget added**, warned at 75% and stopped at 100% like the others. It is metered at published list rates **including cache reads**, which the token basis excludes — the reason it can bind first | PI |
+ 
+ ## Note on the G3 density bounds
+ 
