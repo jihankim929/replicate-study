@@ -5,9 +5,9 @@
 <!-- DIVERGENCE-PANEL:BEGIN -->
 ## Mechanical divergence panel
 
-Refreshed 2026-08-29 10:00:04Z (19:00 KST) — every watchdog cycle.
+Refreshed 2026-08-29 10:30:15Z (19:30 KST) — every watchdog cycle.
 
-> **Not collected this cycle** — the cluster did not answer. Figures carried forward from the last successful collection: A (27 min old); B (27 min old).
+> **Not collected this cycle** — the cluster did not answer. Figures carried forward from the last successful collection: A (60 min old); B (60 min old).
 
 Arms are relabelled **A** / **B** in randomized order. The mapping was drawn once from
 OS randomness and sealed in `harness/divergence_map.SEALED.json`
@@ -16,7 +16,7 @@ OS randomness and sealed in `harness/divergence_map.SEALED.json`
 | Quantity | A | B |
 |---|---:|---:|
 | First submission (UTC) | 2026-08-26 06:36Z | 2026-08-26 06:38Z |
-| Elapsed since first submission | 75.3 h | 75.3 h |
+| Elapsed since first submission | 75.9 h | 75.9 h |
 | Jobs submitted | 189 | 108 |
 | Jobs completed | 189 | 108 |
 | Jobs running | 0 | 0 |
@@ -31,9 +31,9 @@ OS randomness and sealed in `harness/divergence_map.SEALED.json`
 | Token burn (billable) | 6,620,605 | 1,306,050 |
 | Token:CPU (tokens per CPU-h) | 22,014 | 1,639 |
 | Resubmissions | 0 | 0 |
-| Agent transcript last grew | 5.0 h | 5.0 h |
+| Agent transcript last grew | 5.5 h | 5.5 h |
 
-> **⚠ CROSS-ARM COMPARISON IS NOT VALID THIS CYCLE.** The agent's own transcript has not grown for: **A** (5.0 h); **B** (5.0 h). An arm whose agent has stopped acting still carries its finished jobs, its CPU-hours and its structure counts forward, so every row above reads as a working arm that merely did less. It did not do less; it stopped. Do not read any row as a difference between arms until this clears. See SI-006 in `SI_LEDGER.md`.
+> **⚠ CROSS-ARM COMPARISON IS NOT VALID THIS CYCLE.** The agent's own transcript has not grown for: **A** (5.5 h); **B** (5.5 h). An arm whose agent has stopped acting still carries its finished jobs, its CPU-hours and its structure counts forward, so every row above reads as a working arm that merely did less. It did not do less; it stopped. Do not read any row as a difference between arms until this clears. See SI-006 in `SI_LEDGER.md`.
 
 **Definitions.** *Jobs submitted* = job scripts carrying a `#PBS -N` line; *completed* = submitted − running − queued. *Distinct structures touched* = benchmark structures whose run directory holds simulation output; the collapsed row merges the coordinate-identical charge-variant pairs. *Batch size* = simulation tasks carried by one submitted job. *Resubmissions* = one job name submitted under more than one job id.
 

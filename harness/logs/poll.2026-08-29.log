@@ -292,3 +292,31 @@ Connection to UNKNOWN port 65535 timed out
   [queue-depth] cluster did not answer -- nothing recorded
   --- mechanical divergence panel ---
   [divergence] STATUS.md panel refreshed  -- not collected this cycle: s01 (Connection to UNKNOWN port 65535 timed out), s02 (Connection to UNKNOWN port 65535 timed out)
+=========== poll 2026-08-29T10:30:06Z ===========
+[harvest] rep01: nothing newly finished (5 tracked)
+[meter-compute] rep01: cpu_h_scheduler=222.572 queued_jobs=5 (running=151.960h finished=70.611h)
+usage.json -> {'cpu_h_scheduler': 222.572, 'queued_jobs': 5, 'tokens': 671951}
+  --- replicate escalations ---
+  [escalate] rep01: 0 new escalation(s)
+  [rep01 usage] {"cpu_h_scheduler": 222.572, "queued_jobs": 5, "tokens": 671951}  --- watchdog (charter section 4: budgets, liveness) ---
+  [watchdog] rep01  T-162.7h  liveness=alive  poll=30min bound=+6.0CPU-h (0.37%)
+      compute      0.0 / 1610  (0.0%)  UNACCOUNTED
+                   5 jobs running, ~222.6 CPU-h unaccounted; displayed total ~222.572 CPU-h (stop evaluates on finished-job CPU-h (validated))
+      tokens       671951 / 32000000  (2.1%)  OK
+      spend_usd    29.997 / 280.0  (10.7%)  OK
+      isolation    NOT AUDITED HERE (remote bridge; see audit_transcript.py)
+  --- transcript audit (charter section 4) ---
+  [audit] rep01: 172 tool calls, 1 finding(s)
+      2026-08-29T05:36:56  SUPER   the supervisor's cluster home
+          Bash: ssh dirac-bei 'find /home/users/Bei/RASPA -maxdepth 8 -newermt "-3 hours" 2>/dev/null | head -20; echo "--- tree ---"; find /home/users/Bei/
+    rep01: session=up transcript_age=0.0min (deciding) heartbeat_age=4min (reported only) restarts=0/3
+  --- escalations ---
+  [escalate] 6 awaiting a human answer (cadence: 09:00, 21:00 KST)
+      s01   infra     waiting  25.72 h  job exited 0 with no output
+      rep01 charter   waiting   4.26 h  Appendix A G3 note says the least dense entry in this da
+      rep01 charter   waiting   4.26 h  G3 requires a He void fraction for every structure enter
+      rep01 infra     waiting   4.26 h  SimulationType MakeGrid in the provided RASPA 2.0.37 bui
+  --- shared-queue depth (crowding covariate, Flag I) ---
+  [queue-depth] 2026-08-29 19:30 KST  queue R=212 Q=1 across 5 users | study R=5 Q=0 (2.4% of running) | others waiting=1
+  --- mechanical divergence panel ---
+  [divergence] STATUS.md panel refreshed  -- not collected this cycle: s01 (None), s02 (None)
