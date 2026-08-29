@@ -580,3 +580,111 @@
          cache reads are 40.0% of that; $18.02 per M billable (547,904 billable vs 7,894,608 cache-read)
 [spend] rep09: $   10.51 / $280.00     3.8%  OK
          cache reads are 35.9% of that; $18.41 per M billable (570,782 billable vs 7,546,610 cache-read)
+[spend] rep01: $   30.80 / $280.00    11.0%  OK
+         cache reads are 68.8% of that; $45.45 per M billable (677,648 billable vs 42,362,424 cache-read)
+[spend] rep02: $    8.10 / $280.00     2.9%  OK
+         cache reads are 36.7% of that; $23.49 per M billable (344,822 billable vs 5,942,310 cache-read)
+[spend] rep03: $   10.12 / $280.00     3.6%  OK
+         cache reads are 39.6% of that; $23.39 per M billable (432,780 billable vs 8,018,377 cache-read)
+[spend] rep04: $   10.76 / $280.00     3.8%  OK
+         cache reads are 38.4% of that; $17.92 per M billable (600,546 billable vs 8,256,457 cache-read)
+[spend] rep05: $    9.50 / $280.00     3.4%  OK
+         cache reads are 44.5% of that; $25.76 per M billable (368,797 billable vs 8,465,560 cache-read)
+[spend] rep06: $   13.22 / $280.00     4.7%  OK
+         cache reads are 47.3% of that; $26.91 per M billable (491,298 billable vs 12,500,408 cache-read)
+[spend] rep07: $    7.71 / $280.00     2.8%  OK
+         cache reads are 36.2% of that; $21.48 per M billable (359,060 billable vs 5,582,103 cache-read)
+[spend] rep08: $   11.79 / $280.00     4.2%  OK
+         cache reads are 41.0% of that; $17.29 per M billable (682,004 billable vs 9,678,273 cache-read)
+[spend] rep09: $   12.63 / $280.00     4.5%  OK
+         cache reads are 37.6% of that; $17.74 per M billable (711,648 billable vs 9,485,756 cache-read)
+[spend] rep01: $   30.80 / $280.00    11.0%  OK
+         cache reads are 68.8% of that; $45.45 per M billable (677,648 billable vs 42,362,424 cache-read)
+[spend] rep02: $    8.37 / $280.00     3.0%  OK
+         cache reads are 37.5% of that; $23.83 per M billable (351,257 billable vs 6,285,920 cache-read)
+[spend] rep03: $   10.12 / $280.00     3.6%  OK
+         cache reads are 39.6% of that; $23.39 per M billable (432,780 billable vs 8,018,377 cache-read)
+[spend] rep04: $   10.91 / $280.00     3.9%  OK
+         cache reads are 39.0% of that; $18.12 per M billable (601,876 billable vs 8,505,861 cache-read)
+[spend] rep05: $   11.92 / $280.00     4.3%  OK
+         cache reads are 39.6% of that; $18.64 per M billable (639,311 billable vs 9,443,278 cache-read)
+[spend] rep06: $   14.42 / $280.00     5.1%  OK
+         cache reads are 47.6% of that; $27.33 per M billable (527,511 billable vs 13,731,129 cache-read)
+[spend] rep07: $    7.71 / $280.00     2.8%  OK
+         cache reads are 36.2% of that; $21.48 per M billable (359,060 billable vs 5,582,103 cache-read)
+[spend] rep08: $   12.28 / $280.00     4.4%  OK
+         cache reads are 42.1% of that; $17.72 per M billable (692,831 billable vs 10,332,556 cache-read)
+[spend] rep09: $   12.63 / $280.00     4.5%  OK
+         cache reads are 37.6% of that; $17.74 per M billable (711,648 billable vs 9,485,756 cache-read)
+[spend] rep01: $   30.80 / $280.00    11.0%  OK
+         cache reads are 68.8% of that; $45.45 per M billable (677,648 billable vs 42,362,424 cache-read)
+[spend] rep02: $    8.69 / $280.00     3.1%  OK
+         cache reads are 38.9% of that; $24.40 per M billable (356,243 billable vs 6,754,223 cache-read)
+[spend] rep03: $   10.12 / $280.00     3.6%  OK
+         cache reads are 39.6% of that; $23.39 per M billable (432,780 billable vs 8,018,377 cache-read)
+[spend] rep04: $   11.24 / $280.00     4.0%  OK
+         cache reads are 39.5% of that; $18.42 per M billable (610,307 billable vs 8,881,673 cache-read)
+[spend] rep05: $   14.22 / $280.00     5.1%  OK
+         cache reads are 40.4% of that; $17.67 per M billable (804,843 billable vs 11,494,027 cache-read)
+[spend] rep06: $   15.59 / $280.00     5.6%  OK
+         cache reads are 49.8% of that; $28.55 per M billable (545,941 billable vs 15,522,137 cache-read)
+[spend] rep07: $    7.86 / $280.00     2.8%  OK
+         cache reads are 37.0% of that; $21.71 per M billable (362,062 billable vs 5,817,663 cache-read)
+[spend] rep08: $   12.28 / $280.00     4.4%  OK
+         cache reads are 42.1% of that; $17.72 per M billable (692,831 billable vs 10,332,556 cache-read)
+[spend] rep09: $   12.63 / $280.00     4.5%  OK
+         cache reads are 37.6% of that; $17.74 per M billable (711,648 billable vs 9,485,756 cache-read)
+[spend] rep01: $   30.80 / $280.00    11.0%  OK
+         cache reads are 68.8% of that; $45.45 per M billable (677,648 billable vs 42,362,424 cache-read)
+[spend] rep02: $    8.69 / $280.00     3.1%  OK
+         cache reads are 38.9% of that; $24.40 per M billable (356,243 billable vs 6,754,223 cache-read)
+[spend] rep03: $   10.12 / $280.00     3.6%  OK
+         cache reads are 39.6% of that; $23.39 per M billable (432,780 billable vs 8,018,377 cache-read)
+[spend] rep04: $   11.24 / $280.00     4.0%  OK
+         cache reads are 39.5% of that; $18.42 per M billable (610,307 billable vs 8,881,673 cache-read)
+[spend] rep05: $   14.49 / $280.00     5.2%  OK
+         cache reads are 40.7% of that; $17.89 per M billable (810,169 billable vs 11,797,469 cache-read)
+[spend] rep06: $   16.57 / $280.00     5.9%  OK
+         cache reads are 51.4% of that; $29.63 per M billable (559,039 billable vs 17,038,861 cache-read)
+[spend] rep07: $    9.31 / $280.00     3.3%  OK
+         cache reads are 40.5% of that; $23.20 per M billable (401,168 billable vs 7,535,831 cache-read)
+[spend] rep08: $   12.28 / $280.00     4.4%  OK
+         cache reads are 42.1% of that; $17.72 per M billable (692,831 billable vs 10,332,556 cache-read)
+[spend] rep09: $   12.63 / $280.00     4.5%  OK
+         cache reads are 37.6% of that; $17.74 per M billable (711,648 billable vs 9,485,756 cache-read)
+[spend] rep01: $   32.42 / $280.00    11.6%  OK
+         cache reads are 69.1% of that; $46.18 per M billable (701,920 billable vs 44,784,218 cache-read)
+[spend] rep02: $    8.69 / $280.00     3.1%  OK
+         cache reads are 38.9% of that; $24.40 per M billable (356,243 billable vs 6,754,223 cache-read)
+[spend] rep03: $   10.12 / $280.00     3.6%  OK
+         cache reads are 39.6% of that; $23.39 per M billable (432,780 billable vs 8,018,377 cache-read)
+[spend] rep04: $   11.24 / $280.00     4.0%  OK
+         cache reads are 39.5% of that; $18.42 per M billable (610,307 billable vs 8,881,673 cache-read)
+[spend] rep05: $   14.49 / $280.00     5.2%  OK
+         cache reads are 40.7% of that; $17.89 per M billable (810,169 billable vs 11,797,469 cache-read)
+[spend] rep06: $   18.23 / $280.00     6.5%  OK
+         cache reads are 53.0% of that; $30.88 per M billable (590,306 billable vs 19,305,064 cache-read)
+[spend] rep07: $   10.95 / $280.00     3.9%  OK
+         cache reads are 44.2% of that; $24.86 per M billable (440,289 billable vs 9,682,725 cache-read)
+[spend] rep08: $   12.28 / $280.00     4.4%  OK
+         cache reads are 42.1% of that; $17.72 per M billable (692,831 billable vs 10,332,556 cache-read)
+[spend] rep09: $   12.63 / $280.00     4.5%  OK
+         cache reads are 37.6% of that; $17.74 per M billable (711,648 billable vs 9,485,756 cache-read)
+[spend] rep01: $   33.09 / $280.00    11.8%  OK
+         cache reads are 69.5% of that; $46.83 per M billable (706,711 billable vs 46,021,560 cache-read)
+[spend] rep02: $    9.03 / $280.00     3.2%  OK
+         cache reads are 40.1% of that; $24.89 per M billable (362,643 billable vs 7,229,085 cache-read)
+[spend] rep03: $   10.63 / $280.00     3.8%  OK
+         cache reads are 41.6% of that; $24.10 per M billable (440,925 billable vs 8,848,624 cache-read)
+[spend] rep04: $   11.24 / $280.00     4.0%  OK
+         cache reads are 39.5% of that; $18.42 per M billable (610,307 billable vs 8,881,673 cache-read)
+[spend] rep05: $   14.49 / $280.00     5.2%  OK
+         cache reads are 40.7% of that; $17.89 per M billable (810,169 billable vs 11,797,469 cache-read)
+[spend] rep06: $   21.87 / $280.00     7.8%  OK
+         cache reads are 49.7% of that; $23.09 per M billable (947,270 billable vs 21,725,184 cache-read)
+[spend] rep07: $   12.62 / $280.00     4.5%  OK
+         cache reads are 47.4% of that; $26.71 per M billable (472,255 billable vs 11,968,958 cache-read)
+[spend] rep08: $   12.28 / $280.00     4.4%  OK
+         cache reads are 42.1% of that; $17.72 per M billable (692,831 billable vs 10,332,556 cache-read)
+[spend] rep09: $   12.95 / $280.00     4.6%  OK
+         cache reads are 38.2% of that; $18.05 per M billable (717,654 billable vs 9,884,915 cache-read)

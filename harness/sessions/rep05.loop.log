@@ -1,1 +1,5 @@
 2026-08-29T10:40:57Z iteration 1 starting (headless)
+2026-08-29T11:10:19Z iteration 1 exited rc=0 after 1762s (transcript 0 -> 604340)
+2026-08-29T11:10:29Z iteration 2 starting (headless)
+2026-08-29T11:11:45Z iteration 2 exited rc=0 after 76s (transcript 604340 -> 639563)
+2026-08-29T11:11:55Z iteration 3 starting (headless)
