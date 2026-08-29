@@ -33,10 +33,14 @@ def _read_usage(ws: Path) -> dict:
     """
     f = ws / "usage.json"
     if not f.exists():
-        return {"cpu_h": 0.0, "cpu_h_scheduler": 0.0, "basis": "none",
+        return {"cpu_h": 0.0, "cpu_h_scheduler": 0.0, "basis": "none", "cpu_h_present": False,
                 "tokens": 0, "queued_jobs": 0}
     d = json.loads(f.read_text())
-    return {"cpu_h": float(d.get("cpu_h", 0)),
+    # SI-021: whether the validated meter HAS data is not the same question as what it says.
+    # `cpu_h` is written only from finished jobs, so before the first completion the key is
+    # absent -- and a `.get(..., 0)` turned "I do not know" into "zero, OK".
+    return {"cpu_h_present": "cpu_h" in d,
+            "cpu_h": float(d.get("cpu_h", 0)),
             "cpu_h_scheduler": float(d.get("cpu_h_scheduler", 0)),
             "basis": d.get("cpu_h_basis", "unknown"),
             "tokens": int(d.get("tokens", 0)),
@@ -95,8 +99,36 @@ def check_budget(ws: Path, meta: dict) -> list:
     # local read cannot go stale the way the cluster-bound meters did at collection (-36.5% and
     # -50.5%). It is also why spend can be polled far more often than the cluster meters --
     # there is no ssh round trip to pay, which is what makes the cap enforceable within its bound.
-    rows = [("compute", u["cpu_h"], meta["compute_cpu_h"]),
-            ("tokens", u["tokens"], meta["token_budget"])]
+    rows = [("tokens", u["tokens"], meta["token_budget"])]
+
+    # --- COMPUTE: two-tier, per PI amendment 2026-08-29 (SI-021) --------------------------
+    # The hard stop keeps its ratified basis -- finished-job CPU-h, the validated meter. What
+    # changes is that the meter is no longer allowed to report OK while it has nothing to
+    # report: warnings and the displayed total carry the scheduler's in-flight estimate, and a
+    # replicate with jobs running is never shown as OK on a number that excludes them.
+    cap = meta["compute_cpu_h"]
+    stop_used = u["cpu_h"]                        # validated: finished jobs only
+    in_flight = u["cpu_h_scheduler"]              # estimate: alive at poll + caught leaving
+    running = u["queued_jobs"]
+    warn_used = stop_used + in_flight
+    if stop_used / cap >= C.STOP_FRACTION:
+        level = "stop"
+    elif warn_used / cap >= C.WARN_FRACTION:
+        level = "warn"
+    elif running > 0 or not u["cpu_h_present"]:
+        level = "unaccounted"                     # never "ok" while the meter is incomplete
+    else:
+        level = "ok"
+    events.append({"resource": "compute", "used": round(stop_used, 3), "cap": cap,
+                   "fraction": round(stop_used / cap, 4), "level": level,
+                   "enforcement": enforcement(meta["phase"], "compute"),
+                   "stop_basis": "finished-job CPU-h (validated)",
+                   "in_flight_cpu_h": round(in_flight, 3),
+                   "jobs_running": running,
+                   "displayed_total_cpu_h": round(warn_used, 3),
+                   "meter_has_data": u["cpu_h_present"],
+                   "note": (f"{running} jobs running, ~{in_flight:.1f} CPU-h unaccounted"
+                            if running or not u["cpu_h_present"] else None)})
     spend_cap = C.RATIFIED.get("spend_usd", {}).get(meta["phase"])
     if spend_cap:
         try:
@@ -294,6 +326,10 @@ def _fmt(r):
     for e in r["budget"]:
         f = "n/a" if e["fraction"] is None else f"{e['fraction']:.1%}"
         out.append(f"    {e['resource']:<12} {e['used']} / {e['cap']}  ({f})  {e['level'].upper()}")
+        if e.get("note"):
+            out.append(f"                 {e['note']}; displayed total "
+                       f"~{e['displayed_total_cpu_h']} CPU-h (stop evaluates on "
+                       f"{e['stop_basis']})")
     if not r.get("isolation_audited", True):
         out.append("    isolation    NOT AUDITED HERE (remote bridge; see audit_transcript.py)")
     else:

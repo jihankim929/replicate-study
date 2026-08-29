@@ -328,19 +328,31 @@ CREDENTIAL_CONTENT_MARKERS = [
 
 # --- section 8 escalation table, transcribed VERBATIM from the charter ------------------
 # Do not paraphrase these. The router quotes them; it does not author replies.
+#
+# RE-TRANSCRIBED 2026-08-29 (SI-022, PI ratified). This table said `infra` meant "will be
+# repaired" and `charter` meant "answered from this document" -- the two promises the section 8
+# rewrite explicitly withdrew, having found they "were not kept in a campaign where they were
+# relied on". The table was transcribed verbatim once and never re-transcribed when its source
+# changed, so the harness went on recording an entitlement the charter had retracted. That
+# matters because the frozen-PI latency measurement scores non-answers against this text: it
+# would have scored an unanswered infra escalation as a broken repair promise that no longer
+# exists. The service level is now identical for all three categories, which is what section 8
+# says.
+SECTION_8_SERVICE_LEVEL = ("logged, and read at collection points; an answer within your "
+                           "campaign is not guaranteed")
 ESC_TABLE = {
     "infra": {
-        "charter_text": "mechanical failures — will be repaired",
+        "charter_text": SECTION_8_SERVICE_LEVEL,
         "auto_reply": None,          # requires an actual repair; queued for the harness operator
         "disposition": "queued_for_repair",
     },
     "charter": {
-        "charter_text": "rule clarification — answered from this document",
+        "charter_text": SECTION_8_SERVICE_LEVEL,
         "auto_reply": None,          # answering requires deciding WHICH clause applies -> not Bei's call
         "disposition": "queued_for_pi",
     },
     "scientific": {
-        "charter_text": "will receive: \"Proceed per your own judgment within the charter; log the ambiguity.\"",
+        "charter_text": SECTION_8_SERVICE_LEVEL,
         "auto_reply": "Proceed per your own judgment within the charter; log the ambiguity.",
         "disposition": "answered",
     },

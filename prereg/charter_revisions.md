@@ -961,3 +961,32 @@ RECORD restated the main-phase values in prose, and the revision record renders 
 charter. The standing rule now, ratified: **the record says that a value was set, not what it was
 set to.** One pre-existing row naming a superseded budget is **left as written and flagged** —
 append-only prevails over tidiness.
+
+## Rev 21 — 2026-08-29 — two G3 clarifications, both from rep01 escalations
+
+**Amendment to the compute meter, filed with SI-021 attached (PI, 2026-08-29).** Enforcement of
+the §4 compute cap becomes two-tier. The **hard stop keeps its ratified basis** — finished-job
+CPU-h, the validated meter — so the cap's threshold is unchanged. What changes is that the meter
+may no longer report `OK` on absent data: **warnings and the displayed total include the
+scheduler's in-flight estimate**, rendered as *"N jobs running, ~X CPU-h unaccounted"*, and a
+replicate with jobs in flight is never shown as `OK`. This restores the cap's intent rather than
+altering it: before the amendment, `cpu_h` defaulted to `0` whenever no job had yet finished, and
+the watchdog printed `compute 0.0 / 1610 (0.0%) OK` against 112 CPU-h of scheduler-basis burn.
+
+**Rev 21(a) — G3 density note, cited minimum corrected.** The note quoted a least-dense figure
+measured on a smaller earlier database. Measured on the database this campaign holds: minimum
+**0.164 g/cm³**, maximum 3.963, median 1.255; **four entries fall below the 0.20 g/cm³ bound** and
+sixteen below the stale figure. **The bound itself is unchanged and stands as ratified** — it is an
+impossibility filter, and the four are killed as designed. Found by rep01, not by Bei: the charter
+carried a claim about its own database that stopped being true when the world was frozen at Q1,
+which is the SI-008 shape — a guard citing a number the charter no longer contains.
+
+**Rev 21(b) — G3 void-fraction method.** G3 requires a He void fraction for every structure
+entering GCMC, and the hash-pinned `pseudo_atoms.def` contains no helium, so the requirement could
+not be met without editing a pinned file. G3 now states that **any stated and logged method**
+satisfies it, and that **the pinned file set governs claim simulations, not descriptors**.
+
+**Asymmetry, logged.** rep01 receives both rulings through the escalation channel mid-campaign; the
+fifteen waiting replicates receive the same content as corrected charter text at provisioning and
+will never file the escalation. rep01's trajectory therefore contains a round-trip no other
+trajectory can contain, and comparisons of escalation behaviour must exclude it.

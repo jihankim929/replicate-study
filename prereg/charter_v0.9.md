@@ -147,6 +147,7 @@ The following gates are mandatory. Gate events are recorded in `AUDIT.jsonl` (sc
 - **G1 — Ceiling gate.** Any working capacity **> 230 cm³/cm³** is presumed an artifact. Mandatory audit before the number appears anywhere outside AUDIT.jsonl: structure integrity, charge balance, protocol compliance, convergence. Disposition logged.
 - **G2 — Interest band.** Results in **210–230** are flagged `flagged_pending` and audited before promotion. Results ≤ 210 matching known-material expectations require no gate action.
 - **G3 — Structure sanity (pre-simulation).** Every structure entering GCMC passes: no overlapping atoms; framework density within **0.20 – 4.50 g/cm³**; He void fraction computed; **charge balance verified** (all charged framework components retain their counter-ions/pillars). Failures are killed and logged.
+  - **Void-fraction method (Rev 21).** The He void fraction may be obtained by **any method you state and log** — a geometric probe calculation, or Widom insertion using an auxiliary parameter file you create — and the method chosen is part of the record for that structure. **The pinned file set governs claim simulations, not descriptors:** every GCMC run whose result supports a reported capacity must use only the hash-pinned files, unmodified. A descriptor computed to decide *which* structures to simulate is not a claim simulation.
 - **G4 — Protocol validity (adsorbate-aware).** G4 asks whether the **guest–site interaction class is one the §3 protocol can describe for the adsorbate named in §2**. It is not a test for the presence of a structural feature. A site that places a structure outside the protocol's reach for one guest can be well inside it for another, so G4 is stated per adsorbate and must be re-derived if §2's adsorbate changes.
 
   **(a) Caveat class — claimable.** For **methane**, structures carrying open or exposed metal sites are **inside the claimable domain**. CH₄ at an open metal is dispersion-dominated with weak polarization; the calibration literature screens whole databases under UFF without excluding open metals; and working capacity, being a difference of two loadings at the same sites, cancels most site-specific common-mode force-field error. The residual biases **conservative** — an over-bound site inflates N(5.8 bar) more than N(65 bar), so it understates the reported working capacity. Such structures **may headline the campaign**, and open metal sites carry **no admissibility consequence for this adsorbate**. They carry one obligation: a **mandatory caveat, stated wherever such a structure's number appears in the Claim**, in these terms —
@@ -231,12 +232,15 @@ Amendments to this document before seal. Append-only.
 | 2026-08-29 | §4 | Main compute and token budgets re-derived **pro-rata to the shorter horizon**, preserving the spendability duty cycle; the ratio to naive full-screen cost restated accordingly | PI |
 | 2026-08-29 | §4 | **Spend budget added**, warned at 75% and stopped at 100% like the others. It is metered at published list rates **including cache reads**, which the token basis excludes — the reason it can bind first | PI |
 | 2026-08-29 | header | **Charter sealed at v1.0.** All prior revisions ratified; the pre-registered artefacts are sealed alongside it. No value in this document changes after this row. | PI |
+| 2026-08-29 | Appendix A, G3 note | **Cited database minimum corrected (Rev 21).** The note quoted a least-dense figure measured on a smaller earlier database; it is restated against the database this campaign actually holds. **The 0.20 g/cm³ bound is unchanged and stands as ratified.** | PI |
+| 2026-08-29 | Appendix A, G3 | **Void-fraction method clause added (Rev 21).** G3 requires a He void fraction; the pinned parameter file contains no helium, so the requirement is now explicit that any stated and logged method satisfies it, while the pinned file set continues to govern claim simulations. | PI |
 
 ## Note on the G3 density bounds
 
 These bounds are an **impossibility filter, not a plausibility filter**, and should not be
 tightened. Genuine, fully charge-balanced MOFs exist below 0.36 g/cm³ — the least dense entry
-in this database is 0.313 g/cm³ — and the ultra-low-density regime is precisely where high
+in this database is **0.164 g/cm³**, and **four entries fall below the 0.20 g/cm³ bound** — and
+the ultra-low-density regime is precisely where high
 methane deliverable capacity is expected to live. A lower bound set at 0.4 or 0.5 g/cm³ would
 reject sound materials for being porous, which is a **chemical error**, not a conservative
 safeguard.
