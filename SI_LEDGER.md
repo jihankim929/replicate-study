@@ -1475,3 +1475,55 @@ not a confound between them, but it is a floor on how precisely either arm was i
 one authority per number, so there is nothing left to leave unset. `selftest.sh` now asserts that
 **no unpopulated placeholder survives into any provisioned rendering of the charter or the
 addendum**, across both phases and both arms.
+
+---
+
+## SI-021 — the compute meter reads zero while compute burns [Bei, 2026-08-29]
+
+**Found at the 4-hour gate on rep01.** The watchdog printed:
+
+```
+compute      0.0 / 1610  (0.0%)  OK
+```
+
+while the same poll's `usage.json` carried `"cpu_h_scheduler": 112.183`. **112 CPU-hours consumed,
+metered as zero, reported OK.**
+
+`watchdog.usage()` reads the job-records basis with `float(d.get("cpu_h", 0))`. `cpu_h` is written
+by `harvest_cput.sh`, which populates it only from jobs that have **finished** — `[harvest] rep01:
+nothing newly finished (5 tracked)`. Until a job completes, the key is absent and the meter
+**defaults to 0.0 and reports OK**, rather than reporting that it does not know.
+
+The consequence is not a cosmetic zero. §4's hard stop at 100% is evaluated against this number, so
+**compute enforcement is blind for as long as jobs keep running without finishing** — and a
+replicate that submits long jobs is exactly the case where the 1,610 CPU-h ceiling matters. A
+silent zero is indistinguishable from a genuinely idle replicate.
+
+**This is the silent-success shape again**, and it is the third instance to reach a live meter:
+SI-001 (scheduler basis undercounted 19×, retained only as evidence), the token basis that excluded
+cache reads and so failed to bound spend, and now a compute basis that reports 0.0 when it has no
+data. **A meter with no data must say so, not say zero.**
+
+**Not repaired unilaterally.** The fix is small — carry `basis: "none"` through to the display and
+refuse to evaluate the stop against an unpopulated meter — but it changes how a ratified hard stop
+behaves, and rep01 is executing. Filed for the PI with the gate verdict.
+
+---
+
+## SI-022 — the escalation ledger still promises what §8 withdrew [Bei, 2026-08-29]
+
+rep01's three escalations were stamped by `escalate.py` with:
+
+- `"charter_text": "rule clarification — answered from this document"`
+- `"charter_text": "mechanical failures — will be repaired"`
+
+**Those are the exact promises charter §8 was rewritten to disavow.** §8 now reads: *"An earlier
+version of this section promised that `infra` failures 'will be repaired' and `charter` questions
+'answered from this document'. Those promises were not kept in a campaign where they were relied
+on."* The charter the replicate reads makes no such promise; the harness's own record of that
+replicate's escalations still does.
+
+Nothing the replicate sees is affected — the stamp lives in Bei's queue, not in `INBOX.md`. What is
+affected is the study's record of what each escalation was owed, which is the data SI-013's
+frozen-PI latency measurement is built from. **A latency ledger that records a repair promise the
+charter withdrew will score the non-answer against a standard that no longer exists.**

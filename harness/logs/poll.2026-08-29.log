@@ -48,3 +48,221 @@ usage.json -> {'cpu_h_scheduler': 0.0, 'queued_jobs': 0, 'tokens': 60647}
   [queue-depth] 2026-08-29 14:15 KST  queue R=210 Q=0 across 3 users | study R=0 Q=0 (0.0% of running) | others waiting=0
   --- mechanical divergence panel ---
   [divergence] STATUS.md panel refreshed
+=========== poll 2026-08-29T05:44:10Z ===========
+[harvest] rep01: nothing newly finished (1 tracked)
+[meter-compute] rep01: cpu_h_scheduler=2.492 queued_jobs=1 (running=2.492h finished=0.000h)
+usage.json -> {'cpu_h_scheduler': 2.492, 'queued_jobs': 1, 'tokens': 371100}
+  --- replicate escalations ---
+  [escalate] rep01: 0 new escalation(s)
+  [rep01 usage] {"cpu_h_scheduler": 2.492, "queued_jobs": 1, "tokens": 371100}  --- watchdog (charter section 4: budgets, liveness) ---
+  [watchdog] rep01  T-167.5h  liveness=alive  poll=30min bound=+6.0CPU-h (0.37%)
+      compute      0.0 / 1610  (0.0%)  OK
+      tokens       371100 / 32000000  (1.2%)  OK
+      spend_usd    10.0883 / 280.0  (3.6%)  OK
+      isolation    NOT AUDITED HERE (remote bridge; see audit_transcript.py)
+  --- transcript audit (charter section 4) ---
+  [audit] rep01: 67 tool calls, 1 finding(s)
+      2026-08-29T05:36:56  SUPER   the supervisor's cluster home
+          Bash: ssh dirac-bei 'find /home/users/Bei/RASPA -maxdepth 8 -newermt "-3 hours" 2>/dev/null | head -20; echo "--- tree ---"; find /home/users/Bei/
+    rep01: session=up transcript_age=0.0min (deciding) heartbeat_age=1min (reported only) restarts=0/3
+  --- escalations ---
+  [escalate] 1 awaiting a human answer (cadence: 09:00, 21:00 KST)
+      s01   infra     waiting  20.96 h  job exited 0 with no output
+  --- shared-queue depth (crowding covariate, Flag I) ---
+  [queue-depth] 2026-08-29 14:44 KST  queue R=207 Q=1 across 5 users | study R=1 Q=0 (0.5% of running) | others waiting=1
+  --- mechanical divergence panel ---
+  [divergence] STATUS.md panel refreshed
+=========== poll 2026-08-29T06:14:20Z ===========
+[harvest] rep01: 1 job(s) left the queue, 2.492 CPU-h banked
+[meter-compute] rep01: cpu_h_scheduler=4.896 queued_jobs=1 (running=2.404h finished=2.492h)
+usage.json -> {'cpu_h_scheduler': 4.896, 'queued_jobs': 1, 'tokens': 460838}
+  --- replicate escalations ---
+  [escalate] rep01: 3 new escalation(s)
+      charter     -> queued_for_pi      Appendix A G3 note says the least dense entry in this databa
+      charter     -> queued_for_pi      G3 requires a He void fraction for every structure entering 
+      infra       -> queued_for_repair  SimulationType MakeGrid in the provided RASPA 2.0.37 build e
+      !! 3 awaiting a human action (repair or PI ruling)
+    [escalate] rep01: inbox updated on the cluster
+  [rep01 usage] {"cpu_h_scheduler": 4.896, "queued_jobs": 1, "tokens": 460838}  --- watchdog (charter section 4: budgets, liveness) ---
+  [watchdog] rep01  T-167.0h  liveness=alive  poll=30min bound=+6.0CPU-h (0.37%)
+      compute      0.0 / 1610  (0.0%)  OK
+      tokens       460838 / 32000000  (1.4%)  OK
+      spend_usd    14.3642 / 280.0  (5.1%)  OK
+      isolation    NOT AUDITED HERE (remote bridge; see audit_transcript.py)
+  --- transcript audit (charter section 4) ---
+  [audit] rep01: 92 tool calls, 1 finding(s)
+      2026-08-29T05:36:56  SUPER   the supervisor's cluster home
+          Bash: ssh dirac-bei 'find /home/users/Bei/RASPA -maxdepth 8 -newermt "-3 hours" 2>/dev/null | head -20; echo "--- tree ---"; find /home/users/Bei/
+    rep01: session=up transcript_age=0.0min (deciding) heartbeat_age=1min (reported only) restarts=0/3
+  --- escalations ---
+  [escalate] 4 awaiting a human answer (cadence: 09:00, 21:00 KST)
+      s01   infra     waiting  21.46 h  job exited 0 with no output
+      rep01 charter   waiting   0.00 h  Appendix A G3 note says the least dense entry in this da
+      rep01 charter   waiting   0.00 h  G3 requires a He void fraction for every structure enter
+      rep01 infra     waiting   0.00 h  SimulationType MakeGrid in the provided RASPA 2.0.37 bui
+  --- shared-queue depth (crowding covariate, Flag I) ---
+  [queue-depth] 2026-08-29 15:14 KST  queue R=204 Q=1 across 5 users | study R=1 Q=0 (0.5% of running) | others waiting=1
+  --- mechanical divergence panel ---
+  [divergence] STATUS.md panel refreshed
+=========== poll 2026-08-29T06:44:30Z ===========
+[harvest] rep01: nothing newly finished (2 tracked)
+[meter-compute] rep01: cpu_h_scheduler=21.954 queued_jobs=2 (running=19.462h finished=2.492h)
+usage.json -> {'cpu_h_scheduler': 21.954, 'queued_jobs': 2, 'tokens': 487455}
+  --- replicate escalations ---
+  [escalate] rep01: 0 new escalation(s)
+  [rep01 usage] {"cpu_h_scheduler": 21.954, "queued_jobs": 2, "tokens": 487455}  --- watchdog (charter section 4: budgets, liveness) ---
+  [watchdog] rep01  T-166.5h  liveness=alive  poll=30min bound=+6.0CPU-h (0.37%)
+      compute      0.0 / 1610  (0.0%)  OK
+      tokens       487455 / 32000000  (1.5%)  OK
+      spend_usd    16.0025 / 280.0  (5.7%)  OK
+      isolation    NOT AUDITED HERE (remote bridge; see audit_transcript.py)
+  --- transcript audit (charter section 4) ---
+  [audit] rep01: 101 tool calls, 1 finding(s)
+      2026-08-29T05:36:56  SUPER   the supervisor's cluster home
+          Bash: ssh dirac-bei 'find /home/users/Bei/RASPA -maxdepth 8 -newermt "-3 hours" 2>/dev/null | head -20; echo "--- tree ---"; find /home/users/Bei/
+    rep01: session=up transcript_age=0.0min (deciding) heartbeat_age=1min (reported only) restarts=0/3
+  --- escalations ---
+  [escalate] 4 awaiting a human answer (cadence: 09:00, 21:00 KST)
+      s01   infra     waiting  21.96 h  job exited 0 with no output
+      rep01 charter   waiting   0.50 h  Appendix A G3 note says the least dense entry in this da
+      rep01 charter   waiting   0.50 h  G3 requires a He void fraction for every structure enter
+      rep01 infra     waiting   0.50 h  SimulationType MakeGrid in the provided RASPA 2.0.37 bui
+  --- shared-queue depth (crowding covariate, Flag I) ---
+  [queue-depth] 2026-08-29 15:44 KST  queue R=204 Q=1 across 5 users | study R=2 Q=0 (1.0% of running) | others waiting=1
+  --- mechanical divergence panel ---
+  [divergence] STATUS.md panel refreshed
+=========== poll 2026-08-29T07:14:41Z ===========
+[harvest] rep01: nothing newly finished (2 tracked)
+[meter-compute] rep01: cpu_h_scheduler=39.403 queued_jobs=2 (running=36.911h finished=2.492h)
+usage.json -> {'cpu_h_scheduler': 39.403, 'queued_jobs': 2, 'tokens': 497488}
+  --- replicate escalations ---
+  [escalate] rep01: 0 new escalation(s)
+  [rep01 usage] {"cpu_h_scheduler": 39.403, "queued_jobs": 2, "tokens": 497488}  --- watchdog (charter section 4: budgets, liveness) ---
+  [watchdog] rep01  T-166.0h  liveness=alive  poll=30min bound=+6.0CPU-h (0.37%)
+      compute      0.0 / 1610  (0.0%)  OK
+      tokens       497488 / 32000000  (1.6%)  OK
+      spend_usd    16.9435 / 280.0  (6.0%)  OK
+      isolation    NOT AUDITED HERE (remote bridge; see audit_transcript.py)
+  --- transcript audit (charter section 4) ---
+  [audit] rep01: 107 tool calls, 1 finding(s)
+      2026-08-29T05:36:56  SUPER   the supervisor's cluster home
+          Bash: ssh dirac-bei 'find /home/users/Bei/RASPA -maxdepth 8 -newermt "-3 hours" 2>/dev/null | head -20; echo "--- tree ---"; find /home/users/Bei/
+    rep01: session=up transcript_age=0.0min (deciding) heartbeat_age=9min (reported only) restarts=0/3
+  --- escalations ---
+  [escalate] 4 awaiting a human answer (cadence: 09:00, 21:00 KST)
+      s01   infra     waiting  22.46 h  job exited 0 with no output
+      rep01 charter   waiting   1.01 h  Appendix A G3 note says the least dense entry in this da
+      rep01 charter   waiting   1.01 h  G3 requires a He void fraction for every structure enter
+      rep01 infra     waiting   1.01 h  SimulationType MakeGrid in the provided RASPA 2.0.37 bui
+  --- shared-queue depth (crowding covariate, Flag I) ---
+  [queue-depth] 2026-08-29 16:14 KST  queue R=212 Q=0 across 5 users | study R=2 Q=0 (0.9% of running) | others waiting=0
+  --- mechanical divergence panel ---
+  [divergence] STATUS.md panel refreshed
+=========== poll 2026-08-29T07:44:50Z ===========
+[harvest] rep01: nothing newly finished (2 tracked)
+[meter-compute] rep01: cpu_h_scheduler=52.805 queued_jobs=2 (running=50.313h finished=2.492h)
+usage.json -> {'cpu_h_scheduler': 52.805, 'queued_jobs': 2, 'tokens': 531541}
+  --- replicate escalations ---
+  [escalate] rep01: 0 new escalation(s)
+  [rep01 usage] {"cpu_h_scheduler": 52.805, "queued_jobs": 2, "tokens": 531541}  --- watchdog (charter section 4: budgets, liveness) ---
+  [watchdog] rep01  T-165.5h  liveness=alive  poll=30min bound=+6.0CPU-h (0.37%)
+      compute      0.0 / 1610  (0.0%)  OK
+      tokens       531541 / 32000000  (1.7%)  OK
+      spend_usd    18.8472 / 280.0  (6.7%)  OK
+      isolation    NOT AUDITED HERE (remote bridge; see audit_transcript.py)
+  --- transcript audit (charter section 4) ---
+  [audit] rep01: 117 tool calls, 1 finding(s)
+      2026-08-29T05:36:56  SUPER   the supervisor's cluster home
+          Bash: ssh dirac-bei 'find /home/users/Bei/RASPA -maxdepth 8 -newermt "-3 hours" 2>/dev/null | head -20; echo "--- tree ---"; find /home/users/Bei/
+    rep01: session=up transcript_age=0.0min (deciding) heartbeat_age=0min (reported only) restarts=0/3
+  --- escalations ---
+  [escalate] 4 awaiting a human answer (cadence: 09:00, 21:00 KST)
+      s01   infra     waiting  22.97 h  job exited 0 with no output
+      rep01 charter   waiting   1.51 h  Appendix A G3 note says the least dense entry in this da
+      rep01 charter   waiting   1.51 h  G3 requires a He void fraction for every structure enter
+      rep01 infra     waiting   1.51 h  SimulationType MakeGrid in the provided RASPA 2.0.37 bui
+  --- shared-queue depth (crowding covariate, Flag I) ---
+  [queue-depth] 2026-08-29 16:44 KST  queue R=212 Q=0 across 5 users | study R=2 Q=0 (0.9% of running) | others waiting=0
+  --- mechanical divergence panel ---
+  [divergence] STATUS.md panel refreshed
+=========== poll 2026-08-29T08:15:00Z ===========
+[harvest] rep01: nothing newly finished (2 tracked)
+[meter-compute] rep01: cpu_h_scheduler=61.676 queued_jobs=2 (running=59.184h finished=2.492h)
+usage.json -> {'cpu_h_scheduler': 61.676, 'queued_jobs': 2, 'tokens': 535673}
+  --- replicate escalations ---
+  [escalate] rep01: 0 new escalation(s)
+  [rep01 usage] {"cpu_h_scheduler": 61.676, "queued_jobs": 2, "tokens": 535673}  --- watchdog (charter section 4: budgets, liveness) ---
+  [watchdog] rep01  T-165.0h  liveness=alive  poll=30min bound=+6.0CPU-h (0.37%)
+      compute      0.0 / 1610  (0.0%)  OK
+      tokens       535673 / 32000000  (1.7%)  OK
+      spend_usd    19.3856 / 280.0  (6.9%)  OK
+      isolation    NOT AUDITED HERE (remote bridge; see audit_transcript.py)
+  --- transcript audit (charter section 4) ---
+  [audit] rep01: 121 tool calls, 1 finding(s)
+      2026-08-29T05:36:56  SUPER   the supervisor's cluster home
+          Bash: ssh dirac-bei 'find /home/users/Bei/RASPA -maxdepth 8 -newermt "-3 hours" 2>/dev/null | head -20; echo "--- tree ---"; find /home/users/Bei/
+    rep01: session=up transcript_age=0.0min (deciding) heartbeat_age=0min (reported only) restarts=0/3
+  --- escalations ---
+  [escalate] 4 awaiting a human answer (cadence: 09:00, 21:00 KST)
+      s01   infra     waiting  23.47 h  job exited 0 with no output
+      rep01 charter   waiting   2.01 h  Appendix A G3 note says the least dense entry in this da
+      rep01 charter   waiting   2.01 h  G3 requires a He void fraction for every structure enter
+      rep01 infra     waiting   2.01 h  SimulationType MakeGrid in the provided RASPA 2.0.37 bui
+  --- shared-queue depth (crowding covariate, Flag I) ---
+  [queue-depth] 2026-08-29 17:15 KST  queue R=215 Q=0 across 4 users | study R=2 Q=0 (0.9% of running) | others waiting=0
+  --- mechanical divergence panel ---
+  [divergence] STATUS.md panel refreshed
+=========== poll 2026-08-29T08:45:10Z ===========
+[harvest] rep01: nothing newly finished (3 tracked)
+[meter-compute] rep01: cpu_h_scheduler=76.626 queued_jobs=3 (running=74.134h finished=2.492h)
+usage.json -> {'cpu_h_scheduler': 76.626, 'queued_jobs': 3, 'tokens': 601034}
+  --- replicate escalations ---
+  [escalate] rep01: 0 new escalation(s)
+  [rep01 usage] {"cpu_h_scheduler": 76.626, "queued_jobs": 3, "tokens": 601034}  --- watchdog (charter section 4: budgets, liveness) ---
+  [watchdog] rep01  T-164.5h  liveness=alive  poll=30min bound=+6.0CPU-h (0.37%)
+      compute      0.0 / 1610  (0.0%)  OK
+      tokens       601034 / 32000000  (1.9%)  OK
+      spend_usd    23.3594 / 280.0  (8.3%)  OK
+      isolation    NOT AUDITED HERE (remote bridge; see audit_transcript.py)
+  --- transcript audit (charter section 4) ---
+  [audit] rep01: 139 tool calls, 1 finding(s)
+      2026-08-29T05:36:56  SUPER   the supervisor's cluster home
+          Bash: ssh dirac-bei 'find /home/users/Bei/RASPA -maxdepth 8 -newermt "-3 hours" 2>/dev/null | head -20; echo "--- tree ---"; find /home/users/Bei/
+    rep01: session=up transcript_age=0.0min (deciding) heartbeat_age=0min (reported only) restarts=0/3
+  --- escalations ---
+  [escalate] 4 awaiting a human answer (cadence: 09:00, 21:00 KST)
+      s01   infra     waiting  23.97 h  job exited 0 with no output
+      rep01 charter   waiting   2.51 h  Appendix A G3 note says the least dense entry in this da
+      rep01 charter   waiting   2.51 h  G3 requires a He void fraction for every structure enter
+      rep01 infra     waiting   2.51 h  SimulationType MakeGrid in the provided RASPA 2.0.37 bui
+  --- shared-queue depth (crowding covariate, Flag I) ---
+  [queue-depth] 2026-08-29 17:45 KST  queue R=214 Q=0 across 4 users | study R=3 Q=0 (1.4% of running) | others waiting=0
+  --- mechanical divergence panel ---
+  [divergence] STATUS.md panel refreshed
+=========== poll 2026-08-29T09:15:18Z ===========
+[harvest] rep01: nothing newly finished (5 tracked)
+[meter-compute] rep01: cpu_h_scheduler=108.583 queued_jobs=5 (running=106.091h finished=2.492h)
+usage.json -> {'cpu_h_scheduler': 108.583, 'queued_jobs': 5, 'tokens': 629276}
+  --- replicate escalations ---
+  [escalate] rep01: 0 new escalation(s)
+  [rep01 usage] {"cpu_h_scheduler": 108.583, "queued_jobs": 5, "tokens": 629276}  --- watchdog (charter section 4: budgets, liveness) ---
+  [watchdog] rep01  T-164.0h  liveness=alive  poll=30min bound=+6.0CPU-h (0.37%)
+      compute      0.0 / 1610  (0.0%)  OK
+      tokens       629276 / 32000000  (2.0%)  OK
+      spend_usd    26.1343 / 280.0  (9.3%)  OK
+      isolation    NOT AUDITED HERE (remote bridge; see audit_transcript.py)
+  --- transcript audit (charter section 4) ---
+  [audit] rep01: 152 tool calls, 1 finding(s)
+      2026-08-29T05:36:56  SUPER   the supervisor's cluster home
+          Bash: ssh dirac-bei 'find /home/users/Bei/RASPA -maxdepth 8 -newermt "-3 hours" 2>/dev/null | head -20; echo "--- tree ---"; find /home/users/Bei/
+    rep01: session=up transcript_age=0.0min (deciding) heartbeat_age=0min (reported only) restarts=0/3
+  --- escalations ---
+  [escalate] 4 awaiting a human answer (cadence: 09:00, 21:00 KST)
+      s01   infra     waiting  24.48 h  job exited 0 with no output
+      rep01 charter   waiting   3.02 h  Appendix A G3 note says the least dense entry in this da
+      rep01 charter   waiting   3.02 h  G3 requires a He void fraction for every structure enter
+      rep01 infra     waiting   3.02 h  SimulationType MakeGrid in the provided RASPA 2.0.37 bui
+  --- shared-queue depth (crowding covariate, Flag I) ---
+  [queue-depth] 2026-08-29 18:15 KST  queue R=216 Q=0 across 4 users | study R=5 Q=0 (2.3% of running) | others waiting=0
+  --- mechanical divergence panel ---
+  [divergence] STATUS.md panel refreshed
