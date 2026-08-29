@@ -658,6 +658,113 @@ and source URL. **If produced:** byte-verify the 7,358 remainder against it and 
 validation tier; check it for the 2,811. Logged here as the ruling directs. Bei does not contact
 the student — that is a PI action.
 
+### Q1 — CR-SET DELIVERY, steps 1–2 — **Bei, 2026-08-29. CONTINGENCY FIRED: STOPPED before staging.**
+
+`[external: student assistance]` delivered `/home/molsim_share/CoRE_MOF_2024_CR_united/`.
+**Counts verified exactly as stated: ASR 6,963 / FSR 4,978 / Ion 558 = 12,499**, CoRE-MOF-ID
+naming, 218 MB, no non-CIF entries. Steps 3–5 **not executed**.
+
+#### Step 1 — the identity intersection cannot be formed as specified
+
+The ruling directs an identity match against *"the 2025 release's CR list"*. **The 2025 release
+publishes no list in the CoRE-MOF-ID namespace at all**, so there is nothing to match identities
+against. Measured from the record itself (DOI 10.5281/zenodo.15621349, `CoREMOFDBSI_0613.zip` MD5
+`c24b990c…` verified):
+
+| 2025 artefact | Entries | Namespace |
+|---|---:|---|
+| `CR_meta_data_SI.json` | **2,737** | publisher refcode — `ja0c07257_si_005_ASR_pacman`. Its `id` field holds `common_name`/`mofid-v1`/`mofid-v2`, **not** a CoRE-MOF-ID |
+| `8806-recommended-screening-list.txt` | **8,806** | **CSD refcode** — `UDEPIE_ASR_pacman.cif` |
+| SI CIFs in the zip | 9,256 | publisher refcode |
+
+**None is 12,499 and none is expressible in CoRE-MOF-IDs.** The ruling explicitly requires
+*"identity match per structure, not count match"*, so Bei has not substituted a count match.
+
+**The canonical CR list that does exist is the one already ruled as membership.** The
+`12089-recommended-screening-list.csv` in the **2024 v1.1** release is documented as listing the
+**unique CR MOFs (ASR, FSR, ION) drawn from SI, CSD-modified and CSD-unmodified** — i.e. it *is*
+the CR set, and it is **12,089**, not 12,499. Against it:
+
+| Identity intersection vs the canonical CR list | Count |
+|---|---:|
+| present **and** listed | **9,278** |
+| **listed but absent** | **2,811** |
+| **present but unlisted** | **3,221** |
+
+**Not 12,499 / 12,499. Contingency fires: stopped, delta reported, nothing frozen.**
+
+The delivered set is **neither a subset nor a superset** of the canonical CR set.
+
+#### Step 2 — the cross-check passes perfectly, and that is the finding
+
+| | |
+|---|---:|
+| Overlap with the old share | **12,471** |
+| Overlap **byte-identical** | **12,471** — differing **0** |
+| Old-share entries **dropped** | **0** |
+| Delta (new only) | **28** — exactly as predicted |
+| Of the 28: present in the verified SI zip | **28 / 28** |
+| Of the 28: recommended-list members | **28 / 28** |
+
+**No anomalies whatsoever.** Every mechanical check the ruling asked for returns clean.
+
+#### What the delivered set actually is
+
+**Every one of the 12,499 files carries today's mtime, 11:13–11:30**, against the old share's
+uniform 2026-01-19 and the SI zip's 2025-01-27. The directory was **assembled this morning**.
+
+Its content is, byte for byte, **the old share (12,471, byte-identical) ∪ the SI zip's CR
+structures (28, byte-identical)** — both of which this study already held and had already
+measured. All 28 delta entries are `[ASR]`, matching 6,963 − 6,935 exactly.
+
+**It is therefore not the original archive, and it carries no new provenance.** It cannot
+corroborate anything, because every byte in it came from one of two sources already in hand. This
+is not a criticism of the assembly — it is a tidy, self-consistent, CR-only corpus and it is
+strictly better organised than the old share. It is simply **not a new source**, and the ruling's
+step 4 asks Bei to record provenance from it.
+
+#### It does not close the gap. At all.
+
+| | |
+|---|---:|
+| Recommended-list members | 12,089 |
+| Missing **before** (old share + SI zip) | **2,811** |
+| Missing **after** (new set + SI zip) | **2,811** |
+| **Gap closed by the delivery** | **0** |
+
+New-set members on the list: **9,278 of 12,499 (74.2 %)** — unchanged. Not on the list:
+**3,221** — unchanged. **The world problem reported at the previous step is exactly where it was**,
+plus 28 structures Bei had already identified as available from the verified zip.
+
+#### Why steps 3–5 were not executed
+
+- **Step 3 (stage + validate)** — blocked by the contingency, and independently by the reference-data
+  finding already on the record: the release publishes per-structure properties for its **2,664 CR
+  SI structures only**. For the delivered set, content-validation coverage is **the same 1,920**
+  it was before. *(The 28 correctly get no courier privilege and would validate by byte-match,
+  which they pass — but 28 is not the problem.)*
+- **Step 4 (freeze + provenance)** — the ruled provenance paragraph reads *"membership = CoRE MOF
+  2025 release CR set (DOI 10.5281/zenodo.15621349)"*. **That sentence cannot be written truthfully
+  about this set**: the 2025 release's CR set is 2,737 SI structures under publisher refcodes. And
+  *"source URL from the student to follow"* has not arrived, so the provenance is incomplete by
+  its own terms.
+- **Step 5 (Q2 at N = 12,499 + ceiling reconnaissance)** — N is not established. Running the
+  arithmetic on 12,499 would produce numbers that look settled and are not.
+
+#### Bei's recommendation, unchanged and now better evidenced
+
+**The membership definition and the file holdings do not meet.** Two coherent ways out, both the
+PI's to choose:
+
+1. **Wait for the student's source URL.** It is the one thing that could still identify the
+   corpus. If the 12,499 turns out to be a documented CR distribution, membership can be
+   re-pointed at it and the intersection re-run — the files are already here and byte-verified.
+2. **SI as shipped, N = 8,300.** Complete, MD5-verified, freely distributable, DOI- and
+   version-citable, no membership gap, per-structure records for its CR half.
+
+**Bei continues to recommend against a 9,278 world**, and notes that the delivery does not change
+that arithmetic by a single structure.
+
 ### Q2 — recompute the budget arithmetic at full-database scale
 
 From **measured** per-structure costs (prior campaign: GCMC 1.83 CPU-h/structure at two

@@ -2,7 +2,7 @@
 
 *Updated before any long wait. Supersedes itself; history lives in LOG.md and git.*
 
-Last updated: 2026-08-29, after LOG-2026-08-29-05 (world step 1; contingency fired).
+Last updated: 2026-08-29, after LOG-2026-08-29-06 (CR-set delivery; contingency fired again).
 
 ## Role
 
@@ -286,10 +286,36 @@ replicates. Off-script input from a replicate receives the chartered default res
    in the list's namespace at all; (iii) the 2025 probe's 0 % is a namespace result before a
    content one. **None of these move the three numbers**, since NCR could never have been list
    members either way.
-15. **`[external: student assistance]` — OPEN, non-blocking.** PI has asked the student who
-   assembled the share for the original archive and source URL. If produced: byte-verify the
-   7,358 remainder against it, upgrade the validation tier, and check it for the 2,811. Bei does
-   not contact the student.
+15. **`[external: student assistance]` DELIVERED 2026-08-29 — and it is the old share plus 28.**
+   `/home/molsim_share/CoRE_MOF_2024_CR_united/` — **counts verified exactly: ASR 6,963 /
+   FSR 4,978 / Ion 558 = 12,499**, CoRE-MOF-ID naming, 218 MB. **Steps 3–5 NOT executed;
+   contingency fired.**
+   **Step 1 cannot be formed as specified.** The 2025 release publishes **no list in the
+   CoRE-MOF-ID namespace**: `CR_meta_data_SI.json` is 2,737 under publisher refcodes (its `id`
+   field is mofid, not a coreid) and `8806-recommended-screening-list.txt` is 8,806 under **CSD
+   refcodes**. Neither is 12,499; neither is matchable by identity, and the ruling forbids
+   substituting a count match. **The canonical CR list that does exist is the one already ruled
+   as membership** — the 12,089 recommended screening list is documented as *the* unique CR set
+   across SI + CSD-modified + CSD-unmodified. Against it: **present-and-listed 9,278 ·
+   listed-but-absent 2,811 · present-but-unlisted 3,221.** Not 12,499/12,499 → **stopped**.
+   The delivered set is **neither a subset nor a superset** of the canonical CR set.
+   **Step 2 passes perfectly, and that is the finding.** Overlap with the old share **12,471, all
+   byte-identical, 0 differing, 0 dropped**; delta exactly **28**, all in the verified SI zip, all
+   list members, all `[ASR]` (6,963 − 6,935). **No anomalies.**
+   **What it is:** every file carries **today's mtime, 11:13–11:30**, against the old share's
+   uniform 2026-01-19 and the SI zip's 2025-01-27. Assembled this morning; content is byte for
+   byte **old share ∪ SI-zip CR**. **Not the original archive, and it carries no new provenance** —
+   every byte came from a source already in hand, so it cannot corroborate anything. Better
+   organised than the old share; not a new source.
+   **Gap closed: 0.** Missing list members before 2,811, after **2,811**. List membership 74.2 %,
+   non-members 3,221 — both unchanged.
+   **Step 4's provenance sentence cannot be written truthfully**: the 2025 release's CR set is
+   2,737 SI structures under publisher refcodes, not these 12,499 — and the student's source URL
+   has not arrived, so provenance is incomplete by its own terms.
+   **Bei recommends:** wait for the source URL (the one thing that could still identify the
+   corpus — files are here and byte-verified, so an intersection can be re-run immediately), or
+   fall back to **SI as shipped, N = 8,300**. Still recommends against a 9,278 world; the delivery
+   does not move that arithmetic by one structure.
 16. **Q2 IS BLOCKED on the world choice**, not on arithmetic. Every downstream number — naive
    cost, budget fraction, provisioning footprint, G7's `k` — takes N as input.
 17. **Q5 REWRITTEN AND DRAFTED 2026-08-29; Q5-PRE absorbed.** The rubric is now a standalone

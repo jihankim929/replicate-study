@@ -1966,3 +1966,82 @@ of the recommended list that happened to be on this cluster", with 79.3 % of it 
 the provenance paragraph the ruling asks for could not be written honestly about it. The ceiling
 claim is the specific casualty: the maximum may sit in the scattered quarter that is missing, and
 nothing in a trajectory's evidence would reveal that it did.
+
+---
+
+## LOG-2026-08-29-06 — The delivered CR set is the old share plus 28, assembled this morning; every mechanical check passes and the world problem is untouched
+
+**Counts verified exactly as stated:** `/home/molsim_share/CoRE_MOF_2024_CR_united/`, ASR 6,963 /
+FSR 4,978 / Ion 558 = **12,499**, CoRE-MOF-ID naming, 218 MB, no stray files. **Steps 3–5 not
+executed — the contingency fired.**
+
+### Step 1 cannot be formed as specified
+
+The ruling asks for an identity match against *"the 2025 release's CR list"*. **The 2025 release
+publishes no list in the CoRE-MOF-ID namespace.** From the record itself:
+
+| 2025 artefact | Entries | Namespace |
+|---|---:|---|
+| `CR_meta_data_SI.json` | 2,737 | publisher refcode; its `id` field is mofid-v1/v2, not a coreid |
+| `8806-recommended-screening-list.txt` | 8,806 | **CSD refcode** — `UDEPIE_ASR_pacman.cif` |
+| SI CIFs | 9,256 | publisher refcode |
+
+None is 12,499; none is matchable by identity. The ruling says *"identity match per structure, not
+count match"*, so I have not substituted one.
+
+**The canonical CR list that does exist is the one already ruled as membership.** The 2024 v1.1
+`12089-recommended-screening-list.csv` is documented as listing the **unique CR MOFs (ASR, FSR,
+ION) drawn from SI, CSD-modified and CSD-unmodified** — it *is* the CR set, and it is **12,089**.
+
+**Present-and-listed 9,278 · listed-but-absent 2,811 · present-but-unlisted 3,221.** Not
+12,499/12,499. Stopped. The delivered set is **neither a subset nor a superset** of the canonical
+CR set.
+
+### Step 2 passes perfectly, and that is the finding
+
+Overlap with the old share **12,471 — all byte-identical, 0 differing, 0 dropped**. Delta exactly
+**28**, every one present in the verified SI zip, every one a recommended-list member, every one
+`[ASR]` (6,963 − 6,935 = 28). **No anomalies of any kind.** Every check the ruling asked for
+returns clean.
+
+### What it actually is
+
+**Every file carries today's mtime, 11:13–11:30**, against the old share's uniform 2026-01-19 and
+the SI zip's 2025-01-27. The directory was assembled this morning, and its content is byte for
+byte **the old share ∪ the SI zip's CR structures** — both already in hand and already measured.
+
+**It is not the original archive and it carries no new provenance.** It cannot corroborate
+anything, because every byte in it came from a source we already had. That is not a complaint
+about the assembly: it is tidier, CR-only, and strictly better organised than the share it
+replaces. It is simply not a new source, and step 4 asks me to record provenance from it.
+
+### It does not close the gap
+
+Missing recommended-list members **before: 2,811. After: 2,811. Closed: 0.** List membership
+74.2 %, non-members 3,221 — both unchanged to the structure. The world problem is exactly where it
+was, plus 28 structures I had already reported as available from the verified zip.
+
+### Why 3, 4 and 5 were not run
+
+**Step 3** is blocked by the contingency and independently by the reference-data finding already on
+the record — content-validation coverage for this set is **the same 1,920** it was before. The 28
+correctly get no courier privilege; they would pass by byte-match, and 28 is not the problem.
+
+**Step 4's provenance sentence cannot be written truthfully.** *"Membership = CoRE MOF 2025 release
+CR set (DOI 10.5281/zenodo.15621349)"* — that release's CR set is 2,737 SI structures under
+publisher refcodes. And *"source URL from the student to follow"* has not arrived, so the
+provenance is incomplete by its own terms even setting the mismatch aside.
+
+**Step 5** would put Q2's arithmetic and a ceiling reconnaissance on an N that is not established.
+Numbers computed at N = 12,499 would look settled and would not be.
+
+### Recommendation
+
+**The membership definition and the file holdings still do not meet.** Either wait for the
+student's source URL — the one thing that could still identify this corpus, and the files are here
+and byte-verified so an intersection can be re-run the moment it arrives — or fall back to **SI as
+shipped, N = 8,300**: complete, MD5-verified, freely distributable, DOI- and version-citable, no
+membership gap.
+
+I continue to recommend against a 9,278 world, and note that this delivery does not move that
+arithmetic by a single structure.
