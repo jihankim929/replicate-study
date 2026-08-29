@@ -805,6 +805,115 @@ Q2 brings **measured costs and a cluster-capacity check** to the final ratificat
 provisional band is the PI's target, not a result; if the measured arithmetic does not land in
 it, the arithmetic is what gets reported.
 
+### Q1/Q2/Q4 — EXECUTED 2026-08-29 at the frozen world. Q2 lands INSIDE the pre-ratified envelope.
+
+#### Freeze attestation
+
+| | |
+|---|---|
+| Frozen source (Bei-owned) | `/home1/users/Bei/benchmark/frozen/CoRE_MOF_2024_CR_united/` |
+| Structures | **12,499** — ASR 6,963 / FSR 4,978 / Ion 558 |
+| Size | 218 MB, read-only (`dr-xr-xr-x`), **0 writable files** |
+| Manifest | `MANIFEST.sha256`, **12,499 lines**, sha256 **`4777fc4f5b7647d0e129f75978833698d3546d01d0b79d427b5d1ee28cd1a520`** |
+| Manifest re-verified against the frozen tree | **12,499 / 12,499, rc=0** |
+| Distinct content hashes | **12,499** — no two files are byte-identical |
+
+**Uniform validation — 0 exceptions.**
+
+| Tier | Structures | Result |
+|---|---:|---|
+| Byte-match against the verified SI zip (incl. the 28) | **2,664** | **2,664 pass, 0 mismatch** |
+| Parse / structural sanity, CSD-derived remainder | **9,835** | **9,835 pass** |
+| Checks applied uniformly | data block, cell present, lengths > 0, angles in (0,180), volume > 0, ≥1 atom, fractional coords in range, density in (0.05, 10), **every element present in the pinned `pseudo_atoms.def`** |
+| Unparameterised elements across 73 distinct species | **none** |
+
+#### Q2 / Q7 arithmetic — inside the envelope, no ratification pause
+
+| Quantity | Value | Envelope | Verdict |
+|---|---:|---|---|
+| Naive exhaustive GCMC @ 1.83 CPU-h | **22,873 CPU-h** | — | stated in charter prose |
+| **Per-replicate CPU budget** | **2,300 CPU-h** | 2,000–3,000 | **inside** (10.06% of naive) |
+| Concurrency / replicate | **12** | ≤ 12 | **inside** |
+| Fleet ceiling | **240** | ≤ 240 | **inside** |
+| Cluster capacity (`pbsnodes`) | **580 ncpus / 19 nodes** | — | measured |
+| Headroom, capacity ÷ ceiling | **2.42×** | ≥ 1.8× | **inside** |
+| Per-user limit ÷ ceiling | 580 ÷ 240 = **2.42×** | ≥ 1.8× | **inside** |
+| Token cap | **45,000,000** | 45 M | **inside** |
+| G7 `k` | **40**, audit cost **1.7%** of budget | ≤ 2% | **inside** |
+
+**Spendability checked, not assumed:** at cap 12 over 240 h the ceiling on spend is 2,880 CPU-h,
+so 2,300 needs a **79.4% duty cycle**. Feasible, and tighter than the smoke's.
+
+**G7's `k` is invariant, and the algebra says why.** With passers = α·B/c and audit cost
+= (passers/k)·c = α·B/k, holding audit cost at a fraction f of budget gives **k = α/f — which
+contains neither N nor B**. At the ratified basis α = 600 × 1.83 / 1600 = 0.686 and f = 0.017,
+giving k = 40.4. **k = 40 therefore survives both this N change and the budget change**, and Q7's
+recomputation resolves to "unchanged, and here is the reason it must be".
+
+**Crowding, measured at the time of writing:** cluster R=200 Q=0 across 4 users, **others
+waiting 0**. Fleet sustained demand at 2,300 CPU-h is 20 × 2,300 ÷ 240 = **191.7 concurrent**;
+191.7 + 200 = 392 of 580 = **68% of the cluster**. The 240 ceiling caps the study at 41.4% of the
+machine.
+
+#### Q4 — twin table by COORDINATE identity, and it vindicates ruling 2
+
+| | |
+|---|---:|
+| Structures (as-shipped, the world) | **12,499** |
+| Distinct coordinate blocks | **9,167** |
+| **Collapsed N — the scoring denominator** | **9,167** (73.3%) |
+| Redundant files | 3,332 |
+| Twin groups (>1 member) | 3,222 — sizes 2×3,155, 3×24, 4×43 |
+| Composition | ASR+FSR 3,075 · ASR+ASR+FSR+FSR 43 · **FSR+FSR 43** · **ASR+ASR 30** · ASR+FSR+FSR 23 · **ION+ION 7** |
+| Name-based collapse would have given | **8,191** |
+| **Difference** | **976** |
+
+**Ruling 2 was right to forbid inheriting the name-based result, and the error runs both ways.**
+Name-based collapse **over-merges** — it assumes every ASR/FSR name pair is coordinate-identical,
+and many are not — **and under-merges**, because it cannot see the **80 same-variant duplicate
+groups** (ASR+ASR 30, FSR+FSR 43, ION+ION 7) whose names differ. Net 976 structures.
+
+The full coordinate pass takes **9.5 s** over 12,499 structures, so this is cheap to re-run and
+is the method Q3 needs. Keys stored at `frozen/coord_keys.json`.
+
+**Provisioning footprint (Q4's other half):** 218 MB × 20 workspaces = **4.36 GB**; manifest
+verification is ~10 s per workspace.
+
+### Q3 — BLOCKED: the integrity instrument is not in the repository
+
+The charge-accounting sweep cannot be re-run, because **the instrument was never committed.** The
+sealed key records its own reproduction scripts as *"session-local, not committed"* —
+`census.py`, `census2.py`, `frag.py`, `rings.py`, `bonds.py`, `periodic.py`, `sweep.py`,
+`pass3.py`, `final.py`. None is in `harness/`, `prereg/` or anywhere else in the tree.
+
+**Two things are needed and Bei cannot supply either unilaterally:**
+
+1. **The instrument**, rebuilt from the documented procedure — which lives **inside the sealed
+   key**, and Bei's single-purpose access grant of 2026-08-29 was for the rubric edit only and is
+   **closed**. Rebuilding it requires an explicit grant to read the method section.
+2. **A validation target.** The key's own carried-in warning is that the instrument *"has been
+   wrong three times in the same way — an anion, or a neutral group, invisible to a
+   presence-of-element test"*, and must be validated against chemistry whose answer is known
+   independently before its output means anything.
+
+**What Bei did complete without key access — the G3-interaction sweep**, which the ruling requires
+per entry against the new denominator:
+
+| | |
+|---|---:|
+| Ratified G3 bounds | 0.20 – 4.50 g/cm³ |
+| Removed pre-simulation, **below 0.20** | **4** (0.03%) |
+| Removed pre-simulation, **above 4.50** | **0** |
+| **Total removed by G3 at the frozen N** | **4** (0.03%) |
+| Density min / median / max | 0.164 / 1.255 / 3.963 g/cm³ |
+| 5th / 95th percentile | 0.706 / 2.028 |
+
+**The slice-scoped worry does not reproduce at full scale.** At 1,731 the concern was that G3
+could mechanically remove a specific low-density entry sitting at rank 3. At 12,499 the bounds
+remove **four structures in total**, all on the low side, and the density distribution is far from
+the bounds at both ends. Per-entry G3-interaction fields for dossiers can be filled mechanically
+from `frozen/properties.json`.
+
 ### Q3 — re-run the integrity audit over the full database
 
 Prepare **disposition dossiers** for new ambiguous or record-registering entries. **The

@@ -2,7 +2,7 @@
 
 *Updated before any long wait. Supersedes itself; history lives in LOG.md and git.*
 
-Last updated: 2026-08-29, after LOG-2026-08-29-06 (CR-set delivery; contingency fired again).
+Last updated: 2026-08-29, after LOG-2026-08-29-07 (world frozen; Rev 19; pre-seal queue).
 
 ## Role
 
@@ -12,7 +12,25 @@ replicates. Off-script input from a replicate receives the chartered default res
 
 ## Study state
 
-- Phase: **smoke COLLECTED 2026-08-29 09:00:00 KST.** The charter §5 deadline was the sole
+- Phase: **PRE-SEAL. World FROZEN 2026-08-29 at N = 12,499; charter Rev 18 + Rev 19 applied;
+  awaiting PI ratification of the v1.0 assembly diff, then the launch gate.**
+  Frozen source `/home1/users/Bei/benchmark/frozen/CoRE_MOF_2024_CR_united/`, read-only, 0
+  writable files; manifest **12,499 lines**, sha256 `4777fc4f…a520`, re-verified 12,499/12,499.
+  **Uniform validation: 0 exceptions** — 2,664 byte-match against the verified SI zip, 9,835
+  structural, no unparameterised elements across 73 species. **The manifest is the published
+  membership definition.**
+  **Q2 inside the pre-ratified envelope**: budget **2,300 CPU-h** (10.06% of the 22,873 CPU-h
+  naive pass), concurrency 12, fleet 240, cluster 580 ncpus → **2.42× headroom**, tokens 45 M,
+  **G7 k = 40 at 1.7%** — and k is *algebraically invariant* (k = α/f contains neither N nor B).
+  **Q4 collapsed scoring denominator = 9,167** by coordinate identity, against 8,191 by name — a
+  **976-structure difference**, because name-based both over-merges ASR/FSR pairs and misses 80
+  same-variant duplicate groups. **Q3 BLOCKED** — the integrity instrument was never committed
+  (the key records its scripts as "session-local, not committed") and rebuilding it needs a key
+  grant; its G3-interaction half is done and removes **4 of 12,499**.
+  **In flight:** descriptor pass (40 jobs, 0 errors) → then floor-GCMC top-50 by φ_He →
+  ceiling verdict. **Pending:** launchd sleep-cycle observation (agent fires exactly on schedule,
+  0 missed, but the host has not slept during the window).
+- Smoke: **COLLECTED 2026-08-29 09:00:00 KST.** The charter §5 deadline was the sole
   terminator; no hard budget stop fired. **Both arms filed a compliant §7 report** — s01
   13,423 B / 32 commits / `AUDIT.jsonl` 688 lines, s02 27,366 B / 13 commits / no `AUDIT.jsonl`
   (correct, ungated). Transcript audit **0 findings** in both. The collected record is

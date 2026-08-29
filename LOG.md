@@ -2045,3 +2045,99 @@ membership gap.
 
 I continue to recommend against a 9,278 world, and note that this delivery does not move that
 arithmetic by a single structure.
+
+---
+
+## LOG-2026-08-29-07 — World frozen at 12,499 with zero validation exceptions; charter v1.0 assembled; Q4 shows name-based collapse would have been wrong by 976 structures in both directions
+
+**Pre-seal queue executed.** Freeze, Q2/Q7, Q4, charter v1.0 assembly, SI-012's launchd fix, the
+§5 day-count fix, §8's rewrite, Q8 provisioning and the launch gate are done. Q3 is blocked on a
+missing instrument. The ceiling reconnaissance is in flight.
+
+### Freeze — 0 exceptions
+
+12,499 structures staged Bei-owned, read-only, **0 writable files**; manifest 12,499 lines,
+sha256 `4777fc4f…a520`, re-verified **12,499/12,499**. All 12,499 content hashes are distinct.
+**Uniform validation returned nothing**: 2,664 byte-matched against the verified SI zip with 0
+mismatches, 9,835 passed structural sanity, and across **73 distinct element species not one is
+absent from the pinned `pseudo_atoms.def`** — so G4's leg (b)(i) is empty on this world too, and
+is still worth keeping for the reason it was kept before: that failure is silent.
+
+### Q2 lands inside the envelope, and G7's k turns out to be invariant
+
+Budget **2,300 CPU-h** = **10.06%** of the 22,873 CPU-h naive pass, both figures now in charter
+prose. Concurrency 12, fleet 240, tokens 45 M. Cluster measured at **580 ncpus / 19 nodes**, so
+capacity ÷ ceiling = **2.42×**, comfortably over the 1.8× floor. Nothing needed a ruling.
+
+Spendability was checked rather than assumed: cap 12 over 240 h ceilings spend at 2,880 CPU-h, so
+2,300 requires a **79.4% duty cycle** — feasible, and tighter than the smoke ran.
+
+**G7's k came out as algebra rather than arithmetic.** With passers = α·B/c and audit cost
+= α·B/k, holding audit cost at fraction f of budget gives **k = α/f**, which contains **neither N
+nor B**. So k = 40 survives the world change *and* the budget change, and Q7's recomputation is
+"unchanged, and here is why it must be" rather than a new number.
+
+### Q4 vindicates ruling 2, and the error runs both ways
+
+Coordinate identity gives a collapsed scoring denominator of **9,167**; name matching would have
+given **8,191**. The 976-structure gap is not a rounding difference — it is **two opposite
+mistakes**. Name-based collapse **over-merges**, assuming every ASR/FSR name pair is
+coordinate-identical when many are not; and it **under-merges**, because it cannot see the **80
+same-variant duplicate groups** — ASR+ASR 30, FSR+FSR 43, ION+ION 7 — whose names differ while
+their coordinates do not. Forbidding the inheritance was right for a reason stronger than caution.
+
+The full pass takes **9.5 s**, so this is cheap to re-run and it is the method Q3 needs.
+
+### Three defects found by doing the work
+
+**`dirac.py`'s submission interface was wrong in two ways**, and 40 real jobs found both: `qas` is
+**not on a non-interactive PATH** (it lives at `/usr/local/mjs/qas`), so `available()` reported the
+cluster unreachable; and `qas` takes the qsub **file as its first positional argument and accepts
+no flags** — `qas -q long -l ... file` dies inside qas.py with `AssertionError: -q does not
+exists`. The module had never executed: `launch.sh` calls nothing in it, so the **first main-run
+submission would have been its first run**. Corrected, and it is now assertion A4 of the gate.
+
+**A selftest check went stale the instant Q1 landed.** `MAIN_UNSET` asserted that the *live*
+charter aborts for `main` on unpopulated brackets. Populating them made a correct test fail — the
+SI-008 class exactly. It now tests the **mechanism** against a synthetic fixture, and a new
+`MAIN_POPULATED` tests the live file's actual state, so neither reading can rot. 85/85.
+
+**The §5 day-count bug was in the provisioner, not just the prose.** `deadline = now + days` then
+snapped to 09:00 — which is how the smoke got 65.53 h against a nominal 72. Now
+`provisioned + 24×days` hours, verified on a real dry-run provision at **exactly 240.0000 h**,
+with `campaign_hours` and `deadline_basis` in `WORKSPACE.json` beside the day count.
+
+### §8 now states its true service level
+
+The section promised repair and answers; the campaign that relied on those promises got neither,
+and one unanswered `charter` escalation cost the ungated arm its §3-compliant headline number. The
+rewrite says escalations are **logged and read at collection points**, that **an answer is not
+guaranteed**, and that **absent one the replicate acts on its best reading and logs it as
+`[CHARTER-READ]`** — named as the intended path. §5's honest-incomplete-report clause is retained
+and is what makes that safe rather than merely permitted.
+
+### Q3 is blocked, and on the same shape of gap as the rubric and the manuscript
+
+The charge-accounting instrument **was never committed** — the key records its own scripts as
+*"session-local, not committed"*. Rebuilding it needs the method section, which is inside the
+sealed key, and the single-purpose grant of this morning was for the rubric edit and is closed.
+Its G3-interaction half is done and needs no key: at the frozen N the ratified bounds remove
+**4 structures of 12,499**, all on the low side. **The slice-scoped worry does not reproduce** —
+what was a rank-3-of-1,731 hazard is four structures in a distribution far from both bounds.
+
+### The vocabulary purge is a no-op on living documents
+
+Two occurrences survive, and both must: the dossier template names the retired words **in order to
+forbid them**, and the harness README names them **in order to document the deny-list**. Removing
+either would delete the guard rather than the exposure — the case Rev 16 already ruled. Only the
+answer-key **filename** remains, and renaming it needs an explicit grant that this ruling does not
+give.
+
+### Still moving
+
+The descriptor pass is running (40 jobs, 0 errors) and the floor-GCMC batch on the top-50 by φ_He
+follows it; the ceiling verdict lands when both do. The launchd agent is installed and firing on
+exact schedule with **0 missed intervals**, but **the host has not slept during the observation
+window** — it stays awake while work runs — so the wake-catchup property, which is the whole
+reason for choosing launchd over cron, is **observed-pending rather than verified**. The probe
+keeps logging and will have the evidence at the next idle period.
