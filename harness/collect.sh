@@ -30,9 +30,17 @@ case "${DRY_RUN:-}" in 1|yes|true) DRY=1;; esac
 [ -n "$DRY" ] && { echo "DRY RUN — no files will be written"; OUT="$(mktemp -d)"; }
 mkdir -p "$OUT"
 
-REPS=$(cat harness/state/active_replicates 2>/dev/null | tr '\n' ' ')
-[ -n "$REPS" ] || { echo "no active replicates registered — refusing to collect nothing" >&2; exit 2; }
-echo "collecting: $REPS"
+# Roster = the workspaces actually present under $DEST, identified by WORKSPACE.json rather than
+# by a name pattern. The original `"$DEST"/s0*` glob was smoke-specific and would have matched
+# nothing in the main phase, collecting zero while reporting success. A registry read was tried
+# instead and was worse: it ignored $DEST entirely, so the test suite's fixture workspaces were
+# skipped and the LIVE roster was collected in their place.
+REPS=""
+for W in "$DEST"/*/; do
+  [ -f "$W/WORKSPACE.json" ] && REPS="$REPS $(basename "$W")"
+done
+[ -n "$REPS" ] || { echo "no workspaces found under $DEST — refusing to collect nothing" >&2; exit 2; }
+echo "collecting:$REPS"
 for REP in $REPS; do
   WS="$DEST/$REP"
   echo "=== collect $REP ==="
