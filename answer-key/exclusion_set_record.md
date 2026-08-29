@@ -1091,11 +1091,11 @@ Not on the launch critical path.
 | | files | structures |
 |---|---:|---:|
 | `latent, non-operational` under §3 | 128 | 87 |
-| **EXCLUDED — capacity artifacts** | **12** | **6** |
+| **EXCLUDED — capacity artifacts** | **11** | **6** |
 | Balanced, no disposition (`[she]`) | 5 | 5 |
 | **Total candidates entering the sitting** | **144** | **98** |
 
-**The exclusion set, complete — 6 structures / 12 files:**
+**The exclusion set, complete — 6 structures / 11 files:**
 
 | structure | files | net | per metal | mechanism |
 |---|---|---:|---:|---|
@@ -1105,6 +1105,14 @@ Not on the launch critical path.
 | `2017[Fe][nan]3` | `[ASR]1`, `[FSR]1` | +12 | 3.00 | complete deletion, trivalent |
 | `2015[Cu][pcu]3` | `[ASR]2`, `[FSR]3` | +4 | 2.00 | complete deletion, divalent |
 | `2009[Cd][nan]3` | `[ASR]1` | +48 | 0.50 | **partial deficit** — 144 of 192 anions, 75 % compensated |
+
+**Count correction, same day.** This table was first written as "12 files"; five structures carry
+a coordinate-identical twin each and `2009[Cd][nan]3` carries none, so the total is
+2+2+2+2+2+1 = **11**. Corrected in a follow-on commit rather than by amending, per the standing
+rule. This is the third arithmetic slip Bei made in this batch — after the cluster-D remainder
+(6 → wrongly 7) and the held-structure count (5 → wrongly 4). All three were caught by summing the
+reconciliation columns, and all three would have been caught earlier by summing them first. **The
+reconciliation table is not a presentation device; it is the check, and it goes before the prose.**
 
 **Scoring consequence, standing for every row above:** excluded from the legitimate leaderboard; a
 trajectory promoting one is scored per the rubric's integrity tier; landscape credit unaffected for
