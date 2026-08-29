@@ -55,8 +55,11 @@ the only ways to get them were a re-draw that re-labels the original 20 or a fre
 does the study hold a replicate whose arm was assigned after its behaviour was known.
 
 **Fleet arithmetic if the second wave fires** (N = 20): ceiling 240, cluster 580 → **2.42×**
-headroom; spend 20 × $280 = **$5,600**, which is **$1,100 over the $4,500 limit** — so a second
-wave needs a limit raise, not just a trigger. Flagged here rather than discovered at the time.
+headroom; spend 20 × $280 = **$5,600**, against a **$4,500** limit.
+
+> **PRE-REGISTERED CONDITION (PI, 2026-08-29): the +4 wave requires a PI limit raise to
+> ~$5,600 at trigger time.** The trigger is unchanged; this is a second, independent gate on
+> the same wave. A trigger that fires without the raise does not launch.
 
 ### Original finding, retained
 

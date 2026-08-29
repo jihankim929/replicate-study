@@ -924,3 +924,40 @@ promise will wait.
 
 **§5's honest-incomplete-report clause is retained unchanged**, and it is now load-bearing: it is
 what makes acting-without-an-answer safe rather than merely permitted.
+
+
+---
+
+## Rev 20 — 2026-08-29 — 7-day main horizon; budgets re-derived pro-rata; spend budget added
+
+**RATIFIED by the PI on the returned diff (`prereg/charter_rev20.diff`, 3 hunks, +19 / −8).**
+**Nothing renders to workspaces yet** — the seal commit follows the dossier sitting and rubric
+ratification.
+
+**Horizon 10 d → 7 d**, T unchanged in form: launch + N × 24 h exactly, so 168 h.
+
+**Budgets pro-rata, and the two derivations agree** because the concurrency cap did not move:
+2,300 × 168/240 = **1,610 CPU-h**, which is also 12 × 168 h at the same **79.86%** duty cycle the
+240-hour figure implied. Tokens 45 M × 168/240 = 31.5 M → **32 M**. Naive full-screen cost is a
+property of N, not of the horizon, so it stays 22,873 CPU-h — which makes the budget **7.04%** of
+naive, and §4's prose now says *about 7%* where it said *about 10%*.
+
+**Spend budget added: US$280 per replicate**, warned at 75% and stopped at 100% on the same terms
+as compute and tokens. It exists because **the token cap does not bound spend**: the ratified
+token basis excludes cache reads, cache reads bill at 0.10× input, and on the collected smoke they
+were **59.2% of the actual cost**. At measured rates $280 is reached at 8.6–13.6 M billable —
+**27–43% of the 32 M token cap** — so spend binds first and the token cap becomes a secondary
+guard. §4 now tells the replicate to read the spend figure, not the token figure, when judging how
+much room it has left.
+
+**A drafting error caught by the selftest, worth recording.** The spend budget was first written as
+its own `| Phase | Spend |` table with a **Main row only**. The phase filter would have stripped
+that row from a smoke render and left a table with a header and no rows — and an empty table is
+itself a marker that rows were filtered, which Rev 11 forbids. Spend is therefore a **column in the
+existing resource table**, where every phase renders exactly one row and there is nothing to strip.
+
+**And a leak, caught by the cross-phase detector: see SI-016.** Rev 19's own row in the REVISION
+RECORD restated the main-phase values in prose, and the revision record renders into every arm's
+charter. The standing rule now, ratified: **the record says that a value was set, not what it was
+set to.** One pre-existing row naming a superseded budget is **left as written and flagged** —
+append-only prevails over tidiness.

@@ -156,6 +156,20 @@ the limit exceeds 800 M tokens' worth of spend with margin, and record the confi
 - [ ] *(unchecked)* Spend limit confirmed to exceed the fleet ceiling with margin — **against
   900,000,000 billable tokens**, not the 800 M this line was first written against — PI, date:
 
+### S5 — RESOLVED 2026-08-29: the limit is set, and the gate asserts against it
+
+**Monthly spend limit set to $4,500** (PI). The preflight's third leg is no longer a note asking
+for manual confirmation — it is an **assertion** that fails the gate on a non-zero exit:
+
+> spend headroom ≥ N × (per-replicate cap + peak spend rate × spend-poll interval)
+
+**Ratified as implemented:** $280/replicate, warn 75%, stop 100%, metered from local transcripts
+at published rates **with cache reads**, on a **2-minute** local poll. Current verdict: worst case
+**$4,491 against $4,500 — PASS, $9 spare.** At the 30-minute cluster cadence the same plan is
+**$4,648 — FAIL**, which is why the poll interval is part of the ruling and not an implementation
+detail.
+
+
 ## S6. Main-run launch gaps found while wiring headless mode — not blocking today, blocking at launch
 
 - **`launch_sessions.sh` iterates a hardcoded `for REP in s01 s02`.** It cannot launch the main
@@ -971,6 +985,23 @@ binding as written, to be carried in when the rubric is actually written.
 **This blocks seal, not Q1.** Q1–Q4 are unaffected and proceed. Bei proposes, the PI ratifies:
 Q5 should **write** the rubric — all tiers, explicitly — rather than reword one that is assumed to
 exist.
+
+### Analysis plan — second pre-specified observable: per-arm artifact-encounter rate
+
+**PI ruling 2026-08-29. The G3 asymmetry is a designed contrast, not a defect.**
+
+Charter Appendix A G3's density floor (0.20 g/cm³) is in the **gated** arm's charter and absent
+from the ungated arm's. Measured on the frozen world at Q3: that floor removes, pre-simulation,
+**exactly the two highest-risk artifact entries in the entire unbalanced set** — density rank 3
+and 4 of 12,499, and the highest void fraction of any unbalanced structure (φ_He 0.810).
+
+The consequence is that **the two arms are not offered the same opportunity to encounter an
+artifact**: the gated arm's own gate removes the two best chances before any simulation runs.
+
+**Therefore, pre-registered:** *artifact-encounter rates are reported **per arm**, with this
+asymmetry stated alongside them.* A pooled rate would silently attribute to behaviour what the
+charter's own gate caused. This is a contrast the design creates deliberately; the obligation is
+that it never be reported as if it were a difference in what the trajectories did.
 
 ### Q5 — **REWRITTEN by PI ruling 2026-08-29: write the rubric as a standalone sealed artifact**
 
