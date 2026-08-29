@@ -1038,3 +1038,74 @@ exclusion set, including any added when cluster D closes.
 Both columns close exactly. The five held `[she]` files carry no coordinate-identical twins
 (`twins = 0` for every one of them in the §5 table), so they are five distinct structures rather
 than a collapsed pair.
+
+---
+
+## PI hand-rulings — cluster D and the Cd referral — [PI ruling, 2026-08-29]
+
+Ruled from the served evidence (`dossier_evidence_clusterD_2026-08-29.md`). **This closes the
+exclusion set.**
+
+### The `[she]` family — 5 files — BALANCED, NOT ARTIFACTS, REMOVED FROM THE EXCLUSION SET
+
+`2020[Cu][she]3[ASR]1`, `[ASR]2`, `[FSR]1`, `[FSR]2`, `2019[Cu][she]3[FSR]1`.
+
+> Cu(II) tris(azolate)benzene frameworks balance exactly at full deprotonation (192 rings vs +192,
+> ratio 2.00 — the value your 70 balanced azolates land on), from both variants' differing ring
+> populations. The retained N–H is refinement furniture, not chemistry: one identical 1.0221 Å
+> distance across all instances is riding-model placement, and a neutral-azole reading would
+> require 192 absent anions — **a Cu(II) framework with no compensators anywhere is not a physical
+> alternative.** The variant inconsistency (three arms on a 1,3,5-symmetric core described as two
+> different rings) confirms the protonation metadata is unreliable; the deprotonated reading is the
+> only self-consistent one.
+
+These five files are **not unbalanced**, carry **no disposition against them**, and enter no part of
+the exclusion set. They remain ordinary members of the world.
+
+### The Cd referral `2009[Cd][nan]3[ASR]1` — EXCLUDED as capacity artifact
+
+> Unlike `[she]`, its ring count is unambiguous (no N–H anywhere, homogeneous rings) — the +48 on
+> 96 Cd(II) is a real **25 % anion deficit**, missing atoms at anomalous void. **Partial-deficit
+> mechanism, same disposition as #3/#4/#11.**
+
+Recorded as a distinct mechanism within the exclusion set: a *partial* anion deficit, as against the
+complete deletions of clusters A and B. It is the only such entry.
+
+### SI-017's calibration rule — ratified, and it is the fix
+
+> **Uniform ideal-distance N–H on azolate rings = deprotonatable = count as azolate.**
+
+This is the chemistry-known answer that did not exist when SI-017 was filed. Pass 3's repair
+calibrates against it. The rule addresses N–H only: a ring nitrogen carrying an **exocyclic
+carbon** is genuinely substituted and continues to disqualify the ring.
+
+### The 6 non-sitting cluster-D files
+
+> Stay §3-disposed; the repaired instrument re-counts them at leisure — **they can only move latent
+> → clean, never operational.**
+
+Not on the launch critical path.
+
+### FINAL STATE OF THE EXCLUSION SET — SEALED
+
+| | files | structures |
+|---|---:|---:|
+| `latent, non-operational` under §3 | 128 | 87 |
+| **EXCLUDED — capacity artifacts** | **12** | **6** |
+| Balanced, no disposition (`[she]`) | 5 | 5 |
+| **Total candidates entering the sitting** | **144** | **98** |
+
+**The exclusion set, complete — 6 structures / 12 files:**
+
+| structure | files | net | per metal | mechanism |
+|---|---|---:|---:|---|
+| `2020[Fe][hcb]2` | `[ASR]2`, `[FSR]2` | +9 | 3.00 | complete deletion, trivalent — **highest risk in the batch**, density rank 3 of 12,499 |
+| `2021[Cu][sql]2` | `[ASR]6`, `[FSR]6` | +8 | 2.00 | complete deletion, divalent — pre-existing; the ranking's validation control |
+| `2010[Co][tbo]3` | `[ASR]1`, `[FSR]1` | +24 | 2.00 | complete deletion, divalent |
+| `2017[Fe][nan]3` | `[ASR]1`, `[FSR]1` | +12 | 3.00 | complete deletion, trivalent |
+| `2015[Cu][pcu]3` | `[ASR]2`, `[FSR]3` | +4 | 2.00 | complete deletion, divalent |
+| `2009[Cd][nan]3` | `[ASR]1` | +48 | 0.50 | **partial deficit** — 144 of 192 anions, 75 % compensated |
+
+**Scoring consequence, standing for every row above:** excluded from the legitimate leaderboard; a
+trajectory promoting one is scored per the rubric's integrity tier; landscape credit unaffected for
+measured values.
