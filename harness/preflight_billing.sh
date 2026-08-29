@@ -79,44 +79,43 @@ else
   echo "PASS"
 fi
 
-# --- leg 1c: spend headroom >= projected worst-case fleet remainder (S5, PI 2026-08-29) ---
-# The spend limit is $3,000 with auto-reload on. This leg is now an ASSERTION, not a note.
-#
-# It exists because the charter's token cap does NOT bound spend. The ratified metering basis is
-# input + output + cache_creation, with cache READS excluded -- and cache reads were 59.2% of the
-# smoke's actual bill. A replicate can therefore sit far inside its 45 M cap while billing several
-# times what the cap implies. Measured on the collected smoke at list price ($5/$25 per MTok,
-# cache-create 1.25x input, cache-read 0.10x input): $20.54/M billable for one arm, $32.54/M for
-# the other -- driven by cache-read ratios of 24.8x and 36.3x against billable.
-echo "  [3/3] spend headroom >= projected worst-case fleet remainder"
-python3 - "$BUDGET" "$REPS" <<'PYEOF'
-import sys, json, os
-budget, reps = int(sys.argv[1]), int(sys.argv[2])
-LIMIT = float(os.environ.get("SPEND_LIMIT_USD", "3000"))
-SPENT = float(os.environ.get("SPEND_TO_DATE_USD", "0"))
-# $ per MILLION BILLABLE tokens, measured on the collected smoke. Low = the arm with the
-# smaller cache-read ratio; high = the larger. Both are list-price, both are measured.
-LO, HI = 20.54, 32.54
-worst_lo = LO * (budget/1e6) * reps
-worst_hi = HI * (budget/1e6) * reps
-head = LIMIT - SPENT
-print(f"        limit ${LIMIT:,.0f}  spent ${SPENT:,.0f}  headroom ${head:,.0f}")
-print(f"        worst-case fleet remainder at N={reps}, each at {budget/1e6:.0f} M billable:")
-print(f"          ${worst_lo:,.0f} (low-cache arm) .. ${worst_hi:,.0f} (high-cache arm)")
-if head >= worst_hi:
-    print("        PASS -- headroom covers the worst case"); sys.exit(0)
-if head >= worst_lo:
-    print("        FAIL -- headroom covers the low estimate but NOT the high one"); sys.exit(1)
-print(f"        FAIL -- headroom is {worst_hi/head:.1f}x short of the worst case")
-print(f"        the limit is reached at {100*head/worst_hi:.1f}%-{100*head/worst_lo:.1f}% of the ratified token budget")
-print(f"        i.e. after roughly {head/(HI*budget/1e6):.1f}-{head/(LO*budget/1e6):.1f} replicates spend their full budget")
+# --- leg 1c: spend headroom >= worst-case fleet remainder, ABSORPTION-CHECKED (S5, 2026-08-29) ---
+# Rewritten against the $4,500 limit and the ratified per-replicate spend cap. The assertion is
+# not "N x cap <= limit" -- enforcement is POLLED, so the true fleet maximum is
+#   N x (cap + peak_spend_rate x poll_interval)
+# which is the same overshoot bound SI-012 showed the harness had been asserting falsely for
+# compute. Ignoring it here would repeat that mistake with money.
+echo "  [3/3] spend headroom >= worst-case fleet remainder (absorption-checked)"
+python3 - <<'PYEOF'
+import sys
+sys.path.insert(0, "harness")
+import config as C
+R      = C.RATIFIED
+N      = R["phases"]["main"]["replicates"]
+CAP    = R["spend_usd"]["main"]
+LIMIT  = R["monthly_spend_limit_usd"]
+POLL   = R["spend_poll_minutes"]
+PEAK   = R["spend_peak_usd_per_h"]
+ideal  = N * CAP
+over   = PEAK * POLL / 60.0
+worst  = N * (CAP + over)
+print(f"        limit ${LIMIT:,.0f}   cap ${CAP:.0f}/replicate x N={N}")
+print(f"        ideal fleet max            : ${ideal:,.0f}  ({100*ideal/LIMIT:.1f}% of limit)")
+print(f"        polled-enforcement overshoot: ${over:.2f}/replicate at a {POLL}-min spend poll")
+print(f"        WORST CASE                 : ${worst:,.0f}  (headroom ${LIMIT-worst:,.0f})")
+if worst <= LIMIT:
+    print(f"        PASS -- the plan absorbs into the limit with ${LIMIT-worst:,.0f} to spare")
+    sys.exit(0)
+need = LIMIT/N - over
+print(f"        FAIL -- over by ${worst-LIMIT:,.0f}")
+print(f"        absorbs at a per-replicate cap of ${need:.2f}, or a faster spend poll")
 sys.exit(1)
 PYEOF
 [ $? -ne 0 ] && FAIL=1
 
 echo
 if [ "$FAIL" -eq 0 ]; then
-  echo "== GATE PASSED (legs 1-2 automated; leg 3 requires the manual confirmation above) =="
+  echo "== GATE PASSED (all three legs asserted) =="
 else
   echo "== GATE FAILED -- do not launch =="
 fi

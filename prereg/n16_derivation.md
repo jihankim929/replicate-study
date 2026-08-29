@@ -36,6 +36,30 @@ The three ceilings still agree: 16 × 12 = 192 is the fleet ceiling, and 580 ÷ 
 headroom against measured capacity — up from 2.42× at N = 20, because the ceiling fell and the
 cluster did not.
 
+## Conditional second wave — RULED: **+4**, the deferred remainder, no new draw
+
+**PI ruling, 2026-08-29.** The second wave is **+4**: `rep14`, `rep18`, `rep19`, `rep20` — exactly
+the replicates the first-8-per-arm rule deferred, restoring the sealed 20.
+
+| | |
+|---|---|
+| Gated | **rep14, rep20** |
+| Ungated | **rep18, rep19** |
+| Arm balance | **2 + 2 — exact** |
+| New randomness | **none** — these are the sealed assignments, unchanged |
+| Trigger | unchanged from the pre-ruling plan |
+
+This closes the gap Bei raised: a **+8** wave would have needed 4 ids beyond the sealed 20, and
+the only ways to get them were a re-draw that re-labels the original 20 or a fresh seed for
+`rep21…rep24`. **+4 needs neither.** The sealed file is sufficient for both waves, and at no point
+does the study hold a replicate whose arm was assigned after its behaviour was known.
+
+**Fleet arithmetic if the second wave fires** (N = 20): ceiling 240, cluster 580 → **2.42×**
+headroom; spend 20 × $280 = **$5,600**, which is **$1,100 over the $4,500 limit** — so a second
+wave needs a limit raise, not just a trigger. Flagged here rather than discovered at the time.
+
+### Original finding, retained
+
 ## The conditional second wave needs 4 ids the seal does not contain
 
 The ruling says the conditional second wave **becomes +8, same trigger**. The sealed assignment

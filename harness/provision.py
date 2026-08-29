@@ -365,6 +365,12 @@ def provision(rep_id, dest_root, dry_run=False, db_limit=None, force=False, remo
         "db_files": len(names),
         "budget_status": "ratified 2026-08-26; revised 2026-08-28 (charter Rev 13)",
         "compute_cpu_h": C.RATIFIED["compute_cpu_h"][phase],
+        # The spend cap is the budget most likely to bind -- see charter section 4. It is metered
+        # at published list rates WITH cache reads, which the token figure above excludes.
+        "spend_usd": C.RATIFIED["spend_usd"].get(phase),
+        "spend_metering_basis": "published list rates over input + output + cache_creation + "
+                                "CACHE READS (cache reads are excluded from the token basis "
+                                "above but are charged in full)",
         "token_budget": C.RATIFIED["token_budget"][phase],
         "token_metering_basis": C.RATIFIED["token_metering_basis"],
         "max_queued_jobs": C.RATIFIED["max_queued_jobs"][phase],

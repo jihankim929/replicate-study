@@ -175,7 +175,23 @@ Stated because a monitoring component that overstates its reach is worse than no
    | Phase | Concurrency | Poll | Worst-case overshoot | % of budget |
    |---|---|---|---|---|
    | Smoke | 50 | **10 min** | **8.33 CPU-h** | **2.45 %** |
-   | Main | 8 | **30 min** | **4.00 CPU-h** | **0.25 %** |
+   | Main | **12** | **30 min** | **6.00 CPU-h** | **0.37 %** |
+
+   *(The main row read `8 | 4.00 CPU-h | 0.25 %` until 2026-08-29 — stale since Rev 14 moved the
+   cap 8 → 12. Corrected as SI-012 §Proposed 5. Budget basis: 1,610 CPU-h at the 7-day horizon.)*
+
+   **The same bound governs SPEND, and there it is the binding constraint** (PI, 2026-08-29):
+
+   > `overshoot_usd <= peak_spend_rate x poll_interval_hours`
+
+   | Resource | Poll | Peak rate | Overshoot / replicate | Fleet (N=16) |
+   |---|---|---|---|---|
+   | Spend, at the cluster cadence | 30 min | $21.06/h | $10.53 | **$168 — does not fit $4,500** |
+   | Spend, at the ratified cadence | **2 min** | $21.06/h | **$0.70** | **$11 — fits, $9 spare** |
+
+   Spend is metered from local transcripts, so its poll costs no cluster round trip and runs on
+   its own 2-minute launchd agent. That cadence is what makes the $280 cap enforceable inside the
+   $4,500 limit; at 30 minutes it is not.
 
    `config.overshoot_bound(phase)` computes it; the watchdog prints it on every run, so the
    bound travels with the measurement instead of living only in this file.

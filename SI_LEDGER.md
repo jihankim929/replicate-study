@@ -1193,3 +1193,49 @@ quietly doing nothing.
 **Verified the only way that means anything: run against the live record with no backup.**
 Production hashes taken independently before and after: **unchanged**, `git status` clean, and the
 suite reports **84 PASS / 0 FAIL** (82 + the two new checks).
+
+---
+
+## SI-016 — The revision record leaked main-phase values into every provisioned charter, and it was the fifth leak of the same shape
+
+**Found:** 2026-08-29, by the cross-phase leak detector, while re-rendering the charter after the
+7-day budget re-derivation. **Phase:** main (pre-launch). **Status:** closed the same day.
+
+**The defect.** Charter Rev 19's own entry in the append-only REVISION RECORD read:
+
+> `[Q1:N]` → **12,499**, `[Q2:naive]` → **22,873 CPU-hours**, `[Q2:ratio]` → **about 10% of that**
+
+Those are **main-phase values, written in plain text**, in a table that renders into **every**
+provisioned copy — both arms, both phases. The phase-prose mechanism built at Rev 17 filters §1
+and §4 correctly; it has no reach into the revision record, because the record does not use spans.
+So a smoke-phase render carried the main run's database size and naive full-screen cost.
+
+**Why the source looked fine.** In `charter_v0.9.md` the §1/§4 values are `{{smoke=…|main=…}}`
+spans — you read brackets, not numbers. The revision record then *documents* what those spans were
+set to, in prose, and prose does not filter. **The leak is created by the act of recording the
+fix.** This is the fifth leak in this study and the fourth of exactly this shape: *invisible in
+the source, visible only in the provisioned output.* The standing belief — **review the provisioned
+output, never the source** — held again, and the detector built after the earlier ones is what
+caught it.
+
+**A second defect in the same row, found while fixing the first.** The row also said
+`[Q2:ratio]` → *"about 10% of that"*. Rev 20 changed the ratio to **7%**. So an append-only record
+of a ratified value had gone **stale** — the same class as SI-008's guard and the README's
+main-run row. An append-only record is not self-maintaining merely because it is append-only.
+
+**The fix, and the rule it establishes.** The row now describes *which* values were populated and
+on whose authority, and does not restate them. **The value lives in §1/§4, where the phase filter
+governs it; the record says that it was set, not what it was set to.** That is now the standing
+rule for the revision record, and it removes the staleness failure mode as a side effect: a row
+that names no number cannot carry a wrong one.
+
+**Caught by a third defect, in the fix for something else.** The spend budget was first drafted as
+its own `| Phase | Spend |` table with a **Main row only**. The phase filter would have removed
+that row from a smoke render and left a table with a header and no rows — and *an empty table is
+itself a marker that rows were filtered*, which Rev 11 forbids. The selftest's
+`no marker that rows were filtered` check is what surfaced it. Spend is now a **column in the
+existing resource table**, so every phase renders exactly one row and there is nothing to filter.
+
+**Verified after the fix:** both renders clean — 0 residual span markers, **0 cross-phase values in
+either direction**, 0 hits against `LEAK_DENY_HARD` (9 terms) and `LEAK_DENY_WARN` (6), no
+structure ids; selftest **85/85**.

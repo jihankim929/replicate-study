@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key><string>study.spend</string>
+  <key>ProgramArguments</key>
+  <array><string>/Users/jihankim/replicate-study/harness/spend_wrapper.sh</string></array>
+  <key>StartInterval</key><integer>120</integer>
+  <key>RunAtLoad</key><true/>
+  <key>StandardOutPath</key><string>/Users/jihankim/replicate-study/harness/logs/spend.launchd.out</string>
+  <key>StandardErrorPath</key><string>/Users/jihankim/replicate-study/harness/logs/spend.launchd.err</string>
+  <key>WorkingDirectory</key><string>/Users/jihankim/replicate-study</string>
+</dict>
+</plist>

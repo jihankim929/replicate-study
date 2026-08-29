@@ -89,8 +89,25 @@ def check_budget(ws: Path, meta: dict) -> list:
     """Returns a list of budget events. One per resource, worst level only."""
     u = _read_usage(ws)
     events = []
-    for name, used, cap in (("compute", u["cpu_h"], meta["compute_cpu_h"]),
-                            ("tokens", u["tokens"], meta["token_budget"])):
+    # SPEND is metered here on the same warn/stop terms as compute and tokens (PI, 2026-08-29).
+    # It is computed from the agent's own transcript on THIS machine, not from usage.json, for
+    # two reasons: cache reads never reach usage.json (the token basis excludes them), and a
+    # local read cannot go stale the way the cluster-bound meters did at collection (-36.5% and
+    # -50.5%). It is also why spend can be polled far more often than the cluster meters --
+    # there is no ssh round trip to pay, which is what makes the cap enforceable within its bound.
+    rows = [("compute", u["cpu_h"], meta["compute_cpu_h"]),
+            ("tokens", u["tokens"], meta["token_budget"])]
+    spend_cap = C.RATIFIED.get("spend_usd", {}).get(meta["phase"])
+    if spend_cap:
+        try:
+            import meter_spend
+            rows.append(("spend_usd", meter_spend.tally(meta["replicate_id"])["total_usd"], spend_cap))
+        except Exception as exc:                       # never let metering break the watchdog
+            events.append({"resource": "spend_usd", "used": None, "cap": spend_cap,
+                           "fraction": None, "level": "unknown",
+                           "enforcement": enforcement(meta["phase"], "spend_usd"),
+                           "error": type(exc).__name__})
+    for name, used, cap in rows:
         frac = used / cap if cap else 0.0
         level = ("stop" if frac >= C.STOP_FRACTION else
                  "warn" if frac >= C.WARN_FRACTION else "ok")

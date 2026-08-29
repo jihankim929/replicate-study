@@ -40,7 +40,7 @@ RATIFIED = {
         # prereg/arm_assignment.txt (which is ascending id). The seal is untouched, and
         # prereg/n16_derivation.md shows the derivation. Deferred: rep14, rep20 (gated);
         # rep18, rep19 (ungated) -- 4, not 8; see that file on the second wave.
-        "main":  {"days": 10, "replicates": 16,
+        "main":  {"days": 7, "replicates": 16,
                   "ids": ["rep01", "rep02", "rep03", "rep04", "rep05", "rep06", "rep07",
                           "rep08", "rep09", "rep10", "rep11", "rep12", "rep13", "rep15",
                           "rep16", "rep17"]},
@@ -52,10 +52,28 @@ RATIFIED = {
     # Note the smoke figure's ORIGINAL derivation -- 1600/14*3 = 343 -- no longer reproduces it.
     # 340 stands because it was ratified and is in flight, not because it is still 3/14 of main.
     # Per-day compute rates now differ by phase: main 160.0, smoke 113.3 CPU-h/day.
-    "compute_cpu_h":   {"smoke": 340,        "main": 2300},
+    # Main compute PRO-RATA to the 7-day horizon (PI, 2026-08-29): 2,300 x 168/240 = 1,610.
+    # The 240h spendability logic is preserved exactly, because the concurrency cap did not move:
+    # max spendable = 12 x 168 = 2,016 CPU-h, so 1,610 is the same 79.86% duty cycle as before.
+    # Naive exhaustive is a property of N, not of the horizon, so it stays 22,873 CPU-h -- which
+    # makes the budget 7.04% of naive, no longer the ~10% Rev 17 recorded provisionally.
+    "compute_cpu_h":   {"smoke": 340,        "main": 1610},
     # Main tokens: 57 M -> 40 M at Rev 13, 40 M -> 45 M at Rev 16 (PI, 2026-08-28). Warn is
     # derived (0.75 x budget), so the warning level moves with it: 30 M -> 33.75 M.
-    "token_budget":    {"smoke": 12_000_000, "main": 45_000_000},
+    # Pro-rata: 45 M x 168/240 = 31.5 M -> ruled ~32 M. Warn derives at 0.75 -> 24 M.
+    "token_budget":    {"smoke": 12_000_000, "main": 32_000_000},
+    # PER-REPLICATE SPEND CAP (PI, 2026-08-29). The token cap does NOT bound spend: the ratified
+    # metering basis excludes cache reads, and cache reads were 59.2% of the smoke's actual bill.
+    # This is the cap that actually binds -- at measured rates $280 is reached at 8.6-13.6 M
+    # billable, i.e. 27-43% of the 32 M token cap.
+    "spend_usd":       {"smoke": None,       "main": 280.0},
+    # Published list rates, Claude Opus 5. Cache reads ARE counted here, unlike the token meter.
+    "price_per_token": {
+        "input":            5.00e-6,
+        "output":          25.00e-6,
+        "cache_creation":   5.00e-6 * 1.25,
+        "cache_read":       5.00e-6 * 0.10,
+    },
     # Main cap RULED 8 -> 12 on 2026-08-28 (Flag H). The invariant Rev 2 actually set was
     # "~1.7-1.8x the sustained concurrency the budget implies", not the numeral 8: at 14 days
     # sustained was 4.76 and 8 was 1.68x it; at 10 days sustained is 6.67 and 8 would be 1.20x,
@@ -63,6 +81,16 @@ RATIFIED = {
     # Counted as LIVE jobs (running + queued) -- meter_compute.sh counts every job carrying the
     # replicate tag in `qstat -f`, so this is a concurrency cap, not a backlog cap.
     "max_queued_jobs": {"smoke": 50,         "main": 12},
+    # Spend is metered locally (transcripts on this machine), so it can be polled far more often
+    # than the cluster-bound meters -- no ssh round trip to pay. That is what makes the $280 cap
+    # enforceable INSIDE the limit: enforcement is polled, so the real fleet maximum is
+    # N x (cap + peak_rate x poll_interval), and at the 30-min cluster cadence that overshoot
+    # alone is $10.53/replicate -- $168 fleet-wide, which does not fit under $4,500.
+    "spend_poll_minutes": 2,
+    # Peak per-replicate spend rate MEASURED on the collected smoke: 647,100 billable tokens per
+    # active hour at $32.54 per M billable. Used only to bound the polling overshoot.
+    "spend_peak_usd_per_h": 21.06,
+    "monthly_spend_limit_usd": 4500.0,
     "g7_k": 40,                              # unscoped; see charter Appendix A G7
     # Study-wide ceiling. Independent of, and additional to, the per-replicate cap.
     # RULED 160 -> 240 on 2026-08-28 (Flag I). Same invariant as Flag H, one scale up: the
