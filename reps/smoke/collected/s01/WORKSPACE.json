@@ -1,0 +1,21 @@
+{
+  "replicate_id": "s01",
+  "phase": "smoke",
+  "workspace_root": "/home1/users/Bei/ws/s01",
+  "provisioned_at": "2026-08-26T13:33:22.644785+09:00",
+  "deadline_kst": "2026-08-29T09:00:00+09:00",
+  "campaign_days": 3,
+  "db_files": 1,
+  "budget_status": "ratified 2026-08-26",
+  "compute_cpu_h": 340,
+  "token_budget": 12000000,
+  "token_metering_basis": "input + output + cache_creation (cache reads excluded)",
+  "max_queued_jobs": 50,
+  "queue": "long",
+  "job_tag_prefix": "s01_",
+  "raspa_dir": "toolchain/raspa",
+  "raspa_binary": "toolchain/raspa/bin/simulate",
+  "uff_dir": "toolchain/raspa/share/raspa/forcefield/UFF",
+  "raspa_version": "2.0.37",
+  "raspa_commit": "4467e14c375c2e02f3839ffc63c14edf0bbde0a2"
+}

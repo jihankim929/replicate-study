@@ -8,3 +8,10 @@ known_hosts*
 *.pem
 *.ppk
 .ssh/
+
+# Pulled replicate workspaces (collection, 2026-08-29). 3.6 GB of raw run archive.
+# Deliberately not tracked: seal_notes S7 already rules that a database-scale artefact is a
+# decision to surface, not something to settle by `git add`. Hash-pinned instead by
+# reps/smoke/PULLED_MANIFEST.sha256. The COLLECTED record under reps/smoke/collected/ IS tracked.
+reps/smoke/s01/
+reps/smoke/s02/

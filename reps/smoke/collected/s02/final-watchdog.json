@@ -1,0 +1,41 @@
+{
+  "replicate": "s02",
+  "ts": "2026-08-29T09:02:57.724441+09:00",
+  "liveness": {
+    "state": "stale",
+    "age_min": 931.2,
+    "basis": "transcript-growth",
+    "heartbeat_age_min": 1462.7,
+    "heartbeat_informational_only": true
+  },
+  "budget": [
+    {
+      "resource": "compute",
+      "used": 796.754,
+      "cap": 340,
+      "fraction": 2.3434,
+      "level": "stop",
+      "enforcement": "log-only"
+    },
+    {
+      "resource": "tokens",
+      "used": 646274,
+      "cap": 12000000,
+      "fraction": 0.0539,
+      "level": "ok",
+      "enforcement": "enforce"
+    }
+  ],
+  "isolation": [],
+  "isolation_audited": true,
+  "overshoot_bound": {
+    "phase": "smoke",
+    "poll_minutes": 10,
+    "max_concurrent": 50,
+    "overshoot_cpu_h": 8.33,
+    "overshoot_pct_of_budget": 2.45
+  },
+  "cpu_h_scheduler": 94.937,
+  "cpu_h_basis": "job-records (single-core elapsed per finished run)",
+  "hours_to_deadline": -0.0
+}

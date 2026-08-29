@@ -1,0 +1,48 @@
+{
+  "replicate": "s01",
+  "ts": "2026-08-29T09:02:49.778459+09:00",
+  "liveness": {
+    "state": "stale",
+    "age_min": 1521.7,
+    "basis": "transcript-growth",
+    "heartbeat_age_min": 1527.1,
+    "heartbeat_informational_only": true
+  },
+  "budget": [
+    {
+      "resource": "compute",
+      "used": 300.741,
+      "cap": 340,
+      "fraction": 0.8845,
+      "level": "warn",
+      "enforcement": "log-only"
+    },
+    {
+      "resource": "tokens",
+      "used": 4200806,
+      "cap": 12000000,
+      "fraction": 0.3501,
+      "level": "ok",
+      "enforcement": "enforce"
+    }
+  ],
+  "isolation": [
+    "symlink escapes workspace: rw/bin -> /home1/users/Bei/ws/s01/toolchain/raspa/bin",
+    "symlink escapes workspace: rw/lib -> /home1/users/Bei/ws/s01/toolchain/raspa/lib",
+    "symlink escapes workspace: rw/share/raspa/molecules -> /home1/users/Bei/ws/s01/toolchain/raspa/share/raspa/molecules",
+    "symlink escapes workspace: rw/share/raspa/structures -> /home1/users/Bei/ws/s01/toolchain/raspa/share/raspa/structures",
+    "symlink escapes workspace: rw/share/raspa/forcefield -> /home1/users/Bei/ws/s01/toolchain/raspa/share/raspa/forcefield",
+    "symlink escapes workspace: rw/share/raspa/framework -> /home1/users/Bei/ws/s01/toolchain/raspa/share/raspa/framework"
+  ],
+  "isolation_audited": true,
+  "overshoot_bound": {
+    "phase": "smoke",
+    "poll_minutes": 10,
+    "max_concurrent": 50,
+    "overshoot_cpu_h": 8.33,
+    "overshoot_pct_of_budget": 2.45
+  },
+  "cpu_h_scheduler": 5.319,
+  "cpu_h_basis": "job-records (single-core elapsed per finished run)",
+  "hours_to_deadline": -0.0
+}

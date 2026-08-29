@@ -1369,3 +1369,158 @@ question is now asked per entry against the new denominator.
 would still provision 20 replicates with the smoke's slice and report `N/N verified`. Waiting on
 Q1 for the directory to point at. S5's manual spend-limit confirmation is still unchecked, now
 against 900 M.
+
+---
+
+## LOG-2026-08-29-01 — Smoke collected at the bell, hash-attested; the watchdog turns out to have run 2 cycles of 393, and the arm that read as low-burn is the fast one
+
+**Charter §5 deadline: 2026-08-29 09:00:00 KST.** It was the sole terminator; no hard budget
+stop fired. Both arms filed. Collection is complete and read-only with respect to the
+workspaces.
+
+### The collection itself
+
+The bulk `rsync` of 3.6 GB straddled the deadline — started 08:56:25, finished 09:01:56 — which
+on its own would have made the collected copy a snapshot of *whenever each file happened to
+transfer*. So a **bell fingerprint** was taken independently over `ssh` at **09:00:03 KST**:
+`sha256` of every record file in both workspaces, plus git identity and `usage.json`. The local
+copy hashes to it **17/17, zero mismatches**, and a post-bell delta `rsync --dry-run` had nothing
+to transfer. The collection is provably the 09:00 record rather than asserted to be.
+
+`collect.sh` then ran against the pulled copies at 09:02:49. Both reports collected by name
+(both used `REPORT.md`, so Rev 15 and the SI-010 tolerance both did their job); 32 and 13
+commits, no reflog rewriting; transcript audit **0 findings** for both. s02 has no `AUDIT.jsonl`,
+which is correct — Appendix A never reached the ungated arm. Final watchdog and divergence panel
+cycled at 09:03:52, timestamped at collection, after the record was frozen. Then the per-day
+burn ledger (`--dry-run`, so nothing was written back into a finished workspace) and the
+CHARTER-READ harvest. `reps/smoke/collected/COLLECTION.md` is the manifest.
+
+**11 CHARTER-READ entries, 5 from the gated arm and 6 from the ungated.** The instrument works,
+and it works *differently* per arm by construction: the gated arm's reads cluster in Appendix A
+(4 of 5), which the ungated arm never saw and cannot have read. The union is what v1.0 has to
+answer. The strongest single candidate is §2's *"working capacity … volumetric"* — s02 filed the
+absolute-vs-excess ambiguity **twice**, once at the start and once near filing, which is what a
+sentence that never resolved looks like.
+
+### SI-012 — the watchdog had been dead for 49 hours, and the cause is not what I expected
+
+`watchdog.jsonl` holds **four lines for the entire campaign**: two cycles, 16 minutes apart, both
+on 2026-08-27, in the minutes right after `watchdog_remote.sh` was written as the SI-002 fix.
+Then nothing, for **49.05 h**. Expected at the ratified 10-minute interval: **393 cycles.
+Observed: 2. Coverage 0.51 %.**
+
+The standing suspicion was host sleep, and the machine does sleep heavily — **154 transitions,
+32.00 h suspended, 48.8 % of the campaign, and 111 stretches longer than the poll interval.**
+**The evidence rejects it as the cause.** The longest single suspended stretch is **18.0
+minutes**. A `sleep 600` loop would have been *delayed* to roughly 200 cycles; it could not
+produce a 49-hour gap.
+
+It stopped because it was never started. No crontab, no launchd agent, no loop process, no shell
+history containing `poll` or `while true` or `sleep 600`; `launch.sh` starts no loop and
+`dryrun_loop.sh` does not call `poll.sh` at all. **The 10-minute cadence exists in three places
+and none of them is a scheduler:** a comment in `poll.sh`'s header, a table in the README, and
+the `poll_minutes: 10` field the watchdog writes into its own output.
+
+That last one is where it stops being bookkeeping. The README ratifies
+`overshoot_cpu_h ≤ max_queued_jobs × poll_interval_hours`, and the smoke row is **8.33 CPU-h,
+2.45 % of budget**. At the real interval the same formula gives **2,452 CPU-h, 721 %** — the
+bound was understated **294×**, and the watchdog printed the 8.33 figure into its own JSON on
+every run including this morning's. It is not theoretical: **s02 finished 456.75 CPU-h past its
+340 CPU-h cap, 54.8× the bound the harness was asserting.** SI-001's `log-only` concession was
+ruled acceptable *because the bound was small*. The bound was not small.
+
+**This is the second instance of SI-002's class, after SI-002 was fixed.** SI-002 was a header
+comment claiming a step the file did not have; the fix made the step exist. Nothing made the
+*cycle* exist. Both times a cadence was asserted in prose inside an artefact with no way to
+enforce it and no alarm on its absence. Nothing in this harness can tell "polled and healthy"
+from "not polled" — absence of a record read as health.
+
+**At N=20:** the same undetected outage is **11,772 CPU-h, 36.8 % of the fleet budget**, spent
+past a stop nobody is reading. Two further measured facts: `poll.sh` is serial at 8 `ssh` round
+trips per replicate (measured RTT 0.53 s → 4.2 s/replicate of pure latency, and `divergence.py`
+alone took 8.18 s at N=2), and one unreachable workspace can consume **900 s** under its 3×300 s
+retry policy — 1.5× the smoke interval — after which every replicate later in the serial loop is
+skipped silently. Fix is **launchd, not cron**: macOS fires missed intervals on wake, and with
+111 over-interval sleep stretches that difference is the whole sleep problem.
+
+### SI-013 — three escalations aged 24.84 h to the deadline, and one of them cost a result
+
+s02 filed all three at **08:09:47 on 2026-08-28, 3 min 38 s after** the restart notice landed
+following its 39-hour freeze. The first thing it did on waking was use the channel. Its
+`INBOX.md` at the bell contains exactly one entry — the restart notice — and **no acknowledgement
+of any of the three**; neither harness ledger holds an s02 record at all.
+
+All three carried affirmative §8 promises (§8's *"no response should be expected"* applies to the
+day-7 status, which the smoke addendum deletes). The `infra` job-kill request was self-resolved
+by s02 killing them itself, after they had burned **79.5 CPU-h for zero completed structures**.
+The meter-disagreement question is still open at collection. **The `charter` one is the
+expensive one:** it asked to spend **~10 CPU-h** — 2.9 % of one budget — for a claim-grade run,
+got no answer in 24.8 h, resolved it against itself in writing (`[CHARTER-READ] §4 vs §3`),
+honoured the §4 stop and filed with **no §3-compliant headline number**. Its own closing line,
+written not knowing nobody was listening: *"if Bei authorizes any spend before 09:00 tomorrow
+there is still time to use it."* There was.
+
+As latency data: **4 escalations / 2 replicates / 65.53 h = 0.73 per replicate per day**, 1 of 4
+answered, 0 answered by a human, longest latency terminated by the deadline rather than by a
+reply. **At N=20 over 10 days that is ~146 escalations against an answerer that does not scale.**
+§8 should carry an answer-time SLA or stop promising repair and answers.
+
+### SI-014 — found while reconstructing the above: the selftest deletes the escalation ledger
+
+`selftest.sh:158` does `rm -f harness/escalation_queue.jsonl harness/escalations.jsonl` against
+the **production** paths, then asserts on what it rebuilds. `escalations.jsonl` at collection
+holds five synthetic `s01` entries stamped 2026-08-28T17:46:55, including `[ESC: banana / may I
+have a hint?]` and a reply of `"test answer"`. None of it happened. The harness enforces *"git
+history must not have been rewritten — checked, not assumed"* against the replicate and applies
+no such standard to its own record. Concretely: SI-013 cannot establish whether the final poll
+ingested s02's escalations, because this `rm` deleted the proof 9.5 h later.
+
+### The token conclusion inverts
+
+Both token meters were stale at the bell for the SI-012 reason — `usage.json` read **−36.5 %**
+for s01 and **−50.5 %** for s02 against the transcripts. Measured properly:
+
+| | s01 | s02 |
+|---|---:|---:|
+| Billable | 6,620,605 | 1,306,050 |
+| Active-session span | 40.10 h (61.2 % duty) | **2.02 h (3.1 % duty)** |
+| **Tokens per hour worked** | **165.1 k/h** | **647.1 k/h** |
+
+SI-005 warned that one arm's rate was *"a measurement of a stall, not of a working style"* and
+then reassured itself with that arm's *pre-stall* 0.65 M/day — which was **also** an elapsed-time
+figure. On worked hours the supposedly low-burn arm is **3.9× the faster burner**. Projected over
+10 days at s01's duty cycle it reaches **95 M against the 45 M cap**, forced filing around day
+4.7. The caveat is stated as loudly as the number: **2.02 hours** of transcript is a thin lever
+and both sessions were dense deliberation rather than submit-and-wait, so 647 k/h is more likely
+a peak than a sustained rate. **It does not overturn 45 M. It removes the basis 45 M was
+defended on** — "even the slower arm clears 10 days by 6×" was an artefact of downtime.
+
+### Smaller things, recorded where they belong
+
+- **§5's "3 days" is 2.73 days.** T is 09:00 KST on day+3 and launch was 15:28, so the horizon is
+  **9.0 % shorter than the number the replicate is handed** in `WORKSPACE.json`
+  (`campaign_days: 3`). At 10 days the same construction loses 2.7 %. State T as a timestamp,
+  never as a day count. SI-006's *"38.6 h of a 72 h campaign"* is restated as **39.16 h of
+  65.53 h — 59.7 %**.
+- **The isolation audit ran for the first time ever, at collection**, because it needs the
+  workspace on local disk and the workspaces were remote all campaign. Its first output is **6
+  false positives**: s01 built its RASPA overlay with absolute symlinks, s02 with relative ones,
+  and the absolute ones point outside the *collected* root. §4's isolation clause was first
+  exercised after the campaign it governs had ended.
+- **The scheduler CPU counter went down** (s02: 94.9 → 15.1 between cycles). A cumulative counter
+  that decreases is not a counter; it is kept only as SI-001's evidence.
+- **s02's own ledger says 142.1 % (≈483 CPU-h); the harness says 796.75.** Left unreconciled at
+  collection, deliberately — it is the exact question its third escalation asked.
+- **The push 403 is cleared.** `origin/main` is at `db78835`, level with local. The
+  standing-constraints line asserting "5 commits ahead, PI action: re-authenticate" had been
+  stale through the whole repair and is corrected — same class as the SI-008 stale guard and the
+  README's main-run row, which still reads `8 | 4.00 CPU-h` after Rev 14 moved the cap to 12
+  (correct: **6.00 CPU-h, 0.375 %**).
+
+### What this means for the sequence
+
+The post-collection queue Q1…Q7 is unblocked and the smoke's job is done: it existed to change
+the main run, and it has. **Three of the four things it changed are harness defects that only a
+real campaign could surface** — an unscheduled watchdog, an unread channel, and a test that eats
+its own evidence — and all three scale badly to N=20. None of them is visible in a dry run,
+because a dry run has a human watching it.

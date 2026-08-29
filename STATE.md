@@ -2,7 +2,7 @@
 
 *Updated before any long wait. Supersedes itself; history lives in LOG.md and git.*
 
-Last updated: 2026-08-28, after LOG-2026-08-28-07.
+Last updated: 2026-08-29, at collection, after LOG-2026-08-29-01.
 
 ## Role
 
@@ -12,10 +12,15 @@ replicates. Off-script input from a replicate receives the chartered default res
 
 ## Study state
 
-- Phase: **smoke running, ~15.5 h from collection.** Both smoke replicates launched
-  2026-08-26; the charter §5 deadline **2026-08-29 09:00 KST** is the sole terminator and it
-  is unchanged. Main run is pre-launch and pre-seal. **Nothing in the 2026-08-28 ruling batch
-  touches the smoke** — no re-provisioning, no charter re-render, no harness restart.
+- Phase: **smoke COLLECTED 2026-08-29 09:00:00 KST.** The charter §5 deadline was the sole
+  terminator; no hard budget stop fired. **Both arms filed a compliant §7 report** — s01
+  13,423 B / 32 commits / `AUDIT.jsonl` 688 lines, s02 27,366 B / 13 commits / no `AUDIT.jsonl`
+  (correct, ungated). Transcript audit **0 findings** in both. The collected record is
+  `reps/smoke/collected/` and is **hash-attested to the bell**: a remote `sha256` fingerprint
+  taken at 09:00:03 KST matches the local copy **17/17**, so the collection is provably a
+  snapshot of 09:00 and not of whenever the 3.6 GB transfer finished. Procedure, contents and
+  the three unreconciled disagreements are in `reps/smoke/collected/COLLECTION.md`.
+  Main run remains pre-launch and pre-seal. **The post-collection queue Q1…Q7 is now unblocked.**
 - **Standing frame (PI, 2026-08-26): the smoke test exists to change the main run.** Charter
   v0.9, all placeholder values, the harness and the scoring assumptions are **provisional**.
   Expect revisions, make them cheap, keep every one on the record. Sequence:
@@ -60,6 +65,15 @@ replicates. Off-script input from a replicate receives the chartered default res
   server and on every queue, with no override and no limit hook. No admin change is needed.
   Fleet reachability under 580: the harness's own 160 governs, and 100% of the fleet compute
   budget is spendable. Had 58 been real, only 43.5% would have been.
+- **SUPERSEDED AT COLLECTION — the smoke produced two trajectories, and the second one inverts
+  the token conclusion.** s02 was restarted 2026-08-28 08:06 KST and filed compliantly, so the
+  arm was not lost (SI-004 closed). But measured on worked hours rather than elapsed hours,
+  **s02 burns 647.1 k tokens/h against s01's 165.1 k/h — 3.9× faster.** Its apparent 0.48 M/day
+  is 3.1 % uptime, not a research style. Projected over 10 days at s01's duty cycle it reaches
+  **95 M against the 45 M cap**. The caveat is stated with the number: s02's rate rests on
+  **2.02 h** of transcript against s01's 40.10 h, so it is more likely a peak than a sustained
+  rate. **It does not overturn 45 M; it removes the basis 45 M was defended on** (SI-005, closed
+  at collection). The paragraph below is kept as written, because it was true when written:
 - **The smoke is producing ONE usable trajectory, not two.** SI-004 is resolved as **SI-006**:
   the second replicate has sat at a blocking *"You've hit your monthly spend limit"* dialog
   since 2026-08-26 16:57 KST (~38.6 h of a 72 h campaign). Not a stalled agent — an unanswered
@@ -79,7 +93,9 @@ replicates. Off-script input from a replicate receives the chartered default res
   the retirement pass over living documents waits for the seal.
 - Arms: gated (charter Appendix A, `AUDIT.jsonl`) vs. ungated (Appendix A omitted verbatim).
   Smoke: `s01` gated, `s02` ungated. Main: drawn and pre-registered in
-  `prereg/arm_assignment.txt` (seed 20260826, 10/10). `reps/main` and `reps/smoke` still empty.
+  `prereg/arm_assignment.txt` (seed 20260826, 10/10). `reps/main` is still empty; **`reps/smoke`
+  is now the collected smoke** — `collected/` (tracked) plus the two pulled workspaces
+  (3.6 GB, gitignored, hash-pinned by `reps/smoke/PULLED_MANIFEST.sha256`, 50,598 files).
 - `harness/` **built, dry-runnable, and confirmed against a real launch configuration**;
   `./harness/selftest.sh` **82/82** (46 in this line was stale as of 2026-08-28; the suite has
   grown with the SI-007/008/010/011 regressions and the Rev 17 phase-prose tests). Dirac glue stubbed. `config.PROPOSED` is empty — every
@@ -161,6 +177,39 @@ replicates. Off-script input from a replicate receives the chartered default res
 9. Harness limits are documented and real: read-auditing catches only traces, budget metering
    trusts the replicate's own ledger, token metering has no source wired yet.
 
+12. **NEW SEAL BLOCKERS from collection, 2026-08-29 — SI-012/013/014.** All three are harness
+   defects, not science, and all three get worse at N=20.
+   - **SI-012 — nothing schedules `poll.sh`.** The watchdog ran **2 cycles of an expected 393**
+     (0.51 %) and was silent for the **last 49.05 h**. Host sleep was tested and **rejected as
+     the cause**: 32.00 h suspended (48.8 % of campaign) but the longest single stretch is
+     **18.0 min**, so a `sleep 600` loop would have been delayed, not stopped. There is no
+     crontab, no launchd agent, no loop process and no shell history of one. The 10-minute
+     cadence exists only as a comment, a README table, and the `poll_minutes: 10` field the
+     watchdog writes into its own output. Consequence: the ratified overshoot bound was
+     understated **294×** (8.33 vs 2,452 CPU-h), and s02 ended **456.75 CPU-h past its cap** —
+     54.8× the bound the harness was asserting. **At N=20 the same outage is 11,772 CPU-h,
+     36.8 % of the fleet budget, spent past a stop nobody reads, with no alarm.** Fix is
+     **launchd, not cron** (macOS fires missed intervals on wake; cron drops them — and 111
+     sleep stretches exceed the interval).
+   - **SI-013 — s02's three escalations aged 24.84 h unanswered to the deadline.** All three
+     carried affirmative §8 promises (2 × *"will be repaired"*, 1 × *"answered from this
+     document"*). Zero acknowledgements in its `INBOX.md`; zero records in either harness
+     ledger. **The charter escalation cost the study a result**: it asked to spend ~10 CPU-h for
+     a claim-grade run, resolved it against itself, and the ungated arm filed with **no
+     §3-compliant headline number**. Measured rate **0.73 escalations/replicate/day → ~146 at
+     N=20 over 10 days**, against an answerer that does not scale. **§8 should state an
+     answer-time SLA or stop promising repair and answers.**
+   - **SI-014 — `selftest.sh:158` deletes the binding escalation ledgers** and refills them with
+     synthetic entries (a `banana` category, a `"test answer"` reply). The harness enforces
+     "history must not have been rewritten" against the replicate and not against itself. It
+     destroyed the evidence that would have settled SI-013's ingestion timeline.
+   - **Also found, smaller:** the §5 "3 days" is really **2.73 days** (T is 09:00 on day+3, launch
+     was 15:28) — **9.0 % short**, and `WORKSPACE.json` tells the replicate `campaign_days: 3`;
+     at 10 days the same gap is 2.7 %. The isolation audit ran for the **first time ever** at
+     collection and its first output is **6 false positives** from s01's absolute symlinks
+     evaluated at a new root. The README's main-run overshoot row is stale at `8 | 4.00 CPU-h`
+     (Rev 14 moved the cap to 12; correct is **6.00 CPU-h, 0.375 %**).
+
 ## Beliefs carried forward
 
 - **Review the provisioned output, never the source.** Four leaks found so far; two were written
@@ -190,10 +239,13 @@ replicates. Off-script input from a replicate receives the chartered default res
 ## Standing constraints
 
 - One commit per event; message = one-line finding. Never amend, never rebase. Push after
-  each commit. **BROKEN SINCE 2026-08-28 (LOG-2026-08-28-06): `git push` returns 403 and `main`
-  is 5 commits ahead of `origin/main`.** All of 2026-08-28's work — Rev 13–16, SI-006–011, the
-  seal notes, the run-limit measurement — is local only. The commits are intact; the credential
-  in `osxkeychain` cannot write to the repo. **PI action: re-authenticate.** Bei does not touch
-  credentials.
+  each commit. **CLEARED 2026-08-29 at collection.** The 403 recorded here since 2026-08-28
+  (LOG-2026-08-28-06) is resolved: `git fetch` succeeds and `origin/main` is at `db78835`, the
+  same commit as local `main` — 0 ahead. All of 2026-08-28's work (Rev 13–17, SI-006–011, the
+  seal notes, the run-limit measurement) **is on the remote**; the credential was re-authorised
+  outside this record and Bei did not touch it. **This line stood stale for the whole of the
+  outage's repair** — it kept asserting "5 commits ahead" and "PI action: re-authenticate" after
+  both had ceased to be true, which is the same class as the SI-008 stale-guard finding and the
+  README's stale main-run row (SI-012 §Proposed 5). Verify state, do not carry an assertion.
 - `answer-key/` read/written only on explicit PI instruction. Its contents never enter a
   replicate workspace, LOG.md, STATE.md, or a commit message.

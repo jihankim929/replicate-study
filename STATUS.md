@@ -5,7 +5,7 @@
 <!-- DIVERGENCE-PANEL:BEGIN -->
 ## Mechanical divergence panel
 
-Refreshed 2026-08-27 23:16:05Z (08:16 KST) — every watchdog cycle.
+Refreshed 2026-08-29 00:04:00Z (09:04 KST) — every watchdog cycle.
 
 Arms are relabelled **A** / **B** in randomized order. The mapping was drawn once from
 OS randomness and sealed in `harness/divergence_map.SEALED.json`
@@ -14,10 +14,10 @@ OS randomness and sealed in `harness/divergence_map.SEALED.json`
 | Quantity | A | B |
 |---|---:|---:|
 | First submission (UTC) | 2026-08-26 06:36Z | 2026-08-26 06:38Z |
-| Elapsed since first submission | 40.7 h | 40.6 h |
+| Elapsed since first submission | 65.5 h | 65.4 h |
 | Jobs submitted | 189 | 108 |
-| Jobs completed | 189 | 106 |
-| Jobs running | 0 | 2 |
+| Jobs completed | 189 | 108 |
+| Jobs running | 0 | 0 |
 | Jobs queued | 0 | 0 |
 | Distinct structures touched | 1,731 | 797 |
 | — collapsed over charge-variant twins | 1,055 | 671 |
@@ -25,11 +25,13 @@ OS randomness and sealed in `harness/divergence_map.SEALED.json`
 | Batch size — median / max | 38 / 39 | 21 / 73 |
 | Batch-size distribution (size×jobs) | 1×56, 2×8, 4×8, 13×2, 14×2, 38×9, 39×80, unresolved×24 | 1×40, 9×7, 10×5, 21×4, 22×28, 72×21, 73×3 |
 | Cumulative CPU-h — from run records | 300.7 | 796.8 |
-| Cumulative CPU-h — from scheduler | 5.3 | 94.9 |
-| Token burn (billable) | 6,620,605 | 857,183 |
-| Token:CPU (tokens per CPU-h) | 22,014 | 1,076 |
+| Cumulative CPU-h — from scheduler | 5.3 | 15.1 |
+| Token burn (billable) | 6,620,605 | 1,306,050 |
+| Token:CPU (tokens per CPU-h) | 22,014 | 1,639 |
 | Resubmissions | 0 | 0 |
-| Agent transcript last grew | 35 min | 0 min |
+| Agent transcript last grew | 25.4 h | 15.5 h |
+
+> **⚠ CROSS-ARM COMPARISON IS NOT VALID THIS CYCLE.** The agent's own transcript has not grown for: **A** (25.4 h); **B** (15.5 h). An arm whose agent has stopped acting still carries its finished jobs, its CPU-hours and its structure counts forward, so every row above reads as a working arm that merely did less. It did not do less; it stopped. Do not read any row as a difference between arms until this clears. See SI-006 in `SI_LEDGER.md`.
 
 **Definitions.** *Jobs submitted* = job scripts carrying a `#PBS -N` line; *completed* = submitted − running − queued. *Distinct structures touched* = benchmark structures whose run directory holds simulation output; the collapsed row merges the coordinate-identical charge-variant pairs. *Batch size* = simulation tasks carried by one submitted job. *Resubmissions* = one job name submitted under more than one job id.
 

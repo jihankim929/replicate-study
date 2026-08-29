@@ -57,6 +57,37 @@ through the §5 forced-filing path.
 
 **Main run.** Seals truthful metering with working warnings and full enforcement.
 
+### Closed at collection — 2026-08-29 09:00 KST
+
+Collection has occurred, so the readings below use real replicate ids.
+
+| Basis | s01 | s02 |
+|---|---:|---:|
+| Scheduler (`qstat`) | 5.32 CPU-h | 94.94 CPU-h → **15.1** at the final cycle |
+| Job records — the meter this entry installed | **300.74** | **796.75** |
+| Ratio (truthful / scheduler) | **56.5×** | **8.4×** |
+| Against the 340 CPU-h §4 cap | 88.5 % — `warn` | **234.3 % — `stop`** |
+
+**The gap widened; it did not close.** At detection the ratio was 19.2× / 3.2×; at collection it
+is 56.5× / 8.4×. The scheduler basis got relatively worse as more jobs finished and were dropped
+from `qstat`, which is exactly the mechanism this entry described.
+
+**New at collection: the scheduler figure went *down*.** s02's `cpu_h_scheduler` read 94.94 at
+the 2026-08-28 08:16 cycle and **15.1** at the 09:04 cycle. A cumulative counter that decreases
+is not a counter. It is retained only as the evidence for this entry and must never be read as a
+total.
+
+**The price of `enforcement: log-only` is now measured.** The concession was ruled acceptable
+because the polling-overshoot bound was small — 8.33 CPU-h, 2.45 % of budget. **s02 ended
+456.75 CPU-h past its cap.** The bound was not small, because the interval it assumed was not
+being kept: see **SI-012**, where the same formula at the real interval gives 2,452 CPU-h. This
+entry's ruling was sound on the facts it had; the facts were wrong in the harness's favour.
+
+**One disagreement is left open, deliberately.** s02's own final ledger closed at **142.1 %
+(≈483 CPU-h)**; this meter says **796.75**. A 1.65× disagreement between the replicate's
+self-report and the instrument is not adjudicated at collection — it is the same question s02's
+third escalation asked and never got answered (**SI-013**), and it is a Q-item for the main run.
+
 ---
 
 ## SI-002 — The watchdog was never run against a live replicate
@@ -146,6 +177,35 @@ current evidence nothing in the harness will end this state before the §5 deadl
 is progressing without emitting transcript entries. Distinguishing these requires inspecting
 the session, which the PI has ruled out for now.
 
+### Closed at collection — 2026-08-29 09:00 KST
+
+**Superseded by SI-006** (a blocking spend-limit dialog, not a stalled agent) and **repaired**
+by the 2026-08-28 restart. Final measurement, from the two session transcripts:
+
+| | Value |
+|---|---:|
+| Frozen from | 2026-08-26 16:57 KST (last record of session `32fe5673`) |
+| Restarted | 2026-08-28 08:06:43 KST |
+| **Freeze duration** | **39.16 h** |
+| As a fraction of the 65.53 h campaign | **59.7 %** |
+| After the restart | 8 commits, a 27,366 B §7 report, 659,776 further billable tokens, filed compliantly |
+
+**The specimen-first ruling held.** The arm was not lost: it woke, reconciled, killed its own
+runaway jobs, and filed a report that states its own limits accurately.
+
+**Correction to SI-006's denominator, which was wrong in a way that matters.** SI-006 described
+the freeze as *"~38.6 h of a 72 h campaign"*. **The smoke campaign is 65.53 h, not 72.** §5's
+table says *"3 days"*, but it sets **T** at 09:00 KST on the third day, and launch was 15:28 —
+so the nominal 3 days is **2.73 days, 9.0 % short**. `WORKSPACE.json` hands the replicate
+`"campaign_days": 3`. Restated on the true denominator, the freeze was **59.7 %** of the
+campaign, not 53.6 %.
+
+**This generalises to the main run and should be caught before seal.** Ten days measured the
+same way, from a 15:28 launch, is **9.73 days — 2.7 % short**, and the replicate is told "10".
+Any budget derived as (per-day rate × nominal days) is over by that fraction, and any replicate
+planning its own time against "10 days" is planning against 6.5 hours it does not have. Either
+launch at 09:00, or state **T** to the replicate as a timestamp and never as a day count.
+
 ---
 
 ## SI-005 — The main token budget was re-set from a smoke burn measurement with one arm stalled
@@ -206,6 +266,58 @@ as a style, or a peak-day rate to be read afterwards as a sustained one.
 **Open dependency.** SI-004 is still open and B has not written for ~38 h. If the smoke ends
 with B never resuming, **the study has one arm's token burn, not two**, and the 40 M figure
 rests on a single trajectory. That is worth knowing before seal.
+
+### Closed at collection — 2026-08-29 09:00 KST. **The open dependency resolved against the entry's expectation.**
+
+The study **does** have two token trajectories: s02 resumed 24.9 h before the bell and produced a
+real one. But measuring it changes the conclusion rather than confirming it.
+
+**Both meters were stale at the bell**, because `meter_tokens.py` runs only inside a poll and
+polling had stopped (SI-012). The measured column below is read directly from the agents'
+transcripts on this machine and depends on nothing remote.
+
+| | s01 | s02 |
+|---|---:|---:|
+| Billable, **measured at collection** | **6,620,605** | **1,306,050** |
+| As recorded in `usage.json` at the bell | 4,200,806 | 646,274 |
+| **Staleness of the recorded figure** | **−36.5 %** | **−50.5 %** |
+| Campaign-elapsed rate (over 65.53 h) | 2.42 M/day | **0.48 M/day** |
+| Active-session span | 40.10 h (61.2 % duty) | **2.02 h (3.1 % duty)** |
+| **Tokens per hour actually worked** | **165.1 k/h** | **647.1 k/h** |
+
+### The arm that read as low-burn is the high-burn one
+
+SI-005 warned that *"one arm's rate is a measurement of a stall, not of a working style"*, and
+then concluded the 40 M figure was safe because *"even B's pre-stall rate of 0.65 M/day gives 62
+days of runway"*. **That pre-stall rate was itself computed over elapsed time, not worked time.**
+
+On the only basis that forecasts an unattended run — tokens per hour of actual work — **s02
+burns 3.9× faster than s01.** Its 0.48 M/day is not a research style; it is 647 k/h multiplied
+by 3.1 % uptime.
+
+| Projection over a 10-day main run, against the Rev 16 cap of 45 M | Result |
+|---|---:|
+| s01's measured rate at s01's measured duty cycle | 24.2 M — **54 % of cap**, clears |
+| **s02's measured rate at s01's duty cycle** | **95.1 M — 211 % of cap**, forced filing ≈ **day 4.7** |
+
+**The caveat, stated as plainly as the number.** s02's 647 k/h rests on **2.02 hours** of
+transcript — a far thinner lever than the 40 h behind s01's figure — and both of its sessions
+were dense deliberation (one 32-minute reasoning turn) rather than the submit-and-wait pattern
+that dominates a real campaign. **647 k/h is more likely a peak than a sustained rate.** It is
+not a prediction that a main replicate will burn 95 M. It is a demonstration that the smoke does
+**not** establish that no replicate can approach 45 M, which is what the budget was defended on.
+
+**What this does and does not change.**
+
+- **The 45 M ruling is not overturned here.** It remains a cost decision the PI is entitled to
+  make, and s01 — the only arm with a campaign-length trajectory — clears it at 54 %.
+- **Its stated basis no longer holds.** "Measured smoke burn shows even the slower arm clears
+  10 days by 6×" was true only of an elapsed-time rate over an arm that was switched off.
+- **SI-005's own limit #3 is now the binding one**: 1.66 days of smoke was a short lever, and
+  what the smoke actually delivered is **40 h of one arm and 2 h of the other**.
+- **For the seal:** either accept 45 M knowing one arm's measured intensity projects past it, or
+  price the main run from tokens-per-worked-hour with a stated duty-cycle assumption. The second
+  is the instrument this entry should have been using and now can.
 
 ---
 
@@ -615,3 +727,294 @@ written. Bash reads a script lazily by file offset, so editing a live script can
 running process resume at the wrong byte — a way to lose a campaign that has nothing to do with
 the campaign. The two modes are two files, which also makes the apparatus difference visible in
 the tree rather than hidden behind a flag.
+
+---
+
+## SI-012 — The watchdog was silently dead for 49 hours. Second instance of the same class as SI-002, after SI-002 was fixed
+
+**Found:** 2026-08-29, at collection, while assembling the final panel cycle.
+**Phase:** smoke, the whole of it. **Status:** measured and closed for the smoke; **open as a
+main-run seal blocker.**
+
+**Collection has occurred, so quantities below are reported under real replicate ids** rather
+than the sealed A/B labels. The A/B convention in this file's header governed the campaign, not
+its post-mortem.
+
+### The defect
+
+`harness/watchdog.py` implements charter §4's budget warnings, its hard stop and its isolation
+audit. `harness/poll.sh` calls it, once per replicate, every cycle. Its own header says
+*"Run every 10 minutes (ratified interval)."*
+
+**Nothing ran it every 10 minutes. Nothing ran it at all.**
+
+`harness/watchdog.jsonl` contains **four lines** for the entire campaign:
+
+| # | Replicate | Timestamp (KST) |
+|---|---|---|
+| 1 | s01 | 2026-08-27 07:40:47 |
+| 2 | s02 | 2026-08-27 07:40:49 |
+| 3 | s01 | 2026-08-27 07:56:48 |
+| 4 | s02 | 2026-08-27 07:56:51 |
+
+Two cycles, **16.1 minutes apart**, both on 2026-08-27 — the minutes immediately after
+`watchdog_remote.sh` was built as the SI-002 fix. Then nothing.
+
+| Quantity | Value |
+|---|---:|
+| Campaign, launch 2026-08-26 15:28 KST → bell 2026-08-29 09:00 KST | 65.53 h |
+| Cycles expected at the ratified 10-minute interval | 393 |
+| Cycles observed | **2** |
+| Coverage | **0.51 %** |
+| Watchdog silent from last entry to the bell | **49.05 h** |
+| Any poll component last wrote (`queue_depth.jsonl`, `STATUS.md`) | 2026-08-28 08:16 KST |
+| Gap on that more generous reading | 24.73 h |
+
+The 25-hour figure is the generous one — it is the last time *any* part of a poll ran. The
+watchdog specifically had been silent for **twice that**.
+
+### Why it stopped — host sleep was the hypothesis, and the evidence rejects it
+
+The machine does sleep, heavily. Across the campaign window `pmset -g log` records **154 sleep
+transitions and 32.00 h suspended — 48.8 % of the campaign** — and **111 of those stretches are
+longer than the 10-minute poll interval.**
+
+**But the longest single suspended stretch is 18.0 minutes.** A `while true; do poll; sleep 600;
+done` loop on this host would have been *delayed*, not stopped: roughly 200 cycles instead of
+393, never a gap beyond ~18 minutes. Sleep cannot produce 49 hours.
+
+It stopped because **it was never started.** There is no scheduler:
+
+- `crontab -l` → *"no crontab for jihankim"*.
+- No launchd agent for it in `~/Library/LaunchAgents/` (only Dropbox, Google, Pulse Secure).
+- No process: `ps` shows the two `screen`/`session_loop.sh` trees and nothing else of ours.
+- `~/.zsh_history` (31 KB, current to 2026-08-29 08:44) contains **no** occurrence of `poll`,
+  `while true`, `sleep 600` or `watch`.
+- `launch.sh` provisions, verifies, prints a registry, and exits. It starts no loop.
+- `dryrun_loop.sh` — the only thing shaped like a loop — does not call `poll.sh` at all.
+
+**The 10-minute cadence exists in exactly three places, none of which is a scheduler:** a
+comment in `poll.sh`'s header, a table in `harness/README.md`, and the `poll_minutes: 10` field
+that `watchdog.py` writes into its own output on every run.
+
+### Why this is the second instance and not a repeat
+
+**SI-002** was: *`poll.sh` listed a watchdog step in its own header comment and did not have
+one.* The fix added `watchdog_remote.sh` and wired it in. **The fix worked** — lines 1–4 above
+are that fix executing, minutes after it was written.
+
+**SI-012 is the same defect one level up.** SI-002 made the *step* exist. Nothing made the
+*cycle* exist. Both times the header comment described a behaviour the file did not have; both
+times the description was believed because it was written in the same file as the code. The
+class is: **a cadence asserted in prose, in an artefact that has no way to enforce it, and no
+alarm on its absence.** Nothing in this harness notices that a poll did not happen. Absence of
+a record is not a record of absence, and here it read as health.
+
+### The consequence, which is arithmetic and not a worry
+
+`harness/README.md` §Limits 0 ratifies a bound (PI ruling 2026-08-26):
+
+> `overshoot_cpu_h ≤ max_queued_jobs × poll_interval_hours`
+
+| | Concurrency | Poll | Stated bound | % of budget |
+|---|---|---|---:|---:|
+| Smoke, as ratified | 50 | 10 min | **8.33 CPU-h** | 2.45 % |
+| **Smoke, at the real interval** | 50 | **49.05 h** | **2,452.6 CPU-h** | **721 %** |
+
+The bound was understated by **294×**, and `watchdog.py` printed the 8.33 figure into its own
+JSON on every run including the one taken at collection this morning.
+
+It is not a theoretical miss. **s02 finished at 796.75 CPU-h against a 340 CPU-h cap — 456.75
+CPU-h past the stop, which is 54.8× the bound the harness was asserting.** The instrument that
+was supposed to catch it had not run for two days, and the instrument that priced how much
+could escape it was computing that price from an interval nobody was keeping.
+
+This is what made SI-001's *"enforcement: log-only"* a much larger concession than it read as.
+Log-only was ruled acceptable *because the bound was small*. The bound was not small.
+
+### Consequence at N = 20 — the seal-blocking row
+
+Main-run parameters as ratified: **12 concurrent jobs per replicate** (Rev 14), **fleet ceiling
+240** (Flag I), **1,600 CPU-h per replicate**, **10-day horizon**, **30-minute poll**.
+
+| Scenario | Per replicate | Fleet (N = 20) | % of the 32,000 CPU-h fleet budget |
+|---|---:|---:|---:|
+| Bound at the ratified 30-min interval | 6.0 CPU-h | 120 CPU-h | 0.375 % |
+| **Same 49 h outage, undetected** | **588.6 CPU-h** | **11,772 CPU-h** | **36.8 %** |
+
+Better than a third of the main run's entire compute budget can be spent past a hard stop that
+nobody is reading, and **the current harness would report nothing while it happened** — the
+replicates keep working, the jobs keep finishing, `STATUS.md` keeps showing its last panel, and
+the only signal is a file that stops growing.
+
+Two further N = 20 facts, measured today rather than assumed:
+
+1. **`poll.sh` is serial and O(N).** Measured `ssh` round-trip to the login node: **0.53 s**
+   (5 samples, 0.52–0.60). Each replicate costs 8 `ssh`/`scp` round trips per cycle
+   (`harvest_cput` 1, `meter_compute` 1, `escalate_remote` 2, `usage.json` 1, `watchdog_remote`
+   2, `divergence` 1) — **4.2 s of pure latency per replicate before any work.** `divergence.py`
+   alone measured **8.18 s wall for N = 2**. At N = 20 a cycle runs to minutes against a
+   30-minute interval: it fits, but not comfortably.
+2. **One unreachable workspace can eat the whole cycle.** `divergence.collect()` retries **3×
+   with a 300 s timeout** — by design, because *"this login node drops and times out connections
+   often enough that a single failed attempt is not evidence of anything"*. That is **up to 900 s
+   for one replicate**: 1.5× the smoke interval, half the main interval. Because the loop is
+   serial, **every replicate after it in the `for` loop is skipped that cycle, silently.**
+
+### Proposed — Bei proposes, the PI ratifies
+
+1. **Schedule it, in launchd, not cron.** A `StartInterval` agent survives logout and — the
+   reason it must be launchd here — **macOS fires missed intervals on wake.** With 111 sleep
+   stretches longer than the interval, cron would simply drop those cycles. This is the fix for
+   the sleep problem, which is real even though it is not the cause of this entry.
+2. **Alarm on absence.** A poll that has not written to `watchdog.jsonl` within 3 intervals is
+   itself a finding, surfaced where a human sees it. Today the harness is unable to distinguish
+   "polled and healthy" from "not polled".
+3. **Make the bound honest.** `watchdog.py` should compute `overshoot_bound` from the **measured**
+   interval since the previous `watchdog.jsonl` entry, not from the configured constant. A bound
+   derived from an assumption is not a bound; it is the assumption wearing a number.
+4. **Give `poll.sh` a per-replicate deadline** below `interval / N`, and parallelise the fan-out,
+   so one dead workspace degrades one row instead of the cycle.
+5. **The README's main row is stale** — it still reads `Concurrency 8 | 30 min | 4.00 CPU-h |
+   0.25 %`, from before Rev 14 moved the cap 8 → 12. Correct values: **6.00 CPU-h, 0.375 %**.
+   Same class as the SI-008 finding: a guard still stating a number the charter no longer holds.
+
+---
+
+## SI-013 — Three escalations aged unanswered to the deadline; the first measurement of what a frozen PI costs
+
+**Found:** 2026-08-29, at collection. **Phase:** smoke. **Status:** measured; the
+**latency data is the point of the entry** and it is now on the record.
+
+### What was filed and what §8 promised it
+
+Charter §8 defines the only channel and attaches a promise to each category: `infra` —
+*"mechanical failures — will be repaired"*; `charter` — *"rule clarification — answered from
+this document"*; `scientific` — the fixed default reply. §8's *"No response should be
+expected"* applies to the **day-7 weekly status**, not to escalations — and the smoke addendum
+deletes the day-7 status entirely. **Escalations here carried affirmative promises.**
+
+s02 filed three, in `ESCALATIONS.md`, all present in commit `c967d4a` (2026-08-28 08:16:33 KST);
+file `mtime` **2026-08-28 08:09:47 KST**, which is **3 min 38 s after** the harness's restart
+notice landed in its `INBOX.md` (08:06:43) following the 39-hour SI-006 freeze. The first thing
+this replicate did on waking was use the channel.
+
+| # | Category | Question, abridged | §8 promise | Answered? | Latency to bell | How it actually resolved |
+|---|---|---|---|---|---:|---|
+| 1 | `infra` | `qdel` jobs 3470596 / 3470606 — each 39.7 h against a ~15 h peer median, burning past the hard stop; own `qdel` blocked | *will be repaired* | **no** | **24.84 h** | Self-resolved. s02 killed them itself at 08:34:44 (`ab257e9`) after they had burned **79.5 CPU-h for zero completed structures** |
+| 2 | `charter` | Meter reads 483 of 340 CPU-h (142 %), no 10,000+50,000 run exists — may I spend ~10 CPU-h on claim-grade confirmation, or file on floor-cycle evidence? | *answered from this document* | **no** | **24.84 h** | Resolved against itself. See below |
+| 3 | `infra` | `usage.json` reports `cpu_h` 400.35 but `cpu_h_scheduler` 93.912 for the same work — 4.3× — which is the enforced meter? | *will be repaired* | **no** | **24.84 h** | Unresolved. Still open at collection (COLLECTION.md §3) |
+
+`s02/INBOX.md` at the bell contains **exactly one entry** — the restart notice — and **no
+acknowledgement of any of the three.** Neither `harness/escalations.jsonl` nor
+`harness/escalation_queue.jsonl` contains a single s02 record. The channel §8 calls the only one
+there is was, for this replicate, not read.
+
+### Escalation 2 is the one that cost the study a result
+
+s02 asked whether it could spend **~10 CPU-h** — 2.9 % of one replicate's smoke budget — to
+obtain a §3-compliant claim-grade number. Nobody answered in 24.8 hours. It resolved the
+question against itself, correctly and in writing, in its own
+`[CHARTER-READ] §4 vs §3` entry (`LOG.md:269`): it read §4's hard stop as the stronger
+constraint because §5 explicitly blesses *"an honest incomplete report"* while §4 admits no
+exception, and filed with floor-cycle evidence labelled as not claim-grade.
+
+**The consequence is in its report's first section:** *"No run at 10,000 + 50,000 exists, so the
+number above does not meet §3's claim-grade standard."* The ungated arm of this study has **no
+protocol-grade headline number**, and the proximate cause is an unanswered 10 CPU-h question.
+
+Its own closing note, written before the deadline it did not know was uncontactable:
+
+> *"I have not filed early, so if Bei authorizes any spend before 09:00 tomorrow there is still
+> time to use it."*
+
+There was. Nothing was authorised, because nothing was read.
+
+### Why — same root as SI-012
+
+`escalate_remote.sh` runs **only inside `poll.sh`**, and polling had stopped. The window in which
+these three could have been ingested was about **six minutes wide** — filed 08:09:47, last poll
+component wrote at 08:16:03 — and after that nothing looked at the file again for 24.7 hours.
+Whether that final poll ingested them cannot now be determined, because the evidence was deleted
+(SI-014).
+
+**Contrast s01**, whose single `infra` escalation *was* acknowledged — **twice**, at 2026-08-27
+07:27:05 and again at 07:56:42, the same escalation delivered as two notices. Both acknowledgements
+fall inside the same brief window on 2026-08-27 as the only two watchdog cycles. The escalation
+router works. It ran twice, in one 30-minute window, in a 65.5-hour campaign. Its duplicate
+delivery is a second, smaller defect in it.
+
+### Frozen-PI latency, as data for the main run
+
+This is the study's first measurement of an unanswered channel, and it should be read as a rate,
+not an anecdote.
+
+| Measured | Value |
+|---|---:|
+| Escalations filed, both arms, 65.53 h | **4** (s01 1, s02 3) |
+| Rate | **0.73 per replicate per day** |
+| Answered within the campaign | **1 of 4** (25 %) |
+| Answered at all by a human | **0** |
+| Longest unanswered latency | **24.84 h**, terminated by the deadline rather than by an answer |
+| Category promises unmet | 2 `infra` ("will be repaired"), 1 `charter` ("answered from this document") |
+
+**At N = 20 over 10 days that rate projects to ~146 escalations.** The replicates scale; the
+answerer does not. If the main run answers them at the smoke's rate, ~110 replicate-decisions
+get made the way s02's was: alone, correctly, against the replicate's own interest, and at a
+measurable cost to the result.
+
+**A charter that promises repair and answers should deliver them, or stop promising.** Both are
+honest; the present combination is not. For ratification, one of:
+
+- **(a)** a stated answer-time SLA per category in §8, with the harness alarming when it lapses; or
+- **(b)** §8 rewritten to promise only what an unattended run will actually provide — which for
+  `scientific` it already does, since that category's reply is a fixed string the harness can
+  deliver without a human.
+
+Note that **(b) is nearly free**: the `scientific` default already works unattended, and the
+`charter` category is *"answered from this document"* — a large fraction of which could be
+delivered mechanically. It was the two categories that need a human that went unanswered.
+
+---
+
+## SI-014 — The selftest deletes the binding escalation ledger and refills it with test data
+
+**Found:** 2026-08-29, at collection, while reconstructing SI-013's timeline.
+**Phase:** harness, all phases. **Status:** open.
+
+`harness/selftest.sh:158`:
+
+```sh
+rm -f harness/.seen-s01 harness/escalation_queue.jsonl harness/escalations.jsonl
+```
+
+and lines 161–165 then assert against those same paths. The suite does not use a throwaway copy
+for this check the way it does for everything else — **it deletes the production ledgers and
+rebuilds them with synthetic entries.**
+
+`harness/escalations.jsonl` at collection contains **five lines, all timestamped
+2026-08-28T17:46:55, all `s01`**, none of which any replicate ever filed. Among them:
+
+- `[ESC: banana / may I have a hint?]`, `"disposition": "malformed"`
+- `[ESC: charter / does a grid number count as reported?]`, `"reply": "test answer"`
+
+s01's real `ESCALATIONS.md` contains exactly one line, an `infra` report about a gateway outage.
+**None of the five synthetic entries corresponds to anything that happened.** The file mtime is
+2026-08-28 17:46:55 KST — the last selftest run, **15.2 h before the bell**, during the Rev 17
+work.
+
+**Why this matters beyond tidiness.** The harness `README.md` maps escalation logging to charter
+§6, the binding-record clause. The same README's `collect.sh` row enforces *"git history must not
+have been rewritten — checked, not assumed"* against the replicate. **The harness applies to the
+replicate's record a standard it does not apply to its own**, and its own record is the one that
+holds the evidence about the harness.
+
+**Concrete loss.** SI-013 cannot establish whether the 2026-08-28 08:16 poll ingested s02's three
+escalations, because if it had, this `rm` deleted the proof 9.5 hours later. The finding stands
+regardless — s02's `INBOX.md` shows no acknowledgement, which is the replicate-visible fact and
+is not stored in a file the selftest touches — but the harness-side timeline is unrecoverable.
+
+**Proposed.** Point the ledger paths at a temp dir under test (an env var the suite overrides is
+enough — every other check already runs *"against a throwaway mock"*), and treat both ledgers as
+append-only in the same sense the replicates' git history is. A test that destroys the evidence
+it is testing for is a worse instrument than no test.
