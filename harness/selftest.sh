@@ -297,8 +297,12 @@ echo "== 7h. interaction mode is selected BY PHASE (SI-011) =="
 # would look correct here and reproduce SI-006 in the main run.
 chk "smoke selects the TUI loop"    "$(PHASE=smoke bash harness/launch_sessions.sh --dry-run 2>&1 | grep -c 'loop=session_loop.sh')" "1"
 chk "main selects the headless loop" "$(PHASE=main  bash harness/launch_sessions.sh --dry-run 2>&1 | grep -c 'loop=session_loop_headless.sh')" "1"
-chk "main invokes claude with -p"    "$(PHASE=main  bash harness/launch_sessions.sh --dry-run 2>&1 | grep -c -- '-p <prompt>')" "2"
-chk "smoke does NOT invoke with -p"  "$(PHASE=smoke bash harness/launch_sessions.sh --dry-run 2>&1 | grep -c -- '-p <prompt>')" "0"
+# Named replicate, not the phase roster: this asserted "2" because the launcher was hardcoded to
+# two replicates, so parameterising the roster broke a test of the -p flag by changing a count that
+# has nothing to do with -p. Test the mechanism on one replicate; the roster is tested elsewhere.
+chk "main invokes claude with -p"    "$(PHASE=main  bash harness/launch_sessions.sh --dry-run rep01 2>&1 | grep -c -- '-p <prompt>')" "1"
+chk "smoke does NOT invoke with -p"  "$(PHASE=smoke bash harness/launch_sessions.sh --dry-run s01   2>&1 | grep -c -- '-p <prompt>')" "0"
+chk "roster comes from config, not the script" "$(PHASE=main bash harness/launch_sessions.sh --dry-run 2>&1 | grep -c '=== rep[0-9]* (dry-run) ===')" "16"
 chk "an unknown phase is refused"    "$(PHASE=bogus bash harness/launch_sessions.sh --dry-run >/dev/null 2>&1; echo $?)" "2"
 chk "headless loop surfaces limits"  "$(grep -c 'ACCOUNT LIMIT REACHED' harness/session_loop_headless.sh)" "1"
 
