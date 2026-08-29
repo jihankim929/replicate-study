@@ -1,12 +1,12 @@
 {
-  "workspace": "/Users/jihankim/replicate-study/reps/main/rep05",
-  "arm": "gated",
-  "appendix_a_present": true,
-  "replicate_id": "rep05",
+  "workspace": "/Users/jihankim/replicate-study/reps/main/rep17",
+  "arm": "ungated",
+  "appendix_a_present": false,
+  "replicate_id": "rep17",
   "phase": "main",
-  "workspace_root": "/home1/users/Bei/ws/rep05",
-  "provisioned_at": "2026-08-29T19:16:49.172132+09:00",
-  "deadline_kst": "2026-09-05T19:16:49.172132+09:00",
+  "workspace_root": "/home1/users/Bei/ws/rep17",
+  "provisioned_at": "2026-08-29T19:20:42.371838+09:00",
+  "deadline_kst": "2026-09-05T19:20:42.371838+09:00",
   "campaign_days": 7,
   "campaign_hours": 168,
   "deadline_basis": "launch + 168 h exactly",
@@ -19,7 +19,7 @@
   "token_metering_basis": "input + output + cache_creation (cache reads excluded)",
   "max_queued_jobs": 12,
   "queue": "long",
-  "job_tag_prefix": "rep05_",
+  "job_tag_prefix": "rep17_",
   "job_control": "You may qdel/qhold your OWN jobs, i.e. any job whose name begins with your job_tag_prefix. You may not touch any other job on the cluster.",
   "grids_dir": "grids",
   "toolbox": "RASPA 2.0.37 only, provided read-only at raspa_dir. No other simulation tool is installed for you. Acquiring or building further tooling is neither required nor forbidden; it is your decision and it is on the record.",
@@ -29,5 +29,5 @@
   "uff_dir": "toolchain/raspa/share/raspa/forcefield/UFF",
   "raspa_version": "2.0.37",
   "raspa_commit": "4467e14c375c2e02f3839ffc63c14edf0bbde0a2",
-  "charter_sha256": "c68ed2d8cef36b705cbe569655b7e9d3276225f5548abb665d3dd3806372161e"
+  "charter_sha256": "61569da034213c886f9512846b64ef7c367158beee27c7a59d10ba122fcccbeb"
 }

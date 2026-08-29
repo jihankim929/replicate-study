@@ -2159,3 +2159,32 @@ turns. **A halt would have been called on a filesystem timestamp.**
 They were hung, not working — the same silent-stall the collection recorded at 25.4 h and 15.5 h of
 transcript stagnation, now at ~60 h. Retired at seal: the smoke is collected, hashed and sealed, and
 a hung session that woke up would write into a workspace whose collection is already attested.
+
+### LOG-2026-08-29-12 — fleet provisioned; a Rev 21 asymmetry worth a ruling
+
+All 16 main workspaces stand provisioned and independently verified on the cluster: **8 gated / 8
+ungated, zero problems** — 12,499/12,499 CIFs each, toolchain verified against its attestation and
+set read-only, `raspa_home` installed, the corrected addendum in place, and **zero unpopulated
+placeholders** in any charter or addendum.
+
+**Rev 21 reaches seven of eight gated workspaces and none of the ungated eight, and that is
+correct, not a defect.** Both amendments are Appendix A material, and Appendix A is omitted
+verbatim from the ungated arm — which carries no G3 and therefore has no density bound to correct
+and no gate-imposed void fraction to satisfy. rep01 is the eighth gated workspace and carries
+pre-Rev-21 text by ruling, having received both answers through `INBOX.md`.
+
+**A first verification pass reported nine problems.** It asserted Rev 21 text in every workspace,
+which is a statement that the treatment does not exist. The check was wrong, not the fleet — but
+it is worth recording that Bei's own verification measured the independent variable and called it
+a fault.
+
+**What is worth a ruling, and it is not the above.** Rev 21(b) carries two things in one clause:
+a permission scoped to G3 (*any stated and logged method satisfies the void-fraction requirement*)
+and a general statement about the pinned protocol (*the pinned file set governs claim simulations,
+not descriptors*). The first is properly gate-scoped. **The second is a §3 matter and reaches only
+the gated arm.** Both arms receive the identical pinned file set, and `pseudo_atoms.def` contains
+no helium in either. An ungated replicate that computes a void fraction for its own screening meets
+the same wall with no text telling it an auxiliary parameter file is acceptable — so it either
+edits a pinned file, which §3 forbids, or forgoes the descriptor. **The gated arm has been given a
+permission about the pinned files that the ungated arm has not**, which is a difference between the
+arms that is not the audit gates. Filed for the PI; Bei has not moved the clause.
