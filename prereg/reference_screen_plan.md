@@ -70,23 +70,110 @@ for a claim about systematic offset; the plan makes no such claim.
 
 ---
 
-## 2. Stage 1 — full-census floor screen
+## 2. Stage 1 — full-census floor screen, restructured by pressure *(PI amendment, 2026-08-29)*
+
+### 2.1 The bound and its derivation
+
+For an isotherm `N(P)` that passes through the origin and is **concave** on `[0, 65]` bar, the
+chord slope `N(P)/P` is non-increasing in `P`. Therefore
+
+```
+N(65)/65  ≤  N(5.8)/5.8        ⇒        N(65) ≤ (65/5.8) · N(5.8) = 11.2069 · N(5.8)
+WC = N(65) − N(5.8)            ⇒        WC    ≤ (65/5.8 − 1) · N(5.8) = 10.2069 · N(5.8)
+```
+
+The bound is the **pressure ratio itself**, attained only in the Henry limit (`b → 0`) and
+approached from below as saturation sets in. Concavity through the origin is the whole requirement;
+Langmuir is a sufficient special case, not a necessary one.
+
+**Premises, stated because they are what could fail:**
+
+1. **`N(0) = 0`.** Trivially true.
+2. **Rigid framework.** Gate-opening, breathing and structural transitions produce stepped
+   isotherms with locally *convex* segments, which break concavity. **This is protocol-guaranteed,
+   not assumed about the materials**: charter §3 pins `framework rigid`, so no simulation in this
+   study can produce a stepped isotherm even if the real material has one. The bound therefore
+   holds for the quantity the screen actually computes.
+3. **Supercritical adsorbate.** Methane at 298 K against `T_c` = 190.56 K gives a reduced
+   temperature of 1.56, so there is no capillary condensation and no pore-filling step — the other
+   two sources of convexity in this pressure range.
+4. **Single component.** Pure CH₄; no mixture effects.
+
+The residual physical risk is a strongly bimodal pore system whose second population fills only at
+high pressure, which can give a locally convex segment. For supercritical methane in a rigid
+framework over 5.8–65 bar this is not an observed regime, and §2.3 tests it empirically rather than
+resting on the argument.
+
+### 2.2 Execution
 
 | | |
 |---|---|
-| **Cycles** | **2,000 init + 10,000 production**, both pressures (5.8 and 65 bar) |
-| **Population** | all **12,499** structures of the frozen world, membership = the published manifest |
+| **Stage 1a** | **5.8 bar only**, floor cycles (2,000 + 10,000), all **12,499** structures |
+| **Prune** | skip 65 bar where `(N(5.8) + 3σ) · 10.2069 < (provisional band top) − Δ` |
+| **Stage 1b** | **65 bar**, floor cycles, survivors only |
 | **Replication** | 1 run per structure per pressure |
-| **Cost** | 12,499 × 1.83 = **22,873 CPU-h** |
-| **Basis** | measured, 1,072 structures / 2,144 runs / 1,957.9 CPU-h → 0.913 CPU-h per run |
+| **Cost** | 12,499 × 0.913 = **11,411 CPU-h** (1a) + survivors × 0.913 (1b) |
 
-**This stage *is* the naive basis.** The charter's 22,873 CPU-h figure is a floor-grade exhaustive
-pass, not a claim-grade one — worth stating because "1.83 CPU-h per structure" appears in the
-charter beside the word *exhaustive* and is easily read as the cost of a definitive number. It is
-not. Claim grade is **9.13 CPU-h per structure, 5× the cycles**; an exhaustive claim-grade pass
-would be **114,116 CPU-h**, which is what the funnel exists to avoid.
+**The prune is applied to the upper confidence bound on `N(5.8)`, not to the point estimate.** A
+structure is pruned only if it would remain outside the promotion zone even if its 5.8 bar
+measurement were understated by 3σ. §2.3 shows why that allowance is not optional.
 
----
+### 2.3 What the bound does empirically — measured, not asserted
+
+Tested against **all 1,792 smoke runs** carrying both pressure points with `N(5.8) > 0`:
+
+| | |
+|---|---|
+| measured `N(65)/N(5.8)` | median **1.536**, p95 4.453, p99 8.238, max 18.788 |
+| runs exceeding 11.2069 | **6 of 1,792 (0.335 %)** |
+
+**All six violations are noise, and identifiably so.** Every one is at **scout cycles (150 + 600)**,
+the noisiest fidelity, and every one has `N(5.8)` between **0.0017 and 0.259** — where a small
+absolute error produces an enormous ratio. Their working capacities are **0.019 to 2.76 cm³/cm³**
+against a band top near 190. **None is within three orders of magnitude of the promotion zone.**
+No violation occurs at floor grade or above, and none at any loading where the prune operates.
+
+That is the case for the 3σ allowance rather than a bare comparison: the bound is physically sound,
+but a *measurement* of it can exceed it at near-zero loading, and the prune must be robust to the
+measurement rather than to the physics.
+
+### 2.4 The prune is sound and nearly inert — stated before ratification, not after
+
+**It removes 3.2 % of the 65 bar runs and saves ~365 CPU-h, 1.6 % of the naive basis.**
+
+The reason is arithmetic, not implementation. The prune threshold is
+`(band top − Δ)/10.2069 ≈ 19.4 cm³/cm³` at 5.8 bar, and the measured median `N(5.8)` across the
+screened set is **84.7 cm³/cm³** with p5 = 15.7. **Roughly 94 % of structures clear the threshold
+comfortably**, because the concavity bound is **19× looser than the median structure's actual
+`WC/N(5.8)` ratio of 0.534**. A rigorous bound must accommodate the Henry limit; almost nothing in
+this database is near it.
+
+| prune variant | multiplier | pruned | CPU-h saved | provable? |
+|---|---:|---:|---:|---|
+| **rigorous concavity, 3σ allowance** | 10.207 | **3.2 %** | **~365** | **yes** |
+| rigorous concavity, point estimate | 10.207 | 5.8 % | ~664 | yes, but not noise-robust |
+| empirical p99.9 of measured ratio | 14.935 | 3.9 % | ~445 | no — and *looser* than the rigorous bound |
+| empirical multiplier 3.0 | 3.000 | 31.6 % | ~3,600 | **no — 1 % of measured structures exceed it** |
+
+Two things worth the PI's attention in that table. **The empirical p99.9 multiplier is larger than
+the rigorous bound**, so tuning on the smoke data would produce a *weaker* prune than the theory —
+a consequence of the same near-zero-loading noise. And **the multiplier that would actually save
+real compute (3.0) is violated by 1 % of measured structures**, so it would false-exclude, which is
+the one failure mode this screen exists to prevent.
+
+**And the amendment does not pay for itself in compute.** The bound-violation audit it requires
+(§4) costs **~913 CPU-h** against the **~365 CPU-h** the prune saves — **net +548 CPU-h**. That is
+not an argument against it: what the amendment buys is a landscape whose completeness is *verified*
+rather than argued, and 548 CPU-h is a cheap price for that. But it should be ratified for that
+reason and not on the expectation of a saving.
+
+### 2.5 Basis
+
+Stage 1 remains the naive basis. The charter's 22,873 CPU-h figure is a **floor-grade** exhaustive
+pass, not a claim-grade one — worth stating because "1.83 CPU-h per structure" appears in §4 beside
+the word *exhaustive* and is easily read as the cost of a definitive number. It is not. Claim grade
+is **9.13 CPU-h per structure**; an exhaustive claim-grade pass would be **114,116 CPU-h**, which is
+what the funnel exists to avoid.
 
 ## 3. Stage 2 — claim-grade promotion
 
@@ -118,41 +205,77 @@ promotion count is unknown until Stage 1 finishes.**
 
 ---
 
-## 4. Stage 3 — random audit of the non-promoted set
+## 4. Stage 3 — random audit of the non-promoted set, and of the pruned set
+
+Two populations, reported as two separate rates.
+
+### 4.1 False-exclusion audit — non-promoted, unpruned
 
 | | |
 |---|---|
 | **Cycles** | **10,000 + 50,000**, both pressures |
-| **Population** | **300 structures** drawn at random from the non-promoted set |
-| **Stratification** | 150 from the band immediately below the promotion threshold (threshold − 3Δ to threshold), where a false exclusion is plausible; 150 uniformly from the remainder, where it is not, so the design can detect a surprise rather than assuming where it lives |
+| **Population** | **300** drawn at random from the non-promoted set that received both floor runs |
+| **Stratification** | 150 from the band immediately below the promotion threshold (threshold − 3Δ to threshold), where a false exclusion is plausible; 150 uniformly from the remainder, so the design can detect a surprise rather than assuming where it lives |
 | **Replication** | 1 claim-grade run per structure per pressure |
 | **Cost** | 300 × 9.13 = **2,739 CPU-h** |
 
-**What 300 buys, stated as a bound rather than a hope.** With zero false exclusions found in 300
-draws, the rule of three gives a **95 % upper bound of 1.0 %** on the false-exclusion rate of the
-non-promoted set. If any are found, the empirical rate is reported with a Wilson interval and
-**the promotion threshold is re-derived at a larger Δ and Stage 2 re-run over the newly promoted
-set** — that contingency is pre-registered here so it is not a judgment call later.
+With zero false exclusions in 300 draws, the rule of three gives a **95 % upper bound of 1.0 %** on
+the false-exclusion rate. If any are found, the empirical rate is reported with a Wilson interval,
+**Δ is re-derived at the larger value implied, and Stage 2 is re-run over the newly promoted set** —
+pre-registered here so it cannot become a judgment call later.
 
----
+### 4.2 Bound-violation audit — the pruned set *(PI amendment)*
 
-## 5. Compute budget against the naive basis
+| | |
+|---|---|
+| **Cycles** | **10,000 + 50,000**, **both pressure points** — a pruned structure has no `N(65)` at all, so the audit must run the pair |
+| **Population** | **100** drawn at random from the pruned set |
+| **Reported** | the **empirical bound-violation rate**: the fraction whose measured `WC` exceeds `10.2069 · N(5.8)`. **Expected zero.** |
+| **Cost** | 100 × 9.13 = **913 CPU-h** |
 
-| stage | structures | grade | runs each | CPU-h | vs 22,873 naive |
-|---|---:|---|---:|---:|---:|
-| 0 — calibration | 300 | claim | 1 | 2,739 | 12.0 % |
-| 1 — full census | 12,499 | floor | 1 | **22,873** | 100.0 % |
-| 2 — promotion, central | ~140 | claim | 2 | 2,556 | 11.2 % |
-| 3 — audit | 300 | claim | 1 | 2,739 | 12.0 % |
-| retries @ 5 % of all runs | — | — | — | ~1,545 | 6.8 % |
-| **total, central** | | | | **32,452** | **1.42 ×** |
-| **total, envelope** (Stage 2 at 400) | | | | **37,200** | **1.63 ×** |
+**What 100 buys, and what it does not.** Zero violations in 100 draws bounds the violation rate at
+**3.0 % (95 %, rule of three)** — weaker than the 1.0 % the false-exclusion audit achieves, because
+the pruned set is small (~400 structures at the 3σ threshold) and auditing it more heavily would
+cost several times what the prune saves. **Bei flags the asymmetry rather than hiding it in a
+sample size:** the prune's own audit is the least powerful check in the plan. If the PI wants the
+violation rate bounded at 1 %, that is 300 draws and **2,739 CPU-h**, and the prune then costs
+**~2,374 CPU-h net**.
 
-The screen therefore costs between **1.4× and 1.6× a single naive floor pass**, and between **28 %
-and 33 % of an exhaustive claim-grade pass** (114,116 CPU-h). That ratio is the funnel's whole
-justification and it should be checked at ratification rather than taken on trust.
+**A violation found is not a tuning signal.** Any structure whose measured `WC` exceeds the bound is
+reported by name with its full isotherm pair, and **the prune is withdrawn from the plan entirely**
+for the affected regime rather than adjusted — a bound that has been observed to fail is not a bound
+with a different constant, it is a premise that does not hold.
 
----
+## 5. Compute budget against the naive basis — restated under the restructure
+
+| stage | structures | grade | pressures | runs each | CPU-h | vs 22,873 naive |
+|---|---:|---|---|---:|---:|---:|
+| 0 — calibration | 300 | claim | both | 1 | 2,745 | 12.0 % |
+| **1a — full census, 5.8 bar** | **12,499** | floor | 5.8 only | 1 | **11,436** | 50.0 % |
+| **1b — survivors, 65 bar** | **12,099** | floor | 65 only | 1 | **11,071** | 48.4 % |
+| *(prune saving)* | *400* | — | — | — | *−366* | *−1.6 %* |
+| 2 — promotion, central | ~140 | claim | both | 2 | 2,562 | 11.2 % |
+| 3.1 — false-exclusion audit | 300 | claim | both | 1 | 2,745 | 12.0 % |
+| 3.2 — bound-violation audit | 100 | claim | both | 1 | 915 | 4.0 % |
+| retries @ 5 % | — | — | — | — | 1,574 | 6.9 % |
+| **total, central** | | | | | **33,048** | **1.44 ×** |
+| **total, envelope** (Stage 2 at 400) | | | | | **37,806** | **1.65 ×** |
+
+*Costed at the naive basis's own arithmetic — 22,873 / 12,499 = **1.830 CPU-h per structure**,
+**0.915 per run**, **9.150 at claim grade** (5× cycles). The separately measured figures quoted
+earlier in this study are 1.83 and 9.13; the 0.2 % difference is rounding in the source, and this
+table uses the basis-consistent values so its rows sum to the naive figure exactly rather than
+approximately.*
+
+**Against the pre-amendment plan the total rises by 576 CPU-h**: the prune saves **366** and its
+audit costs **915**, with the rest in the retry base. The screen still costs **1.44–1.65× a naive
+floor pass** and **28.9–33.1 % of an exhaustive claim-grade pass** (114,365 CPU-h).
+
+**One ordering consequence of the restructure worth naming.** The prune threshold depends on the
+**provisional band top**, which is not known until Stage 1a has run over all 12,499 — so Stage 1a
+must complete in full before any 65 bar run starts. The two sub-stages cannot be interleaved, and
+Stage 1b's wave planning cannot begin until 1a's census is closed. That is a scheduling cost, not a
+compute cost, and it is why §6's wall-clock figures assume two sequential passes rather than one.
 
 ## 6. Wave sizing against post-collection cluster availability
 
@@ -167,9 +290,17 @@ adopted for a courtesy reason. At 240 concurrent:
 
 | | central | envelope |
 |---|---:|---:|
-| total CPU-h | 32,452 | 37,200 |
-| wall-clock at 240 concurrent, perfect packing | **135 h (5.6 d)** | 155 h (6.5 d) |
-| at 70 % packing efficiency | **193 h (8.0 d)** | 221 h (9.2 d) |
+| total CPU-h | 33,048 | 37,806 |
+| wall-clock at 240 concurrent, perfect packing | **138 h (5.7 d)** | 158 h (6.6 d) |
+| at 70 % packing efficiency | **197 h (8.2 d)** | 225 h (9.4 d) |
+
+**The restructure adds a hard barrier, not just cost.** The prune threshold needs the provisional
+band top, which does not exist until Stage 1a has run over all 12,499 — so **1a must close
+completely before any 65 bar run starts**. The two sub-stages cannot interleave, and 1a's tail is
+its slowest structure, not its median. At 240 concurrent, 1a alone is ~48 h perfectly packed and
+~68 h at 70 %, and the whole of 1b waits on it. A single-pass Stage 1 had no such barrier: it could
+retire a structure's two pressures together and never wait on the census. **This is the real price
+of the amendment — a serialisation point — and it is larger than the 576 CPU-h.**
 
 **Packing efficiency is the risk, and it is measured.** Per-structure cost spans **45 s to 15,190 s
 (338×)** in the prior campaign, and **p99/median = 18.3×** in the smoke's own screen. A wave of
@@ -234,9 +365,17 @@ wc, wc_err, cpu_s, attempt, status, node, started_utc, finished_utc, raspa_sha25
 `screen_landscape.csv`, one row per structure, the leaderboard's direct input:
 
 ```
-stem, floor_wc, floor_err, promoted, promotion_reason, claim_wc_1, claim_wc_2, claim_wc_mean,
-claim_wc_spread, reference_wc, reference_grade, audit_sampled, status
+stem, floor_n05, floor_n05_err, pruned, prune_bound_wc, floor_wc, floor_err, promoted,
+promotion_reason, claim_wc_1, claim_wc_2, claim_wc_mean, claim_wc_spread, reference_wc,
+reference_grade, audit_sampled, audit_class, bound_violated, status
 ```
+
+**A pruned structure carries no `floor_wc` and must never be given one.** Its row records
+`floor_n05`, `pruned = true`, and `prune_bound_wc = 10.2069 × floor_n05` — the *upper bound* that
+justified skipping its 65 bar run, explicitly labelled as a bound and not a measurement. Writing a
+bound into the `floor_wc` column would put a number in the landscape that no simulation produced,
+which is the failure the two-column rule in the paragraph below exists to prevent.
+`bound_violated` is populated only for audited pruned structures and is the §4.2 rate's source.
 
 `reference_wc` is the number a claim is scored against: the mean of the two claim-grade runs where
 they exist, the floor value otherwise, with `reference_grade` naming which. **The two columns are
@@ -257,3 +396,14 @@ error column that would have shown 15.4 % median error.
 4. **240 concurrent rather than the available 580** (§6), costing roughly 2.4× the wall clock.
 5. **The Stage 3 contingency** — that discovering false exclusions re-derives Δ and re-runs
    Stage 2 — which is pre-registered here precisely so it cannot become a judgment call later.
+6. **The prune, on its merits rather than its saving** (§2.4). It removes 3.2 % of the 65 bar runs
+   for **366 CPU-h**, its audit costs **915**, and it serialises Stage 1 behind a full-census
+   barrier. It buys a landscape whose completeness is verified rather than argued. Bei recommends
+   ratifying it for that reason and records that it does not pay for itself in compute.
+7. **The bound-violation audit at 100 rather than 300** (§4.2) — 100 bounds the violation rate at
+   3.0 %, 300 bounds it at 1.0 % and costs 2,745, making the prune **~2,380 CPU-h net**. The
+   prune's own audit is the least powerful check in the plan and the PI should choose its power
+   deliberately.
+8. **The 3σ noise allowance on the prune** (§2.2). Without it the prune uses point estimates, saves
+   366 more CPU-h, and admits exactly the failure mode §2.3 measured: six of 1,792 smoke runs
+   exceed the bound, all at near-zero loading where the point estimate is unreliable.

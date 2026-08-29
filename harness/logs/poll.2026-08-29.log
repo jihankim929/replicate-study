@@ -320,3 +320,205 @@ usage.json -> {'cpu_h_scheduler': 222.572, 'queued_jobs': 5, 'tokens': 671951}
   [queue-depth] 2026-08-29 19:30 KST  queue R=212 Q=1 across 5 users | study R=5 Q=0 (2.4% of running) | others waiting=1
   --- mechanical divergence panel ---
   [divergence] STATUS.md panel refreshed  -- not collected this cycle: s01 (None), s02 (None)
+=========== poll 2026-08-29T11:00:16Z ===========
+[harvest] rep01: nothing newly finished (5 tracked)
+[meter-compute] rep01: cpu_h_scheduler=272.324 queued_jobs=5 (running=201.712h finished=70.611h)
+[harvest] rep02: nothing newly finished (0 tracked)
+[meter-compute] rep02: cpu_h_scheduler=0.0 queued_jobs=0 (running=0.000h finished=0.000h)
+[harvest] rep03: nothing newly finished (0 tracked)
+[meter-compute] rep03: cpu_h_scheduler=0.0 queued_jobs=0 (running=0.000h finished=0.000h)
+[harvest] rep04: nothing newly finished (1 tracked)
+[meter-compute] rep04: cpu_h_scheduler=0.0 queued_jobs=1 (running=0.000h finished=0.000h)
+[harvest] rep05: nothing newly finished (0 tracked)
+[meter-compute] rep05: cpu_h_scheduler=0.0 queued_jobs=0 (running=0.000h finished=0.000h)
+[harvest] rep06: nothing newly finished (0 tracked)
+[meter-compute] rep06: cpu_h_scheduler=0.0 queued_jobs=0 (running=0.000h finished=0.000h)
+[harvest] rep07: nothing newly finished (0 tracked)
+[meter-compute] rep07: cpu_h_scheduler=0.0 queued_jobs=0 (running=0.000h finished=0.000h)
+[harvest] rep08: nothing newly finished (0 tracked)
+[meter-compute] rep08: cpu_h_scheduler=0.0 queued_jobs=0 (running=0.000h finished=0.000h)
+[harvest] rep09: nothing newly finished (0 tracked)
+[meter-compute] rep09: cpu_h_scheduler=0.0 queued_jobs=0 (running=0.000h finished=0.000h)
+usage.json -> {'cpu_h_scheduler': 272.324, 'queued_jobs': 5, 'tokens': 676928}
+usage.json -> {'cpu_h_scheduler': 0.0, 'queued_jobs': 0, 'tokens': 340982}
+usage.json -> {'cpu_h_scheduler': 0.0, 'queued_jobs': 0, 'tokens': 327449}
+usage.json -> {'cpu_h_scheduler': 0.0, 'queued_jobs': 1, 'tokens': 589431}
+usage.json -> {'cpu_h_scheduler': 0.0, 'queued_jobs': 0, 'tokens': 265033}
+usage.json -> {'cpu_h_scheduler': 0.0, 'queued_jobs': 0, 'tokens': 378775}
+usage.json -> {'cpu_h_scheduler': 0.0, 'queued_jobs': 0, 'tokens': 320184}
+usage.json -> {'cpu_h_scheduler': 0.0, 'queued_jobs': 0, 'tokens': 316749}
+usage.json -> {'cpu_h_scheduler': 0.0, 'queued_jobs': 0, 'tokens': 314422}
+  --- replicate escalations ---
+  [escalate] rep01: 0 new escalation(s)
+  [escalate] rep02: 0 new escalation(s)
+  [escalate] rep03: 0 new escalation(s)
+  [escalate] rep04: 0 new escalation(s)
+  [escalate] rep05: 0 new escalation(s)
+  [escalate] rep06: 0 new escalation(s)
+  [escalate] rep07: 0 new escalation(s)
+  [escalate] rep08: 0 new escalation(s)
+  [escalate] rep09: 0 new escalation(s)
+  [rep01 usage] {"cpu_h_scheduler": 272.324, "queued_jobs": 5, "tokens": 676928}  [rep02 usage] {"cpu_h_scheduler": 0.0, "queued_jobs": 0, "tokens": 340982}  [rep03 usage] {"cpu_h_scheduler": 0.0, "queued_jobs": 0, "tokens": 327449}  [rep04 usage] {"cpu_h_scheduler": 0.0, "queued_jobs": 1, "tokens": 589431}  [rep05 usage] {"cpu_h_scheduler": 0.0, "queued_jobs": 0, "tokens": 265033}  [rep06 usage] {"cpu_h_scheduler": 0.0, "queued_jobs": 0, "tokens": 378775}  [rep07 usage] {"cpu_h_scheduler": 0.0, "queued_jobs": 0, "tokens": 320184}  [rep08 usage] {"cpu_h_scheduler": 0.0, "queued_jobs": 0, "tokens": 316749}  [rep09 usage] {"cpu_h_scheduler": 0.0, "queued_jobs": 0, "tokens": 314422}  --- watchdog (charter section 4: budgets, liveness) ---
+  [watchdog] rep01  T-162.2h  liveness=alive  poll=30min bound=+6.0CPU-h (0.37%)
+      compute      0.0 / 1610  (0.0%)  UNACCOUNTED
+                   5 jobs running, ~272.3 CPU-h unaccounted; displayed total ~272.324 CPU-h (stop evaluates on finished-job CPU-h (validated))
+      tokens       676928 / 32000000  (2.1%)  OK
+      spend_usd    30.6693 / 280.0  (10.9%)  OK
+      isolation    NOT AUDITED HERE (remote bridge; see audit_transcript.py)
+  [watchdog] rep02  T-167.7h  liveness=alive  poll=30min bound=+6.0CPU-h (0.37%)
+      compute      0.0 / 1610  (0.0%)  UNACCOUNTED
+                   0 jobs running, ~0.0 CPU-h unaccounted; displayed total ~0.0 CPU-h (stop evaluates on finished-job CPU-h (validated))
+      tokens       340982 / 32000000  (1.1%)  OK
+      spend_usd    8.0984 / 280.0  (2.9%)  OK
+      isolation    NOT AUDITED HERE (remote bridge; see audit_transcript.py)
+  [watchdog] rep03  T-167.7h  liveness=alive  poll=30min bound=+6.0CPU-h (0.37%)
+      compute      0.0 / 1610  (0.0%)  UNACCOUNTED
+                   0 jobs running, ~0.0 CPU-h unaccounted; displayed total ~0.0 CPU-h (stop evaluates on finished-job CPU-h (validated))
+      tokens       327449 / 32000000  (1.0%)  OK
+      spend_usd    7.6039 / 280.0  (2.7%)  OK
+      isolation    NOT AUDITED HERE (remote bridge; see audit_transcript.py)
+  [watchdog] rep04  T-167.7h  liveness=alive  poll=30min bound=+6.0CPU-h (0.37%)
+      compute      0.0 / 1610  (0.0%)  UNACCOUNTED
+                   1 jobs running, ~0.0 CPU-h unaccounted; displayed total ~0.0 CPU-h (stop evaluates on finished-job CPU-h (validated))
+      tokens       589431 / 32000000  (1.8%)  OK
+      spend_usd    10.3092 / 280.0  (3.7%)  OK
+      isolation    NOT AUDITED HERE (remote bridge; see audit_transcript.py)
+  [watchdog] rep05  T-167.7h  liveness=alive  poll=30min bound=+6.0CPU-h (0.37%)
+      compute      0.0 / 1610  (0.0%)  UNACCOUNTED
+                   0 jobs running, ~0.0 CPU-h unaccounted; displayed total ~0.0 CPU-h (stop evaluates on finished-job CPU-h (validated))
+      tokens       265033 / 32000000  (0.8%)  OK
+      spend_usd    5.7026 / 280.0  (2.0%)  OK
+      isolation    NOT AUDITED HERE (remote bridge; see audit_transcript.py)
+  [watchdog] rep06  T-167.7h  liveness=alive  poll=30min bound=+6.0CPU-h (0.37%)
+      compute      0.0 / 1610  (0.0%)  UNACCOUNTED
+                   0 jobs running, ~0.0 CPU-h unaccounted; displayed total ~0.0 CPU-h (stop evaluates on finished-job CPU-h (validated))
+      tokens       378775 / 32000000  (1.2%)  OK
+      spend_usd    8.862 / 280.0  (3.2%)  OK
+      isolation    NOT AUDITED HERE (remote bridge; see audit_transcript.py)
+  [watchdog] rep07  T-167.7h  liveness=alive  poll=30min bound=+6.0CPU-h (0.37%)
+      compute      0.0 / 1610  (0.0%)  UNACCOUNTED
+                   0 jobs running, ~0.0 CPU-h unaccounted; displayed total ~0.0 CPU-h (stop evaluates on finished-job CPU-h (validated))
+      tokens       320184 / 32000000  (1.0%)  OK
+      spend_usd    6.5814 / 280.0  (2.4%)  OK
+      isolation    NOT AUDITED HERE (remote bridge; see audit_transcript.py)
+  [watchdog] rep08  T-167.7h  liveness=alive  poll=30min bound=+6.0CPU-h (0.37%)
+      compute      0.0 / 1610  (0.0%)  UNACCOUNTED
+                   0 jobs running, ~0.0 CPU-h unaccounted; displayed total ~0.0 CPU-h (stop evaluates on finished-job CPU-h (validated))
+      tokens       316749 / 32000000  (1.0%)  OK
+      spend_usd    7.3865 / 280.0  (2.6%)  OK
+      isolation    NOT AUDITED HERE (remote bridge; see audit_transcript.py)
+  [watchdog] rep09  T-167.7h  liveness=alive  poll=30min bound=+6.0CPU-h (0.37%)
+      compute      0.0 / 1610  (0.0%)  UNACCOUNTED
+                   0 jobs running, ~0.0 CPU-h unaccounted; displayed total ~0.0 CPU-h (stop evaluates on finished-job CPU-h (validated))
+      tokens       314422 / 32000000  (1.0%)  OK
+      spend_usd    7.0895 / 280.0  (2.5%)  OK
+      isolation    NOT AUDITED HERE (remote bridge; see audit_transcript.py)
+  --- transcript audit (charter section 4) ---
+  [audit] rep01: 176 tool calls, 1 finding(s)
+      2026-08-29T05:36:56  SUPER   the supervisor's cluster home
+          Bash: ssh dirac-bei 'find /home/users/Bei/RASPA -maxdepth 8 -newermt "-3 hours" 2>/dev/null | head -20; echo "--- tree ---"; find /home/users/Bei/
+  [audit] rep02: 49 tool calls, 0 finding(s)
+  [audit] rep03: 45 tool calls, 1 finding(s)
+      2026-08-29T10:42:26  WSROOT  the shared workspace root
+          Bash: ssh dirac-bei 'echo "--- find qas ---"; ls -la /usr/local/bin/ 2>/dev/null | head -30; find /home1/users/Bei -maxdepth 2 -name "qas*" 2>/dev
+  [audit] rep04: 62 tool calls, 18 finding(s)
+      2026-08-29T10:44:34  REPO    the study repository
+          Write: /Users/jihankim/replicate-study/harness/sessions/rep04/stage/scan_db.py #!/usr/bin/env python3
+  """Single pass over db/*.cif -> compact manif
+      2026-08-29T10:44:39  REPO    the study repository
+          Bash: cd /Users/jihankim/replicate-study/harness/sessions/rep04/stage && scp -q scan_db.py dirac-bei:/home1/users/Bei/ws/rep04/ && ssh dirac-bei '
+      2026-08-29T10:45:39  REPO    the study repository
+          Write: /Users/jihankim/replicate-study/harness/sessions/rep04/stage/prep_cif.py #!/usr/bin/env python3
+  """Rewrite a db CIF into a RASPA-readable P1
+      2026-08-29T10:47:18  REPO    the study repository
+          Write: /Users/jihankim/replicate-study/harness/sessions/rep04/stage/run_case.sh #!/bin/bash
+  # run_case.sh <sid> <pressure_Pa> <ninit> <nprod> <tag>
+      2026-08-29T10:47:31  REPO    the study repository
+          Write: /Users/jihankim/replicate-study/harness/sessions/rep04/stage/parse_out.py #!/usr/bin/env python3
+  """Extract the numbers we need from a RASPA
+      2026-08-29T10:48:03  REPO    the study repository
+          Write: /Users/jihankim/replicate-study/harness/sessions/rep04/stage/mkjob.py #!/usr/bin/env python3
+  """Emit a PBS script that runs a task list unde
+      2026-08-29T10:50:43  REPO    the study repository
+          Write: /Users/jihankim/replicate-study/harness/sessions/rep04/stage/descriptors.py #!/usr/bin/env python3
+  """Cheap per-structure descriptors by Wid
+      2026-08-29T10:52:22  REPO    the study repository
+          Write: /Users/jihankim/replicate-study/harness/sessions/rep04/stage/mkjob.py #!/usr/bin/env python3
+  """Emit a PBS script that runs a task list unde
+      2026-08-29T10:52:57  REPO    the study repository
+          Write: /Users/jihankim/replicate-study/harness/sessions/rep04/stage/STATE.md # STATE — current tasks and beliefs
+  *(working memory; sufficient on it
+      2026-08-29T10:53:28  REPO    the study repository
+          Write: /Users/jihankim/replicate-study/harness/sessions/rep04/stage/LOG.md # LOG — append-only narrative
+  
+  ## 2026-08-29 19:41 KST — launch
+  Read CHA
+      2026-08-29T10:53:49  REPO    the study repository
+          Write: /Users/jihankim/replicate-study/harness/sessions/rep04/stage/status.sh #!/bin/bash
+  # One-line-per-fact campaign status.  Never dumps raw out
+      2026-08-29T10:53:58  REPO    the study repository
+          Write: /Users/jihankim/replicate-study/harness/sessions/rep04/stage/cpuh.py #!/usr/bin/env python3
+  """Meter compute two ways and print one line.
+  
+  b
+      2026-08-29T10:56:04  REPO    the study repository
+          Write: /Users/jihankim/replicate-study/harness/sessions/rep04/stage/run_case.sh #!/bin/bash
+  # run_case.sh <sid> <pressure_Pa> <ninit> <nprod> <tag>
+      2026-08-29T10:56:15  REPO    the study repository
+          Bash: cd /Users/jihankim/replicate-study/harness/sessions/rep04/stage && scp -q run_case.sh dirac-bei:/home1/users/Bei/ws/rep04/bin/ && ssh dirac-
+      2026-08-29T10:57:13  REPO    the study repository
+          Write: /Users/jihankim/replicate-study/harness/sessions/rep04/stage/log_append_1.md 
+  ## 2026-08-29 19:56 — first error, found and corrected on the 
+      2026-08-29T10:57:42  REPO    the study repository
+          Write: /Users/jihankim/replicate-study/harness/sessions/rep04/stage/digest_bench.py #!/usr/bin/env python3
+  """Compact digest of the cost-model benc
+      2026-08-29T10:58:56  REPO    the study repository
+          Write: /Users/jihankim/replicate-study/harness/sessions/rep04/stage/rank.py #!/usr/bin/env python3
+  """Merge the descriptor sweep with the structure
+      2026-08-29T10:59:00  REPO    the study repository
+          Bash: cd /Users/jihankim/replicate-study/harness/sessions/rep04/stage && scp -q rank.py dirac-bei:/home1/users/Bei/ws/rep04/bin/ && ssh dirac-bei 
+  [audit] rep05: 36 tool calls, 0 finding(s)
+  [audit] rep06: 49 tool calls, 0 finding(s)
+  [audit] rep07: 37 tool calls, 0 finding(s)
+  [audit] rep08: 50 tool calls, 0 finding(s)
+  [audit] rep09: 43 tool calls, 7 finding(s)
+      2026-08-29T10:50:31  REPO    the study repository
+          Write: /Users/jihankim/replicate-study/harness/sessions/rep09/_stage/LOG_append_1.md 
+  ## 2026-08-29 (launch +0h) — setup and toolchain verification
+      2026-08-29T10:50:37  REPO    the study repository
+          Bash: cd /Users/jihankim/replicate-study/harness/sessions/rep09/_stage && scp -q LOG_append_1.md dirac-bei:/home1/users/Bei/ws/rep09/scratch/ && s
+      2026-08-29T10:52:32  REPO    the study repository
+          Write: /Users/jihankim/replicate-study/harness/sessions/rep09/_stage/geom.py """Geometric pore descriptors on a fractional grid, one structure at a
+      2026-08-29T10:58:57  REPO    the study repository
+          Write: /Users/jihankim/replicate-study/harness/sessions/rep09/_stage/mkjobs.py """Build interleaved task chunks and PBS scripts for a GCMC wave.
+  
+  U
+      2026-08-29T11:00:06  REPO    the study repository
+          Write: /Users/jihankim/replicate-study/harness/sessions/rep09/_stage/status.sh #!/bin/bash
+  # One-line-per-topic campaign status. Never dumps raw ou
+      2026-08-29T11:00:30  REPO    the study repository
+          Write: /Users/jihankim/replicate-study/harness/sessions/rep09/_stage/STATE.md # STATE — current beliefs and open tasks
+  
+  *(Self-sufficient: this fil
+      2026-08-29T11:00:53  REPO    the study repository
+          Write: /Users/jihankim/replicate-study/harness/sessions/rep09/_stage/LOG_append_2.md 
+  ## 2026-08-29 (launch +1.5h) — the screening proxy failed its
+    rep01: session=up transcript_age=0.3min (deciding) heartbeat_age=3min (reported only) restarts=0/3
+    rep02: session=up transcript_age=0.2min (deciding) heartbeat_age=1min (reported only) restarts=0/3
+    rep03: session=up transcript_age=0.2min (deciding) heartbeat_age=1min (reported only) restarts=0/3
+    rep04: session=up transcript_age=0.2min (deciding) heartbeat_age=1min (reported only) restarts=0/3
+    rep05: session=up transcript_age=0.2min (deciding) heartbeat_age=0min (reported only) restarts=0/3
+    rep06: session=up transcript_age=0.0min (deciding) heartbeat_age=0min (reported only) restarts=0/3
+    rep07: session=up transcript_age=0.0min (deciding) heartbeat_age=0min (reported only) restarts=0/3
+    rep08: session=up transcript_age=0.1min (deciding) heartbeat_age=4min (reported only) restarts=0/3
+    rep09: session=up transcript_age=0.1min (deciding) heartbeat_age=1min (reported only) restarts=0/3
+  --- escalations ---
+  [escalate] 6 awaiting a human answer (cadence: 09:00, 21:00 KST)
+      s01   infra     waiting  26.24 h  job exited 0 with no output
+      rep01 charter   waiting   4.78 h  Appendix A G3 note says the least dense entry in this da
+      rep01 charter   waiting   4.78 h  G3 requires a He void fraction for every structure enter
+      rep01 infra     waiting   4.78 h  SimulationType MakeGrid in the provided RASPA 2.0.37 bui
+  --- shared-queue depth (crowding covariate, Flag I) ---
+  [queue-depth] 2026-08-29 20:01 KST  queue R=211 Q=0 across 5 users | study R=6 Q=0 (2.8% of running) | others waiting=0
+  --- mechanical divergence panel ---
+  [divergence] STATUS.md panel refreshed  -- not collected this cycle: s01 (None), s02 (None)
