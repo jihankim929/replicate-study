@@ -10,18 +10,31 @@
 # Collection is READ-ONLY with respect to the workspace. It copies out; it never edits in.
 set -euo pipefail
 cd "$(dirname "$0")/.."
-DEST="reps/smoke"; OUT="reps/smoke/collected"
+# Phase-aware: the roster comes from the active-replicate registry, never from a glob that
+# happens to match the smoke's naming. `for WS in "$DEST"/s0*` collected exactly two workspaces and
+# would have silently collected ZERO in the main phase, producing an empty collection that looked
+# like a completed one.
+PHASE="${PHASE:-main}"
+DEST="reps/$PHASE"; OUT="reps/$PHASE/collected"
 while [ $# -gt 0 ]; do
   case "$1" in
     --dest) DEST="$2"; shift;; --out) OUT="$2"; shift;;
     *) echo "unknown arg: $1" >&2; exit 2;;
   esac; shift
 done
+# A collection is a terminal act: it creates the directory the release bundle gates on. Running it
+# to "see if it works" mid-campaign creates a partial collection that would satisfy that gate.
+# --dry-run exercises the whole path and writes nothing.
+DRY=""
+case "${DRY_RUN:-}" in 1|yes|true) DRY=1;; esac
+[ -n "$DRY" ] && { echo "DRY RUN — no files will be written"; OUT="$(mktemp -d)"; }
 mkdir -p "$OUT"
 
-for WS in "$DEST"/s0*; do
-  [ -d "$WS" ] || continue
-  REP="$(basename "$WS")"
+REPS=$(cat harness/state/active_replicates 2>/dev/null | tr '\n' ' ')
+[ -n "$REPS" ] || { echo "no active replicates registered — refusing to collect nothing" >&2; exit 2; }
+echo "collecting: $REPS"
+for REP in $REPS; do
+  WS="$DEST/$REP"
   echo "=== collect $REP ==="
   D="$OUT/$REP"; mkdir -p "$D"
   for f in LOG.md STATE.md JOBS.md AUDIT.jsonl ESCALATIONS.md INBOX.md WORKSPACE.json usage.json; do
@@ -89,3 +102,36 @@ for WS in "$DEST"/s0*; do
 done
 echo
 echo "collected into $OUT"
+
+# --- COLLECTION ATTESTATION -------------------------------------------------------------
+# An INDEPENDENT remote fingerprint, taken after the copy, of the same files that were copied.
+# This is what makes the collection a snapshot rather than an assertion: the smoke's version was
+# an ad-hoc script run by hand at the bell, which is exactly the procedural step this replaces.
+# The release bundle refuses to build without this file.
+echo
+echo "=== collection attestation ==="
+ATT="$OUT/BELL_FINGERPRINT.log"
+{
+  echo "COLLECTION ATTESTATION $(date -u +%FT%TZ) / $(TZ=Asia/Seoul date '+%F %H:%M:%S KST')"
+  for REP in $REPS; do
+    ssh -o BatchMode=yes -o ConnectTimeout=60 dirac-bei \
+      "cd /home1/users/Bei/ws/$REP 2>/dev/null && sha256sum REPORT.md LOG.md STATE.md JOBS.md \
+       AUDIT.jsonl ESCALATIONS.md INBOX.md WORKSPACE.json usage.json 2>/dev/null" \
+      | sed "s|^|$REP |" || echo "$REP UNREACHABLE"
+  done
+} > "$ATT"
+NH=$(awk 'NF==3 && length($2)==64 {n++} END{print n+0}' "$ATT")
+echo "  attestation written: $ATT ($NH hashes)"
+
+# verify the local copies against the remote fingerprint -- a copy that diverges is a failed
+# collection, not a collected one
+DIV=0
+while read -r rep h f; do
+  [ ${#h} -eq 64 ] || continue
+  L="$OUT/$rep/$f"
+  [ -f "$L" ] || continue
+  G=$(shasum -a 256 < "$L" | cut -d" " -f1)
+  [ "$G" = "$h" ] || { echo "  DIVERGENCE $rep/$f"; DIV=$((DIV+1)); }
+done < "$ATT"
+echo "  local copies verified against the remote fingerprint: $DIV divergence(s)"
+[ "$DIV" -eq 0 ] || echo "  WARNING: collection diverges from its own attestation"

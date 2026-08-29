@@ -24,11 +24,11 @@ ALLOW = [
     ("prereg/n16_derivation.md", "replicate-count derivation"),
     ("prereg/stage0_sample.SEALED.json", "sealed Stage 0 calibration sample"),
     ("benchmark_frozen/MANIFEST.sha256", "frozen world manifest, 12,499 entries"),
-    # SI_LEDGER.md is DELIBERATELY ABSENT. It is the most methodologically interesting artifact in
-    # the repository and it cannot ship as written: SI-017 and its correction discuss two excluded
-    # structures by name, including the pillar-stripped entry, and say why they are interesting.
-    # The ledger is append-only, so it cannot be edited into a releasable state. Releasing it needs
-    # a PI decision and a redacted derivative, not a quiet inclusion.
+    # SI_LEDGER.md is WITHHELD ENTIRELY (PI ruling 2026-08-29, ruling 1). Not redacted, not
+    # excerpted: it releases complete at study completion under the data-availability plan. It
+    # names two excluded structures by name, including the pillar-stripped entry, and explains why
+    # they are interesting -- and it is append-only, so there is no editing it into a releasable
+    # state. A redacted derivative was considered and refused; the ledger goes out whole or not yet.
 ]
 
 KEY_DIR = Path("answer-key")
@@ -68,7 +68,38 @@ def excluded_ids():
     return ids
 
 
+def collection_gate():
+    """Refuse to build the bundle before the final collection and its hash attestation exist.
+
+    MECHANICAL, NOT PROCEDURAL, and it did not start that way. The first version of this script
+    carried the ordering only in its docstring -- and then WROTE "Produced after the final
+    collection and its hash attestation" into CONTENTS.md, asserting a condition it had never
+    checked. A bundle that claims an ordering it cannot verify is worse than one that says nothing,
+    because the claim travels with the release. The gate now runs before any directory is created.
+    """
+    import subprocess
+    ids = subprocess.run([sys.executable, "-c",
+        "import sys;sys.path.insert(0,'harness');import config as C;"
+        "print(' '.join(C.RATIFIED['phases']['main']['ids']))"],
+        capture_output=True, text=True).stdout.split()
+    missing = [r for r in ids if not Path(f"reps/main/collected/{r}/REPORT.md").is_file()]
+    for extra in ("reps/main/collected/COLLECTION.md",
+                  "reps/main/collected/BELL_FINGERPRINT.log"):
+        if not Path(extra).is_file():
+            missing.append(Path(extra).name)
+    if missing:
+        print("  REFUSED — the release bundle may not be built before the final collection")
+        print(f"  and its hash attestation. Missing: {' '.join(missing)}")
+        print("  Nothing was created.")
+        sys.exit(3)
+    att = Path("reps/main/collected/BELL_FINGERPRINT.log").read_text()
+    n = sum(1 for l in att.splitlines() if len(l.split()) == 2 and len(l.split()[0]) == 64)
+    print(f"  collection gate PASSED — 16 reports collected, attestation carries {n} hashes")
+    return hashlib.sha256(att.encode()).hexdigest()
+
+
 def main():
+    attestation = collection_gate()
     out = Path(sys.argv[1] if len(sys.argv) > 1 else "release/prereg_snapshot")
     if out.exists():
         shutil.rmtree(out)
@@ -98,8 +129,9 @@ def main():
     (out / "MANIFEST.sha256").write_text("".join(f"{h}  {n}\n" for h, n, _ in sorted(rows, key=lambda r: r[1])))
     (out / "CONTENTS.md").write_text(
         "# Pre-registration release snapshot\n\n"
-        "Produced after the final collection and its hash attestation. Allowlisted, scanned and\n"
-        "hash-attested. Contains no answer-key material.\n\n"
+        "Produced after the final collection and its hash attestation, which this bundle's build\n"
+        "REFUSES to proceed without. Collection attestation sha256: `" + attestation + "`.\n"
+        "Allowlisted, scanned and hash-attested. Contains no answer-key material.\n\n"
         "| file | sha256 | contents |\n|---|---|---|\n" +
         "".join(f"| `{n}` | `{h[:16]}…` | {d} |\n" for h, n, d in sorted(rows, key=lambda r: r[1])))
 
