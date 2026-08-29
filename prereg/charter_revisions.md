@@ -856,3 +856,71 @@ exists to repair, at twenty times the scale.
 binding; the schema satisfies it only as free text in `note`, which is what s01 used and which is
 not comparable across twenty trajectories. **Bei-proposed, unratified, and it must close before
 seal** — comparison across arms is the study.
+
+---
+
+## Rev 19 — 2026-08-29 — world frozen at N = 12,499; budget, §2, §5 and §8
+
+**PI rulings, 2026-08-29.** Applied together because they are the pre-seal batch: the world
+ruling closed Q1, Q2's arithmetic landed inside a pre-ratified envelope, and three charter
+defects surfaced by the smoke were repaired in the same pass. Full machine-generated diff:
+**`prereg/charter_v1.0_ASSEMBLY.diff`** (8 hunks, +50 / −9), which also carries Rev 18.
+
+### The world (§1, §4)
+
+`[Q1:N]` → **12,499**, `[Q2:naive]` → **22,873 CPU-hours**, `[Q2:ratio]` → **about 10% of that**.
+**Membership is the published SHA-256 manifest itself**, not a lineage claim — 12,499 lines,
+manifest sha256 `4777fc4f5b7647d0e129f75978833698d3546d01d0b79d427b5d1ee28cd1a520`. The phase-prose
+mechanism built at Rev 17 was designed to abort until these three were populated; **it now renders
+for `main` for the first time**, which is the mechanical proof the world is closed.
+
+### The budget (§4)
+
+**1,600 → 2,300 CPU-hours.** At the frozen N the naive exhaustive GCMC pass is 22,873 CPU-h, so
+2,300 is **10.06%** of it — inside the 2,000–3,000 envelope and inside Rev 17's provisional
+"~10% of naive". **Both figures now appear in charter prose**, so the sub-brute-force constraint
+stays legible as a ratio rather than as a bare number. Tokens (45 M) and concurrency (12)
+unchanged.
+
+Spendability checked rather than assumed: at cap 12 over 240 h a replicate can spend at most
+2,880 CPU-h, so 2,300 requires a **79.4% duty cycle** — feasible, and tighter than the smoke's.
+
+### §2 — absolute, not excess
+
+Adopted **from a replicate's filed `[CHARTER-READ]`**, which is the instrument working as
+designed: the ungated arm logged the ambiguity twice, once at the start and once near filing, and
+its reasoning is carried into the charter almost verbatim. Absolute loading is the convention in
+the deliverable-capacity literature the 65 / 5.8 bar pair comes from, **and** RASPA's excess is
+defined against a helium void fraction §3 does not pin — so an excess number would not be
+reproducible from the pinned inputs alone, which §3 requires. The second reason is the binding
+one: it makes the choice a property of the protocol rather than a preference.
+
+### §5 — T is launch + N × 24 h exactly
+
+The old table said *"launch + 3 days, 09:00 KST"*, and the provisioner implemented it as
+`now + days` snapped back to 09:00. **Measured on the smoke: launched 15:28, deadline 09:00 three
+days later = 65.53 h against a nominal 72 h — 9.0% short**, while `WORKSPACE.json` handed the
+replicate `"campaign_days": 3`. At ten days the same construction loses the same 6.5 h.
+
+Fixed in both places. `provision.py` now computes `provisioned + 24 × days` hours, and
+`WORKSPACE.json` carries `campaign_hours` and `deadline_basis` beside the day count, with the
+charter stating that **the timestamp is authoritative and the day count is a label**. Verified on
+a real dry-run provision: **horizon exactly 240.0000 h**.
+
+### §8 — the channel stops promising what it does not deliver
+
+v0.9 promised that `infra` failures *"will be repaired"* and `charter` questions would be
+*"answered from this document"*. **Neither promise was kept in the campaign that relied on
+them**: three escalations aged **24.84 h unanswered to the deadline**, and the `charter` one asked
+to spend ~10 CPU-h for a claim-grade run and, unanswered, cost the ungated arm its §3-compliant
+headline number (SI-013).
+
+The rewrite states the true service level: escalations are **logged and read at collection
+points**; an answer within the campaign is **not guaranteed**, for any category; and **absent an
+answer the replicate acts on its best charter reading and logs it as `[CHARTER-READ]`** — named as
+the intended path, not a fallback. The section says plainly why it was rewritten, because a
+replicate that knows the channel is thin will plan around it, and one that believes an unkept
+promise will wait.
+
+**§5's honest-incomplete-report clause is retained unchanged**, and it is now load-bearing: it is
+what makes acting-without-an-answer safe rather than merely permitted.

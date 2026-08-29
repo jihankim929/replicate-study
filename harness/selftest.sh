@@ -300,11 +300,21 @@ out.append("SMOKE_S4:" + ("ok" if
     in sm else "CHANGED"))
 out.append("SMOKE_RESIDUE:" + ("ok" if not P.PHASE_SPAN.search(sm) else "RESIDUE"))
 
+# The live charter's main values are POPULATED as of Q1/Q2 (N=12,499), so the real charter
+# must now RENDER for main. This check used to assert the abort against the live file, and
+# went stale the instant Q1 landed -- the SI-008 class exactly. It now asserts the MECHANISM
+# against a fixture, plus the live file's true current state, so neither reading can rot.
 try:
     P.render_phase_prose(P.render_phase_rows(t, "main"), "main")
+    out.append("MAIN_POPULATED:ok")
+except RuntimeError:
+    out.append("MAIN_POPULATED:ABORTED")
+synthetic = "cost {{smoke=1,731|main=[Q9:UNSET]}} structures\n"
+try:
+    P.render_phase_prose(synthetic, "main")
     out.append("MAIN_UNSET:RENDERED")
 except RuntimeError as e:
-    out.append("MAIN_UNSET:" + ("ok" if "[Q1:N]" in str(e) and "[Q2:naive]" in str(e) else "THIN"))
+    out.append("MAIN_UNSET:" + ("ok" if "[Q9:UNSET]" in str(e) else "THIN"))
 
 try:
     P.render_phase_prose(t, "bogus"); out.append("BAD_PHASE:ACCEPTED")
@@ -322,7 +332,7 @@ out.append("CROSS_QUIET:" + ("ok" if not P.leak_phase_prose(d, "smoke") else "FA
 print(" ".join(out))
 PYCHK
 )
-for K in SMOKE_S1 SMOKE_S4 SMOKE_RESIDUE MAIN_UNSET BAD_PHASE RESIDUE_FIRES CROSS_FIRES CROSS_QUIET; do
+for K in SMOKE_S1 SMOKE_S4 SMOKE_RESIDUE MAIN_POPULATED MAIN_UNSET BAD_PHASE RESIDUE_FIRES CROSS_FIRES CROSS_QUIET; do
   chk "$K" "$(printf '%s' "$PROSECHK" | tr ' ' '\n' | grep "^$K:" | cut -d: -f2)" "ok"
 done
 

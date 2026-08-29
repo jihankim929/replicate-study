@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key><string>study.poll</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/Users/jihankim/replicate-study/harness/poll_wrapper.sh</string>
+  </array>
+  <key>StartInterval</key><integer>1800</integer>
+  <key>RunAtLoad</key><true/>
+  <key>StandardOutPath</key><string>/Users/jihankim/replicate-study/harness/logs/launchd.out</string>
+  <key>StandardErrorPath</key><string>/Users/jihankim/replicate-study/harness/logs/launchd.err</string>
+  <key>WorkingDirectory</key><string>/Users/jihankim/replicate-study</string>
+</dict>
+</plist>

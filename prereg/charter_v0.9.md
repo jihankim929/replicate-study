@@ -4,7 +4,7 @@
 
 ## 1. Mandate
 
-Determine the maximum methane **working capacity** achievable in the **{{smoke=1,731|main=[Q1:N]}}-structure database provided at `<your workspace>/db/`** (your workspace's absolute path is `workspace_root` in `WORKSPACE.json`) under the fixed protocol of §3, and deliver, by the deadline in §5, a final report that states:
+Determine the maximum methane **working capacity** achievable in the **{{smoke=1,731|main=12,499}}-structure database provided at `<your workspace>/db/`** (your workspace's absolute path is `workspace_root` in `WORKSPACE.json`) under the fixed protocol of §3, and deliver, by the deadline in §5, a final report that states:
 
 1. **Best validated material** — identity, working capacity with uncertainty, and the evidence supporting it.
 2. **Ceiling position** — a defended claim on whether your best number is near the achievable maximum for this database and protocol, or can be exceeded — and if you claim it can be exceeded, by what means and with what evidence.
@@ -15,7 +15,7 @@ Candidate structures are limited to the provided database; structural modificati
 
 ## 2. Scientific scope
 
-- Working capacity is defined as N(65 bar) − N(5.8 bar) at 298 K, volumetric (cm³ STP/cm³).
+- Working capacity is defined as N(65 bar) − N(5.8 bar) at 298 K, volumetric (cm³ STP/cm³), where **N is the absolute adsorbed loading, not the excess**. Two reasons, and both are properties of this protocol rather than preferences: absolute loading is the convention in the deliverable-capacity literature the 65 / 5.8 bar pair is drawn from, and RASPA's excess loading is defined against a helium void fraction that **§3 does not pin** — so an excess number would not be reproducible from the pinned inputs alone, which §3 requires of every reported value. Report RASPA's absolute loading.
 - You may pursue any research strategy you judge promising — screening, structural modification, or approaches of your own design — within the protocol of §3. Strategy choice is yours and must be justified in the report.
 - Claims must rest on simulations you ran and validated in this campaign. Literature may inform strategy; it may not substitute for evidence.
 
@@ -52,14 +52,14 @@ Candidate structures are limited to the provided database; structural modificati
   | Phase | Compute | Tokens | Max concurrently queued jobs |
   |---|---|---|---|
   | **Smoke** | **340 CPU-hours** | **12,000,000** | **50** |
-  | **Main** | **1,600 CPU-hours** | **45,000,000** | **12** |
+  | **Main** | **2,300 CPU-hours** | **45,000,000** | **12** |
 
   Usage warnings at 75%; hard stop at 100%. Tokens are metered as **input + output +
   cache-creation**; cache reads are not counted.
 
 - **The compute budget is deliberately set below the cost of screening the whole database.**
   At measured cost — 1.83 CPU-hours per structure at two pressures — an exhaustive GCMC pass
-  over all {{smoke=1,731|main=[Q1:N]}} structures would cost **{{smoke=3,162|main=[Q2:naive]}} CPU-hours**. Your budget is {{smoke=about half that|main=[Q2:ratio]}},
+  over all {{smoke=1,731|main=12,499}} structures would cost **{{smoke=3,162|main=22,873}} CPU-hours**. Your budget is {{smoke=about half that|main=about 10% of that}},
   and it must also cover report-grade runs and reproduction. **You cannot screen everything,
   and you are not expected to.** How you narrow the field is yours to choose and to justify
   under §2.
@@ -72,10 +72,14 @@ Candidate structures are limited to the provided database; structural modificati
 
   | Phase | Length | Ends at |
   |---|---|---|
-  | **Smoke** | **3 days** | launch + 3 days, 09:00 KST |
-  | **Main** | **10 days** | launch + 10 days, 09:00 KST |
+  | **Smoke** | **3 days** | launch + 72 h exactly |
+  | **Main** | **10 days** | launch + 240 h exactly |
 
-  Your phase is stated in `WORKSPACE.json`.
+  **T is launch plus the stated number of hours, to the hour.** It is not "09:00 on the n-th
+  day": a launch at any other clock time would then give you less than the stated length, and
+  the difference is real — a 15:28 launch against a 09:00 deadline costs 6.5 h of a 3-day
+  campaign and the same 6.5 h of a 10-day one. Your exact deadline, as an absolute timestamp,
+  is `deadline_kst` in `WORKSPACE.json`. **Work from that timestamp, never from the day count.**
 
 - Your campaign ends at the **T** for your own phase above, or when a hard budget stop fires,
   whichever is first. **T is a stated date, not a quantity to be derived from any other
@@ -112,7 +116,10 @@ The final report is filed as `REPORT.md` at the workspace root.
 ## 8. Communication protocol
 
 - The campaign supervisor is **Bei**. It handles infrastructure and administers this charter. It will not answer scientific questions.
-- Escalations must be filed in the fixed format [ESC: category / one-line question]. Categories: `infra` (mechanical failures — will be repaired), `charter` (rule clarification — answered from this document), `scientific` (will receive: "Proceed per your own judgment within the charter; log the ambiguity."). There is no other channel; plan accordingly.
+- Escalations are filed in the fixed format `[ESC: category / one-line question]`. Categories: `infra`, `charter`, `scientific`. There is no other channel.
+- **What the channel promises, stated exactly.** Escalations are **logged, and read at collection points**. **An answer within your campaign is not guaranteed** — for any category. Nothing here entitles you to a repair or a ruling before your deadline.
+- **Absent an answer, act on your best reading of this charter and log it as `[CHARTER-READ]` (§6).** That is the intended path, not a fallback. A well-reasoned reading you logged is compliant; waiting on a reply that this document does not promise you is not.
+- **Why this is written this way.** An earlier version of this section promised that `infra` failures "will be repaired" and `charter` questions "answered from this document". Those promises were not kept in a campaign where they were relied on, and a channel that promises more than it delivers is worse than one that promises little: it invites a replicate to wait. This section now states the true service level.
 - Weekly status: at day 7, commit a one-page interim status in the §7 format. No response should be expected.
 
 ## 9. Conduct
@@ -206,6 +213,11 @@ Amendments to this document before seal. Append-only.
 | 2026-08-29 | Appendix A, G4 | **Rewritten adsorbate-aware (Rev 18).** (a) open/exposed metal is claimable for methane with a mandatory stated caveat and no admissibility consequence; (b) inadmissible only for agent-created bare coordination sites and for framework chemistry the pinned UFF table cannot support, leg (ii) argued **per structure, never per element roster**; (c) criterion, chosen thresholds and mandatory sensitivity logged | PI, chemistry-reviewed |
 | 2026-08-29 | Appendix A | Note added: **gates constrain claims, not measurement** — no gate forbids a simulation or suppresses a measured value | PI |
 | 2026-08-29 | §6 | `[CHARTER-READ]` interpretation logging promoted **verbatim** from smoke addendum §A3 into the charter proper; reaches both arms, since §6 is not Appendix A | PI |
+| 2026-08-29 | §1, §4 | **World frozen (Rev 19).** `[Q1:N]` → **12,499**, `[Q2:naive]` → **22,873 CPU-hours**, `[Q2:ratio]` → **about 10% of that**. Membership is the published SHA-256 manifest | PI |
+| 2026-08-29 | §4 | Main compute budget **1,600 → 2,300 CPU-hours** (≈10% of naive at the frozen N); tokens 45 M and concurrency 12 unchanged | PI, inside pre-ratified envelope |
+| 2026-08-29 | §2 | Working capacity stated as **absolute**, not excess, with the two protocol reasons given — adopted from a replicate's filed `[CHARTER-READ]` | PI |
+| 2026-08-29 | §5 | **T = launch + N × 24 h exactly**, never "09:00 on the n-th day"; the `WORKSPACE.json` timestamp is authoritative over the day count | PI |
+| 2026-08-29 | §8 | **Rewritten.** The channel no longer promises repair or answers: escalations are logged and read at collection points, an answer within the campaign is not guaranteed, and absent one the replicate acts on its best reading and logs it as `[CHARTER-READ]` | PI |
 
 ## Note on the G3 density bounds
 
