@@ -1866,3 +1866,103 @@ finding a day earlier: a referenced artifact that the record does not contain.
 A2's three-part requirement is checkable rather than merely stated. **Flagged, unratified:**
 `disposition: "killed"` is still accepted on a `G4` event, which Rev 18 forbids. The schema will
 accept a line the charter does not.
+
+---
+
+## LOG-2026-08-29-05 — World step 1: 2,811 of the 12,089 members are not here, scattered across every year; step 2 turns out to have no reference data for 79% of the world; and three of my own numbers from this morning needed correcting
+
+**Contingency fired. Stopped.** Nothing staged, hashed, validated or frozen.
+
+### The three numbers
+
+Membership: the 12,089-row recommended screening list from the MD5-verified release, **0 duplicate
+ids**. Sources: the share **`/home/molsim_share/core2024_cifs`** (12,471) plus the verified SI zip
+(8,300); union 18,135.
+
+| | Count | % of list |
+|---|---:|---:|
+| **list ∩ available — candidate world** | **9,278** | **76.7 %** |
+| **list − available — missing locally** | **2,811** | **23.3 %** |
+| **available − list — surplus, ignored** | **8,857** | — |
+
+9,278 + 2,811 = 12,089 exactly. **The ruling's threshold was ~50. This is 2,811 — 56× it.**
+
+**The verified SI zip contributes 28 structures to the world.** Share ∩ list is 9,250; the zip
+moves it to 9,278. As a file source for this membership definition it is very nearly a no-op.
+
+### The share is not this corpus, and the pattern says so cleanly
+
+The missing set is **not a class**. It is **20–29 % of every single year** from 2012 to 2020 —
+23.6, 28.6, 25.9, 20.4, 26.3, 26.8, 23.7, 24.7 — roughly proportional across ASR/FSR/ION, and
+**72 % of the missing entries have no local twin either**. There is no cut-off date, no subset
+boundary, no variant class to point at.
+
+And the profiles disagree: the share is **55.6 % ASR / 39.9 % FSR**, the list is **73.3 % / 20.9 %**.
+A near-doubling of the FSR share is not a sampling accident. Whatever the share was assembled from,
+it was not this list.
+
+### A second stop-condition, which I did not expect and which is worse
+
+**Step 2's content-validation tier has no reference data at all.**
+
+| Tier | Structures | Reference data |
+|---|---:|---|
+| Byte-match against the verified zip | 1,920 | yes — the zip |
+| **Content-validation against published per-structure records** | **7,358** | **0.0 %** |
+
+The release publishes `coreid`, `refcode`, LCD, PLD, density and ASA for **exactly its 2,664 CR
+structures** — which are precisely the byte-match tier. The CSD-derived remainder has **no
+published record in this release to validate against**, because those structures live in the CSD
+portions the ruling excludes from pulling. **20.7 % of the candidate world is validatable.**
+
+So even if the 2,811 were forgiven, step 2 as specified could not run on four fifths of what
+remained.
+
+### No free source closes the gap
+
+Pulled the 2025 SI release as a probe and MD5-verified it (`c24b990c…`, matches): **9,256 CIFs, 0
+recommended-list members, 0 of the 2,811.** Probe only — not added to any file source. The gap is
+reachable through CCDC or through the student's archive, and nothing else.
+
+### Corrections to my own step-2 report, from this morning
+
+The 2024 SI release uses **two identifier namespaces**, and I reported numbers across them before
+establishing that:
+
+| Subset | Count | Naming |
+|---|---:|---|
+| CR | 2,664 | CoRE-MOF-ID — `2020[Cu][sql]2[ASR]1` |
+| NCR | 5,636 | publisher refcode — `10853_2020_5211_MOESM2_ESM_ASR_pacman` |
+
+**"NCR present in the share: 0" is withdrawn.** I reported it as a content measurement. It is a
+property of namespaces: the share carries CoRE-MOF-IDs, NCR files carry refcodes, and that
+comparison could not have matched anything whatever the share contained.
+
+**"The list points 84 % outside its own zip" was right for a reason I had not established.** The
+correct route: `NCR_*_SI.xlsx` publish **`refcode` only, with no `coreid` anywhere in the
+release** — so NCR structures cannot be named in the list's namespace at all, and the list's
+12,089 ids resolve to CR (1,920) plus the CSD portions (10,169). Same number, sound reason.
+
+**The 2025 probe's 0 % is a namespace result before it is a content result**, and is stated as
+both above rather than left as a bare figure that reads like a finding about coverage.
+
+**None of these move the three numbers.** NCR could never have been list members, so `available`
+was effectively share ∪ CR either way. But two of them were stated with more confidence than the
+evidence carried, and that is worth more than the arithmetic being unaffected.
+
+### Recommendation for the reopened choice
+
+**Hold the world open pending `[external: student assistance]`** — the student's archive is the
+only thing that could make the ruled membership definition achievable, and it would double as the
+missing tier-2 reference.
+
+**If it does not produce, fall back to SI as shipped, N = 8,300**: complete, verified against its
+own published checksums, freely distributable, DOI- and version-citable, no membership gaps,
+per-structure records for its CR half. Its membership definition is *"the SI release"* rather than
+*"the recommended list"* — a weaker claim, but one that is true.
+
+**I recommend against adopting the 9,278 world.** It would be a benchmark defined as "the 76.7 %
+of the recommended list that happened to be on this cluster", with 79.3 % of it unvalidatable, and
+the provenance paragraph the ruling asks for could not be written honestly about it. The ceiling
+claim is the specific casualty: the maximum may sit in the scattered quarter that is missing, and
+nothing in a trajectory's evidence would reveal that it did.

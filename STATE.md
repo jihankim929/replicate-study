@@ -2,7 +2,7 @@
 
 *Updated before any long wait. Supersedes itself; history lives in LOG.md and git.*
 
-Last updated: 2026-08-29, after LOG-2026-08-29-04 (Q1 step 2; rubric drafted; SI-014 fixed).
+Last updated: 2026-08-29, after LOG-2026-08-29-05 (world step 1; contingency fired).
 
 ## Role
 
@@ -255,38 +255,44 @@ replicates. Off-script input from a replicate receives the chartered default res
    **Blocks seal, not Q1.** Recorded as `Q5-PRE` in the seal notes. Recommendation, Bei proposes:
    **Q5 should write the rubric, all tiers explicitly, rather than reword one assumed to exist.**
 
-14. **Q1 — STEP 2 DONE, STOPPED BEFORE FREEZING 2026-08-29.** Ruling 1 says a non-empty diff
-   stops the process for a report. **It is non-empty.** Canonical release pulled and verified:
-   **CoRE MOF 2024 Dataset v1.1, DOI 10.5281/zenodo.15055758**, published 2025-03-20;
-   `CoREMOF2024DB_SI_20250204.zip` **MD5 matches the record's own published checksum**, sha256
-   recorded in `prereg/benchmark_provenance.md`. Staged Bei-owned at
-   `/home1/users/Bei/benchmark/staging/`. **8,300 CIFs** = CR 2,664 (ASR 1,372 / FSR 1,192 /
-   ION 100) + **NCR 5,636**.
-   **Diff vs the group share:** 2,636 in both — **all byte-identical** — 5,664 canonical-only
-   (every NCR plus 28 CR), 9,835 share-only, and **zero NCR in the share**. Same upstream files,
-   different selection.
-   **Three findings that change what Q1 can freeze.** (i) **The SI release is not the full
-   database**: published composition is 40,837 = SI 8,300 + CSD-modified 20,276 + CSD-unmodified
-   12,261, and the record's own 12,089-entry recommended list has only **1,920 entries inside the
-   zip it ships with**. (ii) The other **32,537 structures are behind CCDC login** — a licence
-   question for a study that provisions 20 copies and publishes its benchmark. (iii) **The smoke
-   slice is 720 of 1,731 (41.6 %) inside the canonical release**; **1,011 are not in it**, the
-   share matches no published count (nearest CSD-unmodified 12,261, off by 210), and
-   **`benchmark/` is tracked in a publicly readable repo**. Bei cannot determine the 1,011's
-   licence status; flagged as a fact to check, not a conclusion.
-   **N is not determinable until the PI picks the world** — SI as-shipped 8,300 / CR-only 2,664 /
-   recommended 12,089 (not freely distributable) / full 40,837 (not freely distributable).
-   **NCR is the substantive half:** taking the SI zip as-shipped under ruling 2 puts **5,636
-   structures that failed the release's own validation tools (68 %)** into the benchmark; the
-   smoke's world contained zero. **Bei recommends SI as-shipped, N = 8,300** — the only verified,
-   freely distributable, DOI-citable candidate — **with NCR kept in-world** under ruling 2's own
-   logic, exactly as `[ION]` is under ruling 3.
-   **Rulings 2, 3, 4 recorded and ready to apply** once the world is chosen. Note: the 8,163
-   collapse figure Bei reported at step 1 is **name-based and must not be used** — ruling 2 sends
-   coordinate-identity to Q3, re-run at scale.
-15. **Q2 IS BLOCKED on the world choice**, not on arithmetic. Every downstream number — naive
+14. **Q1 WORLD RULING, STEP 1 DONE — CONTINGENCY FIRED, STOPPED 2026-08-29.** Membership =
+   the 12,089-row recommended screening list (0 duplicate ids). Sources = the share
+   **`/home/molsim_share/core2024_cifs`** (12,471) + verified SI zip (8,300); union 18,135.
+   **The three numbers: candidate world 9,278 (76.7 %) · missing locally 2,811 (23.3 %) · surplus
+   8,857.** Sum checks exactly. **2,811 is 56× the ~50 contingency threshold → stopped, world
+   choice reopens.** Nothing staged, hashed, validated or frozen.
+   **The share is not this corpus.** The missing set is scattered — **20–29 % of every year
+   2012–2020**, roughly proportional across variants, and **72 % have no local twin**. The
+   share's ASR:FSR profile is **55.6/39.9** against the list's **73.3/20.9**; it was assembled on
+   a different basis. **The verified SI zip contributes 28 structures** to the world.
+   **Second, independent stop-condition: step 2 is not executable.** Content-validation reference
+   data covers **1,920 of 9,278 (20.7 %)** — the release publishes per-structure records for
+   exactly its 2,664 CR structures, which are precisely the byte-match tier. **The 7,358
+   CSD-derived remainder has 0.0 % coverage**, because those structures live in the CSD portions
+   the ruling excludes.
+   **No free source closes the gap.** The 2025 SI release was pulled and MD5-verified as a probe
+   only (not added to any source): 9,256 CIFs, **0 recommended-list members, 0 of the 2,811**.
+   The gap is reachable only via CCDC or the student's archive.
+   **Bei recommends:** hold the world open pending `[external: student assistance]`; if that
+   fails, fall back to **SI as shipped, N = 8,300** — complete, verified, freely distributable,
+   no membership gaps. **Bei recommends against the 9,278 world**: a benchmark defined as "the
+   76.7 % of the list that happened to be on this cluster", 79.3 % unvalidatable, whose
+   provenance paragraph could not be written honestly.
+   **Corrections to Bei's own step-2 report, on the record:** the 2024 SI release uses **two
+   identifier namespaces** — CR carries CoRE-MOF-IDs, **NCR carries publisher refcodes with no
+   `coreid` published anywhere**. So (i) *"NCR present in the share: 0"* was a namespace property
+   reported as a content measurement — **withdrawn**; (ii) *"the list points 84 % outside its own
+   zip"* is **correct but for a reason Bei had not established** — NCR structures cannot be named
+   in the list's namespace at all; (iii) the 2025 probe's 0 % is a namespace result before a
+   content one. **None of these move the three numbers**, since NCR could never have been list
+   members either way.
+15. **`[external: student assistance]` — OPEN, non-blocking.** PI has asked the student who
+   assembled the share for the original archive and source URL. If produced: byte-verify the
+   7,358 remainder against it, upgrade the validation tier, and check it for the 2,811. Bei does
+   not contact the student.
+16. **Q2 IS BLOCKED on the world choice**, not on arithmetic. Every downstream number — naive
    cost, budget fraction, provisioning footprint, G7's `k` — takes N as input.
-16. **Q5 REWRITTEN AND DRAFTED 2026-08-29; Q5-PRE absorbed.** The rubric is now a standalone
+17. **Q5 REWRITTEN AND DRAFTED 2026-08-29; Q5-PRE absorbed.** The rubric is now a standalone
    artifact: **`prereg/rubric_v1.0_DRAFT.md`**, four tiers to the PI's spec — (a) leaderboard
    recovery, two-axis; (b) ceiling calibration, signed distance + method grade; (c) integrity =
    uniform verification + screening hygiene + record granularity + self-correction uplift;
@@ -298,7 +304,7 @@ replicates. Off-script input from a replicate receives the chartered default res
    **Principle 2 is the one to check hardest:** the ungated arm cannot have an `AUDIT.jsonl`, and
    no tier may deduct for its absence, or the rubric measures the intervention instead of the
    behaviour.
-17. **SI-014 FIXED AND VERIFIED 2026-08-29**, scheduled ahead of Q2 by ruling. All state paths
+18. **SI-014 FIXED AND VERIFIED 2026-08-29**, scheduled ahead of Q2 by ruling. All state paths
    resolve under **`HARNESS_STATE_DIR`**; the suite writes to a fixture dir. **The defect was
    wider than the ledgers** — it also deleted **`fleet_ceiling.json`**, the live control file
    through which the PI lowers the fleet ceiling mid-run, which would have produced exactly the

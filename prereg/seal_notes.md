@@ -537,6 +537,127 @@ precisely the kind of thing a trajectory should find for itself.
   doctrine's value.** Staging is already Bei-owned at `/home1/users/Bei/benchmark/staging/`; the
   group share is corroboration and is never read at provisioning time.
 
+### Q1 — WORLD RULING, STEP 1: intersect and report — **Bei, 2026-08-29. CONTINGENCY FIRED: STOPPED.**
+
+Membership per PI ruling: the **CoRE MOF 2024 recommended screening list**
+(`12089-recommended-screening-list.csv`, from the MD5-verified Zenodo release, 12,089 rows, **0
+duplicate ids**). File sources per ruling: the group share **`/home/molsim_share/core2024_cifs`**
+(12,471 CIFs) plus the verified SI zip (8,300 CIFs). **No CCDC pull.** Union available: 18,135.
+
+#### The three numbers
+
+| | Count | % of the 12,089 list |
+|---|---:|---:|
+| **1. list ∩ available — CANDIDATE WORLD** | **9,278** | **76.7 %** |
+| **2. list − available — MISSING LOCALLY** | **2,811** | **23.3 %** |
+| **3. available − list — SURPLUS, ignored** | **8,857** | — |
+
+Check: 9,278 + 2,811 = 12,089 exactly.
+
+**The surplus decomposes, and the decomposition matters:** of the 8,857, **5,636 are the SI zip's
+NCR files, which are not addressable in the list's identifier namespace at all** (see the
+correction below), and **3,221 are share entries that are addressable but not members**.
+
+**The verified SI zip contributes 28 structures to the world.** Share ∩ list = 9,250; adding the
+zip moves that to 9,278. Everything else it brings is either already in the share or unaddressable.
+
+#### CONTINGENCY: **2,811 is not "hundreds" — it is 56× the ~50 threshold. Stopped. The world choice reopens.**
+
+Nothing has been staged, hashed, validated or frozen.
+
+#### The missing set is scattered, not a class — the share is not this corpus
+
+| | recommended list | MISSING 2,811 | share |
+|---|---|---|---|
+| ASR / FSR / ION | 73.3 % / 20.9 % / 5.9 % | 67.4 % / 27.2 % / 5.4 % | **55.6 % / 39.9 % / 4.5 %** |
+
+Missing by year: **20–29 % of *every* year** from 2012 to 2020 — 23.6 %, 28.6 %, 25.9 %, 20.4 %,
+26.3 %, 26.8 %, 23.7 %, 24.7 %. Not a cut-off, not a subset boundary, not a variant class.
+**72 % of the missing entries do not even have their ASR/FSR twin available locally.**
+
+**The share's variant profile does not match the list's.** A 55.6/39.9 ASR:FSR split against the
+list's 73.3/20.9 is not a sampling accident. The share was assembled on a different basis, and
+whatever that basis was, it was not "the recommended screening list."
+
+#### Two independent stop-conditions, and the second one is worse
+
+**(1) 23.3 % of the intended membership is absent, at random.** A ceiling study cannot make a
+ceiling claim against an intended world when a scattered quarter of that world is missing — the
+maximum may be in the part that is not there, and nothing in the trajectory's evidence would show
+it. A world of 9,278 is coherent for a *replicate*; it is not the benchmark the ruling defines.
+
+**(2) Step 2's content-validation tier has no reference data.** Measured, not estimated:
+
+| Step-2 tier | Structures | Reference data available |
+|---|---:|---|
+| Byte-match against the verified SI zip | **1,920** | yes — the zip itself |
+| **Content-validation against the release's published per-structure records** | **7,358** | **0 — none of them, 0.0 %** |
+
+The release publishes `coreid`, `refcode`, LCD, PLD, density, ASA and more for **exactly its 2,664
+CR structures** — which are precisely the byte-match tier. **The 7,358 CSD-derived remainder has
+no published per-structure record in this release to validate against**, because those structures
+live in the CSD portions the ruling excludes from pulling. **20.7 % of the candidate world is
+validatable; 79.3 % is not.** Step 2 as specified is not executable.
+
+#### Recoverability: no free source closes the gap
+
+The 2025 SI release was pulled and MD5-verified (`c24b990c…`, matches) purely as a probe: **9,256
+CIFs, of which 0 are recommended-list members** and **0 close any part of the 2,811**. It uses
+publisher refcodes, not CoRE-MOF-IDs, so it cannot contribute members in this namespace. Probe
+only — **not added to any file source**, per ruling.
+
+**The 2,811 are reachable only through CCDC or through the student's original archive.**
+
+#### CORRECTIONS to Bei's own step-2 report (LOG-2026-08-29-04)
+
+The 2024 SI release uses **two identifier namespaces**, which Bei did not establish before
+reporting:
+
+| Subset | Count | Naming |
+|---|---:|---|
+| CR (ASR/FSR/Ion) | 2,664 | **CoRE-MOF-ID** — `2020[Cu][sql]2[ASR]1` |
+| NCR (both/mofchecker/Chen_Manz/occupancy) | 5,636 | **publisher SI refcode** — `10853_2020_5211_MOESM2_ESM_ASR_pacman` |
+
+1. **"NCR present in the share: 0" was reported as a content measurement. It is a namespace
+   property.** The share carries CoRE-MOF-IDs; NCR files carry refcodes. That comparison could not
+   have matched anything, whatever the share contained. **The claim is withdrawn.**
+2. **"Its own recommended list points 84 % outside the zip it ships with"** — the *conclusion*
+   survives and is now properly established, by a different route: `NCR_*_SI.xlsx` publish
+   **`refcode` only, with no `coreid` anywhere in the release**, so NCR structures **cannot be
+   named in the list's namespace at all**. The list's 12,089 ids therefore resolve to CR (1,920)
+   plus the CSD portions (10,169). The number was right; Bei's reason for it was not.
+3. **The 2025 probe's "0 % recoverable"** is likewise a namespace result before it is a content
+   result. Stated above as both, rather than left as a bare number that reads like a content
+   finding.
+
+**These corrections do not move the three numbers.** NCR could never have been list members, so
+`available` was effectively share ∪ CR either way, and 9,278 / 2,811 / 8,857 stand.
+
+#### Bei's recommendation for the reopened world choice
+
+**Hold the world open pending `[external: student assistance]`.** The student's archive is the
+only thing that could make the ruled membership definition achievable, and the request is already
+out. If it produces the 2,811 — or the source URL that yields them — the ruled world stands and
+step 2 becomes executable, with the archive itself serving as the missing tier-2 reference.
+
+**If it does not, the ruled membership definition is not achievable from institutional holdings**,
+and the fallback Bei recommends is unchanged from the step-2 report: **the CoRE MOF 2024 SI
+release as shipped, N = 8,300** — complete, MD5-verified against its own published checksums,
+freely distributable, DOI- and version-citable, with no membership gaps and per-structure records
+for its CR half. Its membership definition is *"the SI release"* rather than *"the recommended
+list"*, which is a weaker claim but a true one.
+
+**Bei recommends against adopting the 9,278 candidate world.** It would be a benchmark defined as
+"the 76.7 % of the recommended list that happened to be on this cluster", 79.3 % of it
+unvalidatable, and its provenance paragraph could not be written honestly.
+
+#### `[external: student assistance]` — OPEN, non-blocking
+
+PI has asked the student who assembled `/home/molsim_share/core2024_cifs` for the original archive
+and source URL. **If produced:** byte-verify the 7,358 remainder against it and upgrade the
+validation tier; check it for the 2,811. Logged here as the ruling directs. Bei does not contact
+the student — that is a PI action.
+
 ### Q2 — recompute the budget arithmetic at full-database scale
 
 From **measured** per-structure costs (prior campaign: GCMC 1.83 CPU-h/structure at two
