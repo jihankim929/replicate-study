@@ -456,3 +456,476 @@ the **rubric** as one of exactly four artefacts that **seal pre-launch** — alo
 the exclusion set and the verification protocol. Three of the four exist. The rubric is a set of
 references to a document nobody has written, and two of its three tiers have never been defined.
 Raised for the PI at Q5; Bei proposes, the PI ratifies.
+
+---
+
+## Q3 — full-database charge sweep over the FROZEN world — [Bei, 2026-08-29]
+
+Run with **`harness/charge_audit.py`**, which is **committed to the open repo** per the PI's ruling
+that instrument code is methodology released with the study and only its outputs live here. This
+section is that output.
+
+**Regression first, per the instrument's own standing warning.** Against the 1,731-slice result
+recorded above, the rebuilt instrument reproduces **all four counts exactly**: 100 pass-2 flags,
+70 azolate-balanced at net 0, 30 unbalanced, 7 in the `[sql]` subset. A sweep whose regression did
+not pass would not be evidence about any database.
+
+### Result over the frozen 12,499
+
+| | count | rate |
+|---|---:|---:|
+| parsed | **12,499 / 12,499**, 0 errors | — |
+| pass-1 flags (element-level) | 698 | 5.58 % |
+| pass-2 flags (bonded-environment) | 747 | 5.98 % |
+| — balanced by azolate anions (net = 0) | 341 | — |
+| **— UNBALANCED (net ≠ 0)** | **406** | **3.25 %** |
+
+**The slice's 1.7 % was a prior, not a prediction — and it was low by 1.9×.** The seal notes said
+so in advance; this is the measurement.
+
+### Auto-dispositioned (mechanical) — 262
+
+Unbalanced, density ≥ 0.90 g/cm³, so not record-registering on density. These take the standing
+mechanical disposition and do not need a PI ruling.
+
+### FOR PI DISPOSITION — 144 record-registering candidates
+
+Unbalanced **and** in the density band where high volumetric working capacity lives (< 0.90 g/cm³),
+which is the conjunction that makes an imbalance a *capacity artifact* rather than a deposition
+defect — the same conjunction that made the slice's operational entry what it was.
+
+| Band | count |
+|---|---:|
+| ultra-low, < 0.30 g/cm³ | **2** |
+| 0.30 – 0.90 g/cm³ | 142 |
+
+### The G3 interaction reproduces at full scale, in a sharper form
+
+The dossier template requires each entry to state its density rank and whether the ratified G3
+bounds (0.20 – 4.50 g/cm³) remove it pre-simulation. Answering that for this batch:
+
+**Exactly 2 of the 406 are removed by G3, and they are the two lowest-density entries in the whole
+unbalanced set — density rank 3 and 4 of 12,499, both at 0.175 g/cm³.**
+
+That is the slice-scoped worry, reproduced: at 1,731 the concern was one entry at rank 3 that G3's
+lower bound would remove pre-simulation, making a gated arm's kill hollow. At 12,499 the bound
+removes **the top two candidates of the entire unbalanced set** — the two an integrity instrument
+would most want a trajectory to reach. Every other unbalanced entry reaches simulation.
+
+**This is a PI question, not a Bei one**, and it is the one this batch exists to raise.
+
+### Per-entry table — 144 record-registering candidates, by density
+
+| # | structure | density (g/cm³) | rank of 12,499 | G3 removes |
+|---|---|---:|---:|---|
+| 1 | `2020[Fe][hcb]2[ASR]2` | 0.175 | 3 | **YES** |
+| 2 | `2020[Fe][hcb]2[FSR]2` | 0.175 | 4 | **YES** |
+| 3 | `2021[Cu][sql]2[ASR]6` | 0.358 | 41 | no |
+| 4 | `2021[Cu][sql]2[FSR]6` | 0.358 | 42 | no |
+| 5 | `2010[Co][tbo]3[ASR]1` | 0.462 | 114 | no |
+| 6 | `2010[Co][tbo]3[FSR]1` | 0.462 | 115 | no |
+| 7 | `2017[Fe][nan]3[ASR]1` | 0.557 | 237 | no |
+| 8 | `2017[Fe][nan]3[FSR]1` | 0.557 | 238 | no |
+| 9 | `2019[Zn][sql]2[ASR]3` | 0.572 | 259 | no |
+| 10 | `2020[Cu][sql]2[ASR]1` | 0.579 | 269 | no |
+| 11 | `2015[Cu][pcu]3[ASR]2` | 0.581 | 271 | no |
+| 12 | `2015[Cu][pcu]3[FSR]3` | 0.581 | 272 | no |
+| 13 | `2020[Cu][sql]2[ASR]18` | 0.586 | 287 | no |
+| 14 | `2016[Cu][ubo]3[ASR]1` | 0.597 | 333 | no |
+| 15 | `0000[Cd][nbo]3[ASR]1` | 0.600 | 336 | no |
+| 16 | `2007[Cu][dia]3[ASR]1` | 0.600 | 337 | no |
+| 17 | `2007[Cu][dia]3[FSR]1` | 0.600 | 338 | no |
+| 18 | `2023[Cu][sql]2[ASR]1` | 0.600 | 340 | no |
+| 19 | `2023[Cu][sql]2[FSR]1` | 0.600 | 341 | no |
+| 20 | `2016[Co][sql]2[ASR]2` | 0.607 | 352 | no |
+| 21 | `2016[Co][sql]2[FSR]1` | 0.607 | 353 | no |
+| 22 | `2007[CuMn][pcu]3[ASR]2` | 0.607 | 356 | no |
+| 23 | `2007[CuMn][pcu]3[FSR]2` | 0.607 | 357 | no |
+| 24 | `2007[CuMn][pcu]3[ASR]1` | 0.608 | 359 | no |
+| 25 | `2007[CuMn][pcu]3[FSR]1` | 0.608 | 361 | no |
+| 26 | `2015[Co][crs]3[ASR]1` | 0.624 | 389 | no |
+| 27 | `2015[Co][crs]3[FSR]1` | 0.624 | 390 | no |
+| 28 | `2024[Ni][etb]3[ASR]1` | 0.627 | 393 | no |
+| 29 | `2012[Ag][srs]3[ASR]1` | 0.632 | 408 | no |
+| 30 | `2012[Ag][srs]3[FSR]1` | 0.632 | 409 | no |
+| 31 | `2023[Zn][srs]3[ASR]1` | 0.652 | 458 | no |
+| 32 | `2012[Ag][srs]3[ASR]2` | 0.655 | 470 | no |
+| 33 | `2012[Ag][srs]3[FSR]2` | 0.655 | 471 | no |
+| 34 | `2012[Ag][srs]3[ASR]3` | 0.656 | 472 | no |
+| 35 | `2012[Ag][srs]3[FSR]3` | 0.656 | 473 | no |
+| 36 | `2019[Co][sql]2[ASR]5` | 0.665 | 491 | no |
+| 37 | `2019[Co][sql]2[FSR]6` | 0.665 | 492 | no |
+| 38 | `2019[Co][sql]2[ASR]4` | 0.668 | 504 | no |
+| 39 | `2019[Co][sql]2[FSR]5` | 0.668 | 505 | no |
+| 40 | `1998[Cu][cds]3[ASR]1` | 0.669 | 506 | no |
+| 41 | `2011[Cu][lvt]3[ASR]5` | 0.670 | 512 | no |
+| 42 | `2002[Cu][lvt]3[ASR]1` | 0.676 | 531 | no |
+| 43 | `2011[Cu][lvt]3[ASR]4` | 0.676 | 532 | no |
+| 44 | `2011[Cu][lvt]3[ASR]3` | 0.678 | 543 | no |
+| 45 | `2015[Ni][dia]3[ASR]3` | 0.694 | 584 | no |
+| 46 | `2010[Fe][nbo]3[ASR]4` | 0.702 | 612 | no |
+| 47 | `2010[Fe][nbo]3[FSR]4` | 0.702 | 613 | no |
+| 48 | `2004[Ag][pts]3[ASR]3` | 0.709 | 634 | no |
+| 49 | `2004[Ag][pts]3[FSR]3` | 0.709 | 635 | no |
+| 50 | `2016[Zn][cds]3[ASR]2` | 0.710 | 636 | no |
+| 51 | `2004[Cu][pts]3[ASR]1` | 0.711 | 639 | no |
+| 52 | `2004[Cu][pts]3[FSR]1` | 0.711 | 640 | no |
+| 53 | `0000[Co][nan]3[ASR]15` | 0.713 | 647 | no |
+| 54 | `2016[Co][pcu]3[ASR]6` | 0.715 | 660 | no |
+| 55 | `2016[Co][pcu]3[FSR]7` | 0.715 | 661 | no |
+| 56 | `2015[Fe][pts]3[ASR]4` | 0.720 | 679 | no |
+| 57 | `2015[Fe][pts]3[FSR]4` | 0.720 | 680 | no |
+| 58 | `2020[Cu][dia]3[ASR]5` | 0.720 | 682 | no |
+| 59 | `2020[Cu][dia]3[ASR]4` | 0.722 | 694 | no |
+| 60 | `2010[Co][nan]3[ASR]8` | 0.722 | 695 | no |
+| 61 | `2022[Cu][pto]3[ASR]1` | 0.723 | 705 | no |
+| 62 | `2004[Ag][pts]3[ASR]2` | 0.733 | 743 | no |
+| 63 | `2004[Ag][pts]3[FSR]2` | 0.733 | 744 | no |
+| 64 | `2009[Cd][nan]3[ASR]1` | 0.735 | 757 | no |
+| 65 | `2004[Ag][pts]3[ASR]1` | 0.737 | 766 | no |
+| 66 | `2004[Ag][pts]3[FSR]1` | 0.737 | 767 | no |
+| 67 | `2017[Zn][sql]2[ASR]10` | 0.739 | 775 | no |
+| 68 | `2019[Cu][lvt]3[ASR]4` | 0.759 | 864 | no |
+| 69 | `2022[Zn][kgd]2[ASR]1` | 0.763 | 874 | no |
+| 70 | `2022[Zn][kgd]2[FSR]1` | 0.763 | 875 | no |
+| 71 | `2020[Cu][sql]2[ASR]7` | 0.766 | 885 | no |
+| 72 | `2020[Cu][sql]2[FSR]6` | 0.766 | 886 | no |
+| 73 | `2020[Ni][kgd]2[ASR]1` | 0.771 | 904 | no |
+| 74 | `2020[Ni][kgd]2[FSR]1` | 0.771 | 905 | no |
+| 75 | `2020[Cu][she]3[ASR]2` | 0.771 | 913 | no |
+| 76 | `2020[Cu][she]3[ASR]1` | 0.773 | 917 | no |
+| 77 | `2019[Cu][she]3[FSR]1` | 0.774 | 922 | no |
+| 78 | `2020[Cu][she]3[FSR]2` | 0.775 | 931 | no |
+| 79 | `2020[Cu][she]3[FSR]1` | 0.777 | 936 | no |
+| 80 | `2008[Cu][dia]3[ASR]2` | 0.782 | 957 | no |
+| 81 | `2008[Cu][dia]3[FSR]2` | 0.782 | 959 | no |
+| 82 | `2017[Cu][sql]2[ASR]5` | 0.782 | 960 | no |
+| 83 | `2019[Cu][nan]2[ASR]4` | 0.783 | 969 | no |
+| 84 | `2019[Cu][nan]2[FSR]4` | 0.783 | 971 | no |
+| 85 | `2020[Cu][nan]2[ASR]3` | 0.783 | 970 | no |
+| 86 | `2020[Cu][nan]2[FSR]3` | 0.783 | 972 | no |
+| 87 | `2017[Cu][sql]2[ASR]6` | 0.784 | 974 | no |
+| 88 | `2005[Fe][srs]3[ASR]1` | 0.785 | 976 | no |
+| 89 | `2017[Cd][sql]2[ASR]11` | 0.788 | 985 | no |
+| 90 | `2014[Ag][mtn]3[ASR]2` | 0.791 | 994 | no |
+| 91 | `2020[Cu][dia]3[ASR]2` | 0.791 | 1,003 | no |
+| 92 | `2020[Cu][dia]3[FSR]2` | 0.791 | 1,004 | no |
+| 93 | `2017[Cu][sql]2[ASR]4` | 0.793 | 1,009 | no |
+| 94 | `2005[Co][srs]3[ASR]1` | 0.795 | 1,019 | no |
+| 95 | `2020[Zn][fes]2[ASR]2` | 0.798 | 1,033 | no |
+| 96 | `2020[Mn][sql]2[ASR]3` | 0.800 | 1,049 | no |
+| 97 | `2004[Cu][dia]3[ASR]1` | 0.807 | 1,080 | no |
+| 98 | `2010[Fe][fsc]3[ASR]1` | 0.807 | 1,081 | no |
+| 99 | `2010[Fe][fsc]3[FSR]1` | 0.807 | 1,083 | no |
+| 100 | `2018[Co][kgm]2[ASR]1` | 0.809 | 1,088 | no |
+| 101 | `2002[Cu][dia]3[ASR]1` | 0.811 | 1,095 | no |
+| 102 | `2022[Ni][kgd]2[ASR]2` | 0.816 | 1,111 | no |
+| 103 | `2022[Ni][kgd]2[FSR]2` | 0.816 | 1,112 | no |
+| 104 | `2020[Cu][nan]3[ASR]7` | 0.816 | 1,115 | no |
+| 105 | `2020[Cu][nan]3[FSR]7` | 0.816 | 1,116 | no |
+| 106 | `2020[Cu][nan]3[ASR]9` | 0.818 | 1,125 | no |
+| 107 | `2020[Cu][nan]3[FSR]9` | 0.818 | 1,126 | no |
+| 108 | `2014[Cd][pyr]3[ASR]1` | 0.818 | 1,128 | no |
+| 109 | `2014[Cd][pyr]3[FSR]1` | 0.818 | 1,129 | no |
+| 110 | `2017[Cu][dia]3[ASR]1` | 0.819 | 1,130 | no |
+| 111 | `2017[Cu][dia]3[FSR]1` | 0.819 | 1,132 | no |
+| 112 | `2020[Cu][dia]3[ASR]1` | 0.821 | 1,141 | no |
+| 113 | `2020[Cu][dia]3[FSR]1` | 0.821 | 1,142 | no |
+| 114 | `2010[Cd][pcu]3[ASR]2` | 0.824 | 1,156 | no |
+| 115 | `2010[Cd][pcu]3[FSR]2` | 0.824 | 1,157 | no |
+| 116 | `2020[Cu][nan]3[ASR]8` | 0.824 | 1,160 | no |
+| 117 | `2020[Cu][nan]3[FSR]8` | 0.824 | 1,161 | no |
+| 118 | `2023[Zn][kgd]2[ASR]1` | 0.825 | 1,162 | no |
+| 119 | `2023[Zn][kgd]2[FSR]1` | 0.825 | 1,163 | no |
+| 120 | `2012[Fe][pts]3[ASR]1` | 0.826 | 1,169 | no |
+| 121 | `2012[Fe][pts]3[FSR]1` | 0.826 | 1,170 | no |
+| 122 | `2022[Ni][kgd]2[ASR]1` | 0.828 | 1,176 | no |
+| 123 | `2022[Ni][kgd]2[FSR]1` | 0.828 | 1,178 | no |
+| 124 | `2020[Cu][nan]3[ASR]6` | 0.846 | 1,266 | no |
+| 125 | `2020[Cu][nan]3[FSR]6` | 0.846 | 1,268 | no |
+| 126 | `2015[Cu][wbl]3[ASR]1` | 0.848 | 1,287 | no |
+| 127 | `2015[Cu][wbl]3[FSR]1` | 0.848 | 1,289 | no |
+| 128 | `0000[Cd][nan]3[ASR]12` | 0.850 | 1,295 | no |
+| 129 | `2001[Cu][cds]3[ASR]1` | 0.852 | 1,305 | no |
+| 130 | `2015[Cd][pyr]3[ASR]1` | 0.864 | 1,372 | no |
+| 131 | `2015[Cd][pyr]3[FSR]1` | 0.864 | 1,373 | no |
+| 132 | `2009[Co][dia]3[ASR]1` | 0.866 | 1,386 | no |
+| 133 | `2009[Zn][dia]3[ASR]3` | 0.872 | 1,425 | no |
+| 134 | `2006[Co][ths]3[ASR]1` | 0.874 | 1,439 | no |
+| 135 | `2018[Zn][nbo]3[ASR]1` | 0.880 | 1,482 | no |
+| 136 | `2009[Cu][dia]3[ASR]2` | 0.881 | 1,494 | no |
+| 137 | `2009[Cu][dia]3[FSR]2` | 0.881 | 1,496 | no |
+| 138 | `2019[Zn][utp]3[ASR]2` | 0.885 | 1,547 | no |
+| 139 | `2019[Zn][utp]3[ASR]1` | 0.885 | 1,550 | no |
+| 140 | `2014[Zn][utp]3[ASR]1` | 0.894 | 1,610 | no |
+| 141 | `2023[Cu][nan]3[ASR]2` | 0.897 | 1,631 | no |
+| 142 | `2023[Cu][nan]3[FSR]2` | 0.897 | 1,632 | no |
+| 143 | `2023[Cu][nan]3[ASR]1` | 0.897 | 1,638 | no |
+| 144 | `2023[Cu][nan]3[FSR]1` | 0.897 | 1,639 | no |
+
+### Auto-dispositioned mechanical remainder — 262 ids
+
+```
+2015[Mn][lvt]3[ASR]2
+1999[Cu][pts]3[ASR]1
+1999[Cu][pts]3[FSR]1
+2013[Mn][lvt]3[ASR]1
+2014[Cd][pcu]3[ASR]7
+2014[Cu][bcu]3[ASR]8
+2014[Cu][bcu]3[FSR]6
+2007[InAg][ths]3[ASR]1
+2007[InAg][ths]3[FSR]1
+2011[Cu][cds]3[ASR]1
+2014[Cd][pcu]3[ASR]6
+2014[Cu][bcu]3[FSR]9
+2014[Cu][bcu]3[ASR]11
+2013[Cu][pts]3[ASR]2
+2014[Cu][bcu]3[FSR]8
+2014[Cu][bcu]3[ASR]10
+2019[Ni][hcb]2[ASR]1
+2012[Zn][sod]3[ASR]14
+2012[Zn][sod]3[FSR]10
+2012[Zn][sod]3[FSR]7
+2012[Zn][sod]3[ASR]11
+2014[Cu][bcu]3[ASR]4
+2014[Cu][bcu]3[FSR]3
+2005[Ag][dia]3[ASR]1
+2005[Ag][dia]3[ION]1
+2005[Ag][dia]3[FSR]1
+2018[Co][cds]3[FSR]1
+2018[Co][cds]3[ASR]1
+2022[CoMn][sql]2[ASR]1
+2016[Cu][pcu]3[FSR]1
+0000[Cu][pcu]3[ASR]1
+2014[Cd][pcu]3[ASR]5
+2018[Cu][dia]3[ASR]3
+2022[Co][sql]2[ASR]1
+2015[Fe][pts]3[ASR]1
+2015[Fe][pts]3[FSR]1
+2015[Fe][lvt]3[ASR]1
+2023[Co][dia]3[ASR]1
+2019[Zn][hcb]2[ASR]5
+2006[CoAg][utp]3[ASR]2
+2006[CoAg][utp]3[FSR]2
+2007[Cd][dia]3[ASR]3
+2019[Cd][kgd]2[ASR]3
+2019[Cd][kgd]2[FSR]3
+2005[CoAg][utp]3[ASR]1
+2020[Ag][nbo]3[FSR]1
+2020[Ag][nbo]3[ASR]2
+2013[Zn][bor]3[ASR]1
+2013[Zn][bor]3[FSR]1
+2006[CoAg][utp]3[FSR]3
+2006[CoAg][utp]3[ASR]3
+2006[CoAg][utp]3[FSR]1
+2006[CoAg][utp]3[ASR]1
+2022[Cu][sql]2[ASR]9
+2014[Cu][dia]3[ASR]6
+2017[Zn][pcu]3[FSR]8
+2017[Zn][pcu]3[ASR]9
+2017[Cu][pts]3[FSR]2
+2017[Cu][pts]3[ASR]1
+2014[Co][bcu]3[ASR]1
+2009[Co][pcu]3[ASR]3
+2009[Co][pcu]3[FSR]3
+2017[Cu][nan]3[ASR]3
+2017[Cu][nan]3[FSR]3
+2010[Cd][pcu]3[FSR]1
+2010[Cd][pcu]3[ASR]1
+2014[Co][nan]2[ASR]2
+2014[Co][nan]2[ASR]1
+2003[Cu][pcu]3[FSR]1
+2021[Cu][pcu]3[ASR]4
+2010[Zn][pcu]3[FSR]28
+0000[Zn][pcu]3[ASR]5
+2012[Zn][pcu]3[ASR]5
+2012[Co][pcu]3[ASR]2
+2007[Cd][dia]3[ASR]5
+2007[Cd][dia]3[ASR]7
+2011[Cu][dia]3[ASR]1
+2007[Cd][dia]3[ASR]2
+2007[Fe][pcu]3[ASR]1
+2019[Co][sql]2[FSR]3
+2019[Co][sql]2[ASR]2
+2007[Ni][pcu]3[ASR]3
+2007[Ni][pcu]3[FSR]3
+1997[Ag][nan]3[FSR]1
+1997[Ag][nan]3[ASR]1
+2007[Cd][dia]3[ASR]6
+2019[Ag][sra]3[FSR]2
+2019[Ag][sra]3[ASR]2
+2007[Ni][pcu]3[FSR]2
+2007[Ni][pcu]3[ASR]2
+2007[Ni][pcu]3[ASR]1
+2007[Ni][pcu]3[FSR]1
+2019[Ag][sra]3[FSR]4
+2019[Ag][sra]3[ASR]3
+2012[Cu][sra]3[ASR]2
+0000[Co][nan]2[ASR]1
+2020[Co][nan]2[FSR]5
+2007[Cd][dia]3[ASR]4
+2011[Co][crb]3[FSR]1
+2011[Co][crb]3[ASR]1
+2011[Co][nan]3[FSR]5
+2011[Co][nan]3[ASR]8
+2013[Ag][lvt]3[ASR]1
+2011[Cu][dia]3[ASR]2
+2013[Zn][lvt]3[ASR]1
+2013[Ni][cds]3[FSR]1
+2013[Ni][cds]3[ASR]1
+2007[Ag][nbo]3[ASR]1
+2007[Ag][nbo]3[FSR]1
+2019[Ag][sra]3[FSR]3
+0000[Ag][sra]3[ASR]1
+2019[Ag][sra]3[FSR]1
+2019[Ag][sra]3[ASR]1
+2002[Co][pcu]3[FSR]1
+2002[Co][pcu]3[ASR]1
+2013[Co][sra]3[ASR]1
+2015[Cd][sql]2[ASR]1
+2019[Ag][nan]3[ASR]1
+2015[Mn][nan]3[FSR]2
+2015[Mn][nan]3[ASR]2
+2012[Ni][pcu]3[FSR]1
+0000[Ni][pcu]3[ASR]2
+2015[Mn][nan]3[ASR]9
+2015[Mn][nan]3[FSR]8
+2024[Zn][lig]3[ASR]1
+2024[Zn][lig]3[ASR]2
+2018[Ag][hcb]2[ASR]1
+2024[Zn][srs]3[ASR]1
+2012[Zn][lig]3[ASR]1
+2024[Zn][srs]3[ASR]2
+2023[Cd][lvt]3[ASR]1
+2016[Ag][dia]3[FSR]1
+2016[Ag][dia]3[ASR]1
+2020[Co][nan]3[FSR]17
+0000[Co][nan]3[ASR]4
+2015[Mn][nan]3[ASR]1
+2015[Mn][nan]3[FSR]1
+2011[Cd][pcu]3[FSR]2
+2011[Cd][pcu]3[ASR]2
+2005[Zn][dia]3[ASR]2
+2014[Cu][pcu]3[FSR]4
+2014[Cu][pcu]3[ASR]4
+2000[Ag][bpv]3[ASR]1
+2000[Ag][bpv]3[FSR]1
+2009[Cu][pts]3[ASR]1
+2009[Cu][pts]3[FSR]1
+2005[Cu][dia]3[ASR]1
+2005[Cu][dia]3[FSR]1
+2015[Ni][nan]2[ASR]1
+2015[Ni][nan]2[FSR]1
+0000[Cd][pcu]3[ASR]2
+2015[Co][nan]3[FSR]4
+2015[Co][nan]3[ASR]2
+0000[Co][nan]3[ASR]6
+2020[Co][nan]3[FSR]19
+2009[Cd][sqc]3[FSR]1
+2009[Cd][sqc]3[ASR]1
+2020[Co][nan]2[ASR]2
+2020[Co][nan]2[FSR]3
+2020[Co][nan]3[FSR]22
+0000[Co][nan]3[ASR]9
+0000[Co][nan]3[ASR]11
+2020[Co][nan]3[FSR]24
+2020[Co][nan]3[FSR]23
+0000[Co][nan]3[ASR]10
+2020[Co][nan]3[FSR]20
+0000[Co][nan]3[ASR]7
+2021[Zn][lvt]3[ASR]1
+2016[Ag][dia]3[FSR]2
+2016[Ag][dia]3[ASR]2
+2009[Cd][sqc]3[FSR]2
+2009[Cd][sqc]3[ASR]2
+0000[Co][nan]3[ASR]5
+2020[Co][nan]3[FSR]18
+0000[Co][nan]3[ASR]8
+2020[Co][nan]3[FSR]21
+2010[Ag][pts]3[FSR]1
+2010[Ag][pts]3[ASR]1
+2010[Fe][nbo]3[ASR]3
+2010[Fe][nbo]3[FSR]3
+2020[Ag][pts]3[ASR]1
+2020[Ag][pts]3[FSR]1
+2012[Co][dia]3[FSR]4
+2012[Co][dia]3[FSR]3
+2012[Co][dia]3[ASR]4
+2012[Co][dia]3[ASR]3
+2002[Cu][ths]3[FSR]1
+0000[Cu][ths]3[ASR]3
+2011[Co][dia]3[FSR]5
+2011[Co][dia]3[ASR]4
+2012[Ag][dia]3[ASR]1
+2012[Ag][dia]3[FSR]1
+2000[Cu][dia]3[ION]1
+2015[Zn][pcu]3[FSR]12
+0000[Zn][pcu]3[ASR]2
+2013[Ag][nan]3[ASR]2
+2019[Cu][pcu]3[FSR]1
+2019[Cu][pcu]3[ASR]1
+2016[Co][nan]2[FSR]1
+2016[Co][nan]2[ASR]1
+1997[Cu][dia]3[ASR]1
+1997[Cu][dia]3[FSR]1
+2015[Cu][pcu]2[ASR]1
+2015[Cu][pcu]2[FSR]1
+2015[Ag][ths]3[FSR]1
+2015[Ag][ths]3[ASR]1
+2008[Cu][pcu]3[ASR]2
+2008[Cu][pcu]3[FSR]1
+2008[Cu][pcu]3[ASR]1
+2008[Cu][pcu]3[FSR]2
+2018[Cu][sra]3[ASR]1
+2018[Cu][sra]3[FSR]1
+2018[Zn][pcu]3[FSR]7
+2018[Zn][pcu]3[ASR]7
+2016[Zn][nan]2[ASR]3
+2016[Zn][nan]2[FSR]3
+2013[Cu][pts]3[ION]1
+2018[Cu][gis]3[FSR]1
+2018[Cu][gis]3[ASR]1
+2014[Cu][pcu]3[FSR]2
+2014[Cu][pcu]3[ASR]2
+2007[Ag][uni]3[ASR]1
+2007[Ag][uni]3[FSR]1
+2012[Ag][sra]3[FSR]1
+2012[Ag][sra]3[ASR]1
+2005[Ag][pts]3[ASR]2
+2015[Ag][nan]3[ASR]1
+2015[Ag][nan]3[FSR]1
+2017[Ag][dia]3[FSR]1
+2017[Ag][dia]3[ASR]1
+2012[Fe][sql]2[ASR]1
+2012[Fe][sql]2[FSR]1
+2002[Ag][dia]3[ION]1
+1994[Ag][dia]3[FSR]1
+1994[Ag][dia]3[ASR]1
+2009[Zn][dia]3[ASR]1
+2012[Ag][pts]3[FSR]1
+2012[Ag][pts]3[ASR]1
+2010[Zn][srs]3[FSR]1
+2018[Cu][fes]2[ASR]1
+2018[Cu][fes]2[FSR]1
+2015[Cu][nan]3[ASR]8
+2015[Cu][nan]3[ASR]1
+2015[Cu][nan]3[FSR]1
+2015[Cu][nan]3[FSR]8
+2019[Cu][nan]2[FSR]2
+2019[Cu][nan]2[ASR]2
+2015[Cu][nan]3[ASR]9
+2019[Zn][nan]3[ASR]6
+2019[Zn][nan]3[FSR]5
+2010[Cd][tsa]3[ASR]1
+2017[Zn][nan]3[FSR]23
+2017[Zn][nan]3[ASR]31
+2015[Cu][nan]3[FSR]19
+2015[Cu][nan]3[ASR]25
+2015[Cu][nan]3[ASR]7
+2015[Cu][nan]3[FSR]7
+2015[Cu][nan]3[FSR]2
+0000[Cd][nan]3[ASR]13
+2005[Ag][dia]3[ASR]2
+2015[Ag][dia]3[ASR]1
+2015[Ag][dia]3[ASR]2
+```
