@@ -1,6 +1,8 @@
-# SCORING RUBRIC — v1.0 DRAFT, returned for ratification
+# SCORING RUBRIC — v1.0, RATIFIED AND SEALED
 
-**Status: DRAFT. NOT RATIFIED. NOT SEALED.**
+**Status: RATIFIED AND SEALED — PI ruling 2026-08-29,** *"Rubric: ratified as written. Marginalia
+reserved for the scoring phase, where it binds."* No marginalia were attached at seal; any that
+arrive bind at scoring, not here.
 Written under PI ruling 2026-08-29, which absorbed `Q5-PRE` and directed that the rubric be a
 **standalone sealed artifact** rather than a set of references to a document nobody had written.
 

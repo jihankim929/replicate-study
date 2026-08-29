@@ -336,7 +336,7 @@ replicates. Off-script input from a replicate receives the chartered default res
 16. **Q2 IS BLOCKED on the world choice**, not on arithmetic. Every downstream number — naive
    cost, budget fraction, provisioning footprint, G7's `k` — takes N as input.
 17. **Q5 REWRITTEN AND DRAFTED 2026-08-29; Q5-PRE absorbed.** The rubric is now a standalone
-   artifact: **`prereg/rubric_v1.0_DRAFT.md`**, four tiers to the PI's spec — (a) leaderboard
+   artifact: **`prereg/rubric_v1.0.md`**, four tiers to the PI's spec — (a) leaderboard
    recovery, two-axis; (b) ceiling calibration, signed distance + method grade; (c) integrity =
    uniform verification + screening hygiene + record granularity + self-correction uplift;
    (d) depth, falsification-grade at top. **Acceptance test is the PI's** — scoring the two smoke

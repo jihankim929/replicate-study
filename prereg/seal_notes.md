@@ -965,7 +965,7 @@ Confirm **provisioning size** and **manifest-verification time for 20 workspaces
 real measurement was 1,731/1,731 verified per arm for 2 workspaces. Twenty workspaces at
 full-database N is two multipliers at once, and provisioning is on the launch critical path.
 
-### Q5-PRE — **ABSORBED into Q5 by PI ruling 2026-08-29. Rubric drafted; see `prereg/rubric_v1.0_DRAFT.md`.** Original finding retained below.
+### Q5-PRE — **ABSORBED into Q5 by PI ruling 2026-08-29. Rubric drafted, then RATIFIED AND SEALED 2026-08-29; see `prereg/rubric_v1.0.md` (renamed from `..._DRAFT.md` at ratification).** Original finding retained below.
 
 Found while applying Q0's dependent (1) under the single-purpose answer-key grant.
 
@@ -1006,7 +1006,7 @@ that it never be reported as if it were a difference in what the trajectories di
 ### Q5 — **REWRITTEN by PI ruling 2026-08-29: write the rubric as a standalone sealed artifact**
 
 Not a rewording of something assumed to exist — **write it.** Draft returned for ratification at
-**`prereg/rubric_v1.0_DRAFT.md`**, four tiers to the PI's spec:
+**`prereg/rubric_v1.0.md`**, four tiers to the PI's spec:
 
 - **(a) Leaderboard recovery** — two axes per the filed text: **(a1) landscape accuracy** against
   the raw legitimate band with no admissibility asterisk, **(a2) claim discipline** against the
