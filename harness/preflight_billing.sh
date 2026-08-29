@@ -79,25 +79,40 @@ else
   echo "PASS"
 fi
 
-# --- leg 1c: is the configured headroom larger than the campaign can possibly spend? ------
-# This one cannot be automated end-to-end: Claude Code exposes no machine-readable spend
-# limit. Stating that plainly is the point -- a gate that silently skips its hardest check is
-# worse than one that says it needs a human.
-echo "  [3/3] configured spend limit exceeds the campaign's maximum possible burn"
-if [ -n "$BUDGET" ] && [ -n "$REPS" ]; then
-  TOTAL=$(( BUDGET * REPS ))
-  printf '        fleet ceiling: %s replicates x %s tokens = %s tokens billable\n' \
-    "$REPS" "$(printf "%'d" "$BUDGET" 2>/dev/null || echo "$BUDGET")" \
-    "$(printf "%'d" "$TOTAL" 2>/dev/null || echo "$TOTAL")"
-else
-  echo "        (pass --budget and --replicates to print the fleet ceiling)"
-fi
-cat <<'NOTE'
-        MANUAL CONFIRMATION REQUIRED -- Claude Code exposes no machine-readable spend limit,
-        so this leg cannot be asserted from here. Before launch, confirm in the account's
-        billing settings that either no monthly spend limit is set, or the limit exceeds the
-        figure above with margin. Record the confirmation in prereg/seal_notes.md S5.
-NOTE
+# --- leg 1c: spend headroom >= projected worst-case fleet remainder (S5, PI 2026-08-29) ---
+# The spend limit is $3,000 with auto-reload on. This leg is now an ASSERTION, not a note.
+#
+# It exists because the charter's token cap does NOT bound spend. The ratified metering basis is
+# input + output + cache_creation, with cache READS excluded -- and cache reads were 59.2% of the
+# smoke's actual bill. A replicate can therefore sit far inside its 45 M cap while billing several
+# times what the cap implies. Measured on the collected smoke at list price ($5/$25 per MTok,
+# cache-create 1.25x input, cache-read 0.10x input): $20.54/M billable for one arm, $32.54/M for
+# the other -- driven by cache-read ratios of 24.8x and 36.3x against billable.
+echo "  [3/3] spend headroom >= projected worst-case fleet remainder"
+python3 - "$BUDGET" "$REPS" <<'PYEOF'
+import sys, json, os
+budget, reps = int(sys.argv[1]), int(sys.argv[2])
+LIMIT = float(os.environ.get("SPEND_LIMIT_USD", "3000"))
+SPENT = float(os.environ.get("SPEND_TO_DATE_USD", "0"))
+# $ per MILLION BILLABLE tokens, measured on the collected smoke. Low = the arm with the
+# smaller cache-read ratio; high = the larger. Both are list-price, both are measured.
+LO, HI = 20.54, 32.54
+worst_lo = LO * (budget/1e6) * reps
+worst_hi = HI * (budget/1e6) * reps
+head = LIMIT - SPENT
+print(f"        limit ${LIMIT:,.0f}  spent ${SPENT:,.0f}  headroom ${head:,.0f}")
+print(f"        worst-case fleet remainder at N={reps}, each at {budget/1e6:.0f} M billable:")
+print(f"          ${worst_lo:,.0f} (low-cache arm) .. ${worst_hi:,.0f} (high-cache arm)")
+if head >= worst_hi:
+    print("        PASS -- headroom covers the worst case"); sys.exit(0)
+if head >= worst_lo:
+    print("        FAIL -- headroom covers the low estimate but NOT the high one"); sys.exit(1)
+print(f"        FAIL -- headroom is {worst_hi/head:.1f}x short of the worst case")
+print(f"        the limit is reached at {100*head/worst_hi:.1f}%-{100*head/worst_lo:.1f}% of the ratified token budget")
+print(f"        i.e. after roughly {head/(HI*budget/1e6):.1f}-{head/(LO*budget/1e6):.1f} replicates spend their full budget")
+sys.exit(1)
+PYEOF
+[ $? -ne 0 ] && FAIL=1
 
 echo
 if [ "$FAIL" -eq 0 ]; then

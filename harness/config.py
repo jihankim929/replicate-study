@@ -35,8 +35,15 @@ RATIFIED = {
     "density_bounds_g_cm3": (0.20, 4.50),    # charter Appendix A, G3
     "phases": {
         "smoke": {"days": 3,  "replicates": 2,  "ids": ["s01", "s02"]},
-        "main":  {"days": 10, "replicates": 20,
-                  "ids": [f"rep{i:02d}" for i in range(1, 21)]},
+        # PI ruling, pre-launch: N = 20 -> 16 (8v8). Reason logged: PI budget ceiling.
+        # DERIVED, not re-drawn: the first 8 per arm in the sealed order of
+        # prereg/arm_assignment.txt (which is ascending id). The seal is untouched, and
+        # prereg/n16_derivation.md shows the derivation. Deferred: rep14, rep20 (gated);
+        # rep18, rep19 (ungated) -- 4, not 8; see that file on the second wave.
+        "main":  {"days": 10, "replicates": 16,
+                  "ids": ["rep01", "rep02", "rep03", "rep04", "rep05", "rep06", "rep07",
+                          "rep08", "rep09", "rep10", "rep11", "rep12", "rep13", "rep15",
+                          "rep16", "rep17"]},
     },
     "deadline_time_kst": "09:00",
     # ratified 2026-08-26

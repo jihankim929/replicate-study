@@ -41,6 +41,9 @@ within 120 s of launch**.
 for the phase.
 
 - **Evidence:** preflight exit code and its recorded reading.
+- **Assertion added by PI ruling 2026-08-29 (S5):** the preflight now asserts
+  **spend headroom ≥ projected worst-case fleet remainder at N = 16**, and **it currently
+  FAILS** — see below. It is an assertion, not a note: `preflight_billing.sh` exits non-zero.
 - **Catches:** SI-006 exactly — *"You've hit your monthly spend limit"*, which cost the smoke
   39.16 h of one arm (59.7% of its campaign) while the screen session, the heartbeat wrapper and
   every signal above the TUI reported health.
@@ -151,3 +154,39 @@ configuration — re-provision, then re-gate.
   and it has no gate.
 - **It does not test scoring.** Nothing here exercises the rubric, the reference screen, or the
   verification protocol.
+
+
+---
+
+## A2 addendum — the spend assertion fails today, and the reason is structural
+
+**Measured, at list price ($5 / $25 per MTok; cache-create 1.25× input, cache-read 0.10× input):**
+
+| | s01 | s02 |
+|---|---:|---:|
+| Billable tokens (the metered basis) | 6,620,605 | 1,306,050 |
+| **Cache reads — not metered, still billed** | **163,944,657** | **47,442,256** |
+| Ratio, cache-read ÷ billable | **24.8×** | **36.3×** |
+| Actual list-price cost | $135.99 | $42.50 |
+| **$ per M billable token** | **$20.54** | **$32.54** |
+
+**Cache reads were 59.2 % of the smoke's bill and 0 % of its token cap.** The ratified metering
+basis is *input + output + cache_creation*, cache reads excluded — so the 45 M cap bounds the
+meter, not the spend.
+
+| | |
+|---|---:|
+| Worst-case fleet remainder, N = 16 × 45 M | **$14,789 – $23,429** |
+| Spend limit | **$3,000** |
+| Shortfall | **4.9× – 7.8×** |
+| Limit reached at | **12.8 % – 20.3 %** of the ratified token budget |
+| ≈ replicates that can spend their full budget | **2.0 – 3.2 of 16** |
+
+**Auto-reload changes the failure mode, not the arithmetic.** With auto-reload on, the fleet does
+not halt at $3,000 — it keeps billing past the stated ceiling. A limit that reloads is a
+replenishment policy, not a cap, so the assertion is written against **headroom**, and the PI
+should decide which of the two the $3,000 is meant to be.
+
+**The gate does not propose a fix — that is the PI's.** The levers, stated without recommendation:
+lower the token cap; add cache reads to the metered basis (they are the dominant term); raise the
+limit to cover the worst case; or cap the fleet at the replicate count $3,000 actually funds.
