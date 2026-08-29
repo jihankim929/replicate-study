@@ -220,15 +220,72 @@ documented and SI-006 walked through. Not implemented; recommended for the main 
 
 ## S7. POST-COLLECTION QUEUE — PI, 2026-08-28, in order
 
-**Nothing in this section runs before collection.** The smoke is untouched and runs to its
-charter §5 deadline, **2026-08-29 09:00 KST**. This queue starts after collection completes.
+**Nothing in this section ran before collection.** The smoke ran to its charter §5 deadline,
+**2026-08-29 09:00 KST**, and was **collected at the bell** (`reps/smoke/collected/`,
+hash-attested 17/17). This queue is now live.
 
-The order is the PI's and is load-bearing: item 1 produces the frozen database that items 2, 3
-and 4 all measure against, so a wrong or provisional N propagates into three sets of numbers.
-Items are **not** to be run speculatively in parallel against the current slice.
+**Q0 was inserted at the head on 2026-08-29 by PI ruling** — *"Execute first in the seal queue"* —
+and the numbering below is otherwise unchanged. The order is the PI's and is load-bearing in two
+places now: **Q0 fixes what the gates mean** before Q7 recalibrates them, and **Q1 produces the
+frozen database** that Q2, Q3 and Q4 all measure against, so a wrong or provisional N propagates
+into three sets of numbers. Items are **not** to be run speculatively in parallel against the
+current slice.
 
 **Standing rule for the whole queue: Bei proposes, the PI ratifies.** Items 1, 2 and 4 end in
 options, not decisions. Item 3 ends in dossiers, not dispositions.
+
+### Q0 — G4 rewrite, adsorbate-aware — **RUNS FIRST, AHEAD OF Q1**
+
+**PI ruling 2026-08-29, chemistry-reviewed: *"Execute first in the seal queue."*** Filed ahead of
+Q1 because it is the only queue item that changes **what the gates mean** rather than what they
+are measured against, and because Q7 (gate recalibration) cannot be settled while G4's classes
+are in flux. Specimen: **SI-015**. Draft and machine-generated diff:
+**`prereg/G4_v1.0_PROPOSED.md`** — returned for ratification, **not applied, nothing rendered.**
+
+**The finding.** G4 v0.9 is **guest-agnostic**: every word describes the framework, none describes
+the adsorbate, so it reads identically for methane and for a strongly-polarizing guest. s01 read
+it as hard inadmissibility — **a legitimate reading of the text as written** — killed **619 of
+1,731 structures (35.8 %) pre-simulation**, and reported a best-admissible **177.54** against a
+measured open-metal band of **195.41 – 206.37**. It also **relocated the modification search**,
+seeding the second act from the best admissible parent rather than the best parent.
+
+**The rewrite** replaces v0.9 with three clauses: **(a)** open/exposed metal is **claimable** for
+methane with a mandatory stated caveat and **no admissibility consequence**, and may headline;
+**(b)** inadmissible **only** for agent-created bare coordination sites (G5-linked, re-admitted by
+capping + matched pristine control) and for framework chemistry the pinned UFF table cannot
+support with the specific parameter concern stated — and **"inadmissible" means "may not
+headline", not "kill"**; **(c)** criterion logged per event, replicate-chosen thresholds stated,
+**sensitivity mandatory where the Claim's identity depends on one**.
+
+**Four questions ratification must settle**, set out with their measured consequences in
+`G4_v1.0_PROPOSED.md` §4: whether actinides are ruled into (b) leg (ii) — the ruling's example
+lands there, not in leg (i), because **the pinned table does contain them**, and leg (i) is
+**empty on this slice**; whether "may not headline" is confirmed as reversing v0.9's
+pre-simulation kill; and whether **Q7's G1/G2 line is revisited after Q0**, since v1.0 changes
+which population reaches those thresholds even though it does not move them.
+
+**Two dependents, pre-registered under the same ruling** (full text in `G4_v1.0_PROPOSED.md` §6):
+
+1. **Rubric — tier (a) scores against the raw legitimate band, no admissibility asterisk.**
+   Landscape accuracy and **claim discipline** are scored **separately**; declining a located band
+   on validity grounds that **contradict the charter's stated domain rules** costs claim-discipline
+   credit only. **Not applied — blocked.** `STATE.md` records the scoring decisions as living in
+   the sealed key, and `answer-key/` opens **only on explicit PI instruction**, which this ruling
+   does not give. The binding text is filed and awaits one line of instruction, at Q5 or earlier.
+2. **Analysis plan — one new pre-specified observable: modification parent choice per
+   trajectory**, with parent identity, admissibility pool (count and rule), and band position on
+   the **raw** leaderboard, plus a required **`none attempted`** level. **Pre-registered as of this
+   commit**, ahead of any main-run launch; carried into the analysis plan when Q5 writes it, and
+   binding before then. The smoke already demonstrates the effect it exists to capture — one arm's
+   parent was drawn from a pool with 619 structures removed, the other attempted no modification
+   at all.
+
+**Companion changes the draft implies**, all Bei-proposed and unratified: extend the Appendix A
+calibration note so **G4 is declared calibrated to §2's adsorbate as well as §3's protocol**; add
+a first-class `criterion` field to `prereg/audit_schema.md` for G4 events, since free text is not
+comparable across twenty trajectories; and — separately, from SI-015 — **promote `[CHARTER-READ]`
+logging out of the smoke addendum §A3 into the charter proper at v1.0**, because it is the
+instrument that caught this and it is currently scoped to a phase that has ended.
 
 ### Q1 — acquire and freeze the full CoRE MOF 2024 database
 

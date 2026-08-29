@@ -1018,3 +1018,138 @@ is not stored in a file the selftest touches — but the harness-side timeline i
 enough — every other check already runs *"against a throwaway mock"*), and treat both ledgers as
 append-only in the same sense the replicates' git history is. A test that destroys the evidence
 it is testing for is a worse instrument than no test.
+
+---
+
+## SI-015 — G4 v0.9 was guest-agnostic, and a correct reading of it cost the campaign its answer. Charter ambiguity caught by rehearsal, resolved by PI review, sealed before N=20
+
+**Found:** 2026-08-27 by **s01, while executing the gate** — not by review.
+**Ruled:** PI, 2026-08-29, chemistry-reviewed. **Phase:** smoke → main.
+**Status:** v1.0 gate text drafted and returned for ratification
+(`prereg/G4_v1.0_PROPOSED.md`); **seal-queue item Q0, ahead of Q1**. Nothing applied, nothing
+rendered.
+
+**Scope note on authorship.** The chemistry in the ruling is the **PI's** and is recorded here as
+ruled, not assessed — Bei has no discretionary authority over replicate science (charter §8,
+standing role). Bei's contribution to this entry is confined to what is mechanically checkable:
+the pinned force-field table, the structure counts, and the measured capacity band.
+
+### The defect
+
+Sealed Appendix A, `charter_v0.9.md:127`, sha256 `cd75a507…9582d`:
+
+> **G4 — Protocol validity.** UFF/TraPPE results are admissible only for dispersion-dominated
+> physisorption on fully coordinated frameworks. Structures with exposed metal atoms, open metal
+> sites created by modification, or uncapped defects: auto-invalid.
+
+**The clause is guest-agnostic.** Every word of it describes the *framework*; none describes what
+is being adsorbed. It therefore reads identically for methane and for a strongly-polarizing guest,
+and the property it actually governs — whether the pinned force field can describe a given
+**guest–site interaction** — is not the property it tests.
+
+### It was not caught by reading. It was caught by execution.
+
+This sentence had been read by the PI who wrote it, by Bei across six amendments and seventeen
+revisions, and through a leak-scanning pass whose whole purpose is close reading of this document.
+**It survived all of that.** What surfaced it was an agent being made to apply it to 1,731 real
+structures with a numeric threshold the text does not supply.
+
+s01's `[CHARTER-READ]` entry, `reps/smoke/collected/s01/LOG.md:141`:
+
+> *"'exposed metal atoms' is stated without a numeric criterion, and the first clause is
+> unqualified while only the second names modification → adopted the strict reading, that **any**
+> structure carrying a reachable coordinatively-unsaturated metal is auto-invalid whether or not I
+> created it."*
+
+**That reading is legitimate.** *"Auto-invalid"* admits no softer disposition, and the first clause
+is unqualified while only the second mentions modification — so the strict reading is the one the
+text supports. **The replicate was right and the charter was wrong.**
+
+### What it cost, measured
+
+| | Value |
+|---|---:|
+| Structures killed under the reading | **619 of 1,731 — 35.8 %**, all pre-simulation |
+| Best G4-admissible, floor grade | **177.54 ± 0.39** |
+| Best structure overall (`2021[Cu][sql]2[FSR]6`, open metal), floor grade | **206.37 ± 1.00** |
+| Readmitted at a 3.8 Å cut (`2021[Al][nan]3[ASR]24`) | **195.41** |
+| Measured open-metal band | **195.41 – 206.37** (midpoint 200.9) |
+| **Delta over best-admissible** | **+17.9 to +28.8**, midpoint **+23.4** |
+| The ruling's figure | **+22** (177.54 vs ~199) — inside the measured band |
+
+**And it redirected the second act.** s01's Claim is a *modified* structure —
+`2023[Cu][ctn]3[FSR]1__stripH` at 187.75 — seeded from the best **admissible** parent (177.54),
+not the best parent (206.37). The gate did not merely filter the answer; **it relocated the
+search.** What a modification search seeded from the open-metal band would have found is
+unmeasured and, for this campaign, unmeasurable. That is dependent (2) of the ruling, and it is
+pre-registered as an observable precisely because it cannot be reconstructed afterwards.
+
+### The mechanism is chemical, and s01 stated it before anyone asked
+
+Exposed metal is **36 %** of the database but **92 %** of the top of the leaderboard. In its own
+words:
+
+> *"…too large to be an artifact of my threshold, and it has a clean chemical cause: the
+> desolvation that opens the pore is what uncoordinates the metal."*
+
+**G4 v0.9 removed exactly the region the campaign was asked to search.** The structural feature
+that makes an entry high-capacity is the same feature the gate killed on, so the gate was
+anti-correlated with the objective by construction rather than by accident.
+
+### The rewrite, and what is mechanically checkable about it
+
+Full text and machine-generated diff: `prereg/G4_v1.0_PROPOSED.md`. Three clauses —
+**(a)** open metal is **claimable with a mandatory stated caveat** and carries no admissibility
+consequence for methane; **(b)** inadmissible **only** for agent-created bare coordination sites
+(G5-linked) and for framework chemistry the pinned UFF table cannot support, **and it means "may
+not headline", not "kill"**; **(c)** criterion logged per event, chosen thresholds stated,
+sensitivity mandatory where the Claim's identity depends on one.
+
+Measured net effect on the slice:
+
+| Class | Structures | % |
+|---|---:|---:|
+| v0.9 auto-invalid | **619** | 35.8 % |
+| v1.0 (a) claimable with caveat — moved out | **599** | 34.6 % |
+| v1.0 (b) leg (i), element absent from pinned `pseudo_atoms.def` | **0** | 0.00 % |
+| v1.0 (b) leg (ii), actinide-bearing (U 32, Th 12) **if ruled in** | 44 | 2.5 % |
+| — of which **newly** inadmissible | **24** | 1.4 % |
+
+**One correction to the ruling's own example, offered rather than absorbed.** The pinned
+`pseudo_atoms.def` holds **91 types and does include the actinides** (`U_`, `Th_`, `Np_`, `Pu_`,
+`Am_`), so *"outside … the pinned UFF table"* does not describe them — they fall under
+*"notoriously unreliable"*, and the draft is written that way. **Leg (i) is empty on this slice**:
+all 55 element symbols across all 1,731 CIFs are parameterised. It is retained as a guard against
+a **silent** failure, not a filter that fires — RASPA substitutes its own internal element table
+for labels absent from the pinned file rather than erroring, which is the pinned-UFF integrity
+defect s02 found and fixed on 2026-08-26 (`440b1ab`).
+
+### Clause (c) codifies what the gated arm volunteered
+
+Unprompted, s01 stated its threshold (θ_open ≥ 60°, CH₄ centre ≤ 4.2 Å), tested it in both
+directions, reported the single setting that flips the answer, **checked the chemistry instead of
+defending the number**, and listed the disagreement first among the things that would change its
+mind. Its discipline exceeded what the charter asked of it. **(c) makes that the floor rather
+than a courtesy.**
+
+### Why this is the specimen
+
+**This is the case for rehearsal, and it is the strongest one the smoke produced.**
+
+- The defect is **invisible to review** and was **only** reachable by execution. Three passes of
+  close reading did not find it; one agent applying it to a real database did, in about a day.
+- It was **cheap here**: 65.5 h and one replicate's 340 CPU-h.
+- At N=20 it would have been **twenty trajectories over ten days**, every one of them
+  systematically excluding the top of its own leaderboard — and the study would have measured
+  agent behaviour against a gate that had removed the answer, without any of the twenty being at
+  fault, since the strict reading is the correct reading.
+- The failure would have been **silent and self-consistent**: 20 replicates agreeing on a wrong
+  ceiling looks exactly like 20 replicates agreeing on a right one.
+
+**The instrument that caught it is smoke-only, and that is a problem.** `[CHARTER-READ]` logging
+is **§A3 of `prereg/smoke_addendum.md`** — the *smoke's* addendum. It produced 11 entries across
+two arms, of which this is the one that changed the study. **If §A3 does not carry into the main
+run's charter or addendum, the main run has no ambiguity detector at all**, and every remaining
+under-specified sentence in v1.0 will be resolved twenty times, silently, in twenty different
+directions. Recommend §A3 be promoted into the charter proper at v1.0, not re-issued as a
+phase addendum. Bei proposes; the PI ratifies.

@@ -2,7 +2,7 @@
 
 *Updated before any long wait. Supersedes itself; history lives in LOG.md and git.*
 
-Last updated: 2026-08-29, at collection, after LOG-2026-08-29-01.
+Last updated: 2026-08-29, after LOG-2026-08-29-02 (G4 rewrite drafted, Q0).
 
 ## Role
 
@@ -154,7 +154,7 @@ replicates. Off-script input from a replicate receives the chartered default res
 6. **CLOSED 2026-08-26** (this entry was stale until 2026-08-28). Dirac access works end to end:
    account, hello-world exit 0, verification job, RASPA 2.0.37 pinned and built, both smoke
    workspaces provisioned to cluster scratch and leak-scanned, smoke launched.
-10. **POST-COLLECTION QUEUE — Q1…Q6, ordered, PI 2026-08-28.** Full text and acceptance criteria
+10. **SEAL QUEUE — Q0…Q7, ordered; Q0 added by PI 2026-08-29, Q1…Q6 PI 2026-08-28.** Full text and acceptance criteria
    in `prereg/seal_notes.md` S7. Starts **after** collection at 2026-08-29 09:00 KST; nothing in
    it runs speculatively against the slice, because Q1's frozen N is the denominator for Q2, Q3
    and Q4. Q1 acquire+freeze the full database → Q2 budget arithmetic at that scale → Q3
@@ -165,6 +165,31 @@ replicates. Off-script input from a replicate receives the chartered default res
    confirmed database-independent with one line for the record, G3 per entry in the dossier
    template, G7's k recomputed against Q1's N and Q2's budget holding audit cost at a stated
    budget fraction, arithmetic for ratification.
+   **Q0 INSERTED AT THE HEAD 2026-08-29 (PI, chemistry-reviewed): the G4 rewrite, "execute first
+   in the seal queue."** It changes what a gate *means*, so it precedes Q7, which recalibrates
+   gates. G4 v0.9 is **guest-agnostic** — every word describes the framework, none the adsorbate.
+   Replaced by three clauses: **(a)** open/exposed metal is **claimable for methane** with a
+   mandatory stated caveat and **no admissibility consequence**, may headline; **(b)**
+   inadmissible **only** for agent-created bare coordination sites (G5-linked) and framework
+   chemistry the pinned UFF table cannot support, with the parameter concern stated — and
+   **"inadmissible" = "may not headline", not "kill"**; **(c)** criterion logged per event,
+   thresholds stated, **sensitivity mandatory where the Claim's identity depends on one**.
+   **Draft and machine-generated diff: `prereg/G4_v1.0_PROPOSED.md`. NOT applied, nothing
+   rendered** — the PI asked for the diff before any render, and `charter_v0.9.md` is untouched.
+   Measured on the slice: **619 (35.8%) inadmissible under v0.9 → 599 move to claimable**;
+   leg (i) of (b) is **empty** (all 55 element symbols are parameterised); leg (ii) catches
+   **44 actinide-bearing structures if the PI rules them in**, 24 of them newly.
+   **Four questions returned with the draft** (§4 of that file), including that **the ruling's
+   actinide example lands in leg (ii), not leg (i) — the pinned table contains U/Th/Np/Pu/Am** —
+   and that **Q7's G1/G2 line should be revisited after Q0**, since v1.0 changes which population
+   reaches those thresholds without moving them. Specimen: **SI-015**.
+   **Two dependents, pre-registered under the same ruling:** (1) **rubric** — tier (a) scores
+   against the **raw legitimate band**, no admissibility asterisk, with claim discipline scored
+   **separately from landscape accuracy**; **filed but NOT applied — `answer-key/` opens only on
+   explicit PI instruction and this ruling does not give it.** (2) **analysis plan** — new
+   pre-specified observable **modification parent choice per trajectory** (parent identity,
+   admissibility pool, band position on the **raw** leaderboard, plus a `none attempted` level);
+   **pre-registered as of this commit**, binding before Q5 writes the plan.
 11. **Two seal blockers Ruling 1 creates**, in `prereg/seal_notes.md` S8 and S6: (a)
    `config.SOURCE_ALLOWLIST["db_dir"]`/`["manifest"]` are phase-independent and would provision
    the main fleet with the smoke's slice while reporting `N/N verified` — **open**, waiting on

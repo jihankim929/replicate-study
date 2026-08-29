@@ -1524,3 +1524,123 @@ the main run, and it has. **Three of the four things it changed are harness defe
 real campaign could surface** — an unscheduled watchdog, an unread channel, and a test that eats
 its own evidence — and all three scale badly to N=20. None of them is visible in a dry run,
 because a dry run has a human watching it.
+
+---
+
+## LOG-2026-08-29-02 — G4 rewrite drafted and returned as a diff: the sealed gate was guest-agnostic, a correct reading of it deleted 35.8% of the database, and the ruling's own actinide example lands in the other leg
+
+**PI ruling 2026-08-29, chemistry-reviewed. Filed as seal-queue Q0, ahead of Q1** — it changes
+what a gate *means*, and Q7 recalibrates gates, so it cannot come after. **Nothing applied,
+nothing rendered:** `charter_v0.9.md` is untouched, the diff is what was asked for and the diff is
+what is returned. Draft: `prereg/G4_v1.0_PROPOSED.md`. Specimen: **SI-015**.
+
+### The diff is machine-generated, not retyped
+
+The sealed line was extracted byte-exact from `charter_v0.9.md:127` and hashed
+(`cd75a507…9582d`) before drafting, and `diff -u` produced the block in §1 of the proposal. A gate
+rewrite transcribed by hand is a gate rewrite with an unverified left-hand side.
+
+### What the sealed clause actually says
+
+> *UFF/TraPPE results are admissible only for dispersion-dominated physisorption on fully
+> coordinated frameworks. Structures with exposed metal atoms … auto-invalid.*
+
+**Every word describes the framework; none describes the adsorbate.** The property it governs —
+whether the pinned force field can describe a **guest–site interaction** — is not the property it
+tests, so it reads identically for methane and for a strongly-polarizing guest. v1.0 makes the
+guest the subject of the sentence and states the classes per adsorbate.
+
+### The reading was correct and it cost the answer
+
+s01 adopted the strict reading (`LOG.md:141`) because *"auto-invalid"* admits no other and the
+first clause is unqualified while only the second names modification. **619 of 1,731 structures —
+35.8 % — killed pre-simulation.** Best admissible **177.54**; best structure overall **206.37**;
+readmitted at a 3.8 Å cut **195.41**. The measured band is **195.41–206.37**, midpoint 200.9,
+**+23.4 over best-admissible**; the ruling's **+22** sits inside it, and the band rather than a
+point is what the two measured values support.
+
+**The gate was anti-correlated with the objective by construction.** Exposed metal is 36 % of the
+database and 92 % of the top of the leaderboard, and s01 gave the chemical cause itself: *"the
+desolvation that opens the pore is what uncoordinates the metal."* The feature that makes a
+structure high-capacity is the feature the gate killed on.
+
+**It also relocated the search.** The Claim is a *modified* structure seeded from the best
+**admissible** parent (177.54), not the best parent (206.37). That is dependent (2)'s whole
+subject, and it is why the observable is pre-specified rather than reconstructed later.
+
+### Four things returned with the draft rather than absorbed into it
+
+1. **The ruling's actinide example lands in the wrong leg.** The pinned `pseudo_atoms.def` holds
+   **91 types and does contain the actinides** — `U_`, `Th_`, `Np_`, `Pu_`, `Am_`. So *"outside …
+   the pinned UFF table"* does not describe them; they are *"present but notoriously unreliable"*.
+   The draft is written that way. **Leg (i) is empty on this slice** — all 55 element symbols
+   across all 1,731 CIFs are parameterised — so it is a guard, not a filter. It is worth keeping
+   anyway, because that failure is **silent**: RASPA substitutes its internal element table for
+   absent labels rather than erroring, which is exactly the pinned-UFF defect s02 found on
+   2026-08-26 (`440b1ab`).
+2. **Whether actinides are ruled in at all is a chemistry judgment Bei cannot make.** Clause
+   (c)(ii) requires the *specific parameter concern stated*. If ruled in: **44 structures (2.5 %),
+   24 of them newly inadmissible.** If not: **class (b) catches nothing on this slice.**
+3. **"May not headline" reverses v0.9's pre-simulation kill**, which is a larger change than the
+   phrase looks. The draft implements the ruling's words — simulable, reportable as landscape,
+   value not withdrawn — and flags it, because dependent (1) cannot score landscape accuracy on
+   structures a gate deleted before they were measured.
+4. **Q7's G1/G2 line should be revisited after Q0.** Q7 confirmed both *database-independent*, and
+   that remains true of the **thresholds** — but it was ruled while v0.9 was in force, and v1.0
+   changes **which population reaches them**. G2's audit load rises with no threshold change, and
+   **G1's presumption that > 230 cm³/cm³ is an artifact was formed on a population with open
+   metals excluded.**
+
+### Net effect, measured on the slice
+
+| | Structures | % |
+|---|---:|---:|
+| v0.9 auto-invalid | **619** | 35.8 % |
+| v1.0 (a) claimable with caveat — moved out | **599** | 34.6 % |
+| v1.0 (b) leg (i) — element absent from the pinned table | **0** | 0.00 % |
+| v1.0 (b) leg (ii) — actinide-bearing, if ruled in | 44 | 2.5 % |
+
+### The two dependents
+
+**(1) Rubric — filed, deliberately NOT applied.** Tier (a) scores against the raw legitimate band,
+no admissibility asterisk; claim discipline scored separately from landscape accuracy. The
+asymmetry matters: **under v0.9, s01 was right to decline the band**, so the penalty attaches only
+to declining on grounds that *contradict* the domain rules in force. `STATE.md` records the
+scoring decisions as living in the sealed key, and `answer-key/` opens **only on explicit PI
+instruction**, which this ruling does not give. **One line of instruction lands it.**
+
+**(2) Analysis plan — pre-registered as of this commit.** Modification parent choice per
+trajectory: parent identity, admissibility pool (count and rule), band position on the **raw**
+leaderboard, and a required **`none attempted`** level — needed because s02 declined the second
+act entirely (*"permitted but not required → I did not attempt modification"*). Both smoke arms
+already populate it, one with a parent drawn from a pool 619 structures short and one with a null.
+
+### Three companion changes proposed, none applied
+
+Extend the Appendix A calibration note so **G4 is declared calibrated to §2's adsorbate as well as
+§3's protocol** — the same failure mode Rev 10 wrote that note against, recurring one axis over.
+Add a first-class `criterion` field to `audit_schema.md` for G4 events: s01 put its criterion in
+free-text `note`, which is good practice and unparseable across twenty trajectories.
+
+And the one that is not about G4: **`[CHARTER-READ]` is §A3 of the *smoke* addendum.** It produced
+11 entries and this is the one that changed the study. If it does not carry into the main run's
+charter, **the main run has no ambiguity detector**, and every remaining under-specified sentence
+in v1.0 gets resolved twenty times, silently, in twenty directions. Recommend promoting it into
+the charter proper at v1.0.
+
+### Why this is the specimen
+
+The defect survived the PI who wrote it, six amendments, seventeen revisions and a leak-scanning
+pass whose entire purpose is close reading of this document. **It was not reachable by review.**
+One agent applying it to a real database with a threshold the text does not supply found it in
+about a day, for 65.5 h and one replicate's 340 CPU-h.
+
+At N=20 it would have cost twenty trajectories over ten days, every one of them excluding the top
+of its own leaderboard, **with none of the twenty at fault** — the strict reading is the correct
+reading. And it would have been invisible: twenty replicates agreeing on a wrong ceiling looks
+exactly like twenty agreeing on a right one.
+
+**Leak check before filing:** the drafted gate text carries **no structure id** and **zero hits**
+against `LEAK_DENY_HARD` (9 terms) and `LEAK_DENY_WARN` (6). The proposal document names structure
+ids in its *rationale*; the gate text that would render into a workspace does not, and that was
+checked rather than assumed.
