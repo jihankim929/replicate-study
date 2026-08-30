@@ -10,3 +10,8 @@
 Execution error
 2026-08-29T22:34:49Z stop file present, loop ending
 2026-08-29T22:34:49Z headless session loop for rep05 finished after 4 iteration(s)
+2026-08-30T02:43:22Z iteration 1 starting (headless)
+2026-08-30T02:59:41Z iteration 1 exited rc=0 after 979s (transcript 0 -> 625776)
+2026-08-30T02:59:52Z iteration 2 starting (headless)
+2026-08-30T03:02:54Z iteration 2 exited rc=0 after 182s (transcript 625776 -> 722128)
+2026-08-30T03:03:04Z iteration 3 starting (headless)

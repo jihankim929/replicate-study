@@ -12,3 +12,8 @@
 Execution error
 2026-08-29T22:34:48Z stop file present, loop ending
 2026-08-29T22:34:48Z headless session loop for rep02 finished after 5 iteration(s)
+2026-08-30T02:43:05Z iteration 1 starting (headless)
+2026-08-30T02:57:48Z iteration 1 exited rc=0 after 883s (transcript 0 -> 602091)
+2026-08-30T02:57:58Z iteration 2 starting (headless)
+2026-08-30T02:59:06Z iteration 2 exited rc=0 after 68s (transcript 602091 -> 647069)
+2026-08-30T02:59:16Z iteration 3 starting (headless)

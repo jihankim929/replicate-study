@@ -54,3 +54,4 @@
 2026-08-29T12:36:17Z iteration 27 exited rc=0 after 17s (transcript 2082959 -> 2093101)
 2026-08-29T12:36:17Z 5 consecutive sub-minute turns, stopping to avoid a hot loop
 2026-08-29T12:36:17Z headless session loop for rep06 finished after 27 iteration(s)
+2026-08-30T02:43:28Z iteration 1 starting (headless)

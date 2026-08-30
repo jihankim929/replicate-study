@@ -1,16 +1,20 @@
-# FLEET PAUSED — HELD FOR THE PI's GO ON bronze4
+# FLEET RUNNING ON bronze4 — RESUMED 2026-08-30 11:42:33 KST
 
-*Paused 2026-08-30 07:14:19 KST. All sixteen replicates confirmed down 2026-08-29T22:35:50Z.
-Resume with one command: `./harness/resume_fleet.sh`.*
+*Sixteen main replicates are up. The pause of 2026-08-30 07:14:19 KST lasted a measured
+**4.4704 h**, which every replicate gained on its deadline; rep06 gained that **plus its
+ratified 9.62 h** of harness-fault restoration. `harness/state/PAUSE.json` is retired to
+`harness/state/PAUSE.resumed.20260830T024428Z.json` and the restart watcher is re-armed.*
 
 *Reoriented 2026-08-30: this banner read "RESUME FROM bronze4 — THIS LAPTOP IS NO LONGER A HOST
 … do not resume here", which was written on the laptop. **This repository now lives on
 bronze4**, so for every reader from here on "here" is the new host and the instruction inverted.
 The macOS laptop is retired and holds no live state.*
 
-**Held.** The resume is ratified in its parts but **not authorised**: it runs on the PI's
-explicit go, after `ssh dirac-bei true` passes and `./harness/resume_fleet.sh --dry-run` has
-been reported. See `reports/REPORTS.md`.
+**Resumed on the PI's go**, after `ssh dirac-bei true` passed, the dry-run was reported and the
+poll cadence was ruled. Verified at resume: PASS 1 matched all sixteen live deadlines to the
+microsecond, sixteen `screen` sessions up, sixteen live deadlines re-read afterwards and equal
+to the extended values, meter **$746.06 / $4,480 (16.65 %)**, all `OK`, none at warn. See
+`reports/REPORTS.md` (REPORT 005).
 
 ---
 
@@ -33,13 +37,16 @@ replicates. Off-script input from a replicate receives the chartered default res
 
 ## Study state
 
-### PAUSE — the fleet is stopped, deliberately, and this host is retired
+### PAUSE — CLOSED 2026-08-30. The fleet was stopped deliberately and is running again.
 
-**Status: PAUSED.** Sixteen main replicates, stopped by PI ruling on **2026-08-30 07:14:19 KST**
-(`harness/state/PAUSE.json`); all sixteen confirmed down at **2026-08-29T22:35:50Z**, corroborated
-by an independent process and screen check. Reason recorded: *supervision host unavailable*. The
-host is now being **retired**; the fleet's new permanent home is **bronze4 (KAIST)**, which
-bootstraps from this repository.
+**Status: RESUMED 2026-08-30 11:42:33 KST**, on the PI's go, after a measured **4.4704 h**
+(16,094 s) pause. Sixteen main replicates had been stopped by PI ruling on **2026-08-30
+07:14:19 KST** (`harness/state/PAUSE.json`), all sixteen confirmed down at
+**2026-08-29T22:35:50Z**, corroborated by an independent process and screen check. Reason
+recorded: *supervision host unavailable*. The macOS host is **retired**; the fleet's permanent
+home is **bronze4 (KAIST)**, which bootstrapped from this repository. The paragraphs below are
+kept as the account of what the pause was and what protected it — they are history now, not
+status.
 
 **Why a pause was the only option.** The replicate *processes* run on the supervising machine and
 only their *workspaces* are on the cluster — `prereg/replicate_runtime_spec.md` §1, PI reading
@@ -55,10 +62,17 @@ it stood at the stamp. `harness/resume_fleet.py` adds the *measured* wall-clock 
 sixteen identically, and **aborts as a whole** if any live deadline moved while the fleet was
 down. Nothing re-derives a deadline from `now + campaign_hours`.
 
-**Resume is one command:** `./harness/resume_fleet.sh`. It extends the deadlines, delivers the
-prepared notices *before* the agents wake, resets the restart counters, clears the stop files,
-relaunches per-replicate through the corrected path, and retires the pause record only on full
-success.
+**Resume was one command:** `./harness/resume_fleet.sh`. It extended the deadlines, delivered the
+prepared notices *before* the agents woke, reset the restart counters, cleared the stop files,
+relaunched per-replicate through the corrected path, and retired the pause record only on full
+success — which is what happened: **16/16 up, `=== RESUMED CLEANLY ===`.** PASS 1 matched all
+sixteen live deadlines to the microsecond before anything was written, and the sixteen were
+re-read afterwards and matched the extended values, rep06's restoration included.
+
+**`--dry-run` now rehearses PASS 1 for real** (read-only). It used to return before ever calling
+`resume_fleet.py`, so it exercised the deadline arithmetic and *not* the sixteen live reads that
+are the only thing that can abort a resume. REPORT 003 §4; fixed 2026-08-30 on the PI's
+authorization.
 
 ### RESOLVED 2026-08-30 (was BLOCKING) — the spend cap would have silently reopened on a new host
 
@@ -384,6 +398,21 @@ infrastructure facts **are** fleet-uniform, all sixteen.
      **Note for anyone porting this again:** systemd honours `Persistent=` **only** on
      `OnCalendar=` timers — on a monotonic timer the line is accepted, ignored, and reads as
      though the guarantee is in force. Written up in `harness/HOST_REQUIREMENTS.md` §2.
+     **And the ported scheduler ran at the wrong cadence for 68 minutes — SI-023, 2026-08-30.**
+     The timer was installed at **10 minutes**, which is the ratified interval for the **smoke**
+     phase, in a harness running **main** (ratified 30). The 10-minute figure came from
+     `poll.sh`'s header — *"One operational poll of the whole **smoke** fleet. Run every 10
+     minutes (ratified interval)"* — of which only the second half was quoted; `config.py` has
+     carried `{"smoke": 10, "main": 30}` throughout, and the retired plist's `StartInterval
+     1800` was **keeping** the ratified main cadence, not deviating from it. The PI ratified the
+     revert to `*:0/30` on 2026-08-30 with the **6.00 CPU-h / 0.375 %** bound unchanged. The
+     deviation ran entirely inside the pause, against zero live sessions. Same class as
+     SI-018/SI-019: a phase-scoped value read out of phase.
+     **SI-012's own Proposed 3 is now in force and would have caught it:** `watchdog.py`
+     computes the overshoot bound from the **measured** interval since its own last entry as
+     well as from the constant, and flags the disagreement (`bound-understated` /
+     `tighter-than-ratified`). Against SI-012's 49 h outage that measured bound reads
+     **588 CPU-h, 36.5 %** instead of the 8.33 the harness kept printing.
    - **SI-013 — s02's three escalations aged 24.84 h unanswered to the deadline.** All three
      carried affirmative §8 promises (2 × *"will be repaired"*, 1 × *"answered from this
      document"*). Zero acknowledgements in its `INBOX.md`; zero records in either harness

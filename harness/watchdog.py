@@ -260,6 +260,46 @@ def act_on_stop(ws: Path, resource: str, dry_run: bool):
         dirac.hold_all(ws.name, dry_run=dry_run)
 
 
+def _watchdog_log() -> Path:
+    """The watchdog's own ledger. SI-014's rule: state resolves under HARNESS_STATE_DIR."""
+    return Path(os.environ.get("HARNESS_STATE_DIR", Path(__file__).parent)) / "watchdog.jsonl"
+
+
+def _measured_poll_minutes(replicate: str, log: Path, now: datetime, tail_bytes: int = 262144):
+    """Minutes since this replicate's PREVIOUS watchdog entry — the interval actually kept.
+
+    SI-012 Proposed 3, ratified by the PI 2026-08-30 (see SI-023): the overshoot bound must be
+    computed from the interval the harness is really keeping, not from the constant it means to
+    keep. SI-012 was 49 h of silence priced at 10 minutes; SI-023 was a 10-minute timer in a
+    30-minute phase. Neither is visible from the constant, and both are visible from here.
+
+    Returns (minutes, previous_ts) or (None, None) when there is no previous entry — a bound
+    that has not been measured says so rather than reporting a number it does not have.
+    """
+    try:
+        size = log.stat().st_size
+        with open(log, "rb") as fh:
+            if size > tail_bytes:
+                fh.seek(size - tail_bytes)
+                fh.readline()            # discard the partial line the seek landed inside
+            lines = fh.read().decode("utf-8", "replace").splitlines()
+    except OSError:
+        return None, None
+    for line in reversed(lines):
+        try:
+            d = json.loads(line)
+        except ValueError:
+            continue
+        if d.get("replicate") != replicate:
+            continue
+        try:
+            prev = datetime.fromisoformat(d["ts"])
+        except (KeyError, ValueError):
+            return None, None
+        return round((now - prev).total_seconds() / 60, 2), d["ts"]
+    return None, None
+
+
 def run(ws_path, repo, dry_run=False, once=True, json_out=False, isolation=True):
     ws = Path(ws_path).resolve()
     meta = json.loads((ws / "WORKSPACE.json").read_text())
@@ -272,7 +312,30 @@ def run(ws_path, repo, dry_run=False, once=True, json_out=False, isolation=True)
               # covered on every poll by audit_transcript.py, which reads the local record.
               "isolation": audit_isolation(ws, Path(repo).resolve()) if isolation else [],
               "isolation_audited": bool(isolation)}
+    # The ratified bound, unchanged: it is what the study promised and what the record cites.
     report["overshoot_bound"] = C.overshoot_bound(meta["phase"])
+    # And the same bound recomputed from the interval this harness is ACTUALLY keeping.
+    # SI-012 Proposed 3 / SI-023. Both are reported: a disagreement between them IS the finding,
+    # and printing only one of them is how both defects stayed invisible.
+    _mm, _prev = _measured_poll_minutes(meta["replicate_id"], _watchdog_log(), datetime.now(KST))
+    if _mm is None:
+        report["overshoot_bound_measured"] = {
+            "basis": "none",
+            "note": "no previous watchdog.jsonl entry for this replicate; interval not measured"}
+        report["poll_interval_divergence"] = None
+    else:
+        report["overshoot_bound_measured"] = dict(C.overshoot_bound(meta["phase"], _mm),
+                                                  since=_prev)
+        _rat = report["overshoot_bound"]["poll_minutes"]
+        _ratio = _mm / _rat if _rat else None
+        report["poll_interval_divergence"] = {
+            "measured_minutes": _mm, "ratified_minutes": _rat, "ratio": round(_ratio, 2),
+            # Asymmetric on purpose. Slower than ratified means the ratified bound is
+            # UNDERSTATED and compute can escape the stop unpriced -- SI-012, 294x. Faster
+            # means the harness is polling tighter than ratified: safe for the bound, but a
+            # deviation from a ratified parameter, which is SI-023 and still has to be seen.
+            "verdict": ("bound-understated" if _ratio > 1.25 else
+                        "tighter-than-ratified" if _ratio < 0.75 else "as-ratified")}
     report["cpu_h_scheduler"] = _read_usage(ws)["cpu_h_scheduler"]
     report["cpu_h_basis"] = _read_usage(ws)["basis"]
     deadline = datetime.fromisoformat(meta["deadline_kst"])
@@ -307,7 +370,7 @@ def run(ws_path, repo, dry_run=False, once=True, json_out=False, isolation=True)
     if msgs:
         notify(ws, msgs, dry_run)
 
-    log = Path(os.environ.get("HARNESS_STATE_DIR", Path(__file__).parent)) / "watchdog.jsonl"
+    log = _watchdog_log()
     if not dry_run:
         with open(log, "a") as fh:
             fh.write(json.dumps(report) + "\n")
@@ -323,6 +386,19 @@ def _fmt(r):
     out = [f"[watchdog] {r['replicate']}  T-{r['hours_to_deadline']}h  liveness={r['liveness']['state']}"
            + (f"  poll={ob.get('poll_minutes')}min bound=+{ob.get('overshoot_cpu_h')}CPU-h"
               f" ({ob.get('overshoot_pct_of_budget')}%)" if ob else "")]
+    # The measured bound prints on the same panel as the ratified one, and prints LOUDLY when
+    # they disagree. SI-012 went unread for 49 h because the harness kept printing the figure
+    # it assumed; a number that only agrees with itself is not a check.
+    obm, div = r.get("overshoot_bound_measured") or {}, r.get("poll_interval_divergence")
+    if obm.get("basis") == "measured" and div:
+        mark = "  <-- POLL INTERVAL " + div["verdict"].upper().replace("-", " ") \
+               if div["verdict"] != "as-ratified" else ""
+        out.append(f"    poll interval measured {div['measured_minutes']}min vs ratified "
+                   f"{div['ratified_minutes']}min ({div['ratio']}x): bound "
+                   f"+{obm.get('overshoot_cpu_h')}CPU-h "
+                   f"({obm.get('overshoot_pct_of_budget')}%){mark}")
+    elif obm.get("basis") == "none":
+        out.append("    poll interval not yet measured (no previous entry for this replicate)")
     for e in r["budget"]:
         f = "n/a" if e["fraction"] is None else f"{e['fraction']:.1%}"
         out.append(f"    {e['resource']:<12} {e['used']} / {e['cap']}  ({f})  {e['level'].upper()}")

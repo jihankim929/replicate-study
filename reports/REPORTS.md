@@ -792,3 +792,165 @@ scheduler-written logs. No workspace write, no notice, no resume, no pause recor
 confirmed with the bound restated. **Ready on your word:** the live resume, per REPORT 003 §6.
 
 — Bei (harness)
+
+---
+
+## 2026-08-30T03:05:00Z (12:05:00 KST) — REPORT 005, on the go. **FLEET RESUMED AND RUNNING.**
+
+> **In one line:** the ruling is executed — `study.poll.timer` is back at `OnCalendar=*:0/30`
+> with the **6.00 CPU-h / 0.375 %** bound untouched, the deviation is filed against my timer as
+> **SI-023** with the measurement attached, and **the fleet resumed cleanly at 11:42:33 KST**:
+> PASS 1 matched 16/16 before anything was written, 16/16 relaunched, 16/16 live deadlines
+> re-read afterwards and correct. All four post-resume items are done and the suite is
+> **98 PASS / 0 FAIL**. One judgement call inside the revert is flagged for you in §6, and §7
+> lists what I have *not* been able to verify yet.
+
+### 1. The cadence — reverted first, before the resume, because it binds the moment the fleet is live
+
+`harness/systemd/study.poll.timer` → `OnCalendar=*:0/30`, re-rendered through
+`install.sh`. Verified as **effective runtime state**, not as file contents:
+
+```
+systemctl --user show study.poll.timer
+    TimersCalendar={ OnCalendar=*-*-* *:00/30:00 ; next_elapse=Sun 2026-08-30 12:00:00 KST }
+    Persistent=yes      AccuracyUSec=1s
+```
+
+**And it fired on the new cadence, observed:** `02:40:00Z` (last 10-minute fire) → **`03:00:00Z`
+fire → `03:01:54Z` done, rc=0** — 114 s for a live sixteen-replicate cycle. All sixteen report
+`liveness=alive` in that cycle. The ratified bound is unchanged everywhere it appears:
+`config.overshoot_bound("main")` returns **6.0 CPU-h / 0.37 %**, and the watchdog prints it.
+
+### 2. The resume — executed on your go, 2026-08-30 11:42:33 KST
+
+```
+measured pause: 4.4704 h (16,094 s) -- applied to all 16 identically
+verified: all 16 live deadlines match the pause record      <- PASS 1, before any write
+...
+16/16 up      pause record retired; restart watcher re-armed
+=== RESUMED CLEANLY ===
+```
+
+- **PASS 1 passed 16/16** to the microsecond, rep06's hand-restored value included.
+- **Deadlines, live, re-read by me afterwards over the alias: 16/16 equal to the extended
+  values.** rep01 → `2026-09-05T18:40:46`, the wave-A cohort → `2026-09-06T00:09:xx`, wave B →
+  `01:10:xx`, **rep06 → `2026-09-06T09:46:28`** (uniform 4.4704 h **plus** its ratified 9.62 h).
+- **Notices:** fleet-uniform to 16/16, Rev 21 to rep01 alone, **22 escalation rows closed**,
+  delivered *before* the agents woke.
+- **Sixteen `screen` sessions up**, `rep-rep01 … rep-rep17`, all detached and writing
+  transcripts (rep01 560 KiB, rep06 472 KiB, rep17 380 KiB and growing).
+- **Meter, once, against the carried baseline: `$746.06 / $4,480 = 16.65 %`, all sixteen `OK`,
+  none at warn.** That is `$725.47` carried + `$20.59` spent on this host since the sessions
+  woke — the boot turns. The baseline is carrying, not double-counting.
+- `PAUSE.json` retired to `PAUSE.resumed.20260830T024428Z.json`; `LAST_RESUME.json` written.
+
+### 3. The deviation — filed as SI-023, against my timer
+
+`SI_LEDGER.md` gains **SI-023**, which keeps the wrong number beside the right one as the ledger
+requires: both cadences ratified, phase-scoped, the half-sentence I quoted, the retired plist
+exonerated, and the 30 recorded cycles as the measurement (`126–262 s` live, **worst 842 s**,
+`66–78 s` paused-with-cluster-reachable, `2 s` paused-and-unreachable). It records that the
+10-minute timer ran **02:42Z back to its 01:34Z install — 68 minutes, entirely inside the pause,
+against zero live sessions**, so no replicate was ever polled at the wrong cadence. Class:
+same as SI-018/SI-019, a phase-scoped value read out of phase.
+
+### 4. The four authorized post-resume items — all four done
+
+**(a) `poll.sh`'s header is phase-scoped.** It now says the file is phase-*agnostic* — it polls
+whatever is in `active_replicates` — that the cadence is `{"smoke": 10, "main": 30}` and lives in
+the scheduler, and it quotes its own old sentence as the thing that caused SI-023.
+
+**(b) SI-012 Proposed §3 — the bound is computed from the measured interval.**
+`config.overshoot_bound(phase, poll_minutes=None)` takes a measured override;
+`watchdog.py` measures the gap since **its own last `watchdog.jsonl` entry for that replicate**
+and reports *both* bounds plus a verdict (`as-ratified` / `bound-understated` /
+`tighter-than-ratified`). The ratified key is untouched, so nothing downstream changes meaning.
+Against SI-012's own 49 h outage the measured bound reads **588 CPU-h / 36.5 %** — SI-012's
+table says 588.6 / 36.8 — instead of the 8.33 the harness printed throughout. **Live, in the
+03:00 cycle:**
+
+```
+[watchdog] rep01  T-150.7h  liveness=alive  poll=30min bound=+6.0CPU-h (0.37%)
+    poll interval measured 20.48min vs ratified 30min (0.68x): bound +4.1CPU-h (0.25%)
+                                                <-- POLL INTERVAL TIGHTER THAN RATIFIED
+```
+
+That flag is **correct and transitional**: this cycle's predecessor was a 10-minute-era fire at
+02:40Z, so the first measured gap after the revert is 20.5 min. See §7 — I have not yet seen the
+cycle that should clear it.
+
+**(c) `--dry-run` now performs PASS 1, read-only.** PASS 1 is factored out of
+`resume_fleet.py:main()` into `pass1(reps, at_pause, abort=)`; `--check-only` runs it and nothing
+else; `resume_fleet.sh --dry-run` calls it and adopts its exit code. Live behaviour is byte-for-
+byte the same path with `abort=True`. Tested **against the live cluster, read-only, both ways**:
+a fixture matching the real deadlines gave `match=16 problems=0 → PASS 1 would: PASS` (exit 0),
+and a fixture with one moved deadline and one unreadable replicate gave
+`match=1 problems=2 → PASS 1 would: ABORT` (exit 1), naming both problems rather than stopping
+at the first — which is what a dry-run is for.
+
+**(d) The selftest's wrong-reason case.** Its baseline call dropped `--no-update`, so a baseline
+is actually recorded (under `HARNESS_STATE_DIR`, so nothing about a fake replicate reaches the
+live growth record) and the second call now exercises the **growth** path it is named after. Two
+assertions added on the *reason*: the output must say `alive` and must **not** say `baseline
+only`.
+
+**Suite: 98 PASS / 0 FAIL** (was 88), including the SI-014 regression case. The ten new cases
+cover the ratified bound staying at 6.00, the measured basis moving it, the divergence verdict,
+an unmeasured interval reporting `none` rather than a number, the dry-run's PASS 1 wiring, and
+the two reason-assertions above.
+
+### 5. The gateway hop and the host keys — `HOST_REQUIREMENTS.md` §5 and new §5a
+
+Requirement 5 now names the jump host and requires **both** aliases to pass `BatchMode`;
+checklist step 3 does the same. New **§5a** records the `ProxyJump` topology, that two hosts must
+authenticate rather than one (a gateway failure looks exactly like a cluster outage), and that
+the hop is inside the latency budget the 30-minute cadence absorbs. The **trust-on-first-use**
+host keys are recorded there as the record's own gap, non-blocking, with your note that you will
+verify the fingerprints against the Mac's `known_hosts` on your return, and the rule for the next
+move: **carry the expected fingerprints in the record, or a rebuild has nothing to verify
+against.**
+
+### 6. One judgement call inside the revert — please rule when convenient
+
+`study.poll.service` carried `TimeoutStartSec=9min`, which **I** sized to fit inside the
+10-minute interval. Left at 9 minutes under a 30-minute cadence it is no longer a pile-up guard —
+it is a **kill on a poll that is merely slow**, and the measurement says that is not hypothetical:
+the worst observed live cycle is **842 s (14.0 min)** and SI-012 shows one unreachable workspace
+alone can reach **900 s**. systemd would have terminated a working poll mid-loop and recorded a
+failure for it, which is SI-012's shape again — the scheduler fires, the work does not finish,
+and the record does not say so. **I set it to 25 min**, still strictly inside the 30-minute
+interval. It is in SI-023 and it is the line to change if you want the guard tighter than the
+measurement.
+
+**Also mine, smaller, done:** `deliver_escalation_answers.py` writes a timestamped
+`escalation_queue.jsonl.pre-answer.<stamp>` backup, and the `.gitignore` rule that keeps the
+escalation ledgers out of git did not match it — so this resume's backup was sitting untracked
+and the next `git add` would have committed the ledger under another name. Pattern added.
+
+### 7. What I have NOT verified, stated as such
+
+- **The next poll cycle.** At `03:30:00Z` the measured interval should read ~30 min and the
+  verdict should flip to `as-ratified`. I have seen `03:00` (20.48 min, transitional) and **not**
+  `03:30`. If it does not clear, the measurement is wrong and not the timer.
+- **The 25-minute `TimeoutStartSec` has not been exercised** — no poll since the change has run
+  long. Its correctness rests on the recorded cycle times, not on an observation.
+- **Compute meters read `UNACCOUNTED`, not a number**, for all sixteen: no job has finished since
+  the resume, so `harvest_cput.sh` has nothing to populate `cpu_h` with. That is **SI-021 working
+  as fixed** — a meter with no data says so instead of saying `0.0 OK` — and it will resolve
+  itself as jobs land. Flagged so the panel is not misread.
+- **Host-key fingerprints** remain unverifiable from here, per §5.
+- **Nothing has been observed of the resumed agents' *work*** beyond transcript growth and
+  liveness. The first real read of what sixteen woken replicates did with their notices comes at
+  the next collection point, not from me.
+
+### 8. State
+
+Committed and pushed. Fleet **RUNNING**: 16 sessions up, restart watcher re-armed,
+`study.poll.timer` at 30 min and `study.spend.timer` at 2 min, both `Persistent=true` and both
+observed firing. `STATE.md`'s banner, pause section and SI-012 item are reconciled to a resumed
+fleet — the findings kept, the status lines updated, as in the last grooming.
+
+**Open for you, none blocking:** §6 the 25-minute service timeout · the host-key fingerprints on
+your return · SI-021's `UNACCOUNTED` compute basis, still filed and unruled from 2026-08-29.
+
+— Bei (harness)

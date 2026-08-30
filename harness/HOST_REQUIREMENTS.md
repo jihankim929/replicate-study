@@ -20,7 +20,7 @@ supervision host is an offline fleet, which is why 2026-08-29's pause happened a
 | 2 | **`claude` CLI on PATH** | Runs every replicate session. | `command -v claude && claude --version` |
 | 3 | **Python 3.10+** | The whole harness. f-strings with `=`, `datetime.fromisoformat` on offset strings. | `python3 --version` |
 | 4 | **GNU `screen`** | `launch_sessions.sh` starts every session under `screen -dmS`, and both it and `resume_fleet.sh` **prove liveness** with `screen -ls`. Without it all sixteen report `LAUNCH FAILED`, the resume exits 1, and `PAUSE.json` is correctly left in place. `tmux` is **not** a drop-in: the scripts call `screen` by name. | `command -v screen` |
-| 5 | **`ssh dirac-bei` — alias + key, non-interactive** | Every cluster read and write goes through this exact alias with `BatchMode=yes`. `resume_fleet.py` pass 1 reads sixteen live deadlines over it and **aborts the whole resume** on the first failure. It must work with **no passphrase prompt, no agent, no TTY** — a key that works interactively but not under `BatchMode` will pass a human's test and fail the harness's. | `ssh -o BatchMode=yes -o ConnectTimeout=10 dirac-bei true` must exit 0 silently |
+| 5 | **`ssh dirac-bei` — alias + key, non-interactive, *including the jump host*** | Every cluster read and write goes through this exact alias with `BatchMode=yes`. `resume_fleet.py` pass 1 reads sixteen live deadlines over it and **aborts the whole resume** on the first failure. It must work with **no passphrase prompt, no agent, no TTY** — a key that works interactively but not under `BatchMode` will pass a human's test and fail the harness's. **On bronze4 the alias is not a direct connection: it reaches the cluster through a `ProxyJump` gateway (§5a).** | `ssh -o BatchMode=yes -o ConnectTimeout=10 dirac-bei true` **and** the same against the gateway alias must each exit 0 silently |
 | 6 | **Workspace path reachable** | `/home1/users/Bei/ws/<rep>` readable and writable for all sixteen. | `ssh dirac-bei 'ls -d /home1/users/Bei/ws/rep01'` |
 | 7 | **A scheduler with missed-interval catch-up** | §2 below. Without it nothing runs `poll.sh` and nothing runs the spend meter. This is SI-012, the largest harness defect the study has found. | `./harness/systemd/install.sh --verify` |
 | 8 | **Git remote push** | The record is kept on GitHub; the PI reads it there. | `git push --dry-run` |
@@ -122,7 +122,9 @@ Root needed (1–2), no root needed (3–7):
 
 1. `apt install screen`
 2. *(optional, belt-and-braces)* `systemctl mask sleep.target suspend.target hibernate.target hybrid-sleep.target`
-3. `~/.ssh/config` alias `dirac-bei` + key; verify `ssh -o BatchMode=yes dirac-bei true` exits 0
+3. `~/.ssh/config` alias `dirac-bei` + key, **and the `dirac-bei-gw` jump host it goes
+   through** (§5a); verify `ssh -o BatchMode=yes dirac-bei true` **and**
+   `ssh -o BatchMode=yes dirac-bei-gw true` each exit 0
 4. `git clone` this repository
 5. `loginctl enable-linger $USER`
 6. `./harness/systemd/install.sh` — then **watch `*_fires.jsonl` for a real fire**
@@ -135,3 +137,46 @@ Then, and only then, `./harness/selftest.sh` (expect **88 PASS / 0 FAIL**) and
 **Credentials never enter this repository** (PI standing rule 2026-08-26; enforced by
 `.gitignore`). The ssh key and the git push credential are configured on the host and are named
 here only as requirements.
+
+---
+
+## 5a. The gateway hop — the cluster is not reached directly [added 2026-08-30, PI-authorized]
+
+**Found by verifying §5 rather than accepting the handoff's word for it (REPORT 003 §1).**
+The retired laptop reached the cluster directly, so no earlier report, requirement or plist
+mentions a jump host. On bronze4 `~/.ssh/config` resolves:
+
+```
+Host dirac-bei-gw          # the gateway
+    HostName 143.248.130.178
+Host dirac-bei             # the cluster login node, REACHED THROUGH THE GATEWAY
+    HostName 143.248.125.145
+    ProxyJump dirac-bei-gw
+```
+
+Everything works and `BatchMode` is clean through the hop — this blocks nothing and never did.
+It is recorded because **the record understated the path**, and a future host rebuilt by
+following §5 literally would configure one alias, watch it fail, and have nothing in this file
+to tell it a second one is needed. That is the same shape as the four defects this document was
+written from: truth that lived on a machine rather than in the record.
+
+Two consequences worth stating, both of which the harness now depends on:
+
+- **Two hosts must authenticate, not one.** A gateway that stops accepting the key fails
+  `dirac-bei` entirely, and the failure looks exactly like a cluster outage. Check the gateway
+  alias separately — `ssh -o BatchMode=yes dirac-bei-gw true` — before concluding the cluster
+  is down.
+- **The hop is in the latency budget.** `poll.sh` is serial and costs ~8 round trips per
+  replicate (SI-012), and every one of them now traverses two hops. The measured effect is in
+  SI-023's cycle table: 66–78 s for a paused sixteen-replicate fleet, 126–262 s live, worst
+  observed 842 s. The 30-minute main cadence absorbs this; a tighter one does not.
+
+**Host keys were accepted trust-on-first-use during provisioning, and that is not closed.**
+`known_hosts` gained the gateway's entry at first connection and the cluster's entry is
+unchanged from `known_hosts.old`, which is consistent and suggests nothing is wrong. But *"the
+alias resolves and authenticates"* is not the same claim as *"it authenticates the right host"*,
+and the record holds no fingerprint to check either key against. **Non-blocking, and noted here
+as the record's own gap** (REPORT 003 §5; PI 2026-08-30: fingerprints to be verified against
+the retired Mac's `known_hosts` on the PI's return). The rule for the next host move: **carry
+the expected host-key fingerprints in the record, or a rebuild has nothing to verify against
+and TOFU is the only option available to it.**

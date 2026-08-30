@@ -16,3 +16,6 @@
 Execution error
 2026-08-29T22:34:48Z stop file present, loop ending
 2026-08-29T22:34:48Z headless session loop for rep07 finished after 7 iteration(s)
+2026-08-30T02:43:33Z iteration 1 starting (headless)
+2026-08-30T03:01:30Z iteration 1 exited rc=0 after 1077s (transcript 0 -> 602462)
+2026-08-30T03:01:40Z iteration 2 starting (headless)

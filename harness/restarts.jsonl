@@ -7,3 +7,4 @@
 {"ts":"2026-08-29T14:17:05Z","replicate":"rep06","restart_number":3,"reason":"screen session absent and transcript not grown (100.1 min)","downtime_min":100.1}
 {"ts":"2026-08-29T14:17:40Z","replicate":"s01","restart_number":3,"reason":"screen session absent and transcript not grown (556.1 min)","downtime_min":556.1}
 {"ts":"2026-08-29T14:18:05Z","replicate":"s02","restart_number":3,"reason":"screen session absent and transcript not grown (556.5 min)","downtime_min":556.5}
+{"event":"COUNTER_RESET","ts":"2026-08-30T02:42:33Z","reason":"deliberate fleet pause/resume, not replicate failure","scope":["rep01","rep02","rep03","rep04","rep05","rep06","rep07","rep08","rep09","rep10","rep11","rep12","rep13","rep15","rep16","rep17"]}

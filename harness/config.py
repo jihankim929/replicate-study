@@ -184,17 +184,28 @@ ARM_ASSIGNMENT_FILE = REPO / "prereg" / "arm_assignment.txt"
 PROPOSED = {}
 
 
-def overshoot_bound(phase: str) -> dict:
+def overshoot_bound(phase: str, poll_minutes: float = None) -> dict:
     """Worst-case compute overshoot between two watchdog polls, for `phase`.
 
     Bounded, not eliminated: the watchdog is polled, not inline. Reported so the bound is a
     known quantity rather than an unknown one.
+
+    `poll_minutes` overrides the ratified constant with a MEASURED interval. That is SI-012
+    Proposed 3, ratified 2026-08-30: "a bound derived from an assumption is not a bound; it is
+    the assumption wearing a number." The ratified figure is what the study promised; the
+    measured figure is what the harness is actually delivering, and when they disagree the
+    disagreement is the finding. SI-012 was a 49 h gap priced as 10 minutes (294x understated);
+    SI-023 was the converse, a 10-minute timer in a 30-minute phase. Both are visible from this
+    one number as soon as it is computed from the clock instead of from the file.
     """
     conc = RATIFIED["max_queued_jobs"][phase]
-    poll_h = RATIFIED["watchdog_poll_minutes"][phase] / 60
+    ratified_min = RATIFIED["watchdog_poll_minutes"][phase]
+    pm = ratified_min if poll_minutes is None else float(poll_minutes)
     cap = RATIFIED["compute_cpu_h"][phase]
-    cpu = conc * poll_h
-    return {"phase": phase, "poll_minutes": RATIFIED["watchdog_poll_minutes"][phase],
+    cpu = conc * (pm / 60)
+    return {"phase": phase, "poll_minutes": round(pm, 2),
+            "basis": "ratified" if poll_minutes is None else "measured",
+            "ratified_poll_minutes": ratified_min,
             "max_concurrent": conc, "overshoot_cpu_h": round(cpu, 2),
             "overshoot_pct_of_budget": round(100 * cpu / cap, 2)}
 

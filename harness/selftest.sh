@@ -90,6 +90,26 @@ chk "main: compute stop holds queue"     "$(echo "$OUT" | grep -c 'qhold')" "1"
 echo '{"cpu_h": 1, "tokens": 100, "queued_jobs": 99}' > "$MOCK/s02/usage.json"
 chk "queue cap exceeded flagged" "$(python3 harness/watchdog.py "$MOCK/s02" --dry-run --json 2>/dev/null | python3 -c 'import json,sys;print(sum(1 for e in json.load(sys.stdin)["budget"] if e["resource"]=="queued_jobs"))')" "1"
 
+# SI-012 Proposed 3 / SI-023: the watchdog prices the overshoot bound from the interval it is
+# ACTUALLY keeping, measured against its own last entry for this replicate, and says so when
+# that disagrees with the ratified constant. SI-012 was 49 h of silence still being priced at
+# 10 minutes, and the harness printed the 10-minute figure on every run of the outage.
+python3 - <<'SEEDPOLL'
+import json, os
+from datetime import datetime, timedelta, timezone
+KST = timezone(timedelta(hours=9))
+# 45 minutes since the previous entry. The fixture is in `main` by this point in the suite,
+# whose ratified interval is 30 -- so 45 min is 1.5x ratified and must read as understated.
+row = {"replicate": "s02", "ts": (datetime.now(KST) - timedelta(minutes=45)).isoformat()}
+with open(os.environ["HARNESS_STATE_DIR"] + "/watchdog.jsonl", "a") as fh:
+    fh.write(json.dumps(row) + "\n")
+SEEDPOLL
+WDJ=$(python3 harness/watchdog.py "$MOCK/s02" --dry-run --json 2>/dev/null)
+chk "bound priced from the measured interval" "$(echo "$WDJ" | python3 -c 'import json,sys;d=json.load(sys.stdin);print(d["overshoot_bound_measured"]["basis"])')" "measured"
+chk "a kept interval 4.5x the ratified one is flagged" "$(echo "$WDJ" | python3 -c 'import json,sys;print(json.load(sys.stdin)["poll_interval_divergence"]["verdict"])')" "bound-understated"
+chk "the ratified bound is reported unchanged beside it" "$(echo "$WDJ" | python3 -c 'import json,sys;b=json.load(sys.stdin)["overshoot_bound"];print(b["basis"], b["poll_minutes"], b["overshoot_cpu_h"])')" "ratified 30 6.0"
+chk "an unmeasured interval reports none, not a number" "$(python3 harness/watchdog.py "$MOCK/s01" --dry-run --json 2>/dev/null | python3 -c 'import json,sys;print(json.load(sys.stdin)["overshoot_bound_measured"]["basis"])')" "none"
+
 echo "== 5. isolation audit catches violations =="
 ln -s /etc "$MOCK/s02/escape"
 git -C "$MOCK/s02" remote add origin https://example.invalid/x.git
@@ -125,6 +145,13 @@ chk "PROPOSED is empty"               "$(python3 -c 'import sys;sys.path.insert(
 chk "tail corrections pinned off"     "$(python3 -c 'import sys;sys.path.insert(0,"harness");import config as C;print(C.RATIFIED["tail_corrections"])')" "False"
 chk "raspa pinned to 2.0.37"          "$(python3 -c 'import sys;sys.path.insert(0,"harness");import config as C;print(C.RATIFIED["raspa"]["version"])')" "2.0.37"
 chk "overshoot bound computed"        "$(python3 -c 'import sys;sys.path.insert(0,"harness");import config as C;print(C.overshoot_bound("smoke")["overshoot_pct_of_budget"] < 5)')" "True"
+# SI-012 Proposed 3 / SI-023: the bound must be computable from the interval actually kept, not
+# only from the constant. The 49 h case is SI-012's own measurement -- the bound it published
+# was 8.33 CPU-h while the real figure was three orders of magnitude larger.
+chk "ratified bound keeps main at 6.00" "$(python3 -c 'import sys;sys.path.insert(0,"harness");import config as C;b=C.overshoot_bound("main");print(b["overshoot_cpu_h"], b["basis"])')" "6.0 ratified"
+chk "measured interval moves the bound"  "$(python3 -c 'import sys;sys.path.insert(0,"harness");import config as C;b=C.overshoot_bound("main", 49*60);print(b["basis"], b["overshoot_cpu_h"] > 100)')" "measured True"
+chk "measured bound keeps the ratified figure alongside it" "$(python3 -c 'import sys;sys.path.insert(0,"harness");import config as C;print(C.overshoot_bound("main", 9.8)["ratified_poll_minutes"])')" "30"
+chk "dry-run rehearses PASS 1"            "$(grep -c 'check-only' harness/resume_fleet.sh)" "1"
 
 echo "== 7b. arm assignment comes from the recorded draw =="
 chk "smoke arms fixed in code"  "$(python3 -c 'import sys;sys.path.insert(0,"harness");import config as C;print(C.arm_of("s01"))')" "gated"
@@ -185,11 +212,20 @@ echo "== 7e. liveness: death detection fails safe (PI ruling 2026-08-27) =="
 # so a fake rep gets a real, growing transcript of its own.
 LVREP=selftest_live
 LVDIR="$HOME/.claude/projects/$(printf '%s' "$PWD/harness/sessions/$LVREP" | sed 's|/|-|g')"
-mkdir -p "$LVDIR"; : > "$LVDIR/a.jsonl"
-python3 harness/liveness.py "$LVREP" --no-update >/dev/null 2>&1        # baseline
+mkdir -p "$LVDIR"; printf '{"turn":1}\n' > "$LVDIR/a.jsonl"
+# The baseline call must RECORD the baseline (no --no-update). With --no-update it recorded
+# nothing, so the second call saw no previous observation and exited 1 down the "baseline only"
+# branch -- the right exit code for the wrong reason, never touching the growth path this case
+# is named after, and duplicating the absent-transcripts case below it. The observation is
+# written under HARNESS_STATE_DIR (SI-014), so this still records nothing about a fake
+# replicate into the live growth record. REPORT 002 section 5; authorized 2026-08-30.
+python3 harness/liveness.py "$LVREP" >/dev/null 2>&1                     # record a real baseline
 echo '{"grew":1}' >> "$LVDIR/a.jsonl"                                    # ...then grow
-python3 harness/liveness.py "$LVREP" --dead-after 30 --no-update >/dev/null 2>&1
-chk "live replicate is not restartable"   "$?" "1"
+LVOUT=$(python3 harness/liveness.py "$LVREP" --dead-after 30 --no-update 2>&1); LVRC=$?
+chk "live replicate is not restartable"   "$LVRC" "1"
+# ...and for the RIGHT reason: growth observed, not an absent baseline.
+chk "  ...because growth was observed"    "$(echo "$LVOUT" | grep -c 'alive')" "1"
+chk "  ...not because of a missing baseline" "$(echo "$LVOUT" | grep -c 'baseline only')" "0"
 rm -rf "$LVDIR"
 python3 harness/liveness.py no_such_rep --dead-after 30 --no-update >/dev/null 2>&1
 chk "absent transcripts are not death"    "$?" "1"

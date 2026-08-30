@@ -1527,3 +1527,86 @@ Nothing the replicate sees is affected — the stamp lives in Bei's queue, not i
 affected is the study's record of what each escalation was owed, which is the data SI-013's
 frozen-PI latency measurement is built from. **A latency ledger that records a repair promise the
 charter withdrew will score the non-answer against a standard that no longer exists.**
+
+---
+
+## SI-023 — the poll scheduler I installed ran the main phase at 3× the ratified cadence, and the bound that would have been written for it was one the harness cannot honour [Bei, 2026-08-30]
+
+**The deviation is mine, and it is the timer, not the retired plist.**
+
+Rebuilding the scheduling layer on bronze4 (SI-012's fix, ported off launchd), I read `poll.sh`'s
+header — *"Run every 10 minutes (ratified interval)"* — against the retired
+`study.poll.plist`'s `StartInterval 1800` and filed the plist as running at three times the
+ratified interval (REPORT 002 §5(a)). I installed `study.poll.timer` at `OnCalendar=*:0/10`.
+
+**Both numbers are ratified. They are scoped to different phases, and I quoted half a sentence.**
+
+```
+config.py   "watchdog_poll_minutes": {"smoke": 10, "main": 30}
+poll.sh     "One operational poll of the whole SMOKE fleet. Run every 10 minutes (ratified interval)."
+                                                  ^^^^^ the half I did not quote
+```
+
+SI-012's own arithmetic says it in both directions: *"cycles expected at the ratified 10-minute
+interval — 393"* is 65.5 h, which is the **smoke** campaign; and *"main-run parameters as
+ratified: … 30-minute poll"*, bound **6.00 CPU-h / 0.375 %**.
+
+| | Phase | Poll | Overshoot bound | % of budget |
+|---|---|---|---|---|
+| SI-012, smoke as ratified | smoke | 10 min | 8.33 CPU-h | 2.45 % |
+| SI-012, main as ratified | main | **30 min** | **6.00 CPU-h** | **0.375 %** |
+| **The timer I installed** | main | **10 min** | *(would restate to 2.00)* | *(0.124 %)* |
+
+So the retired plist at 1800 s **was keeping the ratified main cadence.** The deviation is the
+10-minute timer, which ran from its install at 2026-08-30T01:34Z until the revert at
+2026-08-30T02:42Z — entirely inside the pause, against a fleet of zero live sessions, so no
+replicate was ever polled at the wrong cadence.
+
+**Why the wrong number was worse than a wrong number.** Executed as first ruled, the correction
+would have restated the main bound from 6.00 CPU-h to **2.00 CPU-h (0.124 %)** — and that is not a
+tighter bound, it is **a bound the harness cannot honour**, which is SI-012's Proposed §3 rebuilt
+inside SI-012's own fix: *"a bound derived from an assumption is not a bound; it is the assumption
+wearing a number."*
+
+**Measured, from 30 recorded cycles in `harness/poll_fires.jsonl`** (fire→done, rc=0 throughout):
+
+```
+fleet LIVE, N=16:   68  111  126  127  129  139  152  158  236  248  262 s
+        worst:      842 s  (14.0 min)   2026-08-29T09:46:02Z
+fleet PAUSED, cluster reachable:  66, 78 s
+fleet PAUSED, cluster unreachable: 2 s   (fails fast; not representative)
+```
+
+`poll.sh` is serial and O(N), and SI-012 records that `divergence.collect()` retries 3× on a 300 s
+timeout, so **one unreachable workspace can consume 900 s** and every replicate after it in the
+loop is skipped **silently**. A 600 s interval is **already exceeded by the observed worst case**;
+1800 s is not close. SI-012 called N=20 at 30 min *"it fits, but not comfortably"* — at 10 min it
+does not fit. The tighter cadence buys overlapping cycles, silently skipped replicates and a worse
+*effective* interval, while the record would claim 2.00 CPU-h.
+
+**Ruling and resolution [PI, 2026-08-30].** Recommendation ratified in full: revert to
+`OnCalendar=*:0/30` for main, the **6.00 CPU-h / 0.375 %** bound stands unchanged, and the
+deviation is filed here against the timer with the measurement attached. Reverted and verified at
+2026-08-30T02:42Z — `systemctl --user show study.poll.timer` reports
+`OnCalendar=*-*-* *:00/30:00`, `Persistent=yes`, `AccuracySec=1s`.
+
+**One coupled change, made with the revert and flagged for ruling.**
+`study.poll.service` carried `TimeoutStartSec=9min`, which I had sized to fit inside the
+10-minute interval. Left at 9 min under a 30-minute cadence it stops being a pile-up guard and
+becomes **a kill on a poll that is merely slow**: the worst observed live cycle is 842 s (14.0 min)
+and one unreachable workspace alone can reach 900 s (15.0 min), so systemd would have terminated a
+working poll mid-loop and recorded a failure for it — the scheduler fires, the work does not
+finish, and the record does not say so. Set to **25 min**, which still bounds the first instance
+strictly inside the 30-minute interval. If the PI prefers the guard tighter than the measurement,
+this is the line to change.
+
+**The durable fix is SI-012 Proposed §3, and it is now implemented** (same date, this entry's
+resolution): `watchdog.py` computes the overshoot bound from the **measured** interval between the
+last two real poll fires rather than from the configured constant, and reports both. Had it been in
+force, the 10-minute timer would have printed its own 2.00 CPU-h claim against a measured 842 s
+cycle and contradicted itself in the record, instead of waiting for someone to read two files and
+notice.
+
+**Class.** Same family as SI-018 and SI-019: **a phase-scoped value read out of phase.** The
+smoke-era literal here was not in a script's roster but in a *scheduler interval*, and the harness
+it was installed into was in `main`.

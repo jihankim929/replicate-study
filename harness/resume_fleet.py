@@ -89,6 +89,68 @@ def ssh(cmd, **kw):
                            "dirac-bei", cmd], capture_output=True, text=True, **kw)
 
 
+def pass1(reps, at_pause, *, abort=True):
+    """PASS 1 — the sixteen live deadline reads, compared against the pause record.
+
+    The only part of the resume that touches the cluster before anything is written, and the
+    only part that can abort it. Factored out of main() so `--check-only` can run EXACTLY this
+    logic read-only: REPORT 003 section 4 found that `resume_fleet.sh --dry-run` returned before
+    ever calling this file, so a clean dry-run rehearsed the arithmetic and nothing else. A
+    rehearsal that skips the step that aborts is not a rehearsal of the abort.
+
+    abort=True  -> live behaviour, unchanged: exit on the first failure, before any write.
+    abort=False -> read-only survey: collect every problem and let the caller report them all,
+                   which is what a dry-run is for.
+
+    Returns (live_deadlines, problems); problems is [] when PASS 1 would pass.
+    """
+    live, problems = {}, []
+    for r in reps:
+        out = ssh(f"grep deadline_kst /home1/users/Bei/ws/{r}/WORKSPACE.json").stdout
+        if '"' not in out:
+            msg = f"resume: cannot read deadline for {r} -- aborting before any change."
+            if abort:
+                sys.exit(msg)
+            problems.append({"replicate": r, "problem": "unreadable", "live": None})
+            continue
+        live[r] = out.split('"')[3]
+        if live[r] != at_pause[r]:
+            msg = (f"resume: {r} deadline moved during the pause\n"
+                   f"    recorded at pause: {at_pause[r]}\n"
+                   f"    live now:          {live[r]}\n"
+                   f"  Refusing to extend an unexplained edit. Investigate, then rerun.")
+            if abort:
+                sys.exit(msg)
+            problems.append({"replicate": r, "problem": "moved", "live": live[r]})
+    return live, problems
+
+
+def check_only():
+    """Run PASS 1 and nothing else. Reads only; writes nothing, locally or on the cluster."""
+    try:
+        rec = json.load(open(PAUSE_FILE))
+    except FileNotFoundError:
+        sys.exit(f"resume: no pause record at {PAUSE_FILE} -- the fleet is not paused.")
+    reps, at_pause = rec["replicates"], rec["deadlines_at_pause_kst"]
+    print(f"  PASS 1 (read-only): {len(reps)} live deadline reads over ssh dirac-bei")
+    live, problems = pass1(reps, at_pause, abort=False)
+    bad = {p["replicate"] for p in problems}
+    for r in reps:
+        if r not in bad:
+            print(f"    {r}: match")
+    for p in problems:
+        if p["problem"] == "unreadable":
+            print(f"    {p['replicate']}: UNREADABLE -- resume would abort here")
+        else:
+            print(f"    {p['replicate']}: MOVED during the pause -- resume would abort here\n"
+                  f"        recorded at pause: {at_pause[p['replicate']]}\n"
+                  f"        live now:          {p['live']}")
+    n_match = len(reps) - len(bad)
+    print(f"\n  match={n_match}  problems={len(problems)}    "
+          f"PASS 1 would: {'PASS' if not problems else 'ABORT'}")
+    return 0 if not problems else 1
+
+
 def main():
     try:
         rec = json.load(open(PAUSE_FILE))
@@ -109,17 +171,7 @@ def main():
     print(f"  measured pause: {pause_h:.4f} h ({pause_s:.0f} s) -- applied to all {len(reps)} identically\n")
 
     # PASS 1: verify every live deadline still equals the recorded one. Abort as a whole.
-    live = {}
-    for r in reps:
-        out = ssh(f"grep deadline_kst /home1/users/Bei/ws/{r}/WORKSPACE.json").stdout
-        if '"' not in out:
-            sys.exit(f"resume: cannot read deadline for {r} -- aborting before any change.")
-        live[r] = out.split('"')[3]
-        if live[r] != at_pause[r]:
-            sys.exit(f"resume: {r} deadline moved during the pause\n"
-                     f"    recorded at pause: {at_pause[r]}\n"
-                     f"    live now:          {live[r]}\n"
-                     f"  Refusing to extend an unexplained edit. Investigate, then rerun.")
+    live, _ = pass1(reps, at_pause, abort=True)
     print(f"  verified: all {len(reps)} live deadlines match the pause record\n")
 
     # PASS 2: extend. Only after every replicate has been verified.
@@ -189,4 +241,9 @@ def main():
 
 
 if __name__ == "__main__":
+    # --check-only is PASS 1 alone, read-only. It is what resume_fleet.sh --dry-run calls so the
+    # dry-run rehearses the abort as well as the arithmetic (REPORT 003 section 4, authorized by
+    # the PI 2026-08-30). No other flag changes behaviour: this file resumes or it checks.
+    if "--check-only" in sys.argv[1:]:
+        sys.exit(check_only())
     main()

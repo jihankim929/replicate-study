@@ -4,6 +4,9 @@
 #     ./harness/resume_fleet.sh              # resume
 #     ./harness/resume_fleet.sh --dry-run    # show what would happen, change nothing
 #
+# The dry-run performs PASS 1 for real, read-only: it does the sixteen live deadline reads and
+# reports whether the resume would abort on them. It changes nothing either way.
+#
 # Order matters and is enforced here, not left to the operator:
 #   1. extend every deadline by the MEASURED pause duration, uniformly, and record it
 #   2. deliver one identical INBOX note per replicate
@@ -53,7 +56,22 @@ for rep in r['replicates']:
     tail = f"   (+{fr['hours']:.2f} h restored)" if fr else ""
     print(f"      {rep}: {r['deadlines_at_pause_kst'][rep][:19]} -> {nd.isoformat()[:19]}{tail}")
 PY
-  exit 0
+  # PASS 1, FOR REAL AND READ-ONLY. Until 2026-08-30 the dry-run returned here, before ever
+  # calling resume_fleet.py -- so it rehearsed the deadline ARITHMETIC and nothing else, while
+  # the one step that can abort a resume (the sixteen live deadline reads) went unrehearsed.
+  # A clean dry-run was therefore not evidence that the resume would proceed, only that the
+  # numbers would be right if it did. REPORT 003 section 4; fix authorized by the PI 2026-08-30.
+  # This writes nothing, locally or on the cluster, and its exit code is the dry-run's.
+  echo
+  python3 harness/resume_fleet.py --check-only
+  RC=$?
+  echo
+  if [ "$RC" -ne 0 ]; then
+    echo "  (dry-run) PASS 1 WOULD ABORT -- a live resume would stop before any change. See above."
+  else
+    echo "  (dry-run) nothing was changed: no deadline extended, no notice delivered, no stop cleared."
+  fi
+  exit $RC
 fi
 
 # 1-3. deadline extension, INBOX notes, counter reset. Aborts as a whole if anything mismatches.

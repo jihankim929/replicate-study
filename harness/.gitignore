@@ -3,6 +3,11 @@ __pycache__/
 watchdog.jsonl
 escalations.jsonl
 escalation_queue.jsonl
+# ...and the timestamped copies deliver_escalation_answers.py takes before it closes rows.
+# They are the same ledger under another name: without this line the backup escapes the rule
+# that keeps the ledger out of git, and the first resume that answers anything commits it.
+escalation_queue.jsonl.pre-answer.*
+escalations.jsonl.pre-answer.*
 
 # Per-replicate divergence collector output. Deliberately NOT committed: it carries the same
 # quantities the A/B panel publishes, but under the real replicate ids, so committing it would

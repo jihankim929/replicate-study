@@ -9,4 +9,13 @@ WorkingDirectory=@REPO@
 ExecStart=@REPO@/harness/poll_wrapper.sh
 # A poll that reaches an unreachable cluster must not pile up on the next one. systemd will not
 # start a second instance while this one is active, and this bounds the first.
-TimeoutStartSec=9min
+#
+# 25 min, not 9. The 9-minute figure was sized to fit inside the 10-minute interval I installed
+# in error; at the ratified 30-minute main cadence it is not a pile-up guard, it is a KILL on a
+# poll that is merely slow -- 28 recorded cycles put live polls at 126-262 s with a worst case
+# of 842 s (14.0 min), and SI-012 shows one unreachable workspace alone can consume 900 s
+# (15.0 min). A 9-minute cap would have truncated the worst observed live cycle mid-loop and
+# recorded rc != 0 for a poll that was working, which is SI-012's shape again: the scheduler
+# fires, the work does not finish, and the record does not say so. 25 min still bounds the
+# first instance strictly inside the 30-minute interval.
+TimeoutStartSec=25min

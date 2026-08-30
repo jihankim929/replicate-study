@@ -1,1 +1,2 @@
 {"ts": "2026-08-29T22:14:19.952793+00:00", "event": "FLEET_PAUSE", "n": 16, "reason": "supervision host unavailable (planned operator absence, 24-48 h)"}
+{"ts": "2026-08-30T02:42:33.483120+00:00", "event": "FLEET_RESUME", "pause_hours": 4.4704, "n": 16}

@@ -1,5 +1,19 @@
 #!/usr/bin/env bash
-# One operational poll of the whole smoke fleet. Run every 10 minutes (ratified interval).
+# One operational poll of the whole fleet -- WHICHEVER fleet is registered in
+# harness/state/active_replicates. This file is phase-agnostic; the cadence it runs at is not.
+#
+#   CADENCE IS PHASE-SCOPED, and is NOT set here:
+#       config.py  "watchdog_poll_minutes": {"smoke": 10, "main": 30}
+#   The scheduler holds the live figure -- harness/systemd/study.poll.timer (OnCalendar=*:0/30
+#   for main). The overshoot bound that depends on it is 8.33 CPU-h / 2.45 % at smoke and
+#   6.00 CPU-h / 0.375 % at main, and watchdog.py computes it from the MEASURED interval
+#   between real fires, not from either constant. See SI-023.
+#
+#   This header used to read "the whole smoke fleet ... every 10 minutes (ratified interval)".
+#   Both halves were true of the smoke and only the second half got quoted, which is how a
+#   main-phase host came to be polled at the smoke cadence. SI-023, and the same class as
+#   SI-018/SI-019: a phase-scoped value read out of phase.
+#
 #   harvest finished cput -> meter compute -> meter tokens -> watchdog -> fleet -> escalations
 #   -> restart watch -> queue-depth covariate -> divergence panel
 set -uo pipefail

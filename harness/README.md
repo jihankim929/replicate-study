@@ -196,6 +196,21 @@ Stated because a monitoring component that overstates its reach is worse than no
    `config.overshoot_bound(phase)` computes it; the watchdog prints it on every run, so the
    bound travels with the measurement instead of living only in this file.
 
+   **And it is priced twice** (SI-012 Proposed 3, ratified 2026-08-30; SI-023). The ratified
+   figure above is one of them. The other is `config.overshoot_bound(phase, measured_minutes)`,
+   which the watchdog computes from the interval it is ACTUALLY keeping — the gap since its own
+   previous `watchdog.jsonl` entry for that replicate — and prints beside the ratified one,
+   loudly when they disagree. Both defects this file records are invisible from the constant and
+   obvious from the measurement: SI-012 was a 49 h outage still being priced at 10 minutes
+   (294x understated), and SI-023 was a 10-minute timer installed in a 30-minute phase. A bound
+   derived from an assumption is not a bound; it is the assumption wearing a number.
+
+   | | `overshoot_bound` | `overshoot_bound_measured` |
+   |---|---|---|
+   | interval | the ratified constant | the gap since the last real entry |
+   | changes when | the PI ratifies a new one | the harness misses a poll |
+   | verdict | — | `as-ratified` / `bound-understated` / `tighter-than-ratified` |
+
    **Observed, for the record:** in the full-loop dry run the mock `s02` reached **135 % of its
    compute budget** before the first poll saw it — that run polls once at the end, which is the
    worst case by construction. The mock is left overspending deliberately so the limitation

@@ -1,13 +1,26 @@
-# TEN minutes -- the ratified interval, stated in poll.sh's own header and the figure SI-012's
-# arithmetic is built from (2 cycles observed against "an expected 393"; 393 x 10 min = 65.5 h,
-# which is the smoke campaign). The launchd plist this replaces carried StartInterval 1800, so
-# the scheduler that did exist was running at THREE TIMES the ratified interval. Restored here
-# to the ratified figure and flagged to the PI rather than copied forward.
+# THIRTY minutes -- the ratified interval FOR THE MAIN PHASE.
+#
+#     config.py:  "watchdog_poll_minutes": {"smoke": 10, "main": 30}
+#
+# The 10-minute figure is real but SMOKE-scoped: poll.sh's header opens "One operational poll of
+# the whole SMOKE fleet", and SI-012's "393 expected cycles" is 65.5 h at 10 min, which is the
+# smoke campaign. SI-012 states the main parameters separately and as ratified: 30-minute poll,
+# overshoot bound 6.00 CPU-h / 0.375 %.
+#
+# So the retired launchd plist's StartInterval 1800 was keeping the ratified MAIN cadence. The
+# deviation was the 10-minute timer installed here on 2026-08-30 under REPORT 002 SS5(a) on my
+# misreading, corrected in REPORT 004 SS1 and ruled by the PI the same day: reverted to 30, bound
+# left at 6.00 CPU-h / 0.375 %, deviation filed against the timer. See SI-023.
+#
+# Measured, and the reason a tighter cadence would not buy a tighter bound: 28 recorded cycles
+# put live polls at 126-262 s with a worst case of 842 s, and SI-012 shows one unreachable
+# workspace can consume 900 s in a serial O(N) loop, silently skipping every replicate after it.
+# 600 s is already exceeded by the observed worst case; 1800 s is not close.
 [Unit]
-Description=fire the study operational poll every 10 minutes
+Description=fire the study operational poll every 30 minutes (main-phase ratified cadence)
 
 [Timer]
-OnCalendar=*:0/10
+OnCalendar=*:0/30
 AccuracySec=1s
 RandomizedDelaySec=0
 # As study.spend.timer: only meaningful because this is an OnCalendar= timer.

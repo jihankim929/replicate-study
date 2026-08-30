@@ -4,3 +4,8 @@
 
 2026-08-29T22:34:48Z stop file present, loop ending
 2026-08-29T22:34:48Z headless session loop for rep01 finished after 1 iteration(s)
+2026-08-30T02:43:00Z iteration 1 starting (headless)
+2026-08-30T02:59:02Z iteration 1 exited rc=0 after 962s (transcript 0 -> 739902)
+2026-08-30T02:59:12Z iteration 2 starting (headless)
+2026-08-30T03:01:50Z iteration 2 exited rc=0 after 158s (transcript 739902 -> 853980)
+2026-08-30T03:02:00Z iteration 3 starting (headless)
