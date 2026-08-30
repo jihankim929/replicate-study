@@ -124,5 +124,11 @@ Your workspace_root is: $WS"
 done
 
 echo
-echo "sessions:"; printf '%s\n' "$(screen -ls 2>/dev/null || true)" | grep -E 'rep-s0' || echo "  (none)"
+# The roster that was actually launched, never a phase literal. This read `rep-s0`, a smoke-era
+# filter: launch sixteen main replicates successfully and the summary still printed "(none)".
+# Third of the family the record has now fixed twice (collect.sh's two-workspace glob,
+# restart_watch.sh's defaulted smoke roster) -- a smoke-era literal left in a main-phase path,
+# reporting against the wrong subject while looking like it worked.
+SESSION_RE="$(printf 'rep-%s|' $REPS | sed 's/|$//')"
+echo "sessions:"; printf '%s\n' "$(screen -ls 2>/dev/null || true)" | grep -E "$SESSION_RE" || echo "  (none)"
 exit $FAILED
