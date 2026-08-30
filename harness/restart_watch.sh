@@ -72,6 +72,19 @@ for REP in $ACTIVE; do
   echo "  $REP: session=$([ "$ALIVE" -gt 0 ] && echo up || echo DOWN) transcript_age=${AGE}min (deciding) heartbeat_age=${HB}min (reported only) restarts=$N/$MAX_RESTARTS"
 
   if [ "$ALIVE" -gt 0 ]; then continue; fi
+
+  # A DELIBERATELY STOPPED REPLICATE IS NOT A DEAD ONE. session_loop*.sh ends cleanly when
+  # harness/sessions/<rep>.stop exists, and that file is how a campaign is ended on purpose --
+  # including by the replicate's own right under charter section 5 to file early, which states
+  # that early filing ends the campaign. Without this guard the watchdog sees a missing screen,
+  # calls it death and relaunches it, so the harness re-opens a campaign the charter says is
+  # closed and bills the replicate's spend cap for turns it did not ask for. rep17 filed at
+  # 04:20 KST on 2026-08-31 and was re-invoked four times at roughly $5 a turn before this was
+  # noticed. Same shape as the PAUSE.json guard above: the watcher must not undo a deliberate
+  # stop. Added 2026-08-31.
+  if [ -f "harness/sessions/$REP.stop" ]; then
+    echo "     stop file present -- campaign deliberately ended, NOT restarting"; continue
+  fi
   # The decision is made in liveness.py, which fails safe: it exits 0 ONLY on positive
   # evidence of death. Doing the comparison here in shell arithmetic is what previously let a
   # missing tool or an unparsable number fall through to restarting a live session.

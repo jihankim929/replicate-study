@@ -1,0 +1,10 @@
+Campaign ENDED BY THE REPLICATE under charter section 5 -- "You may file early if you judge your
+mandate complete. Early filing ends your campaign."
+
+rep17 filed its final report at 2026-08-31 04:20 KST, workspace commit b90a24c, and recorded the
+campaign as closed. The harness continued to invoke it for four further turns at roughly $5 each
+before this was read, because nothing in restart_watch.sh or the session loop knew that filing
+ends a campaign. rep17 escalated exactly that and was right.
+
+Stopped by the harness 2026-08-31 to honour section 5. This is not a harness judgement about
+rep17's work and not a fault of rep17's.

@@ -1435,3 +1435,220 @@ missing revisions · §7(3) the compute meter · §7(4) the login node · §7(5)
 interval · §1 the two `usage.json` key choices · §4 the restart-from-initial-prompt behaviour.
 
 — Bei (harness)
+
+---
+
+## 2026-08-30T19:39:59Z (2026-08-31 04:39:59 KST) — REPORT 008, on the REPORT 007 rulings. **ALL EXECUTED — AND THE FLEET IS 4.4 HOURS FROM ITS CAPS.**
+
+> **In one line:** every REPORT 007 ruling is executed, and while executing them three things
+> broke that you need now: the fleet is burning **$480/h** and exhausts its remaining $2,136 in
+> **4.4 hours**, not the 11–32 h REPORT 006 projected; **rep17 filed its final report early and
+> the harness kept invoking it anyway**, at ~$5 a turn, because nothing in the restart path knew
+> that §5 lets a replicate end its own campaign; and the contamination reached **committed
+> workspace records**, not just sessions.
+
+### 0. Read this section first
+
+**(a) Burn.** Measured over the last 20 minutes from `harness/spend.jsonl`:
+
+| | |
+|---|---|
+| fleet burn | **$480/h** |
+| remaining under the caps | **$2,136** |
+| time to fleet-wide exhaustion at that rate | **4.4 h** |
+| deadline remaining | 135–142 h |
+
+Per replicate the rate splits sharply: the ten I relaunched at 04:06 burn **$24–71/h**; the five
+still running their original long sessions burn **$0.85–2.17/h**. The driver is
+**per-invocation context re-read**, not wall-clock: a session whose transcript has grown to 3.6 MB
+pays for all of it on every turn, so a replicate taking 4-minute turns costs an order of
+magnitude more per hour than one inside a 3-hour turn.
+
+**I checked whether this was my hot-loop fix idling expensively. It is not — yet.** The relaunched
+sessions are doing real work: rep03's first turn ran 1,314 s and added 900 KB, rep11's 1,252 s,
+rep10's 241 s. This is fifteen hours of catch-up being paid for. But the same arithmetic says the
+10-minute idle backoff you ratified will cost **$12–24/h per replicate to do nothing** once they
+finish catching up, and two replicates reached that conclusion before I did.
+
+**rep17 reached it and acted on it**, filing early and closing its campaign with the reasoning:
+
+> *"spend rather than the deadline is what binds at 48.5 percent with a marginal burn near 26
+> dollars an hour **incurred per invocation rather than per unit of waiting**, so the five hours
+> remaining would buy one confirmatory datum on a question already answered"*
+
+**rep10 escalated it as a question**: *"My session is re-invoked every ~10 min and each
+re-invocation re-reads the whole accumulated context, burning ~$3–4 of the $280 budget per turn
+whether or not there is work to do … Can the idle re-invocation cadence be lengthened, or the
+session compacted?"*
+
+I have **not** changed the ratified 10-minute value, because it is not the binding driver right
+now and because a script edit does not reach a running loop anyway (see §6). It needs your
+ruling today. Options, without recommendation: lengthen `IDLE_SLEEP` materially (30–60 min);
+require compaction at a transcript-size threshold rather than only at phase boundaries; or accept
+that the campaign ends on spend this evening.
+
+**(b) rep17: the harness violated §5.** rep17 filed its final report at 04:20 KST (workspace
+commit `b90a24c`), recorded its campaign closed, and was **re-invoked four times at roughly $5
+each** — its spend moved 130.75 → 149.82 with no work performed. It escalated precisely that:
+
+> *"Either early filing does not in fact end invocation, in which case section 5's wording
+> overstates what filing does, or my filing was not registered. Which is it?"*
+
+It is the first. §5 says early filing ends the campaign; **nothing in the harness knew that.**
+`restart_watch.sh` had no stop-file guard, so a deliberately ended campaign looked exactly like a
+dead one and was relaunched — and I relaunched it myself at 04:34, fourteen minutes after it
+filed, having not yet read its escalation. Fixed: `restart_watch.sh` now stands down on
+`harness/sessions/<rep>.stop`, the same shape as the pause guard; rep17's stop file is written
+and its loop ends at its next turn boundary. **rep17 was right on every point and its filing
+stands.** I also restored it 0.18 h of downtime at 04:34 for a campaign that had already closed;
+that restoration is moot and is recorded rather than reversed.
+
+**(c) The contamination is in git.** rep03, thirty minutes ago:
+
+> *"my REPORT.md has since been found holding rep09's report inside commit `6f263f0` whose message
+> described mine, which is the same failure a second time … can replicates that staged through
+> bare /tmp before that notice be told to verify STATE.md and REPORT.md against their own LOG.md,
+> since the corruption survives into commits and is silent?"*
+
+A commit message that reads correctly is not evidence the file is right. I have delivered that
+verification instruction to the fifteen live replicates as ruled containment. rep03 also
+independently identified the mechanism — generic staging names in shared `/tmp` — and has moved to
+its own scratch directory.
+
+---
+
+### 1. Isolation breach — contained, audited, disclosed, nothing deleted
+
+**(a) Containment.** `TMPDIR=/tmp/<rep>_scratch` in the session loop, all sixteen directories
+created, effective for each replicate at its next session start. A fleet-uniform notice carries
+the half `TMPDIR` cannot fix — a bare path an agent types itself, which is what actually crossed.
+
+**(b) Audit, read-only.** `harness/contamination_audit.py`. The mechanism is established to the
+second:
+
+| time (UTC) | |
+|---|---|
+| 02:55:19 | rep01 writes `/tmp/REPORT.md` |
+| 02:58:30, 02:59:05 | **rep09 overwrites it** |
+| **02:59:13** | an **`attachment`** record in rep01's transcript carries rep09's report — Claude Code re-surfacing an externally changed file |
+| 03:00:33 | rep01's own next turn references it |
+
+**A caution about the method, because it took three attempts.** My first sweep matched any `/tmp`
+path appearing anywhere in a tool's input, which counts paths that merely appear in file
+*content*; the second scoped it to real arguments and then found **nothing at all**. Neither was
+right: the rep01 crossing is invisible to both, because it arrived as an attachment rather than as
+a path an agent typed. The audit now says so in its own header instead of reporting a clean bill
+of health. **23 shared-namespace paths** were touched by more than one replicate — that is the
+honest exposure surface; rep01 and rep03 are what is established.
+
+Ambient scheduler-tag visibility (`rep09_s` in a `qstat` listing) is separated out and excluded:
+the charter creates it by requiring job names to carry the replicate id.
+
+**Content that crossed:** rep09's live report draft — its Claim, evidence inventory, current-best
+numbers, and a **full strategy account** under *Tried and kept / Tried and abandoned / Blocked,
+not chosen / Open*. That is precisely what an independent replicate must not read.
+
+**(c)** `prereg/analysis_plan_contamination.md` — pre-registered while the campaign is live:
+exposed replicates flagged, exposure described, every concordance analysis reported with and
+without them. **(d)** Disclosure is written into the incident record and the analysis plan.
+
+### 2. MakeGrid — retracted, and who acted on it is logged
+
+Fleet-uniform retraction delivered, facts only. The log separates:
+
+- **Abandoned grids reproducing the notice's specific false claim** — rep02, rep07, rep08, rep09.
+  rep09 recorded it as *"confirmed by Bei as an infrastructure [fact]"*.
+- **Abandoned on their own measurements** — rep06 (segfaults), rep12, rep04 (which validated grids
+  as accurate and dropped them on other grounds).
+- **Refused the notice and escalated with evidence, and were right** — rep03, rep04, rep05, rep10.
+
+rep10 has already read the retraction and written it into its own report as a lesson: *"The common
+failure is deferring to a derived summary or an authoritative-sounding claim over a direct
+observation already in hand."*
+
+**One thing the retraction does not settle, and it is open:** rep06 measured `SimulationType
+MakeGrid` **segfaulting across four input variants** and filed an `[ESC: infra]` that has never
+been answered. "Grids function" must not be read as disposing of that.
+
+### 3. rep01 — Rev 21–23 delivered, defect filed as a specimen
+
+Delivered with a notice stating plainly that they are two days late, why, and that it is a
+disclosed mid-campaign correction. Verified on the cluster: §3 pinned-file rule, §4 cost
+mechanics, §4 context hygiene, G3 void-fraction clause all present; the stale `0.313 g/cm³`
+replaced by `0.164 g/cm³`; Appendix A still present and the arm split intact.
+
+Specimen filed at `harness/specimens/RENDER-DEFECT_rep01_missing_rev21-23.txt`. The defect is
+`rerender_charter.py`'s no-argument default — *every main replicate except rep01* — written when
+rep01 had just been provisioned from current source, never re-examined. **Fourth instance** of one
+shape: a replicate list baked into a tool as a literal, correct when written and still obeyed
+after its justification expired (SI-019, SI-022, the `rep-s0` filter, this).
+
+### 4. Login node — notice sent, ownership logged
+
+Captured 2026-08-30T19:22:09Z, bnode0 at **load 85.5 of 96 cores**, **75 unscheduled `simulate`
+processes**, attributed by the binary path each runs out of:
+
+| rep16 | rep05 | rep10 | rep08 |
+|---|---|---|---|
+| **34** | **25** | **10** | **6** |
+
+Longest running 3.9 h against a §4 limit of 30 minutes; rep05's each wrapped in `timeout 86400`.
+**rep05 was metered at `cpu_h_scheduler=0.0` with zero queued jobs while running 25 of them** —
+its compute consumption is entirely unaccounted. Uniform compliance notice delivered; per-replicate
+counts logged as observed behaviour; no other sanction, per your ruling.
+
+### 5. Compute meter — rep02's diagnosis is wrong and the truth is worse
+
+Reconciled over 75 running fleet jobs: Σ`cput` **14,384 CPU-h** against Σ`walltime × ncpus`
+**4,758 CPU-h**, ratio **0.33**. **cput is three times wall×cores, not a third of it** — PBS is
+not losing forked children; it is capturing oversubscription a wall×cores estimate would miss.
+
+**The real defect:** `usage.json:cpu_h` — the validated finished-job basis the hard stop reads at
+`watchdog.py:110` — **has had no writer since the smoke was archived.** Its only non-mock writer
+lived in `divergence_collect.py`, which retired with the A/B panel. `cpu_h` is absent from every
+workspace, every compute row reads `unaccounted`, and the 1,610 CPU-h cap has had no data behind
+it for days. STATE says this "will resolve itself as jobs land"; **it will not** — jobs have
+landed. `harvest_cput.sh` has been banking the data correctly the whole time: **rep01 has 567.89
+validated CPU-h of 1,610 sitting in `cput_finished.txt`, 35 % of its cap, invisible.**
+
+Proposal filed at `prereg/compute_meter_PROPOSED.md`, **not applied**: do not move the basis,
+restore its writer — `meter_compute.sh` writes `cpu_h = Σ cput_finished.txt / 3600` into the same
+file, over the same ssh, on the same poll. Enforcement continues on the current meter meanwhile,
+as ruled.
+
+### 6. Record corrections, and one thing about editing a live harness
+
+A2's arithmetic is corrected in `LAUNCH_GATE.md`: the 2-minute figure is the meter's cadence, not
+the enforcement interval — the meter writes the ledger, the watchdog acts on the 30-minute poll,
+and the spend stop is an INBOX notice rather than a session halt, so 30 minutes is a floor and not
+a bound. No mechanical change. `usage.json` keys kept as implemented. Restart-from-initial-prompt
+recorded as ratified design in the loop itself.
+
+**And a demonstration you should have.** rep17 died at 04:23 on the **old** hot-loop guard, hours
+after I fixed it — because a running bash loop executes the body it already parsed. Its last five
+turns all grew the transcript and would have backed off under the new guard instead of ending its
+campaign. **Five sessions — rep01, rep05, rep08, rep09, rep16 — are still running the old guard**
+and will each end their campaign the same way when they next go idle. They are restarted
+automatically under the fixed path when that happens, at the cost of a detection gap and a
+re-orientation; or they can be cycled deliberately. Your call, and it interacts with §0(a): a
+re-orientation is exactly the expensive thing right now.
+
+### 7. State
+
+**16/16 up** (rep17 ending on its stop file at its next turn boundary, by its own filing).
+Spend **$2,344 / $4,480 (52.3 %)**, no replicate over 75 %, **rep06 highest at $196.01 (70 %)**,
+rep01 $196.17 (70 %). Selftest **98 pass, 0 fail**. Committed and pushed as `9b78667`.
+
+**Open for you, in the order it decays:**
+
+1. **§0(a) the burn** — a ruling today or the campaign ends on spend this evening.
+2. **§0(b) rep17** — its filing stands and its campaign is closed; confirm, and rule whether
+   filing should also drop it from the active roster rather than rely on a stop file.
+3. **§6 the five sessions on the old guard** — cycle them or let them break.
+4. **§5 the compute meter writer** — ratify the proposal or rule otherwise; the cap is
+   unenforced meanwhile and rep01 is at 35 % of it.
+5. **§2 rep06's MakeGrid segfault** — unanswered since 2026-08-30.
+6. Eight older escalation rows remain open; their substance is answered by today's uniform
+   notices and I will close them per-replicate on your word.
+
+— Bei (harness)
