@@ -1200,3 +1200,238 @@ time as this sits · §7(5) the notification gap · §6 the four escalation thre
 yours to rule.
 
 — Bei (harness)
+
+---
+
+## 2026-08-30T19:16:07Z (2026-08-31 04:16:07 KST) — REPORT 007, on the REPORT 006 rulings. **ALL SEVEN EXECUTED. METER LIVE, 16/16 UP.**
+
+> **In one line:** the spend cap binds again and reads $2,117.67 / $4,480 with rep01 at 69.6 % of
+> its own, Rev 24 is in all sixteen charters, the restart path and the hot-loop guard are fixed
+> and each verified both ways, the ten are restored per-replicate and running — and the
+> escalation queue turns out to hold four findings I had not seen, one of which is replicates
+> reading each other's files.
+
+### 0. Status
+
+Executed, in the ruled order, between 03:45 and 04:15 KST. **Fleet: 16/16 sessions up and
+working**, all `0/3` on restarts, all growing their transcripts. Spend meter firing every two
+minutes and metering. Poll at 04:00 completed `rc=0` with the corrected figures. Selftest
+**98 pass, 0 fail**. Committed and pushed as `4d941e6`.
+
+Three things in this report correct REPORT 006, and I put them at the front rather than in
+footnotes: the measured downtime was **larger** than I reported (§4), the number of replicates
+that had escalated the missing spend meter was **nine, not three** (§5), and I closed two
+escalation rows I had not answered before catching it (§5).
+
+### 1. The meter — done first, live since 03:52 KST
+
+**(i) The guard.** `meter_spend.py:88` tested `local ≥ baseline in all four token classes`. That
+is not evidence the previous host's transcripts moved; it is what time does to any replicate that
+keeps running. It now asks the question it was always meant to ask: **does a local transcript
+carry a record from before the previous fleet was confirmed down** (`fleet_confirmed_down_utc`,
+2026-08-29T22:35:50Z)? A running campaign cannot make that true and a copied directory cannot
+make it false, which is the asymmetry the arithmetic test lacked. Verified both ways: with the
+real cutoff rep01 meters $194.57 with its $65.14 carried; with a cutoff in the future the refusal
+fires and names the offending record.
+
+It now **raises** `CarriedTranscriptsPresent` instead of `sys.exit`. That was load-bearing for
+(ii): `SystemExit` derives from `BaseException` and would have passed straight through
+`watchdog.py`'s `except Exception` — the fix you ordered second would have taken the watchdog down
+rather than degrading one row to `unknown`.
+
+**(ii) The baseline.** `watchdog.py:136` now passes it. rep01 reads **$194.84, 69.6 %** where the
+panel said `ok` at 40 %. Fleet **$2,117.67 / $4,480 = 47.3 %**.
+
+**(iii) `usage.json`.** All sixteen workspaces now carry `spend_usd`, refreshed every two minutes.
+
+> `{"cpu_h_scheduler": 582.643, "queued_jobs": 5, "tokens": 6677280, "spend_usd": 194.57,`
+> `"spend_cap_usd": 280.0, "spend_fraction": 0.6949, "spend_level": "ok"}`
+
+Two implementation notes, both reversible, both mine to flag:
+
+- **`spend_usd` now means two things.** In `WORKSPACE.json` it is the **cap**; in `usage.json`,
+  per your ruling, it is what has been **spent**. `usage.json` already held used-values
+  (`cpu_h_scheduler`, `tokens`) so the placement is right, but the collision is real, so I wrote
+  **`spend_cap_usd` and `spend_fraction` alongside** it. Additive, and it means no replicate has
+  to resolve the collision from context. Say the word and they come out.
+- **One ssh for the fleet, not sixteen.** `spend_wrapper.sh`'s stated property is *"no ssh, no
+  cluster load"* and the 2-minute cadence is load-bearing; sixteen connections every two minutes
+  would be 480 an hour. One connection carries the same payload — 30 an hour. The write is atomic
+  and the push runs **after** the ledger, never before, and cannot fail the meter: enforcement is
+  decided from local transcripts and an unreachable cluster must not disturb it.
+
+### 2. Rev 24 — in all sixteen, and one replicate turns out to be three revisions behind
+
+The clause is in §5 of the common core, verbatim as ruled, with a revision row. Rendering was
+checked into **both arms before anything was sent**: one clause bullet each, Appendix A present
+for one and absent for the other. Fifteen went through the ratified `rerender_charter.py`, after a
+per-replicate diff of live-versus-rendered confirmed **the delta was exactly Rev 24 for all
+fifteen**. All sixteen also have an INBOX notice pointing at §5 and at the new spend figure.
+
+**rep01 was handled differently and you need to rule on why.** Its live charter differs from a
+fresh render by **19 lines, not 2**: it holds **no Rev 21, no Rev 22 and no Rev 23**. STATE
+records rep01 as "the only replicate holding a pre-Rev-21 Appendix A"; the measurement is worse
+than that — it is missing the §3 pinned-file rule, the §4 **"Cost mechanics and discipline"**
+clause and the §4 "Context hygiene" clause as well, all three of which were ruled *common core,
+both arms identically*.
+
+So I patched Rev 24 onto rep01's own live text rather than re-rendering it, and delivered exactly
+the ruled clause and nothing else. Re-rendering would have carried three unruled amendments into
+a live campaign mid-flight.
+
+**Why this is not a small bookkeeping gap.** The clause rep01 has never had is the one that says
+context is re-read every turn, that raw output dumped into a session is billed for the rest of the
+campaign, and — in its last sentence — *"The spend meter in your workspace shows your position
+against the budget; consult it when planning."* **rep01 is the highest spender in the study and
+the first to reach its cap.** I am not claiming the missing clause explains that; I am saying the
+one replicate that never received the cost-discipline rule is the one burning fastest, that this
+is measurable, and that it is now a confound in the record either way. Ruling needed on whether
+rep01 receives Rev 21–23 now, and if so whether that is disclosed as a mid-campaign change.
+
+### 3. Restart path and hot-loop guard — both fixed, both verified in both directions
+
+**Restart path.** `systemd-run --user --scope`, placed in `launch_sessions.sh` rather than in
+`restart_watch.sh`: every launch path — restart, resume, first launch, a hand-run relaunch — goes
+through that one line, and the property wanted is *a session outlives whatever started it*, which
+belongs to launching and not to restarting. Guarded on `systemd-run` being present, so a host
+without a systemd user manager still launches. Verified with a disposable oneshot unit: a screen
+started through a scope survives the unit finishing; started directly from the same place it does
+not. The ten relaunched sessions are each in their own scope (`replicate session repNN`).
+
+**Hot-loop guard.** Sub-minute turns that **wrote** to the transcript back the inter-turn sleep
+off from 10 s to 600 s and log the transition; sub-minute turns that wrote **nothing** still
+break. Backing off rather than resetting the counter matters for spend as much as for noise —
+five quick turns then a fresh ten seconds is ~24 full-context turns an hour against a cap, and
+ten minutes between turns is ~6.
+
+### 4. The ten — restored and up, on a corrected measurement
+
+**The COUNTER_RESET did not take on the first attempt, for a recorded reason.**
+`restart_watch.sh` matched `"event":"COUNTER_RESET"` with no space; `json.dumps` writes one. The
+ruled reset was therefore invisible and the caps stayed spent at 3/3. This is the same family as
+SI-007's two counter bugs and as the `"replicate": ?` tolerance three lines below it in the same
+file, so the fix is the same one — tolerate both spacings rather than dictate a writer. The
+ledger row stands as written; the grep was the defect.
+
+**The measured downtime is 13.98–15.63 h, not the 10.0–12.0 h I reported.** REPORT 006 quoted
+*transcript age*, and each of the three killed restarts wrote about twenty seconds of orientation
+transcript before systemd killed it — which reset the growth clock and made a dead replicate look
+three and a half hours less dead. The basis used here is the **hot-loop guard line in each
+replicate's own loop log**, the moment its campaign actually stopped, which is in the repository
+and auditable. The ~60 s of killed restart sessions inside each window is not subtracted: it
+advanced no campaign work and the harness killed it, so the rounding is in the replicate's favour
+by under a minute and this sentence is the disclosure. `harness/restore_downtime.py` does PASS 1
+over all ten before writing anything, aborts as a whole, and reads every deadline back afterwards
+— **10 restored, 0 mismatches**, logged to `harness/restorations.jsonl`.
+
+**The corrective notice** names the three false restart notices explicitly and tells each
+replicate to disregard them and the wall of "no new activity" lines beneath them, states the
+extension and its measurement, and points at the finished cluster work waiting to be collected.
+
+**Relaunch: 10/10 launched and WORKING**, each with transcript growth as proof of life, under the
+fixed path. Fleet 16/16.
+
+One property of the restart path that is unchanged and that you may want to rule on: a restarted
+replicate re-enters at `iteration 1`, which uses the **initial prompt**, not `--continue`. It
+re-reads its charter and re-orients from its workspace record rather than resuming a session.
+That is recoverable by design — the record is the continuity — but it is not free, and it is what
+the ten did this morning.
+
+### 5. Escalations — answered as ruled, and the queue held far more than REPORT 006 saw
+
+Answered per-replicate, leak-checked against `config.LEAK_DENY_*` before a byte was sent, and
+delivered: **rep06** (G3 filters as-deposited artifacts, does not bar simulating an agent-created
+charge-balanced modification, G5 governs the modification and G4 the claim caveat), **rep09**
+(claim-grade stands, no dispatch floor, contention is environment, §5 honest-incomplete governs,
+token reset was the migration), **rep07 / rep12 / rep15** and then **rep01 / rep04 / rep10 /
+rep11 / rep17** (the spend meter now exists; the same answer, per replicate).
+
+**Nine replicates had independently escalated the missing spend meter, not three.** I reported
+three because I read the last six rows of `escalations.jsonl` rather than the queue. Nine of
+sixteen independently reaching the same conclusion about the same missing instrument is a
+different fact from three, and it is the strongest evidence in this record that §4 was pointing
+at something that did not exist.
+
+**Two rows were closed that I had not answered, and I want that on the record.** My first
+delivery closed every open row belonging to any replicate it delivered to — which marked rep07's
+report of unscheduled processes on the login node as answered by a notice about spend. The second
+attempt closed rep10's MakeGrid row because it shares a timestamp *to the second* with its spend
+row. Both are reopened. `deliver_answers.py` now requires each notice to declare the **exact**
+timestamps it closes and closes nothing otherwise: an escalation recorded as answered is one
+nobody reads again, so that failure is silent and permanent, and it should not have taken two
+attempts to see.
+
+### 6. Pager — installed, wired, inert, and honest about it
+
+`harness/page_pi.sh` opens a GitHub issue titled **URGENT**, wired into the restart cap — the
+line that printed *"notify the PI"* 221 times into a log on an unattended host now does it. It
+exits 0 whatever happens, so a poll cannot be broken by it; it dedupes one page per key per 6 h;
+it reads the credential at runtime from the git remote and **never prints or stores it**, passing
+it to curl on stdin rather than argv, and scrubbing every response before logging.
+
+Live test result today: **HTTP 403, "Resource not accessible by personal access token"**,
+recorded in `harness/pages.jsonl` as `forbidden`. That is the expected state until `issues:write`
+lands, and it records that fact at every fire rather than letting the harness believe it has a
+pager it does not have. Until then, REPORTS.md and your twice-daily reads, as you ruled.
+
+### 7. Eight escalations stay open, and four of them are findings I cannot rule on
+
+Ranked by what I think they cost.
+
+1. **Replicates are reading each other's files.** rep01: *"all sixteen replicates share one /tmp
+   on the agent host, and a sibling's REPORT.md overwrote mine at the same path and was surfaced
+   into my session."* rep03: *"STATE.md in my workspace contained rep09's STATE.md — prefix
+   rep09_, 157.4 CPU-h, bin/autopilot.sh, a Tier 1–4 plan."* **Verified, not relayed:**
+   `/tmp/REPORT.md` and `/tmp/STATE.md` exist unprefixed on this host and both are **rep09's**
+   (`# FINAL REPORT — … replicate rep09`). Snapshotted to
+   `harness/state/incident_20260831_tmp_collision/` and deliberately **not deleted** — a live
+   replicate may be using them and removing them is a change to a running campaign. Most
+   replicates namespace their scratch (`rep02_*`); at least one did not, and material from one
+   replicate has reached at least two others. This goes to the independence the study rests on.
+   The obvious containment is a per-replicate `TMPDIR` in the session loop, but applying it now
+   changes the environment for sixteen live campaigns and does not undo what has already crossed,
+   so I have not done it.
+2. **A harness notice told the fleet something false, and four replicates caught it.** rep03,
+   rep04, rep05 and rep10 all rebut INBOX item 3 of 2026-08-30, which stated as infrastructure
+   fact that the provided `simulate` binary contains no MakeGrid code path. rep03 measured
+   *"28/30 grid benchmark tasks returned OK, grids/UFF holds 29 .grid files, and grid-vs-direct
+   working capacities agree"*; rep04 identifies the error precisely — *"the notice appears to have
+   grepped bin/simulate, an 18 KB driver; the code is in lib/libraspa"*. If they are right, the
+   harness removed the single largest available speedup from the fleet's option set by assertion,
+   and it bears directly on the compute starvation in item 4 below. A retraction needs to go out
+   fleet-uniform, and you may want to rule on whether replicates that abandoned grids on the
+   strength of it are owed anything.
+3. **The compute meter may be undercounting by about half.** rep02: `usage.json cpu_h_scheduler`
+   reads 107.5 CPU-h where its own per-task wall times sum to 223.6 — *"PBS cput appears to lose
+   forked children."* The 1,610 CPU-h cap is enforced on that meter.
+4. **Unscheduled simulate processes on the login node.** rep07: *"head node bnode0 is running 76
+   unscheduled RASPA simulate processes from other replicates at load 92 of 96 cores, so
+   login-node wall-clock is inflated."* This is compute consumed outside the accounted path, it
+   is plausibly part of why rep09 has had zero cores for hours, and it is a compliance question
+   about the fleet rather than an infrastructure one.
+
+And one I am adding from reading the code rather than from the queue:
+
+5. **Spend enforcement acts on the 30-minute poll, not the 2-minute meter.** The meter runs every
+   two minutes and maintains the ledger, but the warn and stop **actions** are taken by
+   `watchdog.py` on the poll, and `act_on_stop` for spend is an INBOX notice — it does not stop a
+   session, unlike the compute stop which holds the queue. So the latency LAUNCH_GATE A2 prices
+   at two minutes is in practice thirty minutes plus the replicate's own reading latency. With
+   caps standing at $280 and the fleet at 47 %, nothing is at risk today. I raise it because A2's
+   arithmetic is quoted in the record as though the two-minute figure were the enforcement
+   interval, and it is not.
+
+### 8. State
+
+**Fleet RUNNING, 16/16**, all `0/3` restarts, all transcripts growing. Spend **$2,117.67 / $4,480
+(47.3 %)**, every replicate `ok`, **rep01 highest at 69.6 %** and expected to reach the 75 % warn
+within about two hours — at which point Rev 24 §5 tells it what to do, which is the sequence you
+ruled. Deadlines: the six untouched, the ten extended by their own measured downtime. Charter at
+**Rev 24** in sixteen workspaces, rep01 at Rev 20 + Rev 24 pending your ruling in §2. Selftest 98
+pass, 0 fail. Pager installed and returning 403 until the token scope lands.
+
+**Open for you:** §7(1) the isolation breach · §7(2) the false MakeGrid notice · §2 rep01's three
+missing revisions · §7(3) the compute meter · §7(4) the login node · §7(5) the enforcement
+interval · §1 the two `usage.json` key choices · §4 the restart-from-initial-prompt behaviour.
+
+— Bei (harness)
