@@ -1,0 +1,183 @@
+{
+  "schema": "spend_baseline/1",
+  "active": true,
+  "_active_note": "Set false ONLY if the transcript directories were carried across with the repo, in which case the local tally already contains this spend and adding it would double-count. meter_spend.py also refuses on its own if it sees local transcripts that already cover the baseline.",
+  "measured_on_host": "the retired supervision laptop (macOS, /Users/jihankim/replicate-study)",
+  "basis": "latest harness/spend.jsonl row per paused replicate; token counts, cost recomputed",
+  "ledger_last_ts": "2026-08-30T00:46:19.936538+00:00",
+  "fleet_confirmed_down_utc": "2026-08-29T22:35:50Z",
+  "n": 16,
+  "cap_usd_each": 280.0,
+  "denominator_usd": 4480.0,
+  "carried_usd_total": 725.4712,
+  "carried_fraction": 0.161936,
+  "supersedes_summary": {
+    "file": "harness/state/fleet_spend.json",
+    "fleet_spend_usd": 714.94,
+    "stamped": "2026-08-29T22:24:19Z",
+    "delta_usd": 10.5312,
+    "why": "the summary was stamped 11.5 min before the last session stopped; the ledger kept rising until 2026-08-29T22:35:14Z and was flat from there to the final row, so the delta is real spend, not the meter re-tallying stopped sessions"
+  },
+  "per_replicate": {
+    "rep01": {
+      "tokens": {
+        "input_tokens": 962,
+        "output_tokens": 469679,
+        "cache_creation_input_tokens": 596977,
+        "cache_read_input_tokens": 99323960
+      },
+      "usd_at_current_rates": 65.1399,
+      "ledger_ts": "2026-08-30T00:46:19.936538+00:00"
+    },
+    "rep02": {
+      "tokens": {
+        "input_tokens": 606,
+        "output_tokens": 439446,
+        "cache_creation_input_tokens": 1215375,
+        "cache_read_input_tokens": 43098276
+      },
+      "usd_at_current_rates": 40.1344,
+      "ledger_ts": "2026-08-30T00:46:19.936538+00:00"
+    },
+    "rep03": {
+      "tokens": {
+        "input_tokens": 444,
+        "output_tokens": 307703,
+        "cache_creation_input_tokens": 368021,
+        "cache_read_input_tokens": 27599630
+      },
+      "usd_at_current_rates": 23.7947,
+      "ledger_ts": "2026-08-30T00:46:19.936538+00:00"
+    },
+    "rep04": {
+      "tokens": {
+        "input_tokens": 530,
+        "output_tokens": 336590,
+        "cache_creation_input_tokens": 804716,
+        "cache_read_input_tokens": 34248826
+      },
+      "usd_at_current_rates": 30.5713,
+      "ledger_ts": "2026-08-30T00:46:19.936538+00:00"
+    },
+    "rep05": {
+      "tokens": {
+        "input_tokens": 536,
+        "output_tokens": 316393,
+        "cache_creation_input_tokens": 919576,
+        "cache_read_input_tokens": 38547479
+      },
+      "usd_at_current_rates": 32.9336,
+      "ledger_ts": "2026-08-30T00:46:19.936538+00:00"
+    },
+    "rep06": {
+      "tokens": {
+        "input_tokens": 1094,
+        "output_tokens": 581791,
+        "cache_creation_input_tokens": 3694848,
+        "cache_read_input_tokens": 122780669
+      },
+      "usd_at_current_rates": 99.0334,
+      "ledger_ts": "2026-08-30T00:46:19.936538+00:00"
+    },
+    "rep07": {
+      "tokens": {
+        "input_tokens": 664,
+        "output_tokens": 459914,
+        "cache_creation_input_tokens": 1841858,
+        "cache_read_input_tokens": 55077911
+      },
+      "usd_at_current_rates": 50.5517,
+      "ledger_ts": "2026-08-30T00:46:19.936538+00:00"
+    },
+    "rep08": {
+      "tokens": {
+        "input_tokens": 618,
+        "output_tokens": 393185,
+        "cache_creation_input_tokens": 953686,
+        "cache_read_input_tokens": 48580473
+      },
+      "usd_at_current_rates": 40.0835,
+      "ledger_ts": "2026-08-30T00:46:19.936538+00:00"
+    },
+    "rep09": {
+      "tokens": {
+        "input_tokens": 606,
+        "output_tokens": 362640,
+        "cache_creation_input_tokens": 1057654,
+        "cache_read_input_tokens": 43196137
+      },
+      "usd_at_current_rates": 37.2774,
+      "ledger_ts": "2026-08-30T00:46:19.936538+00:00"
+    },
+    "rep10": {
+      "tokens": {
+        "input_tokens": 1024,
+        "output_tokens": 552956,
+        "cache_creation_input_tokens": 1938049,
+        "cache_read_input_tokens": 99298212
+      },
+      "usd_at_current_rates": 75.5909,
+      "ledger_ts": "2026-08-30T00:46:19.936538+00:00"
+    },
+    "rep11": {
+      "tokens": {
+        "input_tokens": 570,
+        "output_tokens": 386456,
+        "cache_creation_input_tokens": 1098370,
+        "cache_read_input_tokens": 44417946
+      },
+      "usd_at_current_rates": 38.738,
+      "ledger_ts": "2026-08-30T00:46:19.936538+00:00"
+    },
+    "rep12": {
+      "tokens": {
+        "input_tokens": 580,
+        "output_tokens": 335954,
+        "cache_creation_input_tokens": 1027323,
+        "cache_read_input_tokens": 44170710
+      },
+      "usd_at_current_rates": 36.9079,
+      "ledger_ts": "2026-08-30T00:46:19.936538+00:00"
+    },
+    "rep13": {
+      "tokens": {
+        "input_tokens": 630,
+        "output_tokens": 318834,
+        "cache_creation_input_tokens": 790857,
+        "cache_read_input_tokens": 45876912
+      },
+      "usd_at_current_rates": 35.8553,
+      "ledger_ts": "2026-08-30T00:46:19.936538+00:00"
+    },
+    "rep15": {
+      "tokens": {
+        "input_tokens": 760,
+        "output_tokens": 430582,
+        "cache_creation_input_tokens": 1843964,
+        "cache_read_input_tokens": 53557852
+      },
+      "usd_at_current_rates": 49.0721,
+      "ledger_ts": "2026-08-30T00:46:19.936538+00:00"
+    },
+    "rep16": {
+      "tokens": {
+        "input_tokens": 698,
+        "output_tokens": 361330,
+        "cache_creation_input_tokens": 2369543,
+        "cache_read_input_tokens": 50984830
+      },
+      "usd_at_current_rates": 49.3388,
+      "ledger_ts": "2026-08-30T00:46:19.936538+00:00"
+    },
+    "rep17": {
+      "tokens": {
+        "input_tokens": 412,
+        "output_tokens": 252368,
+        "cache_creation_input_tokens": 480837,
+        "cache_read_input_tokens": 22263594
+      },
+      "usd_at_current_rates": 20.4483,
+      "ledger_ts": "2026-08-30T00:46:19.936538+00:00"
+    }
+  }
+}
