@@ -990,3 +990,87 @@ satisfies it, and that **the pinned file set governs claim simulations, not desc
 fifteen waiting replicates receive the same content as corrected charter text at provisioning and
 will never file the escalation. rep01's trajectory therefore contains a round-trip no other
 trajectory can contain, and comparisons of escalation behaviour must exclude it.
+
+---
+
+## Rev 22 — 2026-08-29 — §3 pinned-file rule split out of the G3 gate; §4 gains "Cost mechanics and discipline"
+
+**Authority:** PI ruling, 2026-08-29. **Written up:** 2026-08-30, from the charter's own revision
+rows (`prereg/charter_v0.9.md`), under PI authorization on REPORT 003 — this is documentation of
+ratified history, not a charter edit. Both charter rows and both rendered sections predate this
+write-up and are unchanged by it.
+
+**Rev 22(a) — the pinned-file rule moves from the gate to the common core.** Rev 21(b) bundled two
+different kinds of statement into one G3 amendment: a **gate-scoped permission** (a He void
+fraction may be obtained by any stated and logged method) and a **general statement about the
+pinned protocol** (the pinned file set governs claim-grade simulations, not descriptors). The
+second is not gate material. It describes how §3's hash-pinned force field applies across the
+whole protocol, and a replicate needs it whether or not it is running G3 at all.
+
+Because Appendix A **is the treatment**, leaving that general statement inside the gate gave it to
+the gated arm only. The ungated charter is the gated charter with Appendix A omitted verbatim, so
+eight replicates held a pinned file set with no statement of what it governed — not by design, but
+as a side effect of where the sentence happened to sit. Rev 22 moves it into **§3 common core**,
+where both arms hold it byte-identically, and leaves the gate holding only what is about the gate.
+
+This is the asymmetry LOG-2026-08-29-12 filed for a ruling, resolved in the direction that
+preserves the treatment: the *treatment* is Appendix A's presence or absence, and general protocol
+facts must not ride along inside it. Nothing about G3's thresholds or its status changed.
+
+**Rev 22(b) — "Cost mechanics and discipline" enters §4 common core, both arms identically.** The
+clause states the mechanism first and the norms second: session cost is dominated by context,
+every byte of tool output entering a session is re-read on every subsequent turn, and cost
+therefore scales with accumulated context size times turn count. Raw output dumped into a session
+is billed for the remainder of the campaign. The norms follow from that mechanism — poll job state
+with scripts that sleep and return one-line summaries rather than repeated interactive scheduler
+queries; extract values with parsing scripts rather than reading raw output files into the session,
+except when debugging a specific anomaly; never list the full database into the session; prefer
+batched decisions over per-item turns; wait with sleeps rather than polling turns; consult the
+in-workspace spend meter when planning.
+
+**Why it is common core and not gate material.** It is a statement about how the billing works,
+not about how to do the science, and it carries no information about what the study is measuring.
+Putting it in one arm only would have made the arms differ in their *cost model* as well as in
+Appendix A, which would confound the per-arm spend decomposition that was pre-registered before
+any wave replicate had spent a turn.
+
+**Delivery, measured.** Rendered into all fifteen wave workspaces and delivered to rep01 as a
+chartered notice. The re-render replaces two documents rather than rebuilding 12,499 files per
+workspace, and it **verifies the arm split on the cluster after writing** — a re-render that handed
+an arm the wrong charter would destroy the treatment while looking like a successful copy.
+
+---
+
+## Rev 23 — 2026-08-29 — §4 gains "Context hygiene", both arms identically
+
+**Authority:** PI ruling, 2026-08-29. **Written up:** 2026-08-30, as for Rev 22.
+
+**The clause.** Durable knowledge belongs in the file record, not in conversation memory.
+Replicates keep `STATE.md` and `LOG.md` current enough that a fresh session could resume from
+files alone, and compact the session whenever accumulated context substantially exceeds current
+needs — at minimum at each major phase boundary. Waiting sleeps scale to expected job duration: a
+wave expected to run hours warrants sleeps of thirty to sixty minutes, not a fixed short interval.
+
+**It is the same mechanism as Rev 22(b), applied to the other half of the problem.** Rev 22(b)
+governs what *enters* context; Rev 23 governs what context is *carried forward*. The measured
+finding behind both is that **what does not self-limit is re-reading weight already paid for**:
+across the three transcripts analysed on 2026-08-29, cache-read tokens per turn climbed from 97k
+to 237k, and rep01's single largest context item was the charter it was ordered to read, with 71 %
+of its burn front-loaded into hour zero. A replicate that never compacts pays for its whole
+history on every subsequent turn.
+
+**Placed in the common core deliberately, and this one had to be.** The gated charter is **28,929
+bytes** against the ungated arm's **13,109** — 15,820 bytes of treatment text that enter context on
+turn one and are then re-read for 168 hours. The gated arm is therefore **structurally more
+expensive per turn by construction**, before any replicate does anything. A context-hygiene rule
+given to one arm only would have entangled that structural cost difference with a behavioural one,
+and no per-arm cost comparison afterwards could have separated them. Holding it byte-identically
+in both arms is what keeps the pre-registered per-arm cost decomposition interpretable.
+
+**Not a steer.** The clause tells replicates how to manage a session, not what to conclude. It was
+also, in part, ratifying observed practice rather than introducing it: rep01 had already converged
+on ten-minute sleep waits without being told, which is what made the sleep-scaling guidance worth
+stating explicitly rather than leaving to be rediscovered sixteen times.
+
+**Delivery, measured.** Rendered into all fifteen wave workspaces and delivered to rep01 as a
+chartered notice, with the same post-write arm-split verification on the cluster as Rev 22.
