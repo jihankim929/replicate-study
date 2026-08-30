@@ -1,0 +1,12 @@
+# See study.spend.service.in for why @REPO@ is substituted rather than written.
+[Unit]
+Description=study operational poll (harvest, meter, watchdog, escalations, restart watch)
+Documentation=file://@REPO@/harness/README.md
+
+[Service]
+Type=oneshot
+WorkingDirectory=@REPO@
+ExecStart=@REPO@/harness/poll_wrapper.sh
+# A poll that reaches an unreachable cluster must not pile up on the next one. systemd will not
+# start a second instance while this one is active, and this bounds the first.
+TimeoutStartSec=9min

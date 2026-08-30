@@ -1,0 +1,12 @@
+# Rendered from this template by harness/systemd/install.sh; @REPO@ is substituted with the
+# repository root MEASURED at install time, never a path typed into a file. The launchd plists
+# this replaces hardcoded /Users/jihankim/replicate-study, which is why the scheduling layer did
+# not survive the move to bronze4 and why SI-012's condition rebuilt itself on the new host.
+[Unit]
+Description=study spend meter (per-replicate spend at list rates, 120 s cadence)
+Documentation=file://@REPO@/harness/README.md
+
+[Service]
+Type=oneshot
+WorkingDirectory=@REPO@
+ExecStart=@REPO@/harness/spend_wrapper.sh

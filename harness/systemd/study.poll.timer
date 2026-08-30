@@ -1,0 +1,17 @@
+# TEN minutes -- the ratified interval, stated in poll.sh's own header and the figure SI-012's
+# arithmetic is built from (2 cycles observed against "an expected 393"; 393 x 10 min = 65.5 h,
+# which is the smoke campaign). The launchd plist this replaces carried StartInterval 1800, so
+# the scheduler that did exist was running at THREE TIMES the ratified interval. Restored here
+# to the ratified figure and flagged to the PI rather than copied forward.
+[Unit]
+Description=fire the study operational poll every 10 minutes
+
+[Timer]
+OnCalendar=*:0/10
+AccuracySec=1s
+RandomizedDelaySec=0
+# As study.spend.timer: only meaningful because this is an OnCalendar= timer.
+Persistent=true
+
+[Install]
+WantedBy=timers.target

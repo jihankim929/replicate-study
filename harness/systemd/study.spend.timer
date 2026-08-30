@@ -1,0 +1,24 @@
+# The 2-minute cadence is load-bearing, not cosmetic. Enforcement is POLLED, so the fleet
+# maximum is N x (cap + peak_rate x interval): at a 30-minute cadence the overshoot alone is
+# $168 fleet-wide and the $280 cap does not fit under the $4,500 limit; at 2 minutes it does.
+# LAUNCH_GATE.md's A2 passes on that arithmetic, so slowing this timer silently invalidates
+# the gate.
+[Unit]
+Description=fire the study spend meter every 120 s
+
+[Timer]
+# OnCalendar, NOT OnUnitActiveSec, and the reason is Persistent= below.
+OnCalendar=*:0/2
+# systemd's default accuracy is 1 minute, which on a 2-minute cadence is a 50% jitter. The
+# spend bound is computed from the interval, so the interval has to be the interval.
+AccuracySec=1s
+RandomizedDelaySec=0
+# The property launchd was CHOSEN for, ported: a missed interval fires on resume instead of
+# being silently dropped. systemd honours Persistent= ONLY on OnCalendar= timers -- on a
+# monotonic OnUnitActiveSec= timer this line is accepted, ignored, and reads as though the
+# guarantee is in force. That is SI-012's shape exactly: a scheduling property asserted in a
+# config file that has no effect at runtime.
+Persistent=true
+
+[Install]
+WantedBy=timers.target
