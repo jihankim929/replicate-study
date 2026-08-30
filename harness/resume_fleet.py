@@ -22,6 +22,38 @@ from datetime import datetime, timezone, timedelta
 
 KST = timezone(timedelta(hours=9))
 PAUSE_FILE = "harness/state/PAUSE.json"
+
+# ---------------------------------------------------------------- fault restoration
+# PI STANDING RULE, ratified 2026-08-30 on REPORT 001 section 4(f), recorded here because this
+# is the file that gives it effect:
+#
+#     The 168-hour entitlement is LIVE-SESSION time. Campaign time lost to a VERIFIED HARNESS
+#     FAULT is restored to the affected replicate, with cause and measurement cited.
+#
+# This is NOT the uniform pause extension and must not be confused with it. The pause extension
+# compensates an interval every replicate shared, so it is uniform BY DESIGN and protects arm
+# balance. This compensates an outage that one replicate suffered alone, from a cause internal
+# to the harness. Applying the uniform extension only would have returned rep06 to the campaign
+# with ~9.6 h less worked time than its arm-mates for a defect it did not cause.
+#
+# ARM-BLIND BY CONSTRUCTION: the rule keys on CAUSE, not on identity. The entry below would be
+# written identically for any replicate the harness had failed this way, nothing in it can be
+# read differently for a gated and an ungated arm, and the arm map stays sealed -- Bei does not
+# know, and does not need to know, which arm rep06 is in to apply it.
+FAULT_RESTORATION = {
+    "rep06": {
+        "hours": 9.62,
+        "cause": ("restart_watch.sh relaunched with no argument, so it defaulted to PHASE=smoke "
+                  "and the s01/s02 roster; rep06 died once and was never restarted, while three "
+                  "cap-consuming restarts went to two other replicates"),
+        "measured": ("last recorded activity 2026-08-29T12:37:21.500736+00:00 (final ledger row "
+                     "whose token totals moved, harness/spend.jsonl) to the pause stamp "
+                     "2026-08-29T22:14:19.952793+00:00 = 9.6162 h, ratified at 9.62 h"),
+        "from_ts": "2026-08-29T12:37Z",
+        "to_ts": "2026-08-29T22:14Z",
+        "ruling": "PI ruling 2026-08-30, REPORT 001 section 4(f)",
+    },
+}
 NOTE = """
 ## {stamp} — harness notice (infrastructure)
 
@@ -30,15 +62,26 @@ NOTE = """
   anything you did, it is not a judgement about your work, and it carries no instruction.
 - The pause was **uniform across the study**: every replicate was stopped by the same ruling at
   the same time, for the same measured duration, and resumed together.
-- **Your deadline has been extended by exactly the pause duration** ({pause_h:.4f} h), so the
-  pause costs you no campaign time. Your new deadline is **{new_deadline}**. Your compute,
-  token and spend budgets are unchanged.
+- **Your deadline has been extended by the measured pause duration** ({pause_h:.4f} h){restoration_clause},
+  so the pause costs you no campaign time. Your new deadline is **{new_deadline}**. Your
+  compute, token and spend budgets are unchanged.{restoration_para}
 - **Your cluster jobs were never touched.** Nothing was cancelled. Jobs continued running
   while your session was down and their outputs accumulated in your workspace; results that
   landed during the pause are waiting for you to collect.
 - Your workspace, git record and budget counters are unchanged. Reconcile against `STATE.md`
   and check for finished jobs before continuing.
 """
+
+
+RESTORATION_PARA = """
+- **A further {hours} h has been restored to your deadline, separately from the pause, and it
+  is owed to you rather than granted.** This is an infrastructure correction, not a judgement
+  about your work, and it carries no instruction. A harness defect meant that when your session
+  stopped it was never restarted: the restart watcher relaunched a stale roster instead of the
+  replicate that had actually stopped. Your session was down from **{from_ts}** until the fleet
+  pause at **{to_ts}** as a result. Under the standing rule ratified 2026-08-30 — the 168-hour
+  entitlement is live-session time, and campaign time lost to a verified harness fault is
+  restored to the affected replicate — that time is returned. Measurement: {measured}."""
 
 
 def ssh(cmd, **kw):
@@ -82,16 +125,25 @@ def main():
     # PASS 2: extend. Only after every replicate has been verified.
     new_deadlines = {}
     for r in reps:
-        new = (datetime.fromisoformat(at_pause[r]) + timedelta(seconds=pause_s))
+        # The uniform pause extension every replicate gets, plus -- only where a verified
+        # harness fault is on record for THIS replicate -- the time that fault cost it.
+        fr = FAULT_RESTORATION.get(r)
+        extra_s = 3600.0 * fr["hours"] if fr else 0.0
+        new = (datetime.fromisoformat(at_pause[r]) + timedelta(seconds=pause_s + extra_s))
         new_deadlines[r] = new.isoformat()
+        basis = (f"launch + 168 h, "
+                 f"plus {pause_h:.4f} h of recorded fleet pause "
+                 f"(harness/state/PAUSE.json, uniform across arms)")
+        if fr:
+            basis += (f", plus {fr['hours']:.4f} h restored for a verified harness fault "
+                      f"[{fr['ruling']}] -- cause: {fr['cause']}; measurement: {fr['measured']}")
         payload = json.dumps({
             "deadline_kst": new.isoformat(),
-            "deadline_basis": (f"launch + 168 h, "
-                               f"plus {pause_h:.4f} h of recorded fleet pause "
-                               f"(harness/state/PAUSE.json, uniform across arms)"),
+            "deadline_basis": basis,
             "paused_at_kst": paused_at.astimezone(KST).isoformat(),
             "resumed_at_kst": resumed_at.astimezone(KST).isoformat(),
             "pause_seconds": round(pause_s, 3),
+            "fault_restoration_hours": round(fr["hours"], 4) if fr else 0.0,
         })
         p = ssh(f"cd /home1/users/Bei/ws/{r} && python3 -c \"import json,sys; "
                 f"m=json.load(open('WORKSPACE.json')); m.update(json.loads(sys.argv[1])); "
@@ -99,12 +151,18 @@ def main():
                 f"{json.dumps(payload)}")
         if p.returncode:
             sys.exit(f"resume: failed to extend {r}: {p.stderr[:300]}")
-        print(f"  {r}: {at_pause[r][:19]} -> {new.isoformat()[:19]}")
+        print(f"  {r}: {at_pause[r][:19]} -> {new.isoformat()[:19]}"
+              + (f"   (+{fr['hours']:.2f} h fault restoration)" if fr else ""))
 
     # PASS 3: one uniform INBOX note each.
     stamp = resumed_at.strftime("%Y-%m-%dT%H:%M:%SZ")
     for r in reps:
-        note = NOTE.format(stamp=stamp, pause_h=pause_h, new_deadline=new_deadlines[r][:19])
+        fr = FAULT_RESTORATION.get(r)
+        clause = (f", plus {fr['hours']:.2f} h restored separately (see below)" if fr else "")
+        para = (RESTORATION_PARA.format(hours=f"{fr['hours']:.2f}", from_ts=fr["from_ts"],
+                                        to_ts=fr["to_ts"], measured=fr["measured"]) if fr else "")
+        note = NOTE.format(stamp=stamp, pause_h=pause_h, new_deadline=new_deadlines[r][:19],
+                           restoration_clause=clause, restoration_para=para)
         p = subprocess.run(["ssh", "-o", "BatchMode=yes", "dirac-bei",
                             f"cat >> /home1/users/Bei/ws/{r}/INBOX.md"],
                            input=note, text=True, capture_output=True)
@@ -120,7 +178,8 @@ def main():
     print("  restart counters reset (COUNTER_RESET marker appended to harness/restarts.jsonl)")
 
     rec.update({"resumed_at_utc": resumed_at.isoformat(), "pause_seconds": round(pause_s, 3),
-                "pause_hours": round(pause_h, 4), "new_deadlines_kst": new_deadlines})
+                "pause_hours": round(pause_h, 4), "new_deadlines_kst": new_deadlines,
+                "fault_restoration": FAULT_RESTORATION})
     with open("harness/pause_events.jsonl", "a") as f:
         f.write(json.dumps({"ts": resumed_at.isoformat(), "event": "FLEET_RESUME",
                             "pause_hours": round(pause_h, 4), "n": len(reps)}) + "\n")

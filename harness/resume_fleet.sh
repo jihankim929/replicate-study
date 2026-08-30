@@ -26,12 +26,32 @@ if [ -n "$DRY" ]; then
   echo "  (dry-run) would extend deadlines, notify, reset counters, clear stops, relaunch:"
   echo "    $REPS"
   python3 - <<'PY'
-import json
-from datetime import datetime, timezone
+import json, sys
+from datetime import datetime, timezone, timedelta
+sys.path.insert(0, 'harness')
+from resume_fleet import FAULT_RESTORATION
 r=json.load(open('harness/state/PAUSE.json'))
 p=datetime.fromisoformat(r['paused_at_utc'])
-h=(datetime.now(timezone.utc)-p).total_seconds()/3600
-print(f"    pause so far: {h:.4f} h -- this is what every deadline would gain")
+now=datetime.now(timezone.utc)
+secs=(now-p).total_seconds(); h=secs/3600
+print(f"    paused at:    {p.isoformat()}")
+print(f"    now:          {now.isoformat()}")
+print(f"    pause so far: {h:.4f} h -- this is what every deadline would gain, uniformly")
+if FAULT_RESTORATION:
+    print()
+    print("    PLUS verified-harness-fault restoration (PI standing rule 2026-08-30),")
+    print("    which is NOT uniform because the rule keys on cause, not on identity:")
+    for rep, fr in FAULT_RESTORATION.items():
+        print(f"      {rep}: +{fr['hours']:.4f} h  [{fr['ruling']}]")
+        print(f"        measurement: {fr['measured']}")
+print()
+print("    projected deadlines (KST):")
+for rep in r['replicates']:
+    fr = FAULT_RESTORATION.get(rep)
+    extra = 3600.0*fr['hours'] if fr else 0.0
+    nd = datetime.fromisoformat(r['deadlines_at_pause_kst'][rep]) + timedelta(seconds=secs+extra)
+    tail = f"   (+{fr['hours']:.2f} h restored)" if fr else ""
+    print(f"      {rep}: {r['deadlines_at_pause_kst'][rep][:19]} -> {nd.isoformat()[:19]}{tail}")
 PY
   exit 0
 fi
