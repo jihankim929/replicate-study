@@ -1,7 +1,16 @@
-# FLEET PAUSED — RESUME FROM bronze4 — THIS LAPTOP IS NO LONGER A HOST
+# FLEET PAUSED — HELD FOR THE PI's GO ON bronze4
 
 *Paused 2026-08-30 07:14:19 KST. All sixteen replicates confirmed down 2026-08-29T22:35:50Z.
-Resume with one command on the new host: `./harness/resume_fleet.sh`. Do not resume here.*
+Resume with one command: `./harness/resume_fleet.sh`.*
+
+*Reoriented 2026-08-30: this banner read "RESUME FROM bronze4 — THIS LAPTOP IS NO LONGER A HOST
+… do not resume here", which was written on the laptop. **This repository now lives on
+bronze4**, so for every reader from here on "here" is the new host and the instruction inverted.
+The macOS laptop is retired and holds no live state.*
+
+**Held.** The resume is ratified in its parts but **not authorised**: it runs on the PI's
+explicit go, after `ssh dirac-bei true` passes and `./harness/resume_fleet.sh --dry-run` has
+been reported. See `reports/REPORTS.md`.
 
 ---
 
@@ -9,7 +18,12 @@ Resume with one command on the new host: `./harness/resume_fleet.sh`. Do not res
 
 *Updated before any long wait. Supersedes itself; history lives in LOG.md and git.*
 
-Last updated: 2026-08-30, after LOG-2026-08-30-01 (fleet paused; host retired; restart path corrected).
+Last updated: 2026-08-30, after the PI's ruling on REPORT 001 — spend carry ratified at
+$725.47, systemd schedulers installed, rep06's lost campaign time restored, and this file
+groomed against LOG and git history. **Grooming note:** the seal, the world freeze and the fleet
+launch had all executed on 2026-08-29 while several entries below still described them as open;
+those entries now carry their closing status and name what closed them. Nothing was deleted —
+the findings are kept, the *status lines* were what had gone stale.
 
 ## Role
 
@@ -46,18 +60,30 @@ prepared notices *before* the agents wake, resets the restart counters, clears t
 relaunches per-replicate through the corrected path, and retires the pause record only on full
 success.
 
-### BLOCKING before bronze4 resumes — the spend cap silently reopens on a new host
+### RESOLVED 2026-08-30 (was BLOCKING) — the spend cap would have silently reopened on a new host
 
 `harness/meter_spend.py:session_dir()` derives spend from transcripts under
 `~/.claude/projects/<mangled-local-cwd>/` on the **local** machine, and `tally()` recomputes the
 total from those files — it does **not** read the accumulated `harness/spend.jsonl`. On bronze4
 those directories are empty, so every replicate meters **$0.00 spent with a full $280 available
-again**, against **$714.94** actually spent at pause. STATE calls spend *the budget that binds*;
+again**, against **$725.47** actually spent at pause (the figure of record when this paragraph
+was written was $714.94; corrected below). STATE calls spend *the budget that binds*;
 this is the one way it silently unbinds, and it is not covered by the standing resume orders.
 
-**Baseline is preserved** in `harness/state/fleet_spend.json` (per-replicate totals at pause,
-denominator 16 × $280 = $4,480). Fix before first resume: either carry the transcript directories
-across with the repo, or teach `meter_spend.py` a carried-forward baseline from that file.
+**RATIFIED AND ACTIVE, PI ruling 2026-08-30.** Of the two available fixes the PI ruled
+**baseline carry, not transcript carry** — the git-auditable path; the transcripts stay archived
+on the retired host. `harness/state/spend_baseline.json` carries **token counts** (not dollars,
+so cost is recomputed from `config.RATIFIED["price_per_token"]` in one place), derived from the
+append-only ledger by `harness/make_spend_baseline.py`, and `meter_spend.py` adds them before
+costing. The two fixes must never both be applied, so the meter **refuses to meter at all** if a
+replicate's local tally already covers the baseline in all four token classes.
+
+**The carried figure is $725.47, not $714.94.** The ledger is the authority; the preserved
+summary in `harness/state/fleet_spend.json` was stamped 2026-08-29T22:24:19Z, **11.5 min before
+the last session stopped**, and is a correct reading of the wrong moment. Corrected by an
+**appended** entry in `harness/state/fleet_spend.jsonl` naming the superseded figure — the
+stamped summary itself is never edited. Verified on bronze4: the meter reports the sixteen at
+**$725.47 / $4,480 (16.19 %)**, all `OK`, none at warn.
 
 ### Corrected while paused
 
@@ -74,15 +100,22 @@ across with the repo, or teach `meter_spend.py` a carried-forward baseline from 
   One live instance of this defect was caught and reverted: rep06's deadline was moved +11.3 h on
   2026-08-30 and restored to `2026-09-05T19:41:02.832166+09:00` against the workspace's git HEAD.
 - **Pause guard.** Without it the first poll 30 min into a pause would have relaunched all sixteen
-  on an unattended host. `restart_watch.sh` and `divergence.py` both stand down while
-  `PAUSE.json` exists.
+  on an unattended host. `restart_watch.sh` stands down while `PAUSE.json` exists — it is the
+  only component in `poll.sh` with authority to relaunch anything, and it exits before reaching
+  that authority.
+  *Corrected 2026-08-30: this read "`restart_watch.sh` and `divergence.py` both stand down while
+  `PAUSE.json` exists". The divergence panel does stand down, but on `SMOKE_ARCHIVED.json` and
+  permanently — its subject is the two smoke arms, which are archived — not on the pause record.
+  Same effect, different mechanism, and the mechanism is what a reader would have relied on.*
 
 ### Registry purge — s01/s02 are archived, not down
 
 Roster 18 → 16; `harness/state/SMOKE_ARCHIVED.json` written; the A/B divergence panel **retired**
 in STATUS.md (the sealed map in `harness/divergence_map.SEALED.json` is **untouched and stays
 sealed**); one smoke-era escalation closed as resolved-by-archive; fleet spend recomputed as
-**$714.94 / $4,480 (16.0%)** with $178.48 of smoke excluded. `prereg/` and `config.py`'s phase
+**$714.94 / $4,480 (16.0%)** with $178.48 of smoke excluded — **superseded 2026-08-30: the
+verified carried figure is $725.47 / $4,480 (16.19 %)**, see the spend section above and
+`harness/state/fleet_spend.jsonl`. `prereg/` and `config.py`'s phase
 rosters are deliberately **not** edited — the smoke happened, and the pre-registration is a
 historical record, not a live surface.
 
@@ -98,8 +131,12 @@ unrecoverable. This matches the asymmetry Rev 21 already logged. The budget ruli
 infrastructure facts **are** fleet-uniform, all sixteen.
 
 
-- Phase: **PRE-SEAL, N = 16 (8v8), 7-day horizon. Charter Rev 20 applied; hunks returned for
-  ratification at `prereg/charter_rev20.diff`. Launch gate PASSES.**
+- Phase: **POST-SEAL — MAIN CAMPAIGN LAUNCHED, CURRENTLY PAUSED. N = 16 (8v8), 7-day
+  horizon.** Charter **sealed to v1.0** 2026-08-29 (commit `c67fff5`), through **Rev 23**; the
+  launch gate PASSED and rep01, wave A and wave B all launched (LOG-2026-08-29-13) before the
+  pause. *Groomed 2026-08-30: this line read `PRE-SEAL ... hunks returned for ratification`
+  until today. The seal executed and the fleet launched on 2026-08-29; the label had simply
+  never been moved, and a cold reader would have inherited a study that has not yet sealed.*
   **Budgets, pro-rata to 168 h:** compute **1,610 CPU-h** (the 240 h duty cycle of 79.86%
   preserved exactly, because the cap did not move), tokens **32 M**, and a new **US$280
   per-replicate spend cap** — warned at 75%, stopped at 100%, metered from local transcripts at
@@ -297,13 +334,18 @@ infrastructure facts **are** fleet-uniform, all sixteen.
    (2) **analysis plan** — `modification parent choice per trajectory` (parent identity,
    admissibility pool, band position on the **raw** leaderboard, plus a `none attempted` level)
    **pre-registered**, binding before Q5 writes the plan.
-   **Still open from Q0:** `prereg/audit_schema.md` has **no first-class `criterion` field** —
-   clause (c) is binding and the schema satisfies it only as free text, which is not comparable
-   across 20 trajectories. Bei-proposed, unratified, **must close before seal**.
+   **Q0 residual — CLOSED 2026-08-29** (this entry was stale until the 2026-08-30 grooming).
+   `prereg/audit_schema.md` gained the first-class `criterion` field, ratified, carrying `rule`,
+   `class`, `thresholds` and — for G4 leg (ii) — `element` + `parameter_concern` + `materiality`
+   together, so A2's three-part requirement is checkable rather than merely stated. See open
+   task 18.
 11. **Two seal blockers Ruling 1 creates**, in `prereg/seal_notes.md` S8 and S6: (a)
    `config.SOURCE_ALLOWLIST["db_dir"]`/`["manifest"]` are phase-independent and would provision
-   the main fleet with the smoke's slice while reporting `N/N verified` — **open**, waiting on
-   Q1 for the directory to point at; (b) §1/§4's shared body prose — **CLOSED 2026-08-28**,
+   the main fleet with the smoke's slice while reporting `N/N verified` — **CLOSED 2026-08-29
+   at the freeze** (stale until the 2026-08-30 grooming): Q1 supplied the directory, and the
+   defect is now covered by evidence rather than by inspection — launch-gate assertion A3
+   verifies the manifest **in-workspace**, and all 16 workspaces verified **12,499/12,499**
+   (LOG-2026-08-29-12); (b) §1/§4's shared body prose — **CLOSED 2026-08-28**,
    mechanism built and verified (Rev 17), values populate at Q1/Q2.
 7. **CLOSED** — tail corrections ratified OFF; Appendix A now declares that its thresholds are
    calibrated to §3 and that any §3 change requires recalibration.
@@ -312,8 +354,14 @@ infrastructure facts **are** fleet-uniform, all sixteen.
 9. Harness limits are documented and real: read-auditing catches only traces, budget metering
    trusts the replicate's own ledger, token metering has no source wired yet.
 
-12. **NEW SEAL BLOCKERS from collection, 2026-08-29 — SI-012/013/014.** All three are harness
-   defects, not science, and all three get worse at N=20.
+12. **SEAL BLOCKERS from collection, 2026-08-29 — SI-012/013/014. ALL THREE CLOSED** (status
+   added in the 2026-08-30 grooming; the entry below is kept as the finding record). All three
+   are harness defects, not science, and all three get worse at N=20.
+   **SI-013 — closed:** §8 was rewritten to state its true service level (escalations are logged
+   and read at collection points, an answer is not guaranteed, and absent one the replicate acts
+   on its best reading and logs `[CHARTER-READ]`). **SI-014 — closed and verified** against the
+   live record with no backup; see open task 18. **SI-012 — closed, reopened by the host move,
+   and closed again;** see the platform note at the end of this item.
    - **SI-012 — nothing schedules `poll.sh`.** The watchdog ran **2 cycles of an expected 393**
      (0.51 %) and was silent for the **last 49.05 h**. Host sleep was tested and **rejected as
      the cause**: 32.00 h suspended (48.8 % of campaign) but the longest single stretch is
@@ -326,6 +374,16 @@ infrastructure facts **are** fleet-uniform, all sixteen.
      36.8 % of the fleet budget, spent past a stop nobody reads, with no alarm.** Fix is
      **launchd, not cron** (macOS fires missed intervals on wake; cron drops them — and 111
      sleep stretches exceed the interval).
+     **Restated as a property, 2026-08-30, because the fix as written did not survive the host
+     move.** *"launchd, not cron"* is a macOS sentence and bronze4 is Ubuntu with no
+     `launchctl`, so the recorded fix had **no referent on the new host and nothing scheduled
+     either the poll or the spend meter** — SI-012's condition rebuilt by a migration. The
+     requirement is **a scheduler whose missed interval fires on resume rather than being
+     silently dropped**; the implementation is `harness/systemd/` on Linux (PI ruling
+     2026-08-30) and the plists on macOS. `cron` remains the wrong answer on both.
+     **Note for anyone porting this again:** systemd honours `Persistent=` **only** on
+     `OnCalendar=` timers — on a monotonic timer the line is accepted, ignored, and reads as
+     though the guarantee is in force. Written up in `harness/HOST_REQUIREMENTS.md` §2.
    - **SI-013 — s02's three escalations aged 24.84 h unanswered to the deadline.** All three
      carried affirmative §8 promises (2 × *"will be repaired"*, 1 × *"answered from this
      document"*). Zero acknowledgements in its `INBOX.md`; zero records in either harness
@@ -345,7 +403,10 @@ infrastructure facts **are** fleet-uniform, all sixteen.
      evaluated at a new root. The README's main-run overshoot row is stale at `8 | 4.00 CPU-h`
      (Rev 14 moved the cap to 12; correct is **6.00 CPU-h, 0.375 %**).
 
-13. **SEAL BLOCKER, new 2026-08-29 — the rubric does not exist as a document.** Found while
+13. **SEAL BLOCKER, 2026-08-29 — the rubric does not exist as a document. CLOSED same day**
+   (status added in the 2026-08-30 grooming): written as `prereg/rubric_v1.0.md`, all four tiers
+   explicit, and ratified out of DRAFT at the seal commit `c67fff5`. See open task 17. The
+   finding is kept below as the record of how it was found. Found while
    applying Q0's dependent (1) under the single-purpose answer-key grant. `prereg/seal_notes.md`
    Q6 names the **rubric** as one of exactly **four** artefacts that seal pre-launch, with the
    manifest, the exclusion set and the verification protocol. **Three of the four exist.** What
@@ -358,7 +419,9 @@ infrastructure facts **are** fleet-uniform, all sixteen.
    **Blocks seal, not Q1.** Recorded as `Q5-PRE` in the seal notes. Recommendation, Bei proposes:
    **Q5 should write the rubric, all tiers explicitly, rather than reword one assumed to exist.**
 
-14. **Q1 WORLD RULING, STEP 1 DONE — CONTINGENCY FIRED, STOPPED 2026-08-29.** Membership =
+14. **SUPERSEDED 2026-08-29 by the freeze — see the banner under item 16.** Kept as the record
+   of the contingency and of Bei's recommendation against a 9,278 world.
+   **Q1 WORLD RULING, STEP 1 DONE — CONTINGENCY FIRED, STOPPED 2026-08-29.** Membership =
    the 12,089-row recommended screening list (0 duplicate ids). Sources = the share
    **`/home/molsim_share/core2024_cifs`** (12,471) + verified SI zip (8,300); union 18,135.
    **The three numbers: candidate world 9,278 (76.7 %) · missing locally 2,811 (23.3 %) · surplus
@@ -389,7 +452,9 @@ infrastructure facts **are** fleet-uniform, all sixteen.
    in the list's namespace at all; (iii) the 2025 probe's 0 % is a namespace result before a
    content one. **None of these move the three numbers**, since NCR could never have been list
    members either way.
-15. **`[external: student assistance]` DELIVERED 2026-08-29 — and it is the old share plus 28.**
+15. **SUPERSEDED 2026-08-29 by the freeze — see the banner under item 16.** Kept as the record
+   of what the delivery actually was.
+   **`[external: student assistance]` DELIVERED 2026-08-29 — and it is the old share plus 28.**
    `/home/molsim_share/CoRE_MOF_2024_CR_united/` — **counts verified exactly: ASR 6,963 /
    FSR 4,978 / Ion 558 = 12,499**, CoRE-MOF-ID naming, 218 MB. **Steps 3–5 NOT executed;
    contingency fired.**
@@ -419,8 +484,23 @@ infrastructure facts **are** fleet-uniform, all sixteen.
    corpus — files are here and byte-verified, so an intersection can be re-run immediately), or
    fall back to **SI as shipped, N = 8,300**. Still recommends against a 9,278 world; the delivery
    does not move that arithmetic by one structure.
-16. **Q2 IS BLOCKED on the world choice**, not on arithmetic. Every downstream number — naive
-   cost, budget fraction, provisioning footprint, G7's `k` — takes N as input.
+16. **BOTH CLOSED 2026-08-29 — the world was frozen and Q2 landed. Items 14, 15 and this one
+   were stale until the 2026-08-30 grooming, and they are the paragraph a cold reader would have
+   most wrongly inherited: they describe a study still choosing its benchmark.**
+   **World FROZEN at N = 12,499** (LOG-2026-08-29-07, charter Rev 19): 12,499 structures staged
+   Bei-owned and read-only, 0 writable files, manifest sha256 `4777fc4f…a520`, re-verified
+   **12,499/12,499**, all content hashes distinct. **Uniform validation returned zero
+   exceptions** — 2,664 byte-matched against the verified SI zip with 0 mismatches, 9,835 passed
+   structural sanity, and not one of the 73 element species is absent from the pinned
+   `pseudo_atoms.def`. **Q2 landed inside the envelope and needed no ruling:** 2,300 CPU-h =
+   **10.06 %** of the 22,873 CPU-h naive pass, concurrency 12, fleet 240, tokens 45 M, cluster
+   measured at 580 ncpus / 19 nodes for capacity ÷ ceiling = **2.42×** against a 1.8× floor.
+   **G7's `k` came out invariant as algebra** — `k = α/f` contains neither N nor B — so k = 40
+   survives both the world change and the budget change. Those figures are what the 7-day
+   pro-rata budgets at the top of this file are derived from.
+   *The original entry read:* **Q2 IS BLOCKED on the world choice**, not on arithmetic. Every
+   downstream number — naive cost, budget fraction, provisioning footprint, G7's `k` — takes N
+   as input.
 17. **Q5 REWRITTEN AND DRAFTED 2026-08-29; Q5-PRE absorbed.** The rubric is now a standalone
    artifact: **`prereg/rubric_v1.0.md`**, four tiers to the PI's spec — (a) leaderboard
    recovery, two-axis; (b) ceiling calibration, signed distance + method grade; (c) integrity =
@@ -439,7 +519,10 @@ infrastructure facts **are** fleet-uniform, all sixteen.
    through which the PI lowers the fleet ceiling mid-run, which would have produced exactly the
    traceless quiet edit that design exists to prevent. Two regression checks added; verified by
    running against the live record **with no backup** — production hashes unchanged, `git status`
-   clean, **84 PASS / 0 FAIL**.
+   clean, **84 PASS / 0 FAIL** *(at the time; the suite has since grown and stands at **88 PASS
+   / 0 FAIL** as of 2026-08-30 — the one long-standing failure was `selftest.sh`'s death case
+   asserting against the retired laptop's transcripts, fixed to a self-built fixture under the
+   same PI ruling that ratified the spend carry)*.
    **`audit_schema.md` gains the first-class `criterion` field** (Q0 residual, ratified), carrying
    `rule`, `class`, `thresholds`, and — for leg (ii) — `element` + `parameter_concern` +
    `materiality` together, so A2's three-part requirement is checkable rather than merely stated.
