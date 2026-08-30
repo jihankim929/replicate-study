@@ -323,3 +323,154 @@ scheduler until told. **§4(f) — rep06's uncompensated 9.62 h — wants a ruli
 after.**
 
 — Bei (harness)
+
+---
+
+## 2026-08-30T01:44:14Z (10:44:14 KST) — REPORT 002, on executing the ruling. FLEET STILL PAUSED. Held for go.
+
+> **In one line:** every ratified item is executed, committed and pushed — the spend correction is
+> appended rather than edited, the schedulers are installed and **observed firing on exact
+> calendar boundaries**, rep06's 9.62 h is restored in the arithmetic and in its own notice, and
+> the suite is **88 PASS / 0 FAIL**. `screen` has since appeared on bronze4; **`dirac-bei` still
+> does not resolve**, so the ordered dry-run has not been triggered and the fleet stays down.
+
+**Status: HOLDING.** `resume_fleet.sh` has not been run in live mode. `PAUSE.json` is untouched.
+No session resumed, no notice delivered, nothing `ssh`'d to the cluster. Pause duration at the
+time of writing: **3.4984 h**, still running.
+
+### 1. The ruling, item by item
+
+| Ruling | Done | Commit |
+|---|---|---|
+| **(1)** $725.47 carries; correct `fleet_spend` by appending | `harness/state/fleet_spend.jsonl` carries a `CORRECTION` entry naming the superseded $714.94, its 22:24:19Z stamp, the $10.53 delta and why the delta is real spend. **`fleet_spend.json` is byte-for-byte unedited** — verified against git. | `be3606e` |
+| **(2)** Baseline carry; activate the patched meter | Active. Verified on bronze4: **$725.47 / $4,480 (16.19 %)**, sixteen replicates, all `OK`, none at warn, each line showing `$0.00 on this host + $X carried forward`. Recomputed independently from the ledger before letting it bind: **$725.4712**. | (in `a76d851`) |
+| **(3)** systemd, `study.spend` 120 s, `study.poll` at cadence, `Persistent=true`, user units, enabled before any resume | Installed, enabled, **and observed firing.** §2 below. | `3b9074d` |
+| **(4)** rep06 compensated; standing rule recorded | Rule recorded in `resume_fleet.py` as a cause-keyed table; applied in the deadline arithmetic, in `deadline_basis`, in rep06's own INBOX notice, and surfaced in the dry-run. §3 below. | `3a7c4df` |
+| **(5)** Rev 21 to rep01 only; budget/infra fleet-uniform | **Already correct; nothing changed.** Verified `deliver_escalation_answers.py` sends `NOTICE_rep01_rev21.md` to `["rep01"]` alone and `NOTICE_fleet_uniform.md` to all sixteen, and that the uniform notice contains no arm-dependent content. | — |
+| **(6)** Reconcile STATE.md in a grooming commit | Done. §4 below. | `1c8ca02` |
+| **(7)(e)** selftest death-case fixture | Done; suite **87/1 → 88 PASS / 0 FAIL**. | `cff2a91` |
+| **(7)(g)** `HOST_REQUIREMENTS.md` | Written from this migration. | `814cb3c` |
+| **(7)(h)** smoke-literal cleanup | Done. | `965fafe` |
+
+All seven commits are pushed; `origin/main` is at `1c8ca02`.
+
+### 2. The schedulers — and one thing I had to decide to make the ratified property real
+
+**`Persistent=true` does not do what it says on a monotonic timer.** systemd honours it **only**
+on `OnCalendar=` timers; on an `OnUnitActiveSec=` timer the key is accepted, silently ignored, and
+reads in the unit file as though the guarantee is in force. Since `Persistent=true` is exactly the
+launchd property the ruling was porting — a missed interval fires on resume rather than being
+dropped — writing the obvious interval-based timer would have reproduced **SI-012's shape**: a
+scheduling property asserted in a config file with no runtime effect. Both timers are therefore
+`OnCalendar`-based (`*:0/2` and `*:0/10`), with `AccuracySec=1s` because systemd's default
+accuracy is 1 minute — 50 % jitter on a 120 s cadence, and the spend bound is computed *from* the
+interval.
+
+**Observed, not asserted** — the whole of SI-012 is that nobody ever watched:
+
+```
+study.spend  fires at 01:36:00Z  01:38:00Z  01:40:00Z     exactly 120 s, zero drift
+study.poll   fires at 01:40:00Z, completed rc=0
+```
+
+**Lingering is enabled** (`loginctl enable-linger`, no root needed). Without it the user manager
+stops at logout and both timers die with it — an unattended fleet with no scheduler, which is the
+condition they exist to prevent.
+
+**Suspend, verified as ordered.** All four targets — `sleep`, `suspend`, `hibernate`,
+`hybrid-sleep` — are `static` and `inactive`, and `logind`'s `IdleAction` is at its compiled
+default `ignore` with no override in `/etc/systemd/logind.conf`. **They are not `masked`**;
+masking needs root. So the correct statement for the record is *no trigger to suspend exists*,
+which is weaker than *cannot suspend*. Masking is on the root-required list in
+`HOST_REQUIREMENTS.md` §5 alongside the `screen` install.
+
+### 3. rep06 — the restoration, and why it is arm-blind
+
+Recorded as a rule keyed on **cause**, not identity, exactly as ruled: *the 168-hour entitlement is
+live-session time, and campaign time lost to a verified harness fault is restored to the affected
+replicate.* It would be written identically for any replicate the harness failed this way; nothing
+in it can be read differently for a gated and an ungated arm; and the arm map stays sealed — I do
+not know which arm rep06 is in and did not need to.
+
+**Measurement re-verified from the ledger before applying:** rep06's last row whose token totals
+moved is `2026-08-29T12:37:21.500736Z`; the pause stamp is `2026-08-29T22:14:19.952793Z`;
+difference **9.6162 h**, ratified at **9.62 h**. (180 ledger rows for rep06, flat after 12:37:21.)
+
+**One thing this forced.** The INBOX notice told every replicate its deadline had moved by
+*"exactly the pause duration"*. For rep06 that would have been false in the notice it was most
+important to be honest in, so the notice now states the pause extension and the restoration
+separately, and rep06's carries the cause and the measurement. Nothing in that paragraph
+references arms, gates or Appendix A.
+
+### 4. The grooming — what a cold reader would have inherited
+
+The stale paragraph was worse than one paragraph. **Items 14, 15 and 16 together described a study
+still choosing its benchmark** — world stopped on a fired contingency, Q2 blocked behind it — when
+the world froze at **N = 12,499 with zero validation exceptions** on 2026-08-29 and Q2 landed
+inside the envelope (2,300 CPU-h = 10.06 % of naive; G7's `k` invariant as algebra). Alongside
+them: the phase line read **PRE-SEAL** after the seal commit `c67fff5`; four seal blockers
+(11(a), 12's SI-012/013/014, 13's missing rubric, 10's `criterion` residual) read **open** when
+all had closed; item 18 read **84 PASS**; and the top banner said *"do not resume here"* in a
+working copy that now lives on the host it was pointing at.
+
+**Nothing was deleted.** Every finding is kept and every superseded status line names what closed
+it and when. What had gone stale was the status, not the findings.
+
+### 5. Findings from doing the work — four of them, one a correction to my own REPORT 001
+
+**(a) The poll cadence in the record contradicts itself, and I had to choose. Please rule.**
+`poll.sh`'s header says *"Run every 10 minutes (ratified interval)"*, and SI-012's arithmetic is
+built from it — *"2 cycles of an expected 393"*, and 393 × 10 min = 65.5 h, which is exactly the
+smoke campaign. But the retired `study.poll.plist` carried `StartInterval 1800`, and both
+`config.py` and `spend_wrapper.sh` refer in prose to *"the 30-min cluster cadence"*. **So the
+scheduler that finally did exist was running at three times the ratified interval.** I wrote the
+timer at the ratified **10 minutes** and flagged it rather than copying the plist forward. This is
+in the fleet's favour — it tightens the polled compute-overshoot bound by 3× — and it does not
+disturb the spend argument, which holds a fortiori. But the ratified overshoot bound depends on
+this number, so it should be a ruling and not my reading.
+
+**(b) Correction to REPORT 001 §1 and to STATE.md: the divergence panel does not stand down on
+`PAUSE.json`.** I wrote that `restart_watch.sh` *and* `divergence.py` both stand down while the
+pause record exists. `restart_watch.sh` does. `divergence.py` stands down on
+`SMOKE_ARCHIVED.json`, permanently, because its subject is the two archived smoke arms. **The
+safety conclusion is unchanged and in fact stronger** — I verified separately that
+`restart_watch.sh` is the only component in `poll.sh` with authority to relaunch anything, and it
+exits before reaching that authority — but the mechanism I stated was wrong, and a reader would
+have relied on the mechanism. Corrected in STATE.md in the grooming commit.
+
+**(c) The spend meter appends 5.8 MiB/day to the ledger against a fleet that is not moving.**
+At 120 s × 16 replicates that is **11,520 rows/day**, every one an identical re-tally, for as long
+as the hold lasts. They are not spurious — this is the same idempotency I argued in REPORT 001
+§4(b) — but they are not informative either, and the ledger is a record the study reads. **Your
+call:** I can stop `study.spend.timer` for the duration of the hold and restart it as part of the
+resume, or leave it running as continuous evidence that the scheduler works. I have left it
+**running**, because the ruling was that the fleet is not resumed into an unscheduled state and
+because an unobserved scheduler is what SI-012 was.
+
+**(d) `charter_revisions.md` stops at Rev 21; the charter's own revision table carries Rev 22 and
+Rev 23.** Both revisions are properly recorded as rows in `prereg/charter_v0.9.md` — and Rev 22 is
+substantive, since it is what split the pinned-file rule out of G3 so it reaches both arms,
+resolving the asymmetry LOG-2026-08-29-12 filed for a ruling. But the file that carries the
+narrative write-ups has no Rev 22 or Rev 23 section. I have not touched `prereg/`. Flagged only.
+
+**Smaller, not acted on:** `selftest.sh`'s *"live replicate is not restartable"* passes for the
+wrong reason. Both of its `liveness.py` calls use `--no-update`, so no baseline is ever recorded
+and the second call exits 1 via *"no positive evidence of death (baseline only)"* — never
+exercising the growth path its name describes, and duplicating the check on the line below it. I
+verified this by reproducing the case. It is a **passing** test outside the fixture fix you
+authorised, so I have not changed it.
+
+### 6. What happens next, and what I will not do without a go
+
+`screen` **is now installed** (4.09.01) — the provisioning is landing. **`dirac-bei` still does not
+resolve** and there is no `~/.ssh/config`, so the trigger in your item (8) has not fired and the
+dry-run has not been run against the cluster. I did run the dry-run **path** locally to verify my
+change to it; it touches no cluster, changes nothing, and its output is in §3's arithmetic.
+
+On `ssh dirac-bei true` passing I will: run `./harness/resume_fleet.sh --dry-run`, report the
+measured pause duration and the projected per-replicate deadlines here, and **hold for the one
+word**.
+
+Until then I will not resume, deliver any notice, touch a credential, or clear the pause record.
+
+— Bei (harness)

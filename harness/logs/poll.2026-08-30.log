@@ -487,3 +487,143 @@ usage.json -> {'cpu_h_scheduler': 262.984, 'queued_jobs': 9, 'tokens': 733617}
   [queue-depth] 2026-08-30 09:39 KST  queue R=177 Q=1 across 5 users | study R=66 Q=1 (37.3% of running) | others waiting=0
   --- mechanical divergence panel ---
   [divergence] smoke arms ARCHIVED -- panel retired, not refreshed (harness/state/SMOKE_ARCHIVED.json)
+=========== poll 2026-08-30T01:40:00Z ===========
+  [harvest] rep01 unreachable
+  [meter-compute] rep01 unreachable
+  [harvest] rep02 unreachable
+  [meter-compute] rep02 unreachable
+  [harvest] rep03 unreachable
+  [meter-compute] rep03 unreachable
+  [harvest] rep04 unreachable
+  [meter-compute] rep04 unreachable
+  [harvest] rep05 unreachable
+  [meter-compute] rep05 unreachable
+  [harvest] rep06 unreachable
+  [meter-compute] rep06 unreachable
+  [harvest] rep07 unreachable
+  [meter-compute] rep07 unreachable
+  [harvest] rep08 unreachable
+  [meter-compute] rep08 unreachable
+  [harvest] rep09 unreachable
+  [meter-compute] rep09 unreachable
+  [harvest] rep10 unreachable
+  [meter-compute] rep10 unreachable
+  [harvest] rep11 unreachable
+  [meter-compute] rep11 unreachable
+  [harvest] rep12 unreachable
+  [meter-compute] rep12 unreachable
+  [harvest] rep13 unreachable
+  [meter-compute] rep13 unreachable
+  [harvest] rep15 unreachable
+  [meter-compute] rep15 unreachable
+  [harvest] rep16 unreachable
+  [meter-compute] rep16 unreachable
+  [harvest] rep17 unreachable
+  [meter-compute] rep17 unreachable
+  [meter-tokens] rep01: no session transcripts yet (/home/Bei/.claude/projects/-home-Bei-replicate-study-harness-sessions-rep01)
+  [meter-tokens] rep02: no session transcripts yet (/home/Bei/.claude/projects/-home-Bei-replicate-study-harness-sessions-rep02)
+  [meter-tokens] rep03: no session transcripts yet (/home/Bei/.claude/projects/-home-Bei-replicate-study-harness-sessions-rep03)
+  [meter-tokens] rep04: no session transcripts yet (/home/Bei/.claude/projects/-home-Bei-replicate-study-harness-sessions-rep04)
+  [meter-tokens] rep05: no session transcripts yet (/home/Bei/.claude/projects/-home-Bei-replicate-study-harness-sessions-rep05)
+  [meter-tokens] rep06: no session transcripts yet (/home/Bei/.claude/projects/-home-Bei-replicate-study-harness-sessions-rep06)
+  [meter-tokens] rep07: no session transcripts yet (/home/Bei/.claude/projects/-home-Bei-replicate-study-harness-sessions-rep07)
+  [meter-tokens] rep08: no session transcripts yet (/home/Bei/.claude/projects/-home-Bei-replicate-study-harness-sessions-rep08)
+  [meter-tokens] rep09: no session transcripts yet (/home/Bei/.claude/projects/-home-Bei-replicate-study-harness-sessions-rep09)
+  [meter-tokens] rep10: no session transcripts yet (/home/Bei/.claude/projects/-home-Bei-replicate-study-harness-sessions-rep10)
+  [meter-tokens] rep11: no session transcripts yet (/home/Bei/.claude/projects/-home-Bei-replicate-study-harness-sessions-rep11)
+  [meter-tokens] rep12: no session transcripts yet (/home/Bei/.claude/projects/-home-Bei-replicate-study-harness-sessions-rep12)
+  [meter-tokens] rep13: no session transcripts yet (/home/Bei/.claude/projects/-home-Bei-replicate-study-harness-sessions-rep13)
+  [meter-tokens] rep15: no session transcripts yet (/home/Bei/.claude/projects/-home-Bei-replicate-study-harness-sessions-rep15)
+  [meter-tokens] rep16: no session transcripts yet (/home/Bei/.claude/projects/-home-Bei-replicate-study-harness-sessions-rep16)
+  [meter-tokens] rep17: no session transcripts yet (/home/Bei/.claude/projects/-home-Bei-replicate-study-harness-sessions-rep17)
+  --- replicate escalations ---
+    [escalate] rep01: workspace unreachable
+  [escalate] rep01: could not read workspace
+    [escalate] rep02: workspace unreachable
+  [escalate] rep02: could not read workspace
+    [escalate] rep03: workspace unreachable
+  [escalate] rep03: could not read workspace
+    [escalate] rep04: workspace unreachable
+  [escalate] rep04: could not read workspace
+    [escalate] rep05: workspace unreachable
+  [escalate] rep05: could not read workspace
+    [escalate] rep06: workspace unreachable
+  [escalate] rep06: could not read workspace
+    [escalate] rep07: workspace unreachable
+  [escalate] rep07: could not read workspace
+    [escalate] rep08: workspace unreachable
+  [escalate] rep08: could not read workspace
+    [escalate] rep09: workspace unreachable
+  [escalate] rep09: could not read workspace
+    [escalate] rep10: workspace unreachable
+  [escalate] rep10: could not read workspace
+    [escalate] rep11: workspace unreachable
+  [escalate] rep11: could not read workspace
+    [escalate] rep12: workspace unreachable
+  [escalate] rep12: could not read workspace
+    [escalate] rep13: workspace unreachable
+  [escalate] rep13: could not read workspace
+    [escalate] rep15: workspace unreachable
+  [escalate] rep15: could not read workspace
+    [escalate] rep16: workspace unreachable
+  [escalate] rep16: could not read workspace
+    [escalate] rep17: workspace unreachable
+  [escalate] rep17: could not read workspace
+ssh: Could not resolve hostname dirac-bei: Temporary failure in name resolution
+ssh: Could not resolve hostname dirac-bei: Temporary failure in name resolution
+ssh: Could not resolve hostname dirac-bei: Temporary failure in name resolution
+ssh: Could not resolve hostname dirac-bei: Temporary failure in name resolution
+ssh: Could not resolve hostname dirac-bei: Temporary failure in name resolution
+ssh: Could not resolve hostname dirac-bei: Temporary failure in name resolution
+ssh: Could not resolve hostname dirac-bei: Temporary failure in name resolution
+ssh: Could not resolve hostname dirac-bei: Temporary failure in name resolution
+ssh: Could not resolve hostname dirac-bei: Temporary failure in name resolution
+ssh: Could not resolve hostname dirac-bei: Temporary failure in name resolution
+ssh: Could not resolve hostname dirac-bei: Temporary failure in name resolution
+ssh: Could not resolve hostname dirac-bei: Temporary failure in name resolution
+ssh: Could not resolve hostname dirac-bei: Temporary failure in name resolution
+ssh: Could not resolve hostname dirac-bei: Temporary failure in name resolution
+ssh: Could not resolve hostname dirac-bei: Temporary failure in name resolution
+ssh: Could not resolve hostname dirac-bei: Temporary failure in name resolution
+  --- watchdog (charter section 4: budgets, liveness) ---
+  [watchdog] rep01: workspace unreachable
+  [watchdog] rep02: workspace unreachable
+  [watchdog] rep03: workspace unreachable
+  [watchdog] rep04: workspace unreachable
+  [watchdog] rep05: workspace unreachable
+  [watchdog] rep06: workspace unreachable
+  [watchdog] rep07: workspace unreachable
+  [watchdog] rep08: workspace unreachable
+  [watchdog] rep09: workspace unreachable
+  [watchdog] rep10: workspace unreachable
+  [watchdog] rep11: workspace unreachable
+  [watchdog] rep12: workspace unreachable
+  [watchdog] rep13: workspace unreachable
+  [watchdog] rep15: workspace unreachable
+  [watchdog] rep16: workspace unreachable
+  [watchdog] rep17: workspace unreachable
+  --- transcript audit (charter section 4) ---
+  [audit] rep01: no transcripts at /home/Bei/.claude/projects/-home-Bei-replicate-study-harness-sessions-rep01 (session not started?)
+  [audit] rep02: no transcripts at /home/Bei/.claude/projects/-home-Bei-replicate-study-harness-sessions-rep02 (session not started?)
+  [audit] rep03: no transcripts at /home/Bei/.claude/projects/-home-Bei-replicate-study-harness-sessions-rep03 (session not started?)
+  [audit] rep04: no transcripts at /home/Bei/.claude/projects/-home-Bei-replicate-study-harness-sessions-rep04 (session not started?)
+  [audit] rep05: no transcripts at /home/Bei/.claude/projects/-home-Bei-replicate-study-harness-sessions-rep05 (session not started?)
+  [audit] rep06: no transcripts at /home/Bei/.claude/projects/-home-Bei-replicate-study-harness-sessions-rep06 (session not started?)
+  [audit] rep07: no transcripts at /home/Bei/.claude/projects/-home-Bei-replicate-study-harness-sessions-rep07 (session not started?)
+  [audit] rep08: no transcripts at /home/Bei/.claude/projects/-home-Bei-replicate-study-harness-sessions-rep08 (session not started?)
+  [audit] rep09: no transcripts at /home/Bei/.claude/projects/-home-Bei-replicate-study-harness-sessions-rep09 (session not started?)
+  [audit] rep10: no transcripts at /home/Bei/.claude/projects/-home-Bei-replicate-study-harness-sessions-rep10 (session not started?)
+  [audit] rep11: no transcripts at /home/Bei/.claude/projects/-home-Bei-replicate-study-harness-sessions-rep11 (session not started?)
+  [audit] rep12: no transcripts at /home/Bei/.claude/projects/-home-Bei-replicate-study-harness-sessions-rep12 (session not started?)
+  [audit] rep13: no transcripts at /home/Bei/.claude/projects/-home-Bei-replicate-study-harness-sessions-rep13 (session not started?)
+  [audit] rep15: no transcripts at /home/Bei/.claude/projects/-home-Bei-replicate-study-harness-sessions-rep15 (session not started?)
+  [audit] rep16: no transcripts at /home/Bei/.claude/projects/-home-Bei-replicate-study-harness-sessions-rep16 (session not started?)
+  [audit] rep17: no transcripts at /home/Bei/.claude/projects/-home-Bei-replicate-study-harness-sessions-rep17 (session not started?)
+    FLEET PAUSED (harness/state/PAUSE.json present) -- restart watcher stood down.
+    Sessions are down by ruling, not by failure. Resume with harness/resume_fleet.sh.
+  --- escalations ---
+  [escalate] 0 awaiting a human answer (cadence: 09:00, 21:00 KST)
+  --- shared-queue depth (crowding covariate, Flag I) ---
+  [queue-depth] cluster did not answer -- nothing recorded
+  --- mechanical divergence panel ---
+  [divergence] smoke arms ARCHIVED -- panel retired, not refreshed (harness/state/SMOKE_ARCHIVED.json)
