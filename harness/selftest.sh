@@ -193,8 +193,18 @@ chk "live replicate is not restartable"   "$?" "1"
 rm -rf "$LVDIR"
 python3 harness/liveness.py no_such_rep --dead-after 30 --no-update >/dev/null 2>&1
 chk "absent transcripts are not death"    "$?" "1"
-python3 harness/liveness.py s01 --dead-after 0 --no-update >/dev/null 2>&1
+# Death is POSITIVE evidence: a transcript that exists and has stopped growing. This case used
+# to run against the live s01 and passed only while the retired laptop's transcript directories
+# were on the machine -- harness truth keyed to ~/.claude/projects on one host, the same root
+# cause that reopened the spend cap at $0.00 on bronze4. It now builds its own corpse, so it
+# tests this code instead of reporting on a real replicate.
+DDREP=selftest_dead
+DDDIR="$HOME/.claude/projects/$(printf '%s' "$PWD/harness/sessions/$DDREP" | sed 's|/|-|g')"
+mkdir -p "$DDDIR"; echo '{"turn":1}' > "$DDDIR/a.jsonl"
+python3 harness/liveness.py "$DDREP" >/dev/null 2>&1                    # record a baseline...
+python3 harness/liveness.py "$DDREP" --dead-after 0 --no-update >/dev/null 2>&1   # ...that never grew
 chk "positive evidence does authorise"    "$?" "0"
+rm -rf "$DDDIR"
 chk "heartbeat decides nothing"           "$(grep -c 'heartbeat_informational_only' harness/watchdog.py)" "1"
 chk "restart watcher reads no heartbeat"  "$(grep -c 'AGE=.*heartbeat' harness/restart_watch.sh)" "0"
 

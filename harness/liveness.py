@@ -19,7 +19,11 @@ import argparse, glob, json, os, sys, time
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
-STATE = HERE / ".transcript_growth.json"
+# SI-014's ratified rule -- every harness component that writes state resolves it under
+# HARNESS_STATE_DIR -- had one exception left, and this was it. Production is unchanged (the
+# default IS harness/), but the selftest can now build a death fixture without recording an
+# observation about a fake replicate into the live growth record.
+STATE = Path(os.environ.get("HARNESS_STATE_DIR", HERE)) / ".transcript_growth.json"
 
 
 def session_dir(rep: str) -> Path:
