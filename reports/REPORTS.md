@@ -954,3 +954,249 @@ fleet — the findings kept, the status lines updated, as in the last grooming.
 your return · SI-021's `UNACCOUNTED` compute basis, still filed and unruled from 2026-08-29.
 
 — Bei (harness)
+
+---
+
+## 2026-08-30T18:43:08Z (2026-08-31 03:43:08 KST) — REPORT 006, unprompted, written on your return. **FLEET DEGRADED: 10 of 16 DOWN.** Nothing executed.
+
+> **In one line:** ten replicates have been down for 10–12 h because a guard meant to catch a
+> broken loop instead killed campaigns that were correctly idle, and all thirty restarts that
+> followed were killed by systemd within seconds of starting; separately the spend meter has
+> refused to meter for six hours on a false positive, so the budget this record calls binding is
+> unenforced; and at the burn measured since the resume every surviving replicate reaches its
+> $280 cap within 11–32 h, at about a quarter of its horizon.
+
+### 0. Status, and what this is written from
+
+**Nothing has been executed.** No restart, no counter reset, no relaunch, no edit to any harness
+file, no change to any deadline, no escalation answered. This is a report and a request for
+rulings, per the standing rule that the harness holds no discretionary authority.
+
+Everything below is read from the record on bronze4 and from read-only checks against it:
+`harness/watchdog.jsonl`, `harness/restarts.jsonl`, `harness/sessions/*.loop.log`,
+`harness/logs/poll.2026-08-30.log`, `harness/logs/spend.2026-08-30.log`, the replicates' own
+transcripts under `~/.claude/projects/`, `journalctl --user`, `screen -ls`, `systemctl --user
+show`, and one read-only `ssh dirac-bei` to a workspace `INBOX.md`. The one thing I ran that
+changed anything on this host is the throwaway systemd unit in §2(b): it started and killed a
+`sleep` inside a `screen` of its own, proved the mechanism, and was removed. It touched nothing
+belonging to the study.
+
+**A supervision finding before the operational one.** The fleet has been in this state since
+**17:01 KST**, 10.5 h before this entry, and the harness's own record has been printing
+`!! restart cap reached -- left DOWN deliberately, notify the PI` at every poll since. There is
+no channel by which it could notify anyone. Ten campaigns stopped, the record said so correctly
+at 30-minute intervals, and nobody read it for ten and a half hours. That gap is not fixed by
+anything I propose below and I flag it separately in §7(5).
+
+### 1. Ten down, five per arm
+
+| | |
+|---|---|
+| **DOWN (10)** | rep02, rep03, rep04, rep06, rep07, rep10, rep11, rep12, rep13, rep15 |
+| **UP (6)** | rep01, rep05, rep08, rep09, rep16, rep17 |
+| **Arms** | 5 gated + 5 ungated down; 3 gated + 3 ungated alive |
+| **Down since** | 15:02–17:01 KST 2026-08-30; 10.0–12.0 h at the 03:31 poll |
+| **Deadlines** | unmoved and running: 135.2–150.3 h remain, and the lost hours are being spent |
+
+`screen -ls` shows six sockets, and the six match the six the watchdog calls `alive` to the
+replicate. The eight-vs-eight split survives as **3v3 alive, 5v5 down**. That is luck and not
+design: nothing in the failure path is arm-aware, and a different distribution of long turns
+would have skewed it. I record it as a fact about this incident, not as a property of the
+apparatus.
+
+### 2. Why. Three links, each measured
+
+**(a) The hot-loop guard killed correct behaviour.** `harness/session_loop_headless.sh:110-113`
+ends the campaign after five consecutive sub-minute turns. All ten tripped it between
+**03:26:37Z and 05:05:46Z** — 44 min to 2 h 23 min after the resume. The guard's premise is that a
+turn that ends in seconds, repeatedly, means something is broken. It cannot distinguish that from
+a replicate whose work is all on the cluster queue and which is therefore correctly doing
+nothing. rep02's last four turns, verbatim from its transcript:
+
+> *"There is no useful work for me to do this turn: the critical path is entirely queued and
+> correctly ordered … Per the charter's session rhythm — waiting is not working — I am holding
+> for a longer interval rather than re-polling."*
+> *"Holding for the next results batch — nothing to add."*  ·  *"INBOX unchanged, no cluster
+> progress (33 s elapsed). Holding."*  ·  *"INBOX unchanged, no progress (31 s elapsed). Holding."*
+
+That is a replicate obeying the charter's own session rhythm, at a 10-second nudge interval, being
+terminated for it. The six survivors are simply the ones that happened to be inside long turns —
+rep01's last completed turn ran 11,710 s. **The guard punishes the state the charter asks for**,
+and the fleet-wide cluster contention in §6 is what put ten replicates into that state at once.
+
+**(b) Every restart was killed by systemd before it could do anything.** This is the more serious
+finding, because it means the restart path has never worked on this host and its failure is
+silent.
+
+`harness/systemd/study.poll.service.in` is `Type=oneshot` and sets no `KillMode`, so it takes the
+default `KillMode=control-group` — confirmed live with `systemctl --user show study.poll.service`.
+`restart_watch.sh:92` relaunches through `launch_sessions.sh`, which starts the replicate's
+`screen` **inside the poll unit's cgroup**. When the oneshot finishes, systemd kills everything
+left in that cgroup, the new session included.
+
+The evidence is exact. rep04's restart logged `iteration 1 starting (headless)` at
+**13:02:12 KST**; `journalctl --user -u study.poll.service` records
+`Finished study.poll.service` at **13:02:35 KST**. Twenty-three seconds. The loop log has no exit
+line for that iteration, or for any of the thirty — the script never got to write one. **Thirty orphan
+transcript files** exist — three in each dead replicate's project directory, one per killed
+restart — each opening *"I'll start by reading the governing documents on the cluster."* and
+stopping mid-orientation.
+
+I did not want to rest this on inference, so I ran a disposable probe: a transient
+`--property=Type=oneshot` user unit that starts `screen -dmS kmtest-probe bash -c 'sleep 600'` and
+exits. Inside the unit the screen is present; the instant the unit finishes it is gone. The unit
+and the screen were removed. **This is SI-012's shape for the third time** — a scheduling
+property whose meaning changed with the host, asserted in a config file, with no runtime effect
+and no error.
+
+**(c) So the cap ran out, correctly, on restarts that never happened.** `restart_watch.sh:33` caps
+at `MAX_RESTARTS=3`. Each of the ten burned all three against sessions that lived ~20 s, and every
+poll since has printed `!! restart cap reached -- left DOWN deliberately, notify the PI`. The
+counters now read 3/3, so **even with (a) and (b) fixed, nothing will retry**: a COUNTER_RESET row
+is required, as after the pause.
+
+### 3. What the ten have been told, and what is still being charged
+
+**Their INBOX files say they were restarted. They were not.** `restart_watch.sh:96` appends the
+notice unconditionally after the relaunch call, with no check that the session came up. Measured
+on rep13's workspace: three notices reading *"Your session was restarted by the harness (restart
+N of 3) … your deadline has NOT moved. Reconcile against STATE.md before continuing."* — for
+restarts that lasted twenty seconds. rep13's `INBOX.md` now carries **32 harness notices**, the
+rest of them the watchdog's 30-minute *"No new activity in your session record for N min"* line,
+still being appended to a workspace whose agent has not existed for twelve hours. Whatever is
+ruled below, a returning replicate reads that wall first and has to be told which of it was true.
+
+**Their cluster jobs are still running and still charging.** The dead ten hold **3,841 CPU-h**
+in flight against their 1,610 CPU-h caps — rep07 830.2, rep12 528.0, rep11 508.7, rep02 495.7,
+rep15 405.1, rep04 354.5, rep13 263.0, rep10 200.1, rep06 158.5, rep03 97.5 — with no agent to
+harvest, order or stop them. Compute is not idle during this outage; only the agents are. rep07
+is past half its compute cap unattended.
+
+### 4. The spend meter has refused to meter since 21:36 KST
+
+`harness/logs/spend.2026-08-30.log` has recorded nothing but this, on every 2-minute fire for the
+last six hours:
+
+> *meter_spend: rep01's local transcripts already cover the carried baseline … The transcripts
+> appear to have moved with the repo, so adding the baseline would double-count … Refusing to
+> meter.*
+
+**It is a false positive, and it was always going to happen.** The guard at
+`harness/meter_spend.py:88` tests `local ≥ baseline in all four token classes`. That condition is
+not evidence that the transcripts moved — it is what happens to every replicate eventually, just
+by running. rep01 crossed the carried 99,323,960 cache-reads at 21:36 and now stands at
+214,113,399. The transcripts did not move; they are archived on the retired host, as the baseline
+file itself states. Because the guard is a `sys.exit` and rep01 sorts first, **the whole fleet's
+meter dies on it.** `harness/spend.jsonl` has had no row since 21:36.
+
+So **the $280 cap — the budget STATE calls the one that binds, and the figure LAUNCH_GATE A2's
+arithmetic rests on — has been unenforced for six hours.**
+
+**A second defect in the same direction, older and quieter.** `harness/watchdog.py:136` calls
+`meter_spend.tally(rep)` **without the baseline**. The watchdog panel has therefore been reporting
+local-only spend since the resume, understating every replicate by its carry:
+
+| rep | watchdog | + carry | true | % of $280 |
+|---|---|---|---|---|
+| rep01 | $128.90 (`ok`, 40 %) | $65.14 | **$194.04** | **69.3 %** |
+| rep02 | $128.11 | $40.13 | $168.25 | 60.1 % |
+| rep06 | $76.96 | $99.03 | $175.99 | 62.9 % |
+| rep07 | $122.43 | $50.55 | $172.98 | 61.8 % |
+| rep15 | $113.05 | $49.07 | $162.13 | 57.9 % |
+| rep09 | $107.58 | $37.28 | $144.85 | 51.7 % |
+| **fleet** | **$1,380.75 (30.8 %)** | **$725.47** | **$2,106.22** | **47.0 % of $4,480** |
+
+No replicate is over cap and no stop was missed. But rep01 sits **6 points below the 75 % warn**
+while the panel reads `ok` at 40 %, and the fleet is at 47 % rather than the 31 % on the board.
+
+**A trap in the obvious fix, which I flag because it would take the watchdog down.**
+`watchdog.py:137` wraps the metering in `except Exception` — *"never let metering break the
+watchdog"*. `sys.exit` raises `SystemExit`, which derives from `BaseException` and is **not**
+caught by that clause. Passing the baseline into `tally()` while the §4 guard still stands would
+convert a silently-low number into a watchdog that dies outright. **The guard must be fixed
+first, the baseline passed second.**
+
+### 5. The campaign is spend-bound, and sooner than the ratified arithmetic implied
+
+Burn measured over the 15.92 h since the resume, against the true position of §4:
+
+| rep | $/h | true spend | reaches $280 | deadline left |
+|---|---|---|---|---|
+| rep01 | 8.10 | $194.04 | **2026-08-31 14:14 KST** | 135.2 h |
+| rep09 | 6.76 | $144.85 | 2026-08-31 23:38 | 140.6 h |
+| rep17 | 6.56 | $124.96 | 2026-09-01 03:15 | 141.7 h |
+| rep16 | 5.46 | $136.24 | 2026-09-01 05:58 | 141.7 h |
+| rep05 | 5.74 | $124.34 | 2026-09-01 06:44 | 140.6 h |
+| rep08 | 5.02 | $120.05 | 2026-09-01 11:28 | 140.6 h |
+
+Every surviving replicate stops on spend within **11–32 h**, having used roughly a **quarter** of
+its 168 h horizon. The record already predicted the shape — *"spend is the budget that binds"* —
+but not this margin. Cache reads are $107.06 of rep01's $170.37 gross, and they scale with turn
+count times context, so the rate is more likely to rise than to flatten. Restarting the ten adds
+ten more burners to the same ceiling. **This is the ruling with the largest consequence in this
+report and it is entirely yours.**
+
+### 6. Six escalations open, none answered, and three of them are the same real gap
+
+- **rep07, rep12, rep15 — independently, the same finding.** Charter §4 says to judge remaining
+  room by *"the spend meter in your workspace"*, and `usage.json` carries **no spend figure at
+  all**: only `cpu_h_scheduler`, `queued_jobs`, `tokens`. Three replicates reached that
+  conclusion separately. rep07 has proceeded on the token meter as a proxy and logged it as a
+  CHARTER-READ. The charter points at an instrument that does not exist in the workspace.
+- **rep12 and rep15 also caught the meter reset**, from inside: tokens falling 1,363,857 →
+  932,867 and 2,275,306 → 268,197 across the resume. That is the host move showing through to the
+  agents — the same root as §4 — and they diagnosed it before I did.
+- **rep09, twice.** Zero cores since 11:50 KST with ~560 core-equivalents queued ahead of it,
+  draining at ~9 cores/h; then, at 18:00, that its claim tier is blocked outright — a floor-protocol
+  point needs 45–135 min against the charter's 30-minute interactive cap, so Tiers 3 and 4 require
+  scheduler dispatch it cannot get. It asks whether to report a screening-grade claim. This is
+  also the contention that put ten replicates into the idle state of §2(a).
+- **rep06, for you.** Does G3's 0.20 g/cm³ bound forbid *simulating* a modified structure that
+  lands at 0.179 g/cm³ (one net of a 2-fold interpenetrated pair removed, charge-balanced by
+  construction), or only forbid the *claim*? Marked `queued_for_pi`.
+
+### 7. What I propose, and what I will not do without a ruling
+
+1. **Restart path.** Launch replicate sessions through `systemd-run --user --scope` from
+   `restart_watch.sh`, so a restarted session lives in its own cgroup and outlives the poll.
+   Preferred over `KillMode=process` on the unit, which would leave the guarantee implicit in a
+   file nobody reads at the moment it matters — the failure mode this repository keeps rebuilding.
+2. **Hot-loop guard.** It must distinguish idle-by-design from broken. Proposed: on five
+   consecutive sub-minute turns with `rc=0` **and** transcript growth, back the inter-turn sleep
+   off (10 min) and log it, rather than ending the campaign; keep the hard break for the case it
+   was written for, sub-minute turns with no growth. Without this ruling a relaunch of the ten
+   dies the same way within the hour.
+3. **Spend meter, in this order.** (i) Re-guard `meter_spend.py:88` on actual evidence of carried
+   transcripts — a local transcript file predating `fleet_confirmed_down_utc` — rather than on an
+   arithmetic comparison that time makes true. (ii) Then pass the baseline at `watchdog.py:136`.
+   Reversing the order takes the watchdog down, per §4.
+4. **The ten.** A COUNTER_RESET row and a relaunch, on your word. If the downtime is to be
+   restored, the rep06 precedent says it keys on cause and not identity, and this cause is
+   harness fault throughout: the measured value is **10.0–12.0 h and differs per replicate**, so
+   it must be applied per replicate and not as a flat number. Their INBOX files also need a notice
+   that names the three restart notices as false.
+5. **The supervision gap in §0.** Ten campaigns stopped and the record said so, correctly, **221
+   times**, to nobody. Whatever else is ruled, the harness needs a way to reach you when it reaches
+   `notify the PI` — or the ruling that a 12-hour detection latency is accepted.
+6. **§5 is yours alone.** Raise the cap, or accept a fleet that stops on spend at ~25 % of its
+   horizon.
+
+I will execute none of 1–4 until ruled. I am also not answering the escalations in §6, including
+the three that are plainly correct about the workspace spend meter, because an infrastructure
+answer delivered fleet-uniform is a text change to sixteen workspaces and the Rev 21 asymmetry
+says that is exactly where this study leaks.
+
+### 8. State
+
+Fleet **DEGRADED**: 6 of 16 sessions up, 10 down and left down deliberately at 3/3 restarts. Poll
+timer firing at the ratified 30 min, last cycle 03:30:00–03:31:55 KST. Spend timer firing at 2 min
+and **producing nothing** since 21:36 KST. Deadlines untouched at 135.2–150.3 h. Cluster jobs
+running throughout, including for the ten. Nothing in the harness has been modified by this
+report.
+
+**Open for you, in order of how fast it decays:** §5 the spend trajectory, whose first stop lands
+**today at 14:14 KST** · §7(3) the meter, unenforced now · §7(1,2,4) the ten, losing campaign
+time as this sits · §7(5) the notification gap · §6 the four escalation threads, one of them
+yours to rule.
+
+— Bei (harness)
