@@ -1,0 +1,17 @@
+2026-08-29T11:42:17Z iteration 1 starting (headless)
+2026-08-29T12:18:59Z iteration 1 exited rc=0 after 2201s (transcript 0 -> 824382)
+2026-08-29T12:19:09Z iteration 2 starting (headless)
+2026-08-29T17:29:22Z iteration 2 exited rc=1 after 18613s (transcript 824382 -> 1295184)
+2026-08-29T17:29:22Z iteration 2 FAILED rc=1 (hard failure 1/5). first 500 bytes of output:
+The scheduler counts PBS-queued jobs against the shared limit, so sibling replicates' queued work is what's blocking me. While waiting, validating the worker path end-to-end.
+API Error: Your computer went to sleep mid-response. The response above may be incomplete.
+2026-08-29T18:54:36Z iteration 3 starting (headless)
+2026-08-29T19:42:08Z iteration 3 exited rc=1 after 2852s (transcript 1295184 -> 1310995)
+2026-08-29T19:42:08Z iteration 3 FAILED rc=1 (hard failure 2/5). first 500 bytes of output:
+API Error: Your computer went to sleep mid-response. The response above may be incomplete.
+2026-08-29T21:41:29Z iteration 4 starting (headless)
+2026-08-29T22:34:18Z iteration 4 exited rc=143 after 3169s (transcript 1310995 -> 1432335)
+2026-08-29T22:34:18Z iteration 4 FAILED rc=143 (hard failure 3/5). first 500 bytes of output:
+Execution error
+2026-08-29T22:35:48Z stop file present, loop ending
+2026-08-29T22:35:48Z headless session loop for rep12 finished after 4 iteration(s)

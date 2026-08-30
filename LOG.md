@@ -2212,3 +2212,100 @@ should not later read as though the envelope was met.
 
 Fleet spend at launch: **$40.56 across 9**, of which rep01 is $30.41 — the other eight are at
 $0.93–$1.55 each, having just read their charters.
+
+---
+
+## LOG-2026-08-30-01 — Fleet paused deliberately and this host retired; the restart executor turns out to have been restarting the wrong replicates, which is why rep06 was never restarted at all; Rev 21 never reached the fleet as charter text
+
+**The host had to go offline and there was no way to keep the fleet up.** The replicate
+processes run on the supervising machine; only their workspaces are on the cluster
+(`prereg/replicate_runtime_spec.md` §1, PI reading (A)). `bnode0` is glibc 2.17, two majors below
+Node 18's floor, so it cannot host sessions — there is no `claude` binary there, no npm, and
+`/usr/local/hpc/bin/node` is an HPC Korea node-selector, not Node.js. A proposal to relocate the
+watchdog, spend probes and restart executor to cluster cron was therefore not buildable: the
+spend meter and the liveness check both read local transcripts, a restart means spawning a local
+process, and the supervising machine is NATed with no listening sshd, so nothing on the cluster
+can reach back. Relocation would have produced a watchdog that faithfully observed sixteen
+corpses. The PI ruled a deliberate pause instead.
+
+### The pause
+
+Stamped **2026-08-30 07:14:19 KST** into `harness/state/PAUSE.json`, uniform across arms, with
+every replicate's deadline captured as it stood. Sixteen stop-files armed; four loops exited
+cleanly through them and the remaining twelve were mid-turn — several for many hours — and were
+closed by a PI-executed `pkill`. All sixteen confirmed down at **22:35:50Z** by an independent
+watcher and a fresh process/screen check. **No job was cancelled**: cluster work ran through the
+pause and its outputs wait in the workspaces.
+
+The pause is deadline-neutral by construction, not by promise. `resume_fleet.py` adds the
+*measured* wall-clock pause to all sixteen deadlines identically and **aborts as a whole** if any
+live deadline moved while the fleet was down — an unexplained edit is not something to extend.
+
+### The restart executor was restarting the wrong replicates
+
+`restart_watch.sh`'s relaunch line was a bare `./harness/launch_sessions.sh` — no argument and no
+`PHASE`. `launch_sessions.sh` defaults to `PHASE=smoke`, and with no argument its roster falls
+through to `config.py`'s `["s01","s02"]`. So a dead **main** replicate relaunched the two **smoke**
+arms, in the interactive TUI mode SI-006/SI-011 bars from the main run, while this loop charged
+the restart to the dead replicate's counter and appended an INBOX notice telling it that it had
+been restarted.
+
+**rep06 died once, at 12:36Z, and was never restarted.** Its three cap-consuming "restarts" at
+13:09, 13:43 and 14:17Z went to two other replicates. The evidence agrees from three directions:
+its deadline was still the original launch stamp, no session ever came back, and its transcript
+was dead throughout. It then sat at `restarts=3/3`, "left DOWN deliberately, notify the PI" — a
+cap reached entirely by actions that never touched it. This is SI-012's shape again: the watchdog
+running, on the wrong subject.
+
+### `stamp_deadline.py` was not idempotent, and the restart path used it
+
+It re-stamped to `now + campaign_hours` on every call. Correct exactly once, at first launch, and
+wrong every other time — and because a restart goes through `launch_sessions.sh`, which calls it,
+the restart path silently extended the campaign of anything it restarted while
+`restart_watch.sh`'s own notice said "your deadline has NOT moved". The two disagreed and the
+notice was the one that was wrong. Caught live: a check-run of the script moved rep06's deadline
+**+11.3 h**, restored to `2026-09-05T19:41:02.832166+09:00` from the workspace's own git HEAD.
+Both are fixed; a pause guard now stands the watcher and the divergence panel down while
+`PAUSE.json` exists, because without it the first poll thirty minutes into a pause would have
+relaunched all sixteen on an unattended host.
+
+### Rev 21 never reached the fleet, and its answer is not fleet-uniform
+
+The revision record's own asymmetry note assumed the waiting replicates "receive the same content
+as corrected charter text at provisioning". Measured, they did not, uniformly: **rep01 is the only
+replicate holding a pre-Rev-21 Appendix A** — it still carries the stale `0.313 g/cm³` — while the
+other seven gated replicates did receive Rev 21 as provisioned text. rep01's two escalations were
+live and correct, not ghosts, and it found a defect in the charter it actually holds.
+
+The ruling asked for a fleet-uniform notice. That is right for the compute-budget ruling and the
+infrastructure facts and **wrong for Rev 21**, because Rev 21 amends Appendix A and Appendix A is
+the treatment: all eight ungated charters contain zero Appendix A, and pushing G3 text into them
+would hand the ungated arm the material whose absence defines it. Unrecoverable, and the SI-016
+shape. Rev 21 goes to rep01 alone.
+
+### Infrastructure answers, established rather than repeated
+
+- **`qas` exists.** It is at `/usr/local/mjs/qas`, simply not on the default non-interactive PATH,
+  so rep17's report was half right. The charter is correct that `qas` and not `qsub` is the route.
+- **MakeGrid is genuinely absent.** The provided `simulate` (2.0.37, `4467e14c`) contains **no
+  MakeGrid code path at all** — the string does not occur in the binary — which confirms four
+  independent reports of exit-0-no-output and segfaults. Not a usage error; no spacing will fix
+  it. The toolchain is hash-pinned and will not be rebuilt mid-campaign.
+- **The core caps are one shared pool.** mjs quotas are per UNIX user and all sixteen submit as
+  `Bei`, so the ~252-core cap is fleet-wide with no per-replicate reservation. Recorded as the
+  crowding covariate (Flag I). It had eased by the pause: 68 running, 8 queued.
+
+### Registry purge
+
+s01/s02 out of every live surface as **archived, not down** — roster 18 → 16, marker written, A/B
+panel retired (sealed map untouched), smoke escalation closed as resolved-by-archive, fleet spend
+recomputed at **$714.94 / $4,480 (16.0%)**. `prereg/` and the phase rosters are deliberately not
+edited: the smoke happened, and editing a pre-registration to match today would be falsifying the
+record rather than purging a roster.
+
+### Carried to bronze4 as blocking
+
+`meter_spend.py` recomputes spend from **local** transcripts and does not read `spend.jsonl`. On a
+fresh host every replicate meters `$0.00` with a full `$280` available again, against `$714.94`
+actually spent. The per-replicate baseline is preserved in `harness/state/fleet_spend.json`. This
+is not covered by the standing resume orders and must be closed before bronze4's first resume.

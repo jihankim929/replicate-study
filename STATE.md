@@ -1,8 +1,15 @@
+# FLEET PAUSED — RESUME FROM bronze4 — THIS LAPTOP IS NO LONGER A HOST
+
+*Paused 2026-08-30 07:14:19 KST. All sixteen replicates confirmed down 2026-08-29T22:35:50Z.
+Resume with one command on the new host: `./harness/resume_fleet.sh`. Do not resume here.*
+
+---
+
 # STATE — current tasks and beliefs
 
 *Updated before any long wait. Supersedes itself; history lives in LOG.md and git.*
 
-Last updated: 2026-08-29, after LOG-2026-08-29-08 (7-day budgets; spend cap; Q3 closed).
+Last updated: 2026-08-30, after LOG-2026-08-30-01 (fleet paused; host retired; restart path corrected).
 
 ## Role
 
@@ -11,6 +18,85 @@ replicates. Off-script input from a replicate receives the chartered default res
 (charter §8). Never advise, steer, or evaluate replicate science.
 
 ## Study state
+
+### PAUSE — the fleet is stopped, deliberately, and this host is retired
+
+**Status: PAUSED.** Sixteen main replicates, stopped by PI ruling on **2026-08-30 07:14:19 KST**
+(`harness/state/PAUSE.json`); all sixteen confirmed down at **2026-08-29T22:35:50Z**, corroborated
+by an independent process and screen check. Reason recorded: *supervision host unavailable*. The
+host is now being **retired**; the fleet's new permanent home is **bronze4 (KAIST)**, which
+bootstraps from this repository.
+
+**Why a pause was the only option.** The replicate *processes* run on the supervising machine and
+only their *workspaces* are on the cluster — `prereg/replicate_runtime_spec.md` §1, PI reading
+(A). `bnode0` is glibc 2.17, two majors below Node 18's floor, so it cannot host sessions and
+there is no cluster-side executor that could have carried them. An offline host is an offline
+fleet. The pause is therefore deliberate and recorded rather than a fleet dying unattended.
+
+**Cluster jobs were never touched.** Nothing was `qdel`'d. Jobs kept running through the pause and
+their outputs accumulate in the workspaces for pickup at resume.
+
+**The pause is deadline-neutral by construction.** `PAUSE.json` holds each replicate's deadline as
+it stood at the stamp. `harness/resume_fleet.py` adds the *measured* wall-clock pause to all
+sixteen identically, and **aborts as a whole** if any live deadline moved while the fleet was
+down. Nothing re-derives a deadline from `now + campaign_hours`.
+
+**Resume is one command:** `./harness/resume_fleet.sh`. It extends the deadlines, delivers the
+prepared notices *before* the agents wake, resets the restart counters, clears the stop files,
+relaunches per-replicate through the corrected path, and retires the pause record only on full
+success.
+
+### BLOCKING before bronze4 resumes — the spend cap silently reopens on a new host
+
+`harness/meter_spend.py:session_dir()` derives spend from transcripts under
+`~/.claude/projects/<mangled-local-cwd>/` on the **local** machine, and `tally()` recomputes the
+total from those files — it does **not** read the accumulated `harness/spend.jsonl`. On bronze4
+those directories are empty, so every replicate meters **$0.00 spent with a full $280 available
+again**, against **$714.94** actually spent at pause. STATE calls spend *the budget that binds*;
+this is the one way it silently unbinds, and it is not covered by the standing resume orders.
+
+**Baseline is preserved** in `harness/state/fleet_spend.json` (per-replicate totals at pause,
+denominator 16 × $280 = $4,480). Fix before first resume: either carry the transcript directories
+across with the repo, or teach `meter_spend.py` a carried-forward baseline from that file.
+
+### Corrected while paused
+
+- **`restart_watch.sh` restarted the wrong replicates.** The relaunch line was a bare
+  `./harness/launch_sessions.sh` — no argument, no `PHASE` — so it defaulted to `PHASE=smoke` and
+  the `s01 s02` roster. A dead *main* replicate caused the two *smoke* arms to be relaunched, in
+  the TUI mode SI-006/SI-011 bars from main, while the dead replicate's counter was charged and it
+  was sent an INBOX notice saying it had been restarted. **rep06 died once and was never restarted
+  at all**; three cap-consuming "restarts" went elsewhere. Now resolves each replicate's own phase
+  and relaunches that replicate.
+- **`stamp_deadline.py` was not idempotent.** It re-stamped to `now + campaign_hours`
+  unconditionally, so the restart path silently extended the campaign of anything it restarted
+  while the INBOX notice said the deadline had not moved. Now stamps once; `--force` is explicit.
+  One live instance of this defect was caught and reverted: rep06's deadline was moved +11.3 h on
+  2026-08-30 and restored to `2026-09-05T19:41:02.832166+09:00` against the workspace's git HEAD.
+- **Pause guard.** Without it the first poll 30 min into a pause would have relaunched all sixteen
+  on an unattended host. `restart_watch.sh` and `divergence.py` both stand down while
+  `PAUSE.json` exists.
+
+### Registry purge — s01/s02 are archived, not down
+
+Roster 18 → 16; `harness/state/SMOKE_ARCHIVED.json` written; the A/B divergence panel **retired**
+in STATUS.md (the sealed map in `harness/divergence_map.SEALED.json` is **untouched and stays
+sealed**); one smoke-era escalation closed as resolved-by-archive; fleet spend recomputed as
+**$714.94 / $4,480 (16.0%)** with $178.48 of smoke excluded. `prereg/` and `config.py`'s phase
+rosters are deliberately **not** edited — the smoke happened, and the pre-registration is a
+historical record, not a live surface.
+
+### Rev 21 never reached the fleet as charter text — and its answer is NOT fleet-uniform
+
+Measured 2026-08-30: **rep01 is the only replicate holding a pre-Rev-21 Appendix A** (it still
+carries the stale `0.313 g/cm³`). The other seven gated replicates received Rev 21 as provisioned
+text. All eight ungated charters contain **zero** Appendix A — that omission *is* the treatment.
+
+So the Rev 21 answer goes to **rep01 alone**. Delivering it fleet-uniform would push G3 text into
+the eight workspaces whose defining property is Appendix A's absence — the SI-016 leak shape, and
+unrecoverable. This matches the asymmetry Rev 21 already logged. The budget ruling and the
+infrastructure facts **are** fleet-uniform, all sixteen.
+
 
 - Phase: **PRE-SEAL, N = 16 (8v8), 7-day horizon. Charter Rev 20 applied; hunks returned for
   ratification at `prereg/charter_rev20.diff`. Launch gate PASSES.**

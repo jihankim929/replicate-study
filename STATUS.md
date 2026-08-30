@@ -3,41 +3,18 @@
 *Machine-generated. Refreshed by `harness/poll.sh` each watchdog cycle.*
 
 <!-- DIVERGENCE-PANEL:BEGIN -->
-## Mechanical divergence panel
+## Mechanical divergence panel — **RETIRED 2026-08-29T22:24:19Z**
 
-Refreshed 2026-08-29 11:33:15Z (20:33 KST) — every watchdog cycle.
+The A/B panel compared the two **smoke** arms. Those arms are finished and archived
+(`harness/state/SMOKE_ARCHIVED.json`), so the panel had no live subject: it was carrying figures
+forward from a last successful collection and correctly refusing its own comparison, which is a
+dashboard reporting on a fleet that no longer exists.
 
-> **Not collected this cycle** — the cluster did not answer. Figures carried forward from the last successful collection: A (123 min old); B (123 min old).
+It is retired rather than repaired. The main phase is N = 16 and its comparison is not this
+panel's two-arm shape; a main-phase divergence view is a separate instrument and is not
+pre-registered yet. The sealed arm mapping in `harness/divergence_map.SEALED.json` is
+**unopened and stays sealed** — retiring the display does not unseal anything.
 
-Arms are relabelled **A** / **B** in randomized order. The mapping was drawn once from
-OS randomness and sealed in `harness/divergence_map.SEALED.json`
-(sha256 `dd49fc9492a876f56de2804d0250d362`). It is not to be opened until collection.
-
-| Quantity | A | B |
-|---|---:|---:|
-| First submission (UTC) | 2026-08-26 06:36Z | 2026-08-26 06:38Z |
-| Elapsed since first submission | 77.0 h | 76.9 h |
-| Jobs submitted | 189 | 108 |
-| Jobs completed | 189 | 108 |
-| Jobs running | 0 | 0 |
-| Jobs queued | 0 | 0 |
-| Distinct structures touched | 1,731 | 797 |
-| — collapsed over charge-variant twins | 1,055 | 671 |
-| Tasks across all jobs | 3,620 | 2,584 |
-| Batch size — median / max | 38 / 39 | 21 / 73 |
-| Batch-size distribution (size×jobs) | 1×56, 2×8, 4×8, 13×2, 14×2, 38×9, 39×80, unresolved×24 | 1×40, 9×7, 10×5, 21×4, 22×28, 72×21, 73×3 |
-| Cumulative CPU-h — from run records | 300.7 | 796.8 |
-| Cumulative CPU-h — from scheduler | 5.3 | 15.1 |
-| Token burn (billable) | 6,620,605 | 1,306,050 |
-| Token:CPU (tokens per CPU-h) | 22,014 | 1,639 |
-| Resubmissions | 0 | 0 |
-| Agent transcript last grew | 6.5 h | 6.5 h |
-
-> **⚠ CROSS-ARM COMPARISON IS NOT VALID THIS CYCLE.** The agent's own transcript has not grown for: **A** (6.5 h); **B** (6.5 h). An arm whose agent has stopped acting still carries its finished jobs, its CPU-hours and its structure counts forward, so every row above reads as a working arm that merely did less. It did not do less; it stopped. Do not read any row as a difference between arms until this clears. See SI-006 in `SI_LEDGER.md`.
-
-**Definitions.** *Jobs submitted* = job scripts carrying a `#PBS -N` line; *completed* = submitted − running − queued. *Distinct structures touched* = benchmark structures whose run directory holds simulation output; the collapsed row merges the coordinate-identical charge-variant pairs. *Batch size* = simulation tasks carried by one submitted job. *Resubmissions* = one job name submitted under more than one job id.
-
-**Blind spots, stated rather than implied.** The scheduler drops a finished job from `qstat` and this account cannot read the PBS accounting log, so the scheduler CPU figure accounts only for jobs alive at a poll plus those the harvester caught leaving; the run-records figure is the more complete of the two and is single-core elapsed time per finished run. The resubmission ledger starts at its first poll — resubmissions earlier than that are not recoverable and are not counted. A job script written but never submitted would count as submitted, and therefore as completed.
-
-**The blind is procedural, not cryptographic.** Per-replicate ledgers elsewhere in this repo carry some of the same quantities under their real ids, so the mapping is recoverable by anyone who goes looking. It holds because it is not looked at.
+Historical panels remain in git history. The smoke's own record is in `reps/smoke/` and
+`archive/smoke/`.
 <!-- DIVERGENCE-PANEL:END -->

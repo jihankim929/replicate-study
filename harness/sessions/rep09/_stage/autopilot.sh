@@ -1,29 +1,38 @@
 #!/bin/bash
-# Keeps the Tier-1 screen alive without a live session.
+# Keeps queued waves alive without a live session.
 #
-# Bounded on purpose: it only ever resubmits s1 chunks that (a) still have
-# unfinished tasks and (b) are not currently in the mjs queue, and it never
-# lets the rep09 queue exceed MAXQ. It submits nothing else, so it cannot
-# start a tier I have not decided on.
+# Reads jobs/autopilot.plan: one "<wave> <chunk>" per line, highest priority
+# first. For each entry that is not currently live and still has unfinished
+# points, it submits the chunk. Never exceeds MAXJOBS live rep09 jobs.
+#
+# Bug fixed 2026-08-29 20:50: the first version judged "already submitted" from
+# the mjs queue listing alone, but mjs drops a job from that listing the moment
+# it dispatches it, so running chunks were duplicated and the live count hit 14
+# against the charter cap of 12. bin/census.sh now unions queue and running.
 WS=/home1/users/Bei/ws/rep09
-MAXQ=11
+PLAN=$WS/jobs/autopilot.plan
+MAXJOBS=12
 LOGF=$WS/logs/autopilot.log
-mkdir -p $WS/logs
+mkdir -p "$WS/logs"
 
 while true; do
-    NQ=$(/usr/local/mjs/qinfo 2>/dev/null | grep -c "rep09_")
-    if [ "$NQ" -lt "$MAXQ" ]; then
-        for k in 00 01 02 03 04 05 06 07 08 09 10; do
-            NQ=$(/usr/local/mjs/qinfo 2>/dev/null | grep -c "rep09_")
-            [ "$NQ" -ge "$MAXQ" ] && break
-            /usr/local/mjs/qinfo 2>/dev/null | grep -q "rep09_s1_$k" && continue
-            NEED=$(/bin/python3 $WS/bin/remaining.py s1 $k)
-            if [ "$NEED" -gt 0 ]; then
-                echo "$(date -Iseconds) resubmit s1_$k ($NEED points left)" >> $LOGF
-                /usr/local/mjs/qas $WS/jobs/s1_$k.pbs >> $LOGF 2>&1
-                sleep 5
-            fi
-        done
-    fi
+    LIVE=$(bash "$WS/bin/census.sh")
+    N=$(printf '%s\n' "$LIVE" | grep -c 'rep09_')
+    while read -r WAVE K; do
+        [ -z "$WAVE" ] && continue
+        case "$WAVE" in \#*) continue;; esac
+        [ "$N" -ge "$MAXJOBS" ] && break
+        printf '%s\n' "$LIVE" | grep -qx "rep09_${WAVE}_${K}" && continue
+        [ -f "$WS/jobs/${WAVE}_${K}.pbs" ] || continue
+        NEED=$(/bin/python3 "$WS/bin/remaining.py" "$WAVE" "$K" 2>/dev/null)
+        [ -z "$NEED" ] && continue
+        if [ "$NEED" -gt 0 ]; then
+            echo "$(date -Iseconds) submit ${WAVE}_${K} ($NEED left, live=$N)" >> "$LOGF"
+            /usr/local/mjs/qas "$WS/jobs/${WAVE}_${K}.pbs" >> "$LOGF" 2>&1
+            sleep 10
+            LIVE=$(bash "$WS/bin/census.sh")
+            N=$(printf '%s\n' "$LIVE" | grep -c 'rep09_')
+        fi
+    done < "$PLAN"
     sleep 300
 done

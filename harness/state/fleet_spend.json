@@ -1,0 +1,32 @@
+{
+  "ts": "2026-08-29T22:24:19Z",
+  "basis": "latest metered row per replicate, smoke excluded",
+  "n_live": 16,
+  "cap_usd_each": 280.0,
+  "denominator_usd": 4480.0,
+  "fleet_spend_usd": 714.94,
+  "fleet_fraction": 0.1596,
+  "excluded_smoke_usd": 178.48,
+  "superseded": {
+    "denominator_usd": 5040.0,
+    "note": "18 x $280 counted two archived arms"
+  },
+  "per_replicate": {
+    "rep01": 64.95,
+    "rep02": 39.34,
+    "rep03": 20.7,
+    "rep04": 30.18,
+    "rep05": 32.81,
+    "rep06": 99.03,
+    "rep07": 50.41,
+    "rep08": 39.1,
+    "rep09": 36.99,
+    "rep10": 75.59,
+    "rep11": 36.74,
+    "rep12": 36.77,
+    "rep13": 34.09,
+    "rep15": 49.07,
+    "rep16": 48.94,
+    "rep17": 20.23
+  }
+}

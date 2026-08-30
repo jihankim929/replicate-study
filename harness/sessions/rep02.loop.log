@@ -1,3 +1,14 @@
 2026-08-29T10:41:22Z iteration 1 starting (headless)
 2026-08-29T11:39:08Z iteration 1 exited rc=0 after 3466s (transcript 0 -> 635655)
 2026-08-29T11:39:18Z iteration 2 starting (headless)
+2026-08-29T12:01:19Z iteration 2 exited rc=0 after 1321s (transcript 635655 -> 725382)
+2026-08-29T12:01:29Z iteration 3 starting (headless)
+2026-08-29T12:42:17Z iteration 3 exited rc=0 after 2448s (transcript 725382 -> 790819)
+2026-08-29T12:42:27Z iteration 4 starting (headless)
+2026-08-29T21:50:35Z iteration 4 exited rc=0 after 32888s (transcript 790819 -> 1073293)
+2026-08-29T21:50:45Z iteration 5 starting (headless)
+2026-08-29T22:34:18Z iteration 5 exited rc=143 after 2613s (transcript 1073293 -> 1245354)
+2026-08-29T22:34:18Z iteration 5 FAILED rc=143 (hard failure 1/5). first 500 bytes of output:
+Execution error
+2026-08-29T22:34:48Z stop file present, loop ending
+2026-08-29T22:34:48Z headless session loop for rep02 finished after 5 iteration(s)

@@ -297,6 +297,15 @@ def main():
     ap.add_argument("--dry-run", action="store_true", help="print the panel, do not write")
     a = ap.parse_args()
 
+    # The panel's subject is the two SMOKE arms. Once they are archived it has none, and a
+    # refresh would rewrite a retired section with figures carried forward from a fleet that no
+    # longer exists -- the dashboard-on-a-corpse failure the retirement notice describes. Stand
+    # down instead. This does NOT unseal or touch divergence_map.SEALED.json.
+    if (REPO / "harness/state/SMOKE_ARCHIVED.json").exists():
+        print("[divergence] smoke arms ARCHIVED -- panel retired, not refreshed "
+              "(harness/state/SMOKE_ARCHIVED.json)")
+        return
+
     RAW.mkdir(exist_ok=True)
     m, maphash = sealed_map()
     now = datetime.now(timezone.utc).timestamp()

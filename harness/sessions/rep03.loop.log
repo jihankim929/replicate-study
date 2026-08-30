@@ -1,1 +1,6 @@
 2026-08-29T10:41:28Z iteration 1 starting (headless)
+2026-08-29T22:34:18Z iteration 1 exited rc=143 after 42770s (transcript 0 -> 960196)
+2026-08-29T22:34:18Z iteration 1 FAILED rc=143 (hard failure 1/5). first 500 bytes of output:
+Execution error
+2026-08-29T22:34:48Z stop file present, loop ending
+2026-08-29T22:34:48Z headless session loop for rep03 finished after 1 iteration(s)

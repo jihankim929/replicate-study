@@ -1,0 +1,53 @@
+{
+  "event": "FLEET_PAUSE",
+  "paused_at_utc": "2026-08-29T22:14:19.952793+00:00",
+  "paused_at_kst": "2026-08-30T07:14:19.952793+09:00",
+  "reason": "supervision host unavailable (planned operator absence, 24-48 h)",
+  "uniform_across_arms": true,
+  "arm_dependent_content": null,
+  "replicates": [
+    "rep01",
+    "rep02",
+    "rep03",
+    "rep04",
+    "rep05",
+    "rep06",
+    "rep07",
+    "rep08",
+    "rep09",
+    "rep10",
+    "rep11",
+    "rep12",
+    "rep13",
+    "rep15",
+    "rep16",
+    "rep17"
+  ],
+  "n": 16,
+  "deadlines_at_pause_kst": {
+    "rep01": "2026-09-05T14:12:32.674020+09:00",
+    "rep02": "2026-09-05T19:41:21.212177+09:00",
+    "rep03": "2026-09-05T19:41:27.282693+09:00",
+    "rep04": "2026-09-05T19:41:33.351662+09:00",
+    "rep05": "2026-09-05T19:40:56.678756+09:00",
+    "rep06": "2026-09-05T19:41:02.832166+09:00",
+    "rep07": "2026-09-05T19:41:08.970805+09:00",
+    "rep08": "2026-09-05T19:41:15.055436+09:00",
+    "rep09": "2026-09-05T19:41:39.509213+09:00",
+    "rep10": "2026-09-05T20:42:28.547965+09:00",
+    "rep11": "2026-09-05T20:42:09.489984+09:00",
+    "rep12": "2026-09-05T20:42:16.114249+09:00",
+    "rep13": "2026-09-05T20:42:22.385815+09:00",
+    "rep15": "2026-09-05T20:42:34.845642+09:00",
+    "rep16": "2026-09-05T20:42:41.044958+09:00",
+    "rep17": "2026-09-05T20:42:48.507913+09:00"
+  },
+  "cluster_jobs": "left running; nothing qdel'd; outputs accumulate in-workspace for pickup at resume",
+  "deadline_policy": "deadline-neutral: resume adds the measured pause duration to every deadline, uniformly",
+  "resume_with": "harness/resume_fleet.sh",
+  "smoke_arms_excluded": [
+    "s01",
+    "s02"
+  ],
+  "smoke_note": "s01/s02 were already down and are ARCHIVED, not paused; they are not part of this record"
+}

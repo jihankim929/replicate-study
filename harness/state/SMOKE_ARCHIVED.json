@@ -1,0 +1,21 @@
+{
+  "event": "SMOKE_ARCHIVED",
+  "ts": "2026-08-29T22:24:19Z",
+  "replicates": [
+    "s01",
+    "s02"
+  ],
+  "status": "archived, not down",
+  "material": "archive/smoke/ and reps/smoke/ (verified copies); workspaces removed from cluster",
+  "effect": [
+    "out of harness/state/active_replicates",
+    "excluded from the fleet spend denominator",
+    "A/B divergence panel retired",
+    "smoke-era escalation rows closed as resolved-by-archive"
+  ],
+  "fleet_after": {
+    "n": 16,
+    "cap_usd_each": 280.0,
+    "denominator_usd": 4480.0
+  }
+}

@@ -19,6 +19,17 @@ if [ ! -f "$MARKER" ]; then
   echo "  campaign not launched yet (no $MARKER) -- restart watcher idle"
   exit 0
 fi
+# A DELIBERATE PAUSE IS NOT A DEATH. During a fleet pause every session is down by intent, and
+# after STALE_MIN the transcripts go stale too -- which is exactly the signature this watcher
+# restarts on. Without this guard the first poll cycle 30 minutes into a pause would relaunch
+# all sixteen sessions on an unattended host, against the ruling that stopped them, and the
+# deadline extension the pause is owed would then be computed against a fleet that never
+# actually paused. The pause record is removed by resume_fleet.sh, not by hand.
+if [ -f harness/state/PAUSE.json ]; then
+  echo "  FLEET PAUSED (harness/state/PAUSE.json present) -- restart watcher stood down."
+  echo "  Sessions are down by ruling, not by failure. Resume with harness/resume_fleet.sh."
+  exit 0
+fi
 MAX_RESTARTS=3
 STALE_MIN=30
 LEDGER=harness/restarts.jsonl
@@ -43,7 +54,13 @@ for REP in $ACTIVE; do
   #     `[ "$N" -ge 3 ]` then EXITS 2 rather than returning false -- which, with no `set -e`,
   #     falls through as though the cap were clear. Tolerate both spacings, swallow grep's
   #     exit status without adding to the value, and force a single integer.
-  N=$(grep -cE "\"replicate\": ?\"$REP\"" "$LEDGER" 2>/dev/null | head -1)
+  # SI-022: the cap is counted since the last COUNTER_RESET marker, not over all time. A
+  # deliberate fleet pause is not a replicate failure, and a campaign that is resumed must not
+  # inherit a cap that was spent before it. The ledger stays APPEND-ONLY -- the reset is a row
+  # in it, not a deletion -- so the full restart history is still readable above the marker.
+  RESET_LN=$(grep -n '"event":"COUNTER_RESET"' "$LEDGER" 2>/dev/null | tail -1 | cut -d: -f1)
+  RESET_LN=${RESET_LN:-0}
+  N=$(tail -n +$((RESET_LN+1)) "$LEDGER" 2>/dev/null | grep -cE "\"replicate\": ?\"$REP\"" | head -1)
   N=${N:-0}
   case "$N" in (*[!0-9]*|"") N=0 ;; esac
   echo "  $REP: session=$([ "$ALIVE" -gt 0 ] && echo up || echo DOWN) transcript_age=${AGE}min (deciding) heartbeat_age=${HB}min (reported only) restarts=$N/$MAX_RESTARTS"
@@ -61,7 +78,18 @@ for REP in $ACTIVE; do
   TS=$(date -u +%FT%TZ)
   echo "     restarting (#$((N+1)))"
   if [ -n "$DRY" ]; then echo "     (dry-run) would relaunch and log"; continue; fi
-  ./harness/launch_sessions.sh >/dev/null 2>&1
+  # SI-022, the defect this line WAS. It read `./harness/launch_sessions.sh` -- no argument and
+  # no PHASE. launch_sessions.sh then defaulted to PHASE=smoke and, with no argument, to the
+  # smoke roster `s01 s02`. So a dead MAIN replicate caused s01/s02 to be relaunched, in the
+  # interactive TUI mode that SI-006/SI-011 bars from the main run, while this loop charged the
+  # restart to the dead replicate's counter and sent it an INBOX notice saying it had been
+  # restarted. rep06 died once and was never restarted at all: three cap-consuming "restarts"
+  # went to two other replicates. Restart the replicate that actually died, in its own phase.
+  REP_PHASE=$(python3 -c "import sys;sys.path.insert(0,'harness');import config as C;print(C.phase_of('$REP'))" 2>/dev/null)
+  if [ -z "$REP_PHASE" ]; then
+    echo "     !! cannot resolve phase for $REP -- NOT restarting"; continue
+  fi
+  PHASE="$REP_PHASE" ./harness/launch_sessions.sh "$REP" >/dev/null 2>&1
   printf '{"ts":"%s","replicate":"%s","restart_number":%d,"reason":"screen session absent and transcript not grown (%s min)","downtime_min":%s}\n' \
     "$TS" "$REP" "$((N+1))" "$AGE" "$AGE" >> "$LEDGER"
   ssh -o BatchMode=yes -o ConnectTimeout=20 dirac-bei \

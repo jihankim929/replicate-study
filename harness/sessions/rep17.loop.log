@@ -1,0 +1,16 @@
+2026-08-29T11:42:49Z iteration 1 starting (headless)
+2026-08-29T12:07:48Z iteration 1 exited rc=0 after 1499s (transcript 0 -> 421738)
+2026-08-29T12:07:58Z iteration 2 starting (headless)
+2026-08-29T12:08:48Z iteration 2 exited rc=0 after 50s (transcript 421738 -> 455481)
+2026-08-29T12:08:58Z iteration 3 starting (headless)
+2026-08-29T12:09:50Z iteration 3 exited rc=0 after 52s (transcript 455481 -> 492305)
+2026-08-29T12:10:00Z iteration 4 starting (headless)
+2026-08-29T18:02:59Z iteration 4 exited rc=1 after 21179s (transcript 492305 -> 747275)
+2026-08-29T18:02:59Z iteration 4 FAILED rc=1 (hard failure 1/5). first 500 bytes of output:
+API Error: Your computer went to sleep mid-response. The response above may be incomplete.
+2026-08-29T19:26:25Z iteration 5 starting (headless)
+2026-08-29T22:34:18Z iteration 5 exited rc=143 after 11273s (transcript 747275 -> 852342)
+2026-08-29T22:34:18Z iteration 5 FAILED rc=143 (hard failure 2/5). first 500 bytes of output:
+Execution error
+2026-08-29T22:35:18Z stop file present, loop ending
+2026-08-29T22:35:18Z headless session loop for rep17 finished after 5 iteration(s)

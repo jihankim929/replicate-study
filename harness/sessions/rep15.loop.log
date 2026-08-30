@@ -1,0 +1,23 @@
+2026-08-29T11:42:35Z iteration 1 starting (headless)
+2026-08-29T12:08:30Z iteration 1 exited rc=0 after 1555s (transcript 0 -> 704973)
+2026-08-29T12:08:40Z iteration 2 starting (headless)
+2026-08-29T13:07:54Z iteration 2 exited rc=0 after 3554s (transcript 704973 -> 781940)
+2026-08-29T13:08:04Z iteration 3 starting (headless)
+2026-08-29T13:21:22Z iteration 3 exited rc=0 after 798s (transcript 781940 -> 895072)
+2026-08-29T13:21:32Z iteration 4 starting (headless)
+2026-08-29T14:04:05Z iteration 4 exited rc=0 after 2553s (transcript 895072 -> 1035538)
+2026-08-29T14:04:15Z iteration 5 starting (headless)
+2026-08-29T14:25:00Z iteration 5 exited rc=0 after 1245s (transcript 1035538 -> 1089694)
+2026-08-29T14:25:10Z iteration 6 starting (headless)
+2026-08-29T14:41:40Z iteration 6 exited rc=0 after 990s (transcript 1089694 -> 1170348)
+2026-08-29T14:41:50Z iteration 7 starting (headless)
+2026-08-29T21:25:25Z iteration 7 exited rc=1 after 24215s (transcript 1170348 -> 1239850)
+2026-08-29T21:25:25Z iteration 7 FAILED rc=1 (hard failure 1/5). first 500 bytes of output:
+SSH to the cluster timed out. Work continues independently on the cluster; retrying the connection.
+API Error: Your computer went to sleep mid-response. The response above may be incomplete.
+2026-08-29T21:41:39Z iteration 8 starting (headless)
+2026-08-29T21:43:50Z iteration 8 exited rc=0 after 131s (transcript 1239850 -> 1289059)
+2026-08-29T21:44:00Z iteration 9 starting (headless)
+2026-08-29T22:15:59Z iteration 9 exited rc=0 after 1919s (transcript 1289059 -> 1400501)
+2026-08-29T22:16:09Z stop file present, loop ending
+2026-08-29T22:16:09Z headless session loop for rep15 finished after 9 iteration(s)

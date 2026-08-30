@@ -1,73 +1,85 @@
 # STATE — current beliefs and open tasks
 
 *(Self-sufficient: this file alone must suffice to resume the campaign.)*
+*(Last updated 2026-08-29 21:25 KST, launch +1.7 h.)*
 
 ## Fixed facts
 
-- Deadline **T = 2026-09-05T19:41:39+09:00** (launch 2026-08-29T19:41:39 + 168 h).
-- Budgets: **1610 CPU-h**, **US$280 spend**, **32M tokens**, **12 concurrently
-  queued jobs**, queue `long`, job prefix `rep09_`.
-- Target: max working capacity `N(65 bar) − N(5.8 bar)` at 298 K, absolute
+- Deadline **T = 2026-09-05T19:41:39+09:00** (launch + 168 h).
+- Budgets: **1610 CPU-h**, **US$280 spend**, **32M tokens**, **12 live jobs**,
+  queue `long`, prefix `rep09_`.
+- Target: max working capacity `N(65 bar) − N(5.8 bar)`, 298 K, absolute
   loading, cm³ STP/cm³, over the 12,499 CIFs in `db/`.
-- Toolchain verified: three UFF files match the charter SHA-256 table; RASPA
-  2.0.37. `RASPA_DIR=<ws>/raspa_home`, binary `toolchain/raspa/bin/simulate`.
+- Toolchain verified against all three charter SHA-256 values; RASPA 2.0.37.
+  `RASPA_DIR=<ws>/raspa_home`, binary `toolchain/raspa/bin/simulate`.
 
-## Machinery (all under `bin/`)
+## Machinery (`bin/`)
 
-- `cifutil.py` — CIF parse, cell matrix, perpendicular widths, unit-cell
-  replication for a 12.8 Å cutoff.
-- `prep_cif.py` — db CIF → RASPA-ready CIF (labels become UFF pseudo-atom
-  names `X_`; charges dropped; geometry untouched).
-- `gcmc.py` — one GCMC point → one parsed CSV row. `run_batch.py` — pool over
-  a task file. `mkjobs.py` — interleaved chunks + PBS scripts, resumable
-  (skips points already recorded `ok` for the same wave).
-- `aggregate.py` — fold a wave's per-job CSVs into `tables/<wave>_all.csv` and
-  print distribution summaries only.
-- `geom.py` — geometric clearance descriptors. **Built, validated, set aside.**
-- `status.sh` — one-line campaign status; use this instead of ad-hoc queries.
+`cifutil.py` (CIF parse, cell matrix, unit-cell replication for 12.8 Å) ·
+`prep_cif.py` (db CIF → RASPA CIF, labels → `X_`, charges dropped, geometry
+untouched) · `gcmc.py` (one point → one CSV row) · `run_batch.py` (pool over a
+task file) · `mkjobs.py` (chunks + PBS, resumable) · `remaining.py` ·
+`census.sh` (live rep09 jobs: mjs queue ∪ `qstat -f` names) · `autopilot.sh`
+(resubmits unfinished chunks, capped at 12 live) · `aggregate.py` ·
+`rank.py` (densities + task reordering) · `geom.py` (set aside) ·
+`status.sh` (**use this, not ad-hoc queries**).
 
 ## Beliefs
 
-1. **A hard-sphere geometric screen is not usable on this database.** `geom.py`
-   agrees with brute force, but structure 2778 (`2011[Co][nan]3[FSR]9`,
-   ρ = 2.20 g/cm³) has hard-sphere-accessible fraction 0.0003 for a 1.865 Å
-   probe and RASPA still loads it to 131 cm³/cm³ at 65 bar at −2585 K per
-   molecule. A σ-contact criterion discards exactly the tight-pore materials.
-   Screening is therefore done with real GCMC.
-2. **N(65 bar) is a rigorous upper bound on working capacity**, since
-   N(5.8 bar) ≥ 0. A 65-bar-only screen can *exclude* structures with
-   certainty, up to its own convergence error. This is the backbone of the
-   ceiling argument, and Tier 1v is what quantifies that error.
-3. Measured cost, 65 bar, 200+1000 cycles, one core: mean 123 s, median 73 s,
-   max 553 s over 42 structures stratified uniformly by volume/atom quantile.
-4. **The cluster, not the budget, is the binding constraint so far.** mjs gates
-   on both a per-user core limit per node class and a class-wide total across
-   all users (`molsim_job_scheduler.py:500-506`). At launch: `ac` 203/204
-   cluster-wide from external users, `amd` 80/80 against Bei's own limit from
-   sibling replicates, `ax` 64/64, `aa` 34/38. Expect trickle dispatch.
+1. **No proxy screen.** `geom.py` is correct (matches brute force) and useless:
+   structure 2778, ρ = 2.20 g/cm³, has hard-sphere accessible fraction 0.0003
+   for a methane probe and still loads to 131 cm³/cm³ at −2585 K per molecule.
+   A σ-contact filter would preferentially discard ultramicroporous winners.
+2. **N(65 bar) rigorously upper-bounds working capacity** (N(5.8 bar) ≥ 0), so
+   the 65-bar screen *excludes* rather than merely deprioritises.
+3. **The cheap screen is trustworthy for ranking.** 46 paired structures,
+   200+500 vs 200+1000 cycles: mean −1.2%, sd 2.1%, worst 5.3 cm³/cm³. The
+   residual bias is downward, the safe direction for an exclusion filter.
+4. **Density is a strong free prior.** Pearson(ρ, N65) = −0.669 over 48 probe
+   structures. Tier-1 tasks run in ascending-ρ order, so partial completion
+   still covers the promising end. Confirmed in flight: the first 47 screened
+   (ρ ≤ 0.69) have median N65 **223.5** and max **267.2**, against a
+   random-sample median of 128.
+5. **Energy grids are unavailable** — `MakeGrid` dumps core in this build under
+   every input variant tried. Screening runs without them.
+6. **The cluster is the binding constraint, not the budget.** mjs gates on a
+   per-user core limit per node class *and* a class total across all users
+   (`molsim_job_scheduler.py:500-506`). Dispatch is a trickle.
+7. Cost on `aa`/`ac` compute nodes is ~1.7× the login node used for the probe:
+   ~155 s per screen point. Whole-database Tier 1 ≈ **490 CPU-h**.
 
-## Plan (tiers)
+## Tier plan and budget
 
 | Tier | Set | Protocol | Est. CPU-h |
 |---|---|---|---|
-| 1 (queued) | all 12,499 | 65 bar, 200+500 | 250 |
-| 1v (running) | 46 probe structures | 65 bar 200+500 × 2 seeds; 65 and 5.8 bar at floor | 25 |
-| 2 | top ~1200 by N65 | both P, 500+2500 | 170 |
-| 3 | top ~150 | both P, 2000+10000 (floor) | 85 |
-| 4 | top ~15 × 3 seeds | both P, 10000+50000 (claim) | 130 |
+| 1 (running) | all 12,499 | 65 bar, 200+500 | 490 |
+| 1v (running) | 46 probe structures | 65 bar 200+500 ×2 seeds; both P at floor | 25 |
+| 2 | top ~2500 by N65 | **5.8 bar**, 200+500 | 60 |
+| 3 | top ~200 by screening WC | both P, 2000+10000 (floor) | 215 |
+| 4 | top ~12 × 3 seeds | both P, 10000+50000 (claim) | 194 |
 
-Tier 1v decides the exclusion margin: it measures how much the 200+500 screen
-under-reports N65 relative to the floor protocol, and how much it scatters
-between seeds. Without it the exclusion in belief 2 is not defensible.
+Total ≈ 985 CPU-h, 61% of budget, leaving room for a modification arm and
+reproduction runs.
 
 ## Open tasks
 
-- [ ] Tier 1 queued: 11 jobs `rep09_s1_00..10`, ppn=8 (8 ac, 3 amd), mjs
-      3046–3056, task files already carry 200+500. Results append to
-      `tables/s1_*.csv`; `bin/mkjobs.py s1 ...` regenerates only what is missing.
-- [ ] Tier 1v running: `rep09_cal_00`, ppn=4 on aa, mjs 3058 →
-      `tables/cal_00.csv`. Four settings × 46 structures, ~6 h.
-- [ ] On Tier 1v: fit N65(200+500) vs N65(floor); set exclusion margin.
-- [ ] On Tier 1: build `tables/s1_all.csv`, then launch Tier 2.
-- [ ] Not started: structural-modification arm (§3 permits it). Decide after
-      Tier 2.
+- [ ] **Tier 1 running.** 11 chunks `rep09_s1_00..10`, ppn=8, tasks ordered by
+      ascending density and interleaved. Results append to `tables/s1_*.csv`.
+      Watchdog `bin/autopilot.sh s1` resubmits unfinished chunks; it is capped
+      at 12 live jobs and submits nothing but s1.
+- [ ] **Tier 1v running** (`rep09_cal_00`, ppn=4 → `tables/cal_00.csv`):
+      46 structures × {65 bar 200+500 seed 1 ✔ and seed 2, 5.8 bar floor,
+      65 bar floor}. The floor points give the screen-vs-floor bias and the
+      first honest working capacities.
+- [ ] Decision point: if Tier 1 is under ~15% complete by launch +8 h, cut
+      scope — either fewer cycles or truncate the screen at a density
+      threshold and say so explicitly in the report.
+- [ ] Not started: structural-modification arm (§3 permits it; plan is
+      H-capping of monovalent substituents on top candidates to open pore
+      volume without changing topology or charge balance). Decide after Tier 2.
+
+## Errors on the record
+
+- 20:44 watchdog double-submitted `s1_00`/`s1_01` (live count 14 > cap 12)
+  because it read only the mjs queue listing, which drops dispatched jobs.
+  Withdrawn before dispatch, no GCMC work duplicated. Fixed via `census.sh`.

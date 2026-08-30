@@ -1,0 +1,14 @@
+=== WAVE B launching 2026-08-29 20:42:08 KST ===
+  phase=main  loop=session_loop_headless.sh
+  replicates:rep11 rep12 rep13 rep10 rep15 rep16 rep17
+  rep11: launched and WORKING (screen 'rep-rep11', transcript 0 -> 14265 bytes)
+  rep12: launched and WORKING (screen 'rep-rep12', transcript 0 -> 14267 bytes)
+  rep13: launched and WORKING (screen 'rep-rep13', transcript 0 -> 17029 bytes)
+  rep10: launched and WORKING (screen 'rep-rep10', transcript 0 -> 14217 bytes)
+  rep15: launched and WORKING (screen 'rep-rep15', transcript 0 -> 14265 bytes)
+  rep16: launched and WORKING (screen 'rep-rep16', transcript 14133 -> 23574 bytes)
+  rep17: launched and WORKING (screen 'rep-rep17', transcript 0 -> 19579 bytes)
+
+sessions:
+  (none)
+=== registry: rep01 rep02 rep03 rep04 rep05 rep06 rep07 rep08 rep09 rep10 rep11 rep12 rep13 rep15 rep16 rep17 

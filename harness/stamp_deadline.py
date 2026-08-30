@@ -12,6 +12,19 @@ lost the gap between launch time and a 09:00 snap; here it loses the gap between
 launch. Fixing it in one place and not the other would have left the ruling half-implemented.
 
 The change is recorded in the workspace's own record, not applied silently.
+
+IDEMPOTENCY (PI ruling, 2026-08-30). This script re-stamped UNCONDITIONALLY, so every call
+moved the deadline to now + campaign_hours. That is correct exactly once -- at first launch --
+and wrong every other time. A RESTART goes through launch_sessions.sh, which calls this, so the
+restart path silently extended the campaign of any replicate it restarted, while
+restart_watch.sh's own INBOX notice told that replicate "your deadline has NOT moved". The two
+disagreed and the notice was the one that was wrong.
+
+The stamp is therefore taken ONCE and only once. A workspace that already carries `launched_at`
+is already stamped: this reports its existing deadline and writes nothing. `--force` re-stamps
+deliberately and says so on stdout, for the case where a workspace really is being launched
+afresh. Deadline arithmetic that is SUPPOSED to move a deadline -- the pause extension -- lives
+in resume_fleet.py, where it is measured, uniform across arms, and recorded.
 """
 import json, subprocess, sys
 from datetime import datetime, timedelta, timezone
@@ -28,6 +41,17 @@ def main():
     meta = json.loads(raw)
     hours = meta["campaign_hours"]
     before = meta["deadline_kst"]
+
+    # Already stamped -> report, do not move. This is the whole of the idempotency fix.
+    force = "--force" in sys.argv[2:]
+    if meta.get("launched_at") and not force:
+        print(f"  deadline already stamped at launch ({meta['launched_at'][:19]}); "
+              f"unchanged at {before[:19]}")
+        print(int(datetime.fromisoformat(before).timestamp()))
+        return
+    if force and meta.get("launched_at"):
+        print(f"  --force: RE-STAMPING a workspace already launched at {meta['launched_at'][:19]}")
+
     launch = datetime.now(KST)
     meta["deadline_kst"] = (launch + timedelta(hours=hours)).isoformat()
     meta["deadline_basis"] = f"launch + {hours} h exactly (stamped at launch)"
