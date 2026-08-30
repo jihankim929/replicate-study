@@ -1652,3 +1652,102 @@ rep01 $196.17 (70 %). Selftest **98 pass, 0 fail**. Committed and pushed as `9b7
    notices and I will close them per-replicate on your word.
 
 — Bei (harness)
+
+---
+
+## 2026-08-30T23:08:58Z (2026-08-31 08:08:58 KST) — REPORT 009, on your status check. **NOTHING EXECUTED. THE CAPS BIND TODAY; THE 4.4 HOURS DO NOT.**
+
+> **In one line:** you asked whether things are smooth and they are not, in one respect that needs
+> you inside the hour — **rep06 reaches its $280 cap in 1.6–3.2 h and rep01 in 2.4–3.8 h, against
+> 131 h and 161 h of deadline** — but REPORT 008's headline figure was the catch-up spike and is
+> now measurably wrong: fleet burn has fallen from **$480/h to $52–76/h**, so fleet runway is
+> **23–33 h, not 4.4**. The shortfall against a six-day deadline is unchanged in kind and only
+> changed in date. Nothing has been executed on this; the ruling is yours.
+
+### 0. Read this section first
+
+**(a) The individual caps land today, well before the fleet cap.** Measured from
+`harness/watchdog.jsonl` over trailing 1 h and 2 h windows at 08:01 KST:
+
+| replicate | spend | $/h (1 h) | $/h (2 h) | hours to $280 | deadline left |
+|---|---|---|---|---|---|
+| **rep06** | $255.51 (91.2%) | 7.56 | 15.32 | **1.6 – 3.2** | 160.8 h |
+| **rep01** | $230.30 (82.2%) | 20.46 | 13.13 | **2.4 – 3.8** | 130.7 h |
+| rep16 | $195.76 (69.9%) | 5.01 | 4.93 | 16.8 | 137.2 h |
+| rep11 | $177.85 (63.5%) | 5.08 | 5.22 | 20.1 | 151.9 h |
+| rep10 | $207.31 (74.0%) | 3.56 | 3.60 | 20.4 | 152.3 h |
+| rep07 | $210.53 (75.2%) | 1.78 | 3.22 | 39.1 | 150.6 h |
+| rep02 | $189.93 (67.8%) | 2.09 | 2.46 | 43.0 | 150.1 h |
+| rep03 | $151.26 (54.0%) | 2.40 | 5.22 | 53.6 | 151.5 h |
+| rep13 | $126.70 (45.2%) | 2.74 | 2.36 | 55.8 | 152.7 h |
+| rep08 | $128.56 (45.9%) | 2.07 | 2.13 | 73.0 | 136.1 h |
+| rep04 | $93.46 (33.4%) | 2.41 | 2.25 | 77.3 | 151.8 h |
+| rep15 | $199.34 (71.2%) | 0.99 | 5.41 | 81.3 | 152.0 h |
+| rep09 | $153.88 (55.0%) | 1.44 | 1.69 | 87.7 | 136.1 h |
+| rep05 | $133.26 (47.6%) | 1.44 | 1.53 | 101.9 | 136.1 h |
+| rep12 | $122.50 (43.8%) | 0.96 | 0.92 | 164.5 | 152.5 h |
+
+rep01 is accelerating (1 h rate above its 2 h rate) and rep06 decelerating, which is why each is
+given as a range rather than a point. **Every live replicate reaches its cap before its deadline
+except rep12**, which reaches neither. This is the finding; the two ranges above are only the
+first arrivals.
+
+**(b) REPORT 008's $480/h and 4.4 hours are superseded — by measurement, not by hope.** Fleet
+totals from the same source:
+
+| window ending 08:01 KST | fleet burn |
+|---|---|
+| trailing 0.5 h | **$52.28/h** |
+| trailing 1 h | **$75.68/h** |
+| trailing 2 h | **$63.26/h** |
+| since REPORT 008 (3.35 h) | $124.92/h |
+
+Fleet stands at **$2,735.36 of $4,480**, leaving **$1,744.64** — **23–33 h** at the trailing rate
+against **130–161 h** of deadline. REPORT 008 measured $480/h over a 20-minute window that sat
+directly on the ten relaunched sessions' catch-up work, and that work has now largely drained: the
+since-REPORT-008 average of $124.92/h is itself an artifact of the same spike and is falling. I am
+recording this as a correction to my own figure of 3.4 hours ago. **What it does not change:** the
+campaign still ends on spend rather than on its deadline, at a rate that buys about a day.
+
+**(c) The compute meter is still blind, so its enforcement is nominal.** rep15's latest record
+reads `compute: used 0.0 CPU-h, cap 1610, level "unaccounted"` while carrying **485.75 CPU-h in
+flight across 9 running jobs**. This is REPORT 008 §6's defect unchanged — `usage.json:cpu_h` has
+had no writer since the divergence panel retired — and it is listed here only so the record does
+not read as though spend were the only cap that matters today. It is not urgent relative to (a).
+
+### 1. What is holding
+
+Reported so the picture is not all red:
+
+- **15 replicates alive**, all fifteen reporting `liveness: alive` on `transcript-growth` at
+  08:01, none stale. 13 of 15 held a live `claude` process at the moment of the sweep; the other
+  two were between turns, which is the loop working.
+- **rep17 is correctly stopped.** Its stop file is in place (`harness/sessions/rep17.stop`,
+  written 04:59), no rep17 process or screen exists, and its spend has been **flat at $159.23
+  since 04:58** against the $5-a-turn bleed REPORT 008 reported. The §5 guard added yesterday
+  is doing exactly what it was added to do. Its watchdog row is stale by design, not by failure.
+- **Poll cadence as ratified:** measured 29.96 min against the ratified 30, verdict `as-ratified`,
+  overshoot bound 5.99 CPU-h against the ratified 6.00 (0.37% of budget).
+- **Spend meter live**, last fire 08:02 KST on its 2-minute cadence, no gap since the guard fix.
+- **Host healthy:** load 0.26, 18 GB free of 62 GB, disk 2% of 3.6 TB. Nothing here is a
+  constraint.
+- **Tokens are not binding:** the highest replicate is at 32.0% of its 32 M cap.
+
+### 2. What I have not done
+
+**Nothing.** No cap raised, no deadline moved, no replicate paused, no `IDLE_SLEEP` change, no
+harness edit. REPORT 008's open question — lengthen the idle backoff, require compaction at a
+transcript-size threshold, or accept that the campaign ends on spend — is unchanged and now has a
+first deadline attached to it: **rep06 at roughly 09:40–11:15 KST, rep01 shortly after.** When
+rep06 reaches $280 the enforcement is live and it stops, mid-campaign, at 161 hours before its
+deadline with no final report filed.
+
+### 3. Open, carried forward
+
+1. **§0(a) above — the ruling on rep06 and rep01, needed before ~09:40 KST.**
+2. REPORT 008 §0(a) — the idle-backoff / compaction question, rep10's escalation still unanswered.
+3. REPORT 008 §6 — `usage.json:cpu_h` has no writer; compute enforcement is nominal.
+4. §2 rep06's MakeGrid segfault — unanswered since 2026-08-30.
+5. The eight older escalation rows remain open as recorded in REPORT 008.
+
+— Bei (harness)
