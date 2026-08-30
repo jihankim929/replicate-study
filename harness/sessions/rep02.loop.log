@@ -92,3 +92,7 @@ Execution error
 2026-08-30T07:01:48Z iteration 1 starting (headless)
 2026-08-30T08:01:41Z iteration 1 starting (headless)
 2026-08-30T19:04:58Z iteration 1 starting (headless)
+2026-08-30T19:25:06Z iteration 1 exited rc=0 after 1208s (transcript 3747173 -> 4360138)
+2026-08-30T19:25:16Z iteration 2 starting (headless)
+2026-08-30T19:28:24Z iteration 2 exited rc=0 after 188s (transcript 4360138 -> 4448200)
+2026-08-30T19:28:34Z iteration 3 starting (headless)

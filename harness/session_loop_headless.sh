@@ -38,6 +38,21 @@ NUDGE="Continue your campaign. Check INBOX.md for any notices, bring STATE.md up
 
 cd "$CWD" || exit 1
 
+# PER-REPLICATE SCRATCH. All sixteen sessions run as one user on one machine, so /tmp is shared
+# between them -- and on 2026-08-30 that stopped being theoretical: one replicate wrote
+# /tmp/REPORT.md and /tmp/STATE.md under those bare names, a second reported a sibling's
+# REPORT.md overwriting its own at that path AND being surfaced into its session, and a third
+# reported its workspace STATE.md containing the first replicate's. Material crossed between
+# replicates that the study requires to be independent. REPORT 007 section 7(1); contained on the
+# PI's ruling 2026-08-31.
+#
+# TMPDIR covers what tools do implicitly -- mktemp, python tempfile, editors, sort. It does NOT
+# cover a path an agent types out, which is what actually crossed here; the fleet notice covers
+# that, and the two together are the containment. Set here rather than in the settings file
+# because the value has to differ per replicate and the settings file is shared.
+export TMPDIR="/tmp/${REP}_scratch"
+mkdir -p "$TMPDIR" 2>/dev/null
+
 # Strip every inherited Claude Code environment marker. A child inherits markers such as
 # CLAUDE_CODE_CHILD_SESSION which TURN TRANSCRIPT SAVING OFF -- the agent then works perfectly
 # and leaves no record, which for a study whose output IS the record is the worst failure
@@ -82,6 +97,13 @@ while true; do
   i=$((i+1)); START=$(date +%s)
   BEFORE=$(cat "$TDIR"/*.jsonl 2>/dev/null | wc -c | tr -d " "); BEFORE=${BEFORE:-0}
   echo "$(date -u +%FT%TZ) iteration $i starting (headless)" >> "$LOG"
+  # ITERATION 1 USES THE INITIAL PROMPT, NOT --continue, AND THAT IS THE DESIGN. A restarted
+  # replicate therefore re-enters as a fresh session: it re-reads CHARTER.md and re-orients from
+  # its workspace record rather than resuming a conversation. Raised in REPORT 006 s4 as a
+  # property worth ruling on, and RATIFIED AS DESIGN by the PI 2026-08-31 -- the record is the
+  # continuity. It is not free (the re-orientation is billed) and it is not silent (the workspace
+  # git history shows it), but a campaign whose continuity depended on a live session's context
+  # would not survive the first restart, and this one does.
   if [ "$i" -eq 1 ]; then
     OUT=$(claude --model "$MODEL" --settings "$SETTINGS" -p "$(cat "$PROMPT_FILE")" 2>&1)
   else

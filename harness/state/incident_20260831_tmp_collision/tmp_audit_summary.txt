@@ -1,0 +1,49 @@
+rep     /tmp uses   own  unpref  unpref r/a  foreign  foreign r/a  touched
+rep01         189   174      15          10        0            0  -
+rep02         192   163      29          29        0            0  -
+rep03         182     7     175         100        0            0  -
+rep04          92    50      42          27        0            0  -
+rep05          71    69       2           2        0            0  -
+rep06          12     4       8           8        0            0  -
+rep07          17     6      11          11        0            0  -
+rep08          75    66       9           9        0            0  -
+rep09         135    85      50          28        0            0  -
+rep10          10     0      10           9        0            0  -
+rep11         111    44      67          50        0            0  -
+rep12         117    48      69          48        0            0  -
+rep13          28     2      26          26        0            0  -
+rep15         188   144      44          34        0            0  -
+rep16          80    56      24          24        0            0  -
+rep17          11    10       1           1        0            0  -
+
+C. SHARED-NAMESPACE PATHS TOUCHED BY MORE THAN ONE REPLICATE: 23
+  /tmp/REPORT.md                   rep01 rep03 rep09   2026-08-30T02:55:19 .. 2026-08-30T03:36:22
+  /tmp/STATE.md                    rep03 rep09 rep11 rep12   2026-08-30T02:50:25 .. 2026-08-30T19:20:15
+  /tmp/ceiling.py                  rep03 rep12 rep13   2026-08-30T03:14:17 .. 2026-08-30T03:15:15
+  /tmp/commitmsg.txt               rep01 rep11   2026-08-30T02:55:27 .. 2026-08-30T19:24:45
+  /tmp/log10.md                    rep11 rep15   2026-08-30T04:08:56 .. 2026-08-30T04:10:54
+  /tmp/log11.md                    rep11 rep15   2026-08-30T04:11:51 .. 2026-08-30T04:12:12
+  /tmp/log13.md                    rep11 rep13   2026-08-30T04:14:48 .. 2026-08-30T19:14:01
+  /tmp/log2.md                     rep03 rep09   2026-08-30T02:52:44 .. 2026-08-30T02:57:41
+  /tmp/log5.md                     rep09 rep11   2026-08-30T03:42:12 .. 2026-08-30T03:54:53
+  /tmp/log_append.md               rep03 rep11 rep12   2026-08-30T02:51:23 .. 2026-08-30T19:20:15
+  /tmp/log_entry.md                rep03 rep09   2026-08-30T02:51:06 .. 2026-08-30T19:25:28
+  /tmp/p2.py                       rep02 rep08 rep13   2026-08-30T02:59:00 .. 2026-08-30T19:27:06
+  /tmp/p3.py                       rep04 rep08 rep13   2026-08-30T03:12:04 .. 2026-08-30T14:32:16
+  /tmp/p4.py                       rep04 rep13   2026-08-30T03:16:10 .. 2026-08-30T03:21:24
+  /tmp/p5.py                       rep04 rep13   2026-08-30T03:22:06 .. 2026-08-30T03:27:20
+  /tmp/p6.py                       rep04 rep13   2026-08-30T03:24:21 .. 2026-08-30T03:30:25
+  /tmp/patch_report.py             rep03 rep04 rep11   2026-08-30T03:56:27 .. 2026-08-30T19:23:10
+  /tmp/patch_state.py              rep01 rep03 rep04 rep09   2026-08-30T02:58:31 .. 2026-08-30T19:26:23
+  /tmp/patch_state2.py             rep03 rep09   2026-08-30T03:32:14 .. 2026-08-30T19:25:28
+  /tmp/patch_state3.py             rep03 rep09   2026-08-30T03:42:47 .. 2026-08-30T19:25:28
+  /tmp/rep_patch.py                rep04 rep13   2026-08-30T03:29:38 .. 2026-08-30T19:13:55
+  /tmp/state_patch.py              rep02 rep03 rep11 rep12 rep15   2026-08-30T03:09:44 .. 2026-08-30T19:20:36
+  /tmp/x                           rep03 rep08 rep10   2026-08-30T02:51:44 .. 2026-08-30T19:10:57
+
+A. READ WITHOUT OWN WRITE (0) -- read a shared path it never wrote, written earlier by another
+
+B. INTERLEAVED OVERWRITE (0) -- wrote it, another overwrote it, then read it back
+
+CONTAMINATION-EXPOSED (evidenced from transcripts, classes A and B):
+  none evidenced from transcripts alone

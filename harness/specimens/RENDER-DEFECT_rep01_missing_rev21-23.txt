@@ -1,0 +1,75 @@
+SPECIMEN — the default that left one replicate three charter revisions behind.
+Filed 2026-08-31 on the PI's REPORT 007 ruling. Read-only record; nothing here is live code.
+
+THE LINE
+--------
+harness/rerender_charter.py, in main():
+
+    reps = sys.argv[1:]
+    if not reps:
+        reps = [i for i in C.RATIFIED["phases"]["main"]["ids"] if i != "rep01"]
+
+`rerender_charter.py` is the tool that pushes an amended charter into workspaces that are already
+provisioned. Its no-argument default is every main-phase replicate EXCEPT rep01. Run without
+arguments -- which is how a fleet-wide amendment is naturally applied -- it silently amends
+fifteen of sixteen.
+
+WHY THE EXCLUSION EXISTED, AND WHY THAT STOPPED BEING TRUE
+---------------------------------------------------------
+rep01 was the launch-gate replicate: provisioned, verified and started alone, ahead of waves A
+and B. At the moment the exclusion was written rep01 had just been provisioned from current
+source and did not need re-rendering. That was true once. It was not re-examined at the next
+amendment, and the exclusion is unconditional -- it does not test whether rep01's charter is
+current, it tests only that the replicate is rep01.
+
+MEASURED CONSEQUENCE
+--------------------
+Revisions 21, 22 and 23 were ratified and rendered on 2026-08-29. rep01 did not receive them.
+Measured 2026-08-31 by diffing rep01's live CHARTER.md against a fresh render of the same arm:
+
+    delta +12 lines, -1 line, comprising
+
+      section 3    "Pinned files, claims and descriptors (Rev 22)"        ABSENT from rep01
+      section 4    "Cost mechanics and discipline" (Rev 22)               ABSENT from rep01
+      section 4    "Context hygiene" (Rev 23)                             ABSENT from rep01
+      Appendix A   G3 "Void-fraction method (Rev 21)"                     ABSENT from rep01
+      Appendix A   G3 note, cited database minimum (Rev 21)               STALE in rep01:
+                     rep01 read  "0.313 g/cm3"
+                     correct     "0.164 g/cm3, and four entries fall below the 0.20 bound"
+      revision record, five rows                                          ABSENT from rep01
+
+rep01 worked under that text from 2026-08-29 until 2026-08-31, roughly two days of a seven-day
+campaign.
+
+WHY IT MATTERS BEYOND BOOKKEEPING
+---------------------------------
+Two of the three missing revisions were ruled COMMON CORE, both arms identically -- so the
+omission put one replicate on a different charter from the other fifteen along an axis the study
+deliberately holds constant.
+
+One of them is about cost. "Cost mechanics and discipline" states that session cost is dominated
+by accumulated context re-read every turn, sets norms for how tool output enters a session, and
+ends: "The spend meter in your workspace shows your position against the budget; consult it when
+planning." rep01 never had that clause and is the highest spender in the study and the first
+replicate to approach its $280 cap -- $194.84 of $280, 69.6 percent, at 04:01 KST on 2026-08-31,
+against a fleet mean near 47 percent.
+
+That is a correlation in a sample of one and it is NOT offered as a cause. It is filed because
+the confound is now in the record either way: rep01's spend behaviour cannot afterwards be read
+as purely a property of rep01.
+
+RELATED, SAME FAMILY
+--------------------
+SI-019  a hardcoded roster in poll.sh, watching the wrong subject
+SI-022  restart_watch.sh defaulting to the smoke roster, restarting the wrong replicates
+        launch_sessions.sh reporting success against a hardcoded 'rep-s0' filter
+This is the fourth instance of one shape: a replicate list baked into a tool as a literal,
+correct when written, still being obeyed after the condition that justified it expired.
+
+DISPOSITION
+-----------
+Revisions 21-23 delivered to rep01 2026-08-31 on PI ruling, with an INBOX notice stating plainly
+that they are late and why, disclosed as a mid-campaign correction. The default in
+rerender_charter.py is left AS IS in this specimen for the record; whether it is changed is a
+separate ruling, since a tool whose default silently omits a replicate is the defect and removing
+the literal is not the only possible fix.

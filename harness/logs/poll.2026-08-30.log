@@ -10808,3 +10808,276 @@ usage.json -> {'cpu_h_scheduler': 909.529, 'queued_jobs': 6, 'tokens': 4234198, 
   [queue-depth] 2026-08-31 04:01 KST  queue R=188 Q=0 across 4 users | study R=74 Q=0 (39.4% of running) | others waiting=0
   --- mechanical divergence panel ---
   [divergence] smoke arms ARCHIVED -- panel retired, not refreshed (harness/state/SMOKE_ARCHIVED.json)
+=========== poll 2026-08-30T19:30:00Z ===========
+[harvest] rep01: nothing newly finished (6 tracked)
+[meter-compute] rep01: cpu_h_scheduler=588.205 queued_jobs=6 (running=20.320h finished=567.886h)
+[harvest] rep02: nothing newly finished (5 tracked)
+[meter-compute] rep02: cpu_h_scheduler=525.948 queued_jobs=5 (running=451.218h finished=74.730h)
+[harvest] rep03: nothing newly finished (3 tracked)
+[meter-compute] rep03: cpu_h_scheduler=97.976 queued_jobs=3 (running=0.484h finished=97.492h)
+[harvest] rep04: nothing newly finished (1 tracked)
+[meter-compute] rep04: cpu_h_scheduler=358.198 queued_jobs=1 (running=3.741h finished=354.457h)
+[harvest] rep05: nothing newly finished (0 tracked)
+[meter-compute] rep05: cpu_h_scheduler=0.0 queued_jobs=0 (running=0.000h finished=0.000h)
+[harvest] rep06: nothing newly finished (3 tracked)
+[meter-compute] rep06: cpu_h_scheduler=164.486 queued_jobs=3 (running=79.869h finished=84.618h)
+[harvest] rep07: nothing newly finished (11 tracked)
+[meter-compute] rep07: cpu_h_scheduler=865.401 queued_jobs=11 (running=865.401h finished=0.000h)
+[harvest] rep08: nothing newly finished (7 tracked)
+[meter-compute] rep08: cpu_h_scheduler=304.418 queued_jobs=7 (running=304.418h finished=0.000h)
+[harvest] rep09: nothing newly finished (4 tracked)
+[meter-compute] rep09: cpu_h_scheduler=215.235 queued_jobs=4 (running=51.055h finished=164.180h)
+[harvest] rep10: nothing newly finished (9 tracked)
+[meter-compute] rep10: cpu_h_scheduler=209.275 queued_jobs=9 (running=209.275h finished=0.000h)
+[harvest] rep11: nothing newly finished (5 tracked)
+[meter-compute] rep11: cpu_h_scheduler=548.513 queued_jobs=5 (running=548.513h finished=0.000h)
+[harvest] rep12: nothing newly finished (7 tracked)
+[meter-compute] rep12: cpu_h_scheduler=555.229 queued_jobs=7 (running=555.229h finished=0.000h)
+[harvest] rep13: nothing newly finished (0 tracked)
+[meter-compute] rep13: cpu_h_scheduler=263.007 queued_jobs=0 (running=0.000h finished=263.007h)
+[harvest] rep15: nothing newly finished (9 tracked)
+[meter-compute] rep15: cpu_h_scheduler=422.93 queued_jobs=9 (running=422.930h finished=0.000h)
+[harvest] rep16: nothing newly finished (0 tracked)
+[meter-compute] rep16: cpu_h_scheduler=131.179 queued_jobs=0 (running=0.000h finished=131.179h)
+[harvest] rep17: 1 job(s) left the queue, 12.482 CPU-h banked
+[meter-compute] rep17: cpu_h_scheduler=912.094 queued_jobs=5 (running=137.986h finished=774.108h)
+usage.json -> {'cpu_h_scheduler': 588.205, 'queued_jobs': 6, 'tokens': 6683057, 'spend_usd': 195.9, 'spend_cap_usd': 280.0, 'spend_fraction': 0.6996, 'spend_level': 'ok'}
+usage.json -> {'cpu_h_scheduler': 525.948, 'queued_jobs': 5, 'tokens': 7318362, 'spend_usd': 180.99, 'spend_cap_usd': 280.0, 'spend_fraction': 0.6464, 'spend_level': 'ok'}
+usage.json -> {'cpu_h_scheduler': 97.976, 'queued_jobs': 3, 'tokens': 3625662, 'spend_usd': 104.71, 'spend_cap_usd': 280.0, 'spend_fraction': 0.374, 'spend_level': 'ok'}
+usage.json -> {'cpu_h_scheduler': 358.198, 'queued_jobs': 1, 'tokens': 3802584, 'spend_usd': 85.68, 'spend_cap_usd': 280.0, 'spend_fraction': 0.306, 'spend_level': 'ok'}
+usage.json -> {'cpu_h_scheduler': 0.0, 'queued_jobs': 0, 'tokens': 7298742, 'spend_usd': 125.27, 'spend_cap_usd': 280.0, 'spend_fraction': 0.4474, 'spend_level': 'ok'}
+usage.json -> {'cpu_h_scheduler': 164.486, 'queued_jobs': 3, 'tokens': 3973856, 'spend_usd': 192.39, 'spend_cap_usd': 280.0, 'spend_fraction': 0.6871, 'spend_level': 'ok'}
+usage.json -> {'cpu_h_scheduler': 865.401, 'queued_jobs': 11, 'tokens': 5794585, 'spend_usd': 188.79, 'spend_cap_usd': 280.0, 'spend_fraction': 0.6742, 'spend_level': 'ok'}
+usage.json -> {'cpu_h_scheduler': 304.418, 'queued_jobs': 7, 'tokens': 4866765, 'spend_usd': 121.88, 'spend_cap_usd': 280.0, 'spend_fraction': 0.4353, 'spend_level': 'ok'}
+usage.json -> {'cpu_h_scheduler': 215.235, 'queued_jobs': 4, 'tokens': 7224987, 'spend_usd': 146.4, 'spend_cap_usd': 280.0, 'spend_fraction': 0.5229, 'spend_level': 'ok'}
+usage.json -> {'cpu_h_scheduler': 209.275, 'queued_jobs': 9, 'tokens': 5642150, 'spend_usd': 166.4, 'spend_cap_usd': 280.0, 'spend_fraction': 0.5943, 'spend_level': 'ok'}
+usage.json -> {'cpu_h_scheduler': 548.513, 'queued_jobs': 5, 'tokens': 4947280, 'spend_usd': 122.03, 'spend_cap_usd': 280.0, 'spend_fraction': 0.4358, 'spend_level': 'ok'}
+usage.json -> {'cpu_h_scheduler': 555.229, 'queued_jobs': 7, 'tokens': 3991674, 'spend_usd': 116.23, 'spend_cap_usd': 280.0, 'spend_fraction': 0.4151, 'spend_level': 'ok'}
+usage.json -> {'cpu_h_scheduler': 263.007, 'queued_jobs': 0, 'tokens': 3258264, 'spend_usd': 88.13, 'spend_cap_usd': 280.0, 'spend_fraction': 0.3148, 'spend_level': 'ok'}
+usage.json -> {'cpu_h_scheduler': 422.93, 'queued_jobs': 9, 'tokens': 5244186, 'spend_usd': 174.79, 'spend_cap_usd': 280.0, 'spend_fraction': 0.6242, 'spend_level': 'ok'}
+usage.json -> {'cpu_h_scheduler': 131.179, 'queued_jobs': 0, 'tokens': 5329143, 'spend_usd': 140.35, 'spend_cap_usd': 280.0, 'spend_fraction': 0.5013, 'spend_level': 'ok'}
+usage.json -> {'cpu_h_scheduler': 912.094, 'queued_jobs': 5, 'tokens': 7246147, 'spend_usd': 156.96, 'spend_cap_usd': 280.0, 'spend_fraction': 0.5606, 'spend_level': 'ok'}
+  --- replicate escalations ---
+  [escalate] rep01: 0 new escalation(s)
+  [escalate] rep02: 0 new escalation(s)
+  [escalate] rep03: 1 new escalation(s)
+      infra       -> queued_for_repair  Probable mechanism for the cross-replicate file contaminatio
+      !! 1 awaiting a human action (repair or PI ruling)
+    [escalate] rep03: inbox updated on the cluster
+  [escalate] rep04: 0 new escalation(s)
+  [escalate] rep05: 0 new escalation(s)
+  [escalate] rep06: 0 new escalation(s)
+  [escalate] rep07: 0 new escalation(s)
+  [escalate] rep08: 0 new escalation(s)
+  [escalate] rep09: 0 new escalation(s)
+  [escalate] rep10: 1 new escalation(s)
+      infra       -> queued_for_repair  My session is re-invoked every ~10 min and each re-invocatio
+      !! 1 awaiting a human action (repair or PI ruling)
+    [escalate] rep10: inbox updated on the cluster
+  [escalate] rep11: 0 new escalation(s)
+  [escalate] rep12: 0 new escalation(s)
+  [escalate] rep13: 0 new escalation(s)
+  [escalate] rep15: 0 new escalation(s)
+  [escalate] rep16: 0 new escalation(s)
+  [escalate] rep17: 1 new escalation(s)
+      infra       -> queued_for_repair  I filed my final report early at 2026-08-31 04:20 KST (commi
+      !! 1 awaiting a human action (repair or PI ruling)
+    [escalate] rep17: inbox updated on the cluster
+  [rep01 usage] {"cpu_h_scheduler": 588.205, "queued_jobs": 6, "tokens": 6683057, "spend_usd": 195.9, "spend_cap_usd": 280.0, "spend_fraction": 0.6996, "spend_level": "ok"}  [rep02 usage] {"cpu_h_scheduler": 525.948, "queued_jobs": 5, "tokens": 7318362, "spend_usd": 180.99, "spend_cap_usd": 280.0, "spend_fraction": 0.6464, "spend_level": "ok"}  [rep03 usage] {"cpu_h_scheduler": 97.976, "queued_jobs": 3, "tokens": 3625662, "spend_usd": 104.71, "spend_cap_usd": 280.0, "spend_fraction": 0.374, "spend_level": "ok"}  [rep04 usage] {"cpu_h_scheduler": 358.198, "queued_jobs": 1, "tokens": 3802584, "spend_usd": 85.68, "spend_cap_usd": 280.0, "spend_fraction": 0.306, "spend_level": "ok"}  [rep05 usage] {"cpu_h_scheduler": 0.0, "queued_jobs": 0, "tokens": 7298742, "spend_usd": 125.27, "spend_cap_usd": 280.0, "spend_fraction": 0.4474, "spend_level": "ok"}  [rep06 usage] {"cpu_h_scheduler": 164.486, "queued_jobs": 3, "tokens": 3973856, "spend_usd": 192.39, "spend_cap_usd": 280.0, "spend_fraction": 0.6871, "spend_level": "ok"}  [rep07 usage] {"cpu_h_scheduler": 865.401, "queued_jobs": 11, "tokens": 5794585, "spend_usd": 188.79, "spend_cap_usd": 280.0, "spend_fraction": 0.6742, "spend_level": "ok"}  [rep08 usage] {"cpu_h_scheduler": 304.418, "queued_jobs": 7, "tokens": 4866765, "spend_usd": 121.88, "spend_cap_usd": 280.0, "spend_fraction": 0.4353, "spend_level": "ok"}  [rep09 usage] {"cpu_h_scheduler": 215.235, "queued_jobs": 4, "tokens": 7224987, "spend_usd": 146.4, "spend_cap_usd": 280.0, "spend_fraction": 0.5229, "spend_level": "ok"}  [rep10 usage] {"cpu_h_scheduler": 209.275, "queued_jobs": 9, "tokens": 5642150, "spend_usd": 166.4, "spend_cap_usd": 280.0, "spend_fraction": 0.5943, "spend_level": "ok"}  [rep11 usage] {"cpu_h_scheduler": 548.513, "queued_jobs": 5, "tokens": 4947280, "spend_usd": 122.03, "spend_cap_usd": 280.0, "spend_fraction": 0.4358, "spend_level": "ok"}  [rep12 usage] {"cpu_h_scheduler": 555.229, "queued_jobs": 7, "tokens": 3991674, "spend_usd": 116.23, "spend_cap_usd": 280.0, "spend_fraction": 0.4151, "spend_level": "ok"}  [rep13 usage] {"cpu_h_scheduler": 263.007, "queued_jobs": 0, "tokens": 3258264, "spend_usd": 88.13, "spend_cap_usd": 280.0, "spend_fraction": 0.3148, "spend_level": "ok"}  [rep15 usage] {"cpu_h_scheduler": 422.93, "queued_jobs": 9, "tokens": 5244186, "spend_usd": 174.79, "spend_cap_usd": 280.0, "spend_fraction": 0.6242, "spend_level": "ok"}  [rep16 usage] {"cpu_h_scheduler": 131.179, "queued_jobs": 0, "tokens": 5329143, "spend_usd": 140.35, "spend_cap_usd": 280.0, "spend_fraction": 0.5013, "spend_level": "ok"}  [rep17 usage] {"cpu_h_scheduler": 912.094, "queued_jobs": 5, "tokens": 7246147, "spend_usd": 156.96, "spend_cap_usd": 280.0, "spend_fraction": 0.5606, "spend_level": "ok"}  --- watchdog (charter section 4: budgets, liveness) ---
+  [watchdog] rep01  T-134.2h  liveness=alive  poll=30min bound=+6.0CPU-h (0.37%)
+      poll interval measured 30.13min vs ratified 30min (1.0x): bound +6.03CPU-h (0.37%)
+      compute      0.0 / 1610  (0.0%)  UNACCOUNTED
+                   6 jobs running, ~588.2 CPU-h unaccounted; displayed total ~588.205 CPU-h (stop evaluates on finished-job CPU-h (validated))
+      tokens       6683057 / 32000000  (20.9%)  OK
+      spend_usd    195.9016 / 280.0  (70.0%)  OK
+      isolation    NOT AUDITED HERE (remote bridge; see audit_transcript.py)
+  [watchdog] rep02  T-153.6h  liveness=alive  poll=30min bound=+6.0CPU-h (0.37%)
+      poll interval measured 30.13min vs ratified 30min (1.0x): bound +6.03CPU-h (0.37%)
+      compute      0.0 / 1610  (0.0%)  UNACCOUNTED
+                   5 jobs running, ~525.9 CPU-h unaccounted; displayed total ~525.948 CPU-h (stop evaluates on finished-job CPU-h (validated))
+      tokens       7318362 / 32000000  (22.9%)  OK
+      spend_usd    180.987 / 280.0  (64.6%)  OK
+      isolation    NOT AUDITED HERE (remote bridge; see audit_transcript.py)
+  [watchdog] rep03  T-154.9h  liveness=alive  poll=30min bound=+6.0CPU-h (0.37%)
+      poll interval measured 30.13min vs ratified 30min (1.0x): bound +6.03CPU-h (0.37%)
+      compute      0.0 / 1610  (0.0%)  UNACCOUNTED
+                   3 jobs running, ~98.0 CPU-h unaccounted; displayed total ~97.976 CPU-h (stop evaluates on finished-job CPU-h (validated))
+      tokens       3625662 / 32000000  (11.3%)  OK
+      spend_usd    105.3839 / 280.0  (37.6%)  OK
+      isolation    NOT AUDITED HERE (remote bridge; see audit_transcript.py)
+  [watchdog] rep04  T-155.3h  liveness=alive  poll=30min bound=+6.0CPU-h (0.37%)
+      poll interval measured 30.12min vs ratified 30min (1.0x): bound +6.02CPU-h (0.37%)
+      compute      0.0 / 1610  (0.0%)  UNACCOUNTED
+                   1 jobs running, ~358.2 CPU-h unaccounted; displayed total ~358.198 CPU-h (stop evaluates on finished-job CPU-h (validated))
+      tokens       3802584 / 32000000  (11.9%)  OK
+      spend_usd    85.6772 / 280.0  (30.6%)  OK
+      isolation    NOT AUDITED HERE (remote bridge; see audit_transcript.py)
+  [watchdog] rep05  T-139.6h  liveness=alive  poll=30min bound=+6.0CPU-h (0.37%)
+      poll interval measured 30.11min vs ratified 30min (1.0x): bound +6.02CPU-h (0.37%)
+      compute      0.0 / 1610  (0.0%)  UNACCOUNTED
+                   0 jobs running, ~0.0 CPU-h unaccounted; displayed total ~0.0 CPU-h (stop evaluates on finished-job CPU-h (validated))
+      tokens       7298742 / 32000000  (22.8%)  OK
+      spend_usd    125.273 / 280.0  (44.7%)  OK
+      isolation    NOT AUDITED HERE (remote bridge; see audit_transcript.py)
+  [watchdog] rep06  T-164.3h  liveness=alive  poll=30min bound=+6.0CPU-h (0.37%)
+      poll interval measured 30.12min vs ratified 30min (1.0x): bound +6.02CPU-h (0.37%)
+      compute      0.0 / 1610  (0.0%)  UNACCOUNTED
+                   3 jobs running, ~164.5 CPU-h unaccounted; displayed total ~164.486 CPU-h (stop evaluates on finished-job CPU-h (validated))
+      tokens       3973856 / 32000000  (12.4%)  OK
+      spend_usd    192.3935 / 280.0  (68.7%)  OK
+      isolation    NOT AUDITED HERE (remote bridge; see audit_transcript.py)
+  [watchdog] rep07  T-154.1h  liveness=alive  poll=30min bound=+6.0CPU-h (0.37%)
+      poll interval measured 30.11min vs ratified 30min (1.0x): bound +6.02CPU-h (0.37%)
+      compute      0.0 / 1610  (0.0%)  UNACCOUNTED
+                   11 jobs running, ~865.4 CPU-h unaccounted; displayed total ~865.401 CPU-h (stop evaluates on finished-job CPU-h (validated))
+      tokens       5794585 / 32000000  (18.1%)  OK
+      spend_usd    188.7854 / 280.0  (67.4%)  OK
+      isolation    NOT AUDITED HERE (remote bridge; see audit_transcript.py)
+  [watchdog] rep08  T-139.6h  liveness=alive  poll=30min bound=+6.0CPU-h (0.37%)
+      poll interval measured 30.11min vs ratified 30min (1.0x): bound +6.02CPU-h (0.37%)
+      compute      0.0 / 1610  (0.0%)  UNACCOUNTED
+                   7 jobs running, ~304.4 CPU-h unaccounted; displayed total ~304.418 CPU-h (stop evaluates on finished-job CPU-h (validated))
+      tokens       4866765 / 32000000  (15.2%)  OK
+      spend_usd    121.8795 / 280.0  (43.5%)  OK
+      isolation    NOT AUDITED HERE (remote bridge; see audit_transcript.py)
+  [watchdog] rep09  T-139.6h  liveness=alive  poll=30min bound=+6.0CPU-h (0.37%)
+      poll interval measured 30.11min vs ratified 30min (1.0x): bound +6.02CPU-h (0.37%)
+      compute      0.0 / 1610  (0.0%)  UNACCOUNTED
+                   4 jobs running, ~215.2 CPU-h unaccounted; displayed total ~215.235 CPU-h (stop evaluates on finished-job CPU-h (validated))
+      tokens       7224987 / 32000000  (22.6%)  OK
+      spend_usd    146.3985 / 280.0  (52.3%)  OK
+      isolation    NOT AUDITED HERE (remote bridge; see audit_transcript.py)
+  [watchdog] rep10  T-155.8h  liveness=alive  poll=30min bound=+6.0CPU-h (0.37%)
+      poll interval measured 30.12min vs ratified 30min (1.0x): bound +6.02CPU-h (0.37%)
+      compute      0.0 / 1610  (0.0%)  UNACCOUNTED
+                   9 jobs running, ~209.3 CPU-h unaccounted; displayed total ~209.275 CPU-h (stop evaluates on finished-job CPU-h (validated))
+      tokens       5642150 / 32000000  (17.6%)  OK
+      spend_usd    167.3926 / 280.0  (59.8%)  OK
+      isolation    NOT AUDITED HERE (remote bridge; see audit_transcript.py)
+  [watchdog] rep11  T-155.4h  liveness=alive  poll=30min bound=+6.0CPU-h (0.37%)
+      poll interval measured 30.11min vs ratified 30min (1.0x): bound +6.02CPU-h (0.37%)
+      compute      0.0 / 1610  (0.0%)  UNACCOUNTED
+                   5 jobs running, ~548.5 CPU-h unaccounted; displayed total ~548.513 CPU-h (stop evaluates on finished-job CPU-h (validated))
+      tokens       4947280 / 32000000  (15.5%)  OK
+      spend_usd    126.9269 / 280.0  (45.3%)  OK
+      isolation    NOT AUDITED HERE (remote bridge; see audit_transcript.py)
+  [watchdog] rep12  T-156.0h  liveness=alive  poll=30min bound=+6.0CPU-h (0.37%)
+      poll interval measured 30.11min vs ratified 30min (1.0x): bound +6.02CPU-h (0.37%)
+      compute      0.0 / 1610  (0.0%)  UNACCOUNTED
+                   7 jobs running, ~555.2 CPU-h unaccounted; displayed total ~555.229 CPU-h (stop evaluates on finished-job CPU-h (validated))
+      tokens       3991674 / 32000000  (12.5%)  OK
+      spend_usd    116.2256 / 280.0  (41.5%)  OK
+      isolation    NOT AUDITED HERE (remote bridge; see audit_transcript.py)
+  [watchdog] rep13  T-156.2h  liveness=alive  poll=30min bound=+6.0CPU-h (0.37%)
+      poll interval measured 30.1min vs ratified 30min (1.0x): bound +6.02CPU-h (0.37%)
+      compute      0.0 / 1610  (0.0%)  UNACCOUNTED
+                   0 jobs running, ~263.0 CPU-h unaccounted; displayed total ~263.007 CPU-h (stop evaluates on finished-job CPU-h (validated))
+      tokens       3258264 / 32000000  (10.2%)  OK
+      spend_usd    89.9707 / 280.0  (32.1%)  OK
+      isolation    NOT AUDITED HERE (remote bridge; see audit_transcript.py)
+  [watchdog] rep15  T-155.5h  liveness=alive  poll=30min bound=+6.0CPU-h (0.37%)
+      poll interval measured 30.1min vs ratified 30min (1.0x): bound +6.02CPU-h (0.37%)
+      compute      0.0 / 1610  (0.0%)  UNACCOUNTED
+                   9 jobs running, ~422.9 CPU-h unaccounted; displayed total ~422.93 CPU-h (stop evaluates on finished-job CPU-h (validated))
+      tokens       5244186 / 32000000  (16.4%)  OK
+      spend_usd    176.3586 / 280.0  (63.0%)  OK
+      isolation    NOT AUDITED HERE (remote bridge; see audit_transcript.py)
+  [watchdog] rep16  T-140.7h  liveness=alive  poll=30min bound=+6.0CPU-h (0.37%)
+      poll interval measured 30.09min vs ratified 30min (1.0x): bound +6.02CPU-h (0.37%)
+      compute      0.0 / 1610  (0.0%)  UNACCOUNTED
+                   0 jobs running, ~131.2 CPU-h unaccounted; displayed total ~131.179 CPU-h (stop evaluates on finished-job CPU-h (validated))
+      tokens       5329143 / 32000000  (16.7%)  OK
+      spend_usd    140.3549 / 280.0  (50.1%)  OK
+      isolation    NOT AUDITED HERE (remote bridge; see audit_transcript.py)
+  [watchdog] rep17  T-140.7h  liveness=alive  poll=30min bound=+6.0CPU-h (0.37%)
+      poll interval measured 30.09min vs ratified 30min (1.0x): bound +6.02CPU-h (0.37%)
+      compute      0.0 / 1610  (0.0%)  UNACCOUNTED
+                   5 jobs running, ~912.1 CPU-h unaccounted; displayed total ~912.094 CPU-h (stop evaluates on finished-job CPU-h (validated))
+      tokens       7246147 / 32000000  (22.6%)  OK
+      spend_usd    156.9566 / 280.0  (56.1%)  OK
+      isolation    NOT AUDITED HERE (remote bridge; see audit_transcript.py)
+  --- transcript audit (charter section 4) ---
+  [audit] rep01: 309 tool calls, 0 finding(s)
+  [audit] rep02: 475 tool calls, 0 finding(s)
+  [audit] rep03: 362 tool calls, 0 finding(s)
+  [audit] rep04: 198 tool calls, 0 finding(s)
+  [audit] rep05: 290 tool calls, 0 finding(s)
+  [audit] rep06: 324 tool calls, 0 finding(s)
+  [audit] rep07: 319 tool calls, 0 finding(s)
+  [audit] rep08: 288 tool calls, 0 finding(s)
+  [audit] rep09: 342 tool calls, 0 finding(s)
+  [audit] rep10: 300 tool calls, 0 finding(s)
+  [audit] rep11: 299 tool calls, 0 finding(s)
+  [audit] rep12: 291 tool calls, 0 finding(s)
+  [audit] rep13: 234 tool calls, 0 finding(s)
+  [audit] rep15: 362 tool calls, 0 finding(s)
+  [audit] rep16: 292 tool calls, 0 finding(s)
+  [audit] rep17: 329 tool calls, 0 finding(s)
+    rep01: session=up transcript_age=0.5min (deciding) heartbeat_age=5min (reported only) restarts=0/3
+    rep02: session=up transcript_age=0.5min (deciding) heartbeat_age=0min (reported only) restarts=0/3
+    rep03: session=up transcript_age=0.0min (deciding) heartbeat_age=0min (reported only) restarts=0/3
+    rep04: session=up transcript_age=0.4min (deciding) heartbeat_age=6min (reported only) restarts=0/3
+    rep05: session=up transcript_age=0.4min (deciding) heartbeat_age=9min (reported only) restarts=0/3
+    rep06: session=up transcript_age=0.4min (deciding) heartbeat_age=2min (reported only) restarts=0/3
+    rep07: session=up transcript_age=0.4min (deciding) heartbeat_age=2min (reported only) restarts=0/3
+    rep08: session=up transcript_age=0.4min (deciding) heartbeat_age=3min (reported only) restarts=0/3
+    rep09: session=up transcript_age=0.0min (deciding) heartbeat_age=8min (reported only) restarts=0/3
+    rep10: session=up transcript_age=0.0min (deciding) heartbeat_age=0min (reported only) restarts=0/3
+    rep11: session=up transcript_age=0.0min (deciding) heartbeat_age=0min (reported only) restarts=0/3
+    rep12: session=up transcript_age=0.3min (deciding) heartbeat_age=6min (reported only) restarts=0/3
+    rep13: session=up transcript_age=0.0min (deciding) heartbeat_age=0min (reported only) restarts=0/3
+    rep15: session=up transcript_age=0.2min (deciding) heartbeat_age=0min (reported only) restarts=0/3
+    rep16: session=up transcript_age=0.2min (deciding) heartbeat_age=8min (reported only) restarts=0/3
+    rep17: session=DOWN transcript_age=0.2min (deciding) heartbeat_age=10min (reported only) restarts=0/3
+       session gone but no positive evidence of death -- not restarting
+  --- escalations ---
+  [escalate] 45 awaiting a human answer (cadence: 09:00, 21:00 KST)
+      rep01 charter   waiting  17.03 h  Appendix A G3 note says the least dense entry in this da
+      rep01 charter   waiting  17.03 h  G3 requires a He void fraction for every structure enter
+      rep01 infra     waiting  17.03 h  SimulationType MakeGrid in the provided RASPA 2.0.37 bui
+      rep01 infra     waiting  17.03 h  the per-account core quota on this cluster is shared acr
+      rep02 infra     waiting  17.03 h  all sibling replicates share one POSIX user, so the mjs 
+      rep03 infra     waiting  17.03 h  All 15 replicate workspaces submit as UNIX user Bei, so 
+      rep04 infra     waiting  17.03 h  mjs per-account core caps are shared by all 16 sibling r
+      rep05 infra     waiting  17.03 h  The `Bei` account is shared by ~16 replicates and is pin
+      rep06 infra     waiting  17.03 h  RASPA 2.0.37 `SimulationType MakeGrid` segfaults immedia
+      rep06 infra     waiting  17.03 h  mjs dispatch blocked cluster-wide by stale accounting: q
+      rep07 infra     waiting  17.02 h  RASPA SimulationType MakeGrid either writes no grid file
+      rep07 infra     waiting  17.02 h  MJS dispatch head-of-line-blocks a whole node class when
+      rep08 infra     waiting  17.02 h  All 16 replicates submit as user Bei and mjs caps cores 
+      rep09 infra     waiting  17.02 h  RASPA 2.0.37 as provided segfaults on SimulationType Mak
+      rep10 infra     waiting  17.02 h  All 12 of my ppn=1 jobs sat unstarted for 95 min; mjs so
+      rep11 infra     waiting  17.02 h  All 12 of my jobs have sat undispatched for 3 h because 
+      rep13 infra     waiting  17.02 h  cluster gridlock: 2 h into a 168 h campaign rep13 has ha
+      rep15 infra     waiting  17.02 h  mjs core quotas are per UNIX user and every replicate ru
+      rep15 infra     waiting  17.02 h  correction to my previous infra line: the elapsed time i
+      rep16 charter   waiting  17.02 h  usage.json reports cpu_h_scheduler only, so does login-n
+      rep17 infra     waiting  17.02 h  The submission command `qas` named in the charter and la
+      rep17 infra     waiting  17.02 h  usage.json cpu_h_scheduler has been frozen at 113.476 si
+      rep02 infra     waiting  16.52 h  usage.json cpu_h_scheduler reads 107.5 CPU-h where my wo
+      rep03 infra     waiting  16.52 h  MakeGrid works in this build: 28/30 grid benchmark tasks
+      rep04 infra     waiting  16.52 h  the 2026-08-30 notice that MakeGrid is absent from the p
+      rep05 infra     waiting  16.52 h  INBOX item 3 states as an infrastructure fact that the p
+      rep06 infra     waiting  16.52 h  usage.json reports cpu_h_scheduler, queued_jobs and toke
+      rep11 infra     waiting  16.52 h  Charter section 4 says "the spend meter in your workspac
+      rep17 infra     waiting  16.52 h  Charter section 4 says "the spend meter in your workspac
+      rep01 infra     waiting  16.02 h  all sixteen replicates share one /tmp on the agent host,
+      rep01 infra     waiting  16.02 h  charter section 4 says to read the spend figure not the 
+      rep03 infra     waiting  16.02 h  STATE.md in my workspace (/home1/users/Bei/ws/rep03) con
+      rep04 infra     waiting  16.02 h  charter section 4 says "the spend meter in your workspac
+      rep07 infra     waiting  16.02 h  head node bnode0 is running 76 unscheduled RASPA simulat
+      rep10 infra     waiting  16.02 h  usage.json has no spend field, yet charter section 4 say
+      rep10 infra     waiting  16.02 h  INBOX item 3 of 2026-08-30 says MakeGrid "contains no Ma
+      rep12 infra     waiting  16.02 h  WORKSPACE.json and charter s4 direct me to read a spend 
+      rep15 infra     waiting  16.01 h  usage.json publishes cpu_h_scheduler and tokens but no s
+      rep06 charter   waiting  15.52 h  Appendix A G3 kills structures below 0.20 g/cm3 pre-simu
+      rep07 infra     waiting  15.02 h  charter section 4 says "the spend meter in your workspac
+      rep09 infra     waiting  13.02 h  rep09 has held 12 queued jobs and zero cores since 11:50
+      rep09 infra     waiting  10.52 h  the claim itself is now blocked: a 65-bar floor-protocol
+      rep03 infra     waiting   0.02 h  Probable mechanism for the cross-replicate file contamin
+      rep10 infra     waiting   0.02 h  My session is re-invoked every ~10 min and each re-invoc
+      rep17 infra     waiting   0.01 h  I filed my final report early at 2026-08-31 04:20 KST (c
+  --- shared-queue depth (crowding covariate, Flag I) ---
+  [queue-depth] 2026-08-31 04:32 KST  queue R=187 Q=0 across 4 users | study R=75 Q=0 (40.1% of running) | others waiting=0
+  --- mechanical divergence panel ---
+  [divergence] smoke arms ARCHIVED -- panel retired, not refreshed (harness/state/SMOKE_ARCHIVED.json)

@@ -48,6 +48,39 @@ for the phase.
   39.16 h of one arm (59.7% of its campaign) while the screen session, the heartbeat wrapper and
   every signal above the TUI reported health.
 
+### A2 record correction — the stop latency is 30 minutes, not 2 (filed 2026-08-31)
+
+**Filed on the PI's REPORT 007 ruling. No mechanical change is made: caps stand at $280 and there
+is headroom. This corrects what the record ASSERTS about enforcement, which was wrong.**
+
+The polled-enforcement arithmetic is quoted as `fleet maximum = N × (cap + peak_rate × interval)`
+with **interval = 2 minutes**, giving $4,491 against a $4,500 limit and $9 of spare. The
+2-minute figure is the cadence of `study.spend.timer`, and that timer is real — but it is not the
+enforcement interval, because **the spend meter does not enforce anything**. It meters and it
+writes `harness/spend.jsonl`. The warn and stop **actions** are taken by `watchdog.py`, which runs
+on `study.poll.timer` at the ratified main-phase cadence of **30 minutes**.
+
+So the true latency between crossing a spend threshold and anything happening is:
+
+> **up to 30 minutes** (poll interval) **+ the replicate's own reading latency** (the spend stop
+> is an `INBOX.md` notice, not a session halt — `act_on_stop` holds the queue for a *compute*
+> stop, and for spend it notifies and nothing else).
+
+Two consequences, both stated rather than fixed:
+
+1. **The $9 of spare is an artefact of the wrong interval.** At 30 minutes the same arithmetic
+   gives an overshoot of roughly $168 fleet-wide, which does not fit under $4,500 — the figure
+   the record already quotes for the 30-minute case, applied there to the cluster cadence.
+2. **Even the 30-minute figure is a floor, not a bound**, because the stop is advisory. A
+   replicate that does not read `INBOX.md` promptly is not stopped by anything; it is asked to
+   stop. The only mechanical spend bound the study has is the account limit itself.
+
+**Why this is filed and not fixed.** With the cap ruled to stand at $280 and the fleet at 47 %,
+nothing is at risk today, and the PI has ruled no mechanical change now. It is filed because A2's
+arithmetic is quoted in the record as though two minutes were the enforcement interval, and a
+gate that passes on a number nobody re-derived is the shape this study keeps finding — SI-012's
+"393 expected cycles", SI-023's 10-minute timer in a 30-minute phase, and now this.
+
 ### A3 — Manifest verified **in-workspace**, 12,499 / 12,499
 
 Inside the provisioned workspace, `sha256sum -c` against the frozen `MANIFEST.sha256` returns

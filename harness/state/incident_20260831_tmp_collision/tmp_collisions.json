@@ -1,0 +1,3486 @@
+[
+ {
+  "path": "/tmp/../home1/users/Bei/ws/rep10/data/.predA.csv",
+  "replicates": [
+   "rep10"
+  ],
+  "first_touch": "2026-08-30T03:19:31.580Z",
+  "last_touch": "2026-08-30T03:19:31.580Z",
+  "events": {
+   "rep10": 1
+  }
+ },
+ {
+  "path": "/tmp/../home1/users/Bei/ws/rep10/logs/dbg.py",
+  "replicates": [
+   "rep10"
+  ],
+  "first_touch": "2026-08-30T02:57:09.891Z",
+  "last_touch": "2026-08-30T02:57:09.891Z",
+  "events": {
+   "rep10": 1
+  }
+ },
+ {
+  "path": "/tmp/.keep",
+  "replicates": [
+   "rep03"
+  ],
+  "first_touch": "2026-08-30T03:29:43.293Z",
+  "last_touch": "2026-08-30T03:29:43.293Z",
+  "events": {
+   "rep03": 1
+  }
+ },
+ {
+  "path": "/tmp/REPORT.bak",
+  "replicates": [
+   "rep11"
+  ],
+  "first_touch": "2026-08-30T19:22:35.887Z",
+  "last_touch": "2026-08-30T19:22:35.887Z",
+  "events": {
+   "rep11": 1
+  }
+ },
+ {
+  "path": "/tmp/REPORT.md",
+  "replicates": [
+   "rep01",
+   "rep03",
+   "rep09"
+  ],
+  "first_touch": "2026-08-30T02:55:19.939Z",
+  "last_touch": "2026-08-30T03:36:22.816Z",
+  "events": {
+   "rep01": 2,
+   "rep03": 2,
+   "rep09": 4
+  }
+ },
+ {
+  "path": "/tmp/STATE.md",
+  "replicates": [
+   "rep03",
+   "rep09",
+   "rep11",
+   "rep12"
+  ],
+  "first_touch": "2026-08-30T02:50:25.504Z",
+  "last_touch": "2026-08-30T19:20:15.922Z",
+  "events": {
+   "rep03": 2,
+   "rep09": 2,
+   "rep11": 3,
+   "rep12": 1
+  }
+ },
+ {
+  "path": "/tmp/STATE_0831.md",
+  "replicates": [
+   "rep11"
+  ],
+  "first_touch": "2026-08-30T19:19:19.573Z",
+  "last_touch": "2026-08-30T19:21:09.733Z",
+  "events": {
+   "rep11": 2
+  }
+ },
+ {
+  "path": "/tmp/STATE_new.md",
+  "replicates": [
+   "rep11"
+  ],
+  "first_touch": "2026-08-30T19:18:35.811Z",
+  "last_touch": "2026-08-30T19:18:35.811Z",
+  "events": {
+   "rep11": 1
+  }
+ },
+ {
+  "path": "/tmp/STATE_rep03.md",
+  "replicates": [
+   "rep03"
+  ],
+  "first_touch": "2026-08-30T03:12:48.081Z",
+  "last_touch": "2026-08-30T03:12:52.420Z",
+  "events": {
+   "rep03": 2
+  }
+ },
+ {
+  "path": "/tmp/acc_test.csv",
+  "replicates": [
+   "rep02"
+  ],
+  "first_touch": "2026-08-30T02:50:35.605Z",
+  "last_touch": "2026-08-30T02:50:35.605Z",
+  "events": {
+   "rep02": 1
+  }
+ },
+ {
+  "path": "/tmp/an1.py",
+  "replicates": [
+   "rep03"
+  ],
+  "first_touch": "2026-08-30T19:07:08.089Z",
+  "last_touch": "2026-08-30T19:07:11.377Z",
+  "events": {
+   "rep03": 2
+  }
+ },
+ {
+  "path": "/tmp/an2.py",
+  "replicates": [
+   "rep03"
+  ],
+  "first_touch": "2026-08-30T19:07:39.047Z",
+  "last_touch": "2026-08-30T19:07:42.012Z",
+  "events": {
+   "rep03": 2
+  }
+ },
+ {
+  "path": "/tmp/an_fid08lo.py",
+  "replicates": [
+   "rep11"
+  ],
+  "first_touch": "2026-08-30T19:25:50.613Z",
+  "last_touch": "2026-08-30T19:25:54.824Z",
+  "events": {
+   "rep11": 2
+  }
+ },
+ {
+  "path": "/tmp/ap.bak",
+  "replicates": [
+   "rep07"
+  ],
+  "first_touch": "2026-08-30T19:14:32.237Z",
+  "last_touch": "2026-08-30T19:14:32.237Z",
+  "events": {
+   "rep07": 1
+  }
+ },
+ {
+  "path": "/tmp/audit.py",
+  "replicates": [
+   "rep03"
+  ],
+  "first_touch": "2026-08-30T03:37:44.118Z",
+  "last_touch": "2026-08-30T03:37:47.295Z",
+  "events": {
+   "rep03": 2
+  }
+ },
+ {
+  "path": "/tmp/audit_fix.py",
+  "replicates": [
+   "rep03"
+  ],
+  "first_touch": "2026-08-30T03:38:09.505Z",
+  "last_touch": "2026-08-30T03:38:27.767Z",
+  "events": {
+   "rep03": 2
+  }
+ },
+ {
+  "path": "/tmp/autopilot.sh",
+  "replicates": [
+   "rep09"
+  ],
+  "first_touch": "2026-08-30T03:39:15.240Z",
+  "last_touch": "2026-08-30T03:39:20.397Z",
+  "events": {
+   "rep09": 2
+  }
+ },
+ {
+  "path": "/tmp/bench_idx.txt",
+  "replicates": [
+   "rep03"
+  ],
+  "first_touch": "2026-08-30T02:47:16.651Z",
+  "last_touch": "2026-08-30T02:47:16.651Z",
+  "events": {
+   "rep03": 1
+  }
+ },
+ {
+  "path": "/tmp/brief.py",
+  "replicates": [
+   "rep02"
+  ],
+  "first_touch": "2026-08-30T19:27:38.178Z",
+  "last_touch": "2026-08-30T19:27:38.178Z",
+  "events": {
+   "rep02": 1
+  }
+ },
+ {
+  "path": "/tmp/bu.py",
+  "replicates": [
+   "rep12"
+  ],
+  "first_touch": "2026-08-30T03:40:21.534Z",
+  "last_touch": "2026-08-30T03:40:21.534Z",
+  "events": {
+   "rep12": 1
+  }
+ },
+ {
+  "path": "/tmp/calib.py",
+  "replicates": [
+   "rep11"
+  ],
+  "first_touch": "2026-08-30T04:16:36.303Z",
+  "last_touch": "2026-08-30T04:16:36.303Z",
+  "events": {
+   "rep11": 1
+  }
+ },
+ {
+  "path": "/tmp/ceiling.py",
+  "replicates": [
+   "rep03",
+   "rep12",
+   "rep13"
+  ],
+  "first_touch": "2026-08-30T03:14:17.848Z",
+  "last_touch": "2026-08-30T03:15:15.840Z",
+  "events": {
+   "rep03": 2,
+   "rep12": 2,
+   "rep13": 1
+  }
+ },
+ {
+  "path": "/tmp/ceiling2.py",
+  "replicates": [
+   "rep03"
+  ],
+  "first_touch": "2026-08-30T03:15:50.396Z",
+  "last_touch": "2026-08-30T03:15:53.792Z",
+  "events": {
+   "rep03": 2
+  }
+ },
+ {
+  "path": "/tmp/ceiling3.py",
+  "replicates": [
+   "rep03"
+  ],
+  "first_touch": "2026-08-30T19:19:47.835Z",
+  "last_touch": "2026-08-30T19:25:28.186Z",
+  "events": {
+   "rep03": 3
+  }
+ },
+ {
+  "path": "/tmp/ceiling4.py",
+  "replicates": [
+   "rep03"
+  ],
+  "first_touch": "2026-08-30T19:20:38.079Z",
+  "last_touch": "2026-08-30T19:25:28.186Z",
+  "events": {
+   "rep03": 3
+  }
+ },
+ {
+  "path": "/tmp/checkin.sh",
+  "replicates": [
+   "rep11"
+  ],
+  "first_touch": "2026-08-30T19:25:39.838Z",
+  "last_touch": "2026-08-30T19:25:54.824Z",
+  "events": {
+   "rep11": 2
+  }
+ },
+ {
+  "path": "/tmp/claim_patch.py",
+  "replicates": [
+   "rep15"
+  ],
+  "first_touch": "2026-08-30T19:15:35.561Z",
+  "last_touch": "2026-08-30T19:15:39.332Z",
+  "events": {
+   "rep15": 2
+  }
+ },
+ {
+  "path": "/tmp/claimtest.idx",
+  "replicates": [
+   "rep03"
+  ],
+  "first_touch": "2026-08-30T03:28:42.283Z",
+  "last_touch": "2026-08-30T03:28:42.283Z",
+  "events": {
+   "rep03": 1
+  }
+ },
+ {
+  "path": "/tmp/claude-1002/-home-Bei-replicate-study-harness-sessions-rep01/e7b9e26b-30d5-40cb-b72a-1459384ecd85/tasks/bg6stxi1r.output",
+  "replicates": [
+   "rep01"
+  ],
+  "first_touch": "2026-08-30T03:19:16.798Z",
+  "last_touch": "2026-08-30T03:19:16.798Z",
+  "events": {
+   "rep01": 1
+  }
+ },
+ {
+  "path": "/tmp/claude-1002/-home-Bei-replicate-study-harness-sessions-rep02/9ba9c6b6-16ab-44a2-821f-8f43bf9260e4/tasks/b3et6277h.output",
+  "replicates": [
+   "rep02"
+  ],
+  "first_touch": "2026-08-30T03:55:01.008Z",
+  "last_touch": "2026-08-30T03:55:01.008Z",
+  "events": {
+   "rep02": 1
+  }
+ },
+ {
+  "path": "/tmp/claude-1002/-home-Bei-replicate-study-harness-sessions-rep02/9ba9c6b6-16ab-44a2-821f-8f43bf9260e4/tasks/b6qgg09o4.output",
+  "replicates": [
+   "rep02"
+  ],
+  "first_touch": "2026-08-30T02:57:22.760Z",
+  "last_touch": "2026-08-30T02:57:25.281Z",
+  "events": {
+   "rep02": 2
+  }
+ },
+ {
+  "path": "/tmp/claude-1002/-home-Bei-replicate-study-harness-sessions-rep02/9ba9c6b6-16ab-44a2-821f-8f43bf9260e4/tasks/bbxclbxnv.output",
+  "replicates": [
+   "rep02"
+  ],
+  "first_touch": "2026-08-30T03:20:17.911Z",
+  "last_touch": "2026-08-30T03:20:55.773Z",
+  "events": {
+   "rep02": 2
+  }
+ },
+ {
+  "path": "/tmp/claude-1002/-home-Bei-replicate-study-harness-sessions-rep03/abc956c8-3079-4427-9b70-587ac3a40b39/tasks/bw5xh2iwj.output",
+  "replicates": [
+   "rep03"
+  ],
+  "first_touch": "2026-08-30T02:55:57.850Z",
+  "last_touch": "2026-08-30T02:56:00.208Z",
+  "events": {
+   "rep03": 2
+  }
+ },
+ {
+  "path": "/tmp/claude-1002/-home-Bei-replicate-study-harness-sessions-rep03/abc956c8-3079-4427-9b70-587ac3a40b39/tasks/bz4wrrmhy.output",
+  "replicates": [
+   "rep03"
+  ],
+  "first_touch": "2026-08-30T03:04:46.538Z",
+  "last_touch": "2026-08-30T03:04:46.538Z",
+  "events": {
+   "rep03": 1
+  }
+ },
+ {
+  "path": "/tmp/claude-1002/-home-Bei-replicate-study-harness-sessions-rep04/ae5b5d24-1d82-4089-9ce1-88a5c7be026d/tasks/bosxbzvl1.output",
+  "replicates": [
+   "rep04"
+  ],
+  "first_touch": "2026-08-30T02:51:16.834Z",
+  "last_touch": "2026-08-30T02:51:16.834Z",
+  "events": {
+   "rep04": 1
+  }
+ },
+ {
+  "path": "/tmp/claude-1002/-home-Bei-replicate-study-harness-sessions-rep05/3d64def1-4d6c-4873-81b4-4056e549275c/tasks/b3cpgxpth.output",
+  "replicates": [
+   "rep05"
+  ],
+  "first_touch": "2026-08-30T02:48:43.153Z",
+  "last_touch": "2026-08-30T02:48:43.153Z",
+  "events": {
+   "rep05": 1
+  }
+ },
+ {
+  "path": "/tmp/claude-1002/-home-Bei-replicate-study-harness-sessions-rep05/3d64def1-4d6c-4873-81b4-4056e549275c/tasks/bwndyrwod.output",
+  "replicates": [
+   "rep05"
+  ],
+  "first_touch": "2026-08-30T03:02:35.288Z",
+  "last_touch": "2026-08-30T03:02:35.288Z",
+  "events": {
+   "rep05": 1
+  }
+ },
+ {
+  "path": "/tmp/claude-1002/-home-Bei-replicate-study-harness-sessions-rep06/83dad0ed-ba39-42ce-854f-f4bbb03cab71/tasks/b82pytx5j.output",
+  "replicates": [
+   "rep06"
+  ],
+  "first_touch": "2026-08-30T02:51:16.608Z",
+  "last_touch": "2026-08-30T02:51:18.899Z",
+  "events": {
+   "rep06": 2
+  }
+ },
+ {
+  "path": "/tmp/claude-1002/-home-Bei-replicate-study-harness-sessions-rep06/83dad0ed-ba39-42ce-854f-f4bbb03cab71/tasks/bnttqvc2r.output",
+  "replicates": [
+   "rep06"
+  ],
+  "first_touch": "2026-08-30T03:13:19.623Z",
+  "last_touch": "2026-08-30T03:19:05.984Z",
+  "events": {
+   "rep06": 5
+  }
+ },
+ {
+  "path": "/tmp/claude-1002/-home-Bei-replicate-study-harness-sessions-rep06/83dad0ed-ba39-42ce-854f-f4bbb03cab71/tasks/br5591s1o.output",
+  "replicates": [
+   "rep06"
+  ],
+  "first_touch": "2026-08-30T02:54:45.641Z",
+  "last_touch": "2026-08-30T02:54:45.641Z",
+  "events": {
+   "rep06": 1
+  }
+ },
+ {
+  "path": "/tmp/claude-1002/-home-Bei-replicate-study-harness-sessions-rep07/2f6d5a62-fc98-4d6b-b9e9-77e8e6c9636d/tasks/b778hjf7h.output",
+  "replicates": [
+   "rep07"
+  ],
+  "first_touch": "2026-08-30T03:04:23.670Z",
+  "last_touch": "2026-08-30T03:05:58.335Z",
+  "events": {
+   "rep07": 3
+  }
+ },
+ {
+  "path": "/tmp/claude-1002/-home-Bei-replicate-study-harness-sessions-rep07/2f6d5a62-fc98-4d6b-b9e9-77e8e6c9636d/tasks/bpb86r156.output",
+  "replicates": [
+   "rep07"
+  ],
+  "first_touch": "2026-08-30T03:41:43.788Z",
+  "last_touch": "2026-08-30T03:41:43.788Z",
+  "events": {
+   "rep07": 1
+  }
+ },
+ {
+  "path": "/tmp/claude-1002/-home-Bei-replicate-study-harness-sessions-rep07/2f6d5a62-fc98-4d6b-b9e9-77e8e6c9636d/tasks/byf5fwuwo.output",
+  "replicates": [
+   "rep07"
+  ],
+  "first_touch": "2026-08-30T02:55:33.648Z",
+  "last_touch": "2026-08-30T02:55:55.817Z",
+  "events": {
+   "rep07": 2
+  }
+ },
+ {
+  "path": "/tmp/claude-1002/-home-Bei-replicate-study-harness-sessions-rep07/8f5ca38d-a9a5-4d1f-a654-4c01d3daaa14/tasks/bbxek8iol.output",
+  "replicates": [
+   "rep07"
+  ],
+  "first_touch": "2026-08-30T19:11:25.017Z",
+  "last_touch": "2026-08-30T19:11:27.592Z",
+  "events": {
+   "rep07": 2
+  }
+ },
+ {
+  "path": "/tmp/claude-1002/-home-Bei-replicate-study-harness-sessions-rep08/d540f078-8c7c-4c28-a4f0-a4dbf81d6f89/tasks/b55r9h192.output",
+  "replicates": [
+   "rep08"
+  ],
+  "first_touch": "2026-08-30T03:04:26.991Z",
+  "last_touch": "2026-08-30T03:04:26.991Z",
+  "events": {
+   "rep08": 1
+  }
+ },
+ {
+  "path": "/tmp/claude-1002/-home-Bei-replicate-study-harness-sessions-rep12/d9f5f9ea-e349-4dad-a61e-09b15aa4ce43/tasks/",
+  "replicates": [
+   "rep12"
+  ],
+  "first_touch": "2026-08-30T03:06:22.431Z",
+  "last_touch": "2026-08-30T03:06:22.431Z",
+  "events": {
+   "rep12": 1
+  }
+ },
+ {
+  "path": "/tmp/claude-1002/-home-Bei-replicate-study-harness-sessions-rep12/d9f5f9ea-e349-4dad-a61e-09b15aa4ce43/tasks/b046c3bl8.output",
+  "replicates": [
+   "rep12"
+  ],
+  "first_touch": "2026-08-30T02:59:11.403Z",
+  "last_touch": "2026-08-30T02:59:11.403Z",
+  "events": {
+   "rep12": 1
+  }
+ },
+ {
+  "path": "/tmp/claude-1002/-home-Bei-replicate-study-harness-sessions-rep12/d9f5f9ea-e349-4dad-a61e-09b15aa4ce43/tasks/b9inw37ai.output",
+  "replicates": [
+   "rep12"
+  ],
+  "first_touch": "2026-08-30T03:37:08.962Z",
+  "last_touch": "2026-08-30T03:37:08.962Z",
+  "events": {
+   "rep12": 1
+  }
+ },
+ {
+  "path": "/tmp/claude-1002/-home-Bei-replicate-study-harness-sessions-rep12/d9f5f9ea-e349-4dad-a61e-09b15aa4ce43/tasks/bgvvx3uwt.output",
+  "replicates": [
+   "rep12"
+  ],
+  "first_touch": "2026-08-30T03:10:32.971Z",
+  "last_touch": "2026-08-30T03:10:32.971Z",
+  "events": {
+   "rep12": 1
+  }
+ },
+ {
+  "path": "/tmp/claude-1002/-home-Bei-replicate-study-harness-sessions-rep12/d9f5f9ea-e349-4dad-a61e-09b15aa4ce43/tasks/bhmn161p4.output",
+  "replicates": [
+   "rep12"
+  ],
+  "first_touch": "2026-08-30T03:05:11.167Z",
+  "last_touch": "2026-08-30T03:05:11.167Z",
+  "events": {
+   "rep12": 1
+  }
+ },
+ {
+  "path": "/tmp/claude-1002/-home-Bei-replicate-study-harness-sessions-rep12/d9f5f9ea-e349-4dad-a61e-09b15aa4ce43/tasks/brksw55uu.output",
+  "replicates": [
+   "rep12"
+  ],
+  "first_touch": "2026-08-30T03:08:38.864Z",
+  "last_touch": "2026-08-30T03:08:38.864Z",
+  "events": {
+   "rep12": 1
+  }
+ },
+ {
+  "path": "/tmp/claude-1002/-home-Bei-replicate-study-harness-sessions-rep12/d9f5f9ea-e349-4dad-a61e-09b15aa4ce43/tasks/bv5hpw53t.output",
+  "replicates": [
+   "rep12"
+  ],
+  "first_touch": "2026-08-30T03:09:09.146Z",
+  "last_touch": "2026-08-30T03:09:11.741Z",
+  "events": {
+   "rep12": 2
+  }
+ },
+ {
+  "path": "/tmp/claude-1002/-home-Bei-replicate-study-harness-sessions-rep12/d9f5f9ea-e349-4dad-a61e-09b15aa4ce43/tasks/bxowfjcb3.output",
+  "replicates": [
+   "rep12"
+  ],
+  "first_touch": "2026-08-30T03:18:55.802Z",
+  "last_touch": "2026-08-30T03:18:55.802Z",
+  "events": {
+   "rep12": 1
+  }
+ },
+ {
+  "path": "/tmp/claude-1002/-home-Bei-replicate-study-harness-sessions-rep12/d9f5f9ea-e349-4dad-a61e-09b15aa4ce43/tasks/bymdrd0ym.output",
+  "replicates": [
+   "rep12"
+  ],
+  "first_touch": "2026-08-30T03:05:11.167Z",
+  "last_touch": "2026-08-30T03:05:11.167Z",
+  "events": {
+   "rep12": 1
+  }
+ },
+ {
+  "path": "/tmp/claude-1002/-home-Bei-replicate-study-harness-sessions-rep13/d9ba5b51-ee0e-408e-804d-1fa2c809ea67/tasks/b5owz9nzj.output",
+  "replicates": [
+   "rep13"
+  ],
+  "first_touch": "2026-08-30T19:14:07.635Z",
+  "last_touch": "2026-08-30T19:19:00.382Z",
+  "events": {
+   "rep13": 2
+  }
+ },
+ {
+  "path": "/tmp/claude-1002/-home-Bei-replicate-study-harness-sessions-rep15/07a457a8-4bb1-4fea-8ecc-86cd3737dd92/tasks/b0jb71vpa.output",
+  "replicates": [
+   "rep15"
+  ],
+  "first_touch": "2026-08-30T03:26:10.330Z",
+  "last_touch": "2026-08-30T03:26:43.834Z",
+  "events": {
+   "rep15": 2
+  }
+ },
+ {
+  "path": "/tmp/claude-1002/-home-Bei-replicate-study-harness-sessions-rep15/07a457a8-4bb1-4fea-8ecc-86cd3737dd92/tasks/b157xuk0b.output",
+  "replicates": [
+   "rep15"
+  ],
+  "first_touch": "2026-08-30T03:34:28.270Z",
+  "last_touch": "2026-08-30T03:35:18.248Z",
+  "events": {
+   "rep15": 3
+  }
+ },
+ {
+  "path": "/tmp/claude-1002/-home-Bei-replicate-study-harness-sessions-rep15/07a457a8-4bb1-4fea-8ecc-86cd3737dd92/tasks/b902spovh.output",
+  "replicates": [
+   "rep15"
+  ],
+  "first_touch": "2026-08-30T03:35:24.167Z",
+  "last_touch": "2026-08-30T03:35:45.272Z",
+  "events": {
+   "rep15": 2
+  }
+ },
+ {
+  "path": "/tmp/claude-1002/-home-Bei-replicate-study-harness-sessions-rep15/07a457a8-4bb1-4fea-8ecc-86cd3737dd92/tasks/b9q4v2m45.output",
+  "replicates": [
+   "rep15"
+  ],
+  "first_touch": "2026-08-30T03:26:07.488Z",
+  "last_touch": "2026-08-30T03:26:57.067Z",
+  "events": {
+   "rep15": 2
+  }
+ },
+ {
+  "path": "/tmp/claude-1002/-home-Bei-replicate-study-harness-sessions-rep15/07a457a8-4bb1-4fea-8ecc-86cd3737dd92/tasks/bbxivbd5o.output",
+  "replicates": [
+   "rep15"
+  ],
+  "first_touch": "2026-08-30T03:16:57.489Z",
+  "last_touch": "2026-08-30T03:20:24.290Z",
+  "events": {
+   "rep15": 3
+  }
+ },
+ {
+  "path": "/tmp/claude-1002/-home-Bei-replicate-study-harness-sessions-rep15/07a457a8-4bb1-4fea-8ecc-86cd3737dd92/tasks/bff63fk9b.output",
+  "replicates": [
+   "rep15"
+  ],
+  "first_touch": "2026-08-30T02:50:35.418Z",
+  "last_touch": "2026-08-30T02:51:04.813Z",
+  "events": {
+   "rep15": 3
+  }
+ },
+ {
+  "path": "/tmp/claude-1002/-home-Bei-replicate-study-harness-sessions-rep15/07a457a8-4bb1-4fea-8ecc-86cd3737dd92/tasks/bhwsi2bw1.output",
+  "replicates": [
+   "rep15"
+  ],
+  "first_touch": "2026-08-30T03:34:12.950Z",
+  "last_touch": "2026-08-30T03:34:12.950Z",
+  "events": {
+   "rep15": 1
+  }
+ },
+ {
+  "path": "/tmp/claude-1002/-home-Bei-replicate-study-harness-sessions-rep15/07a457a8-4bb1-4fea-8ecc-86cd3737dd92/tasks/bjkzsd9na.output",
+  "replicates": [
+   "rep15"
+  ],
+  "first_touch": "2026-08-30T03:35:51.659Z",
+  "last_touch": "2026-08-30T03:35:51.659Z",
+  "events": {
+   "rep15": 1
+  }
+ },
+ {
+  "path": "/tmp/claude-1002/-home-Bei-replicate-study-harness-sessions-rep15/07c21137-a5e2-4692-8b85-f9e041c77a40/tasks/b6ujv2g02.output",
+  "replicates": [
+   "rep15"
+  ],
+  "first_touch": "2026-08-30T19:12:17.649Z",
+  "last_touch": "2026-08-30T19:12:17.649Z",
+  "events": {
+   "rep15": 1
+  }
+ },
+ {
+  "path": "/tmp/claude-1002/-home-Bei-replicate-study-harness-sessions-rep16/d7095cf3-d247-4fd8-bc12-71d49cd8715b/tasks/bp761bdit.output",
+  "replicates": [
+   "rep16"
+  ],
+  "first_touch": "2026-08-30T03:34:13.058Z",
+  "last_touch": "2026-08-30T03:34:45.447Z",
+  "events": {
+   "rep16": 2
+  }
+ },
+ {
+  "path": "/tmp/claude-1002/-home-Bei-replicate-study-harness-sessions-rep17/03ff5b31-68d9-476d-9d98-78c67a4e4488/tasks/bep2gz02b.output",
+  "replicates": [
+   "rep17"
+  ],
+  "first_touch": "2026-08-30T03:14:51.864Z",
+  "last_touch": "2026-08-30T03:14:51.864Z",
+  "events": {
+   "rep17": 1
+  }
+ },
+ {
+  "path": "/tmp/clockfix.py",
+  "replicates": [
+   "rep03"
+  ],
+  "first_touch": "2026-08-30T03:08:47.245Z",
+  "last_touch": "2026-08-30T03:08:50.334Z",
+  "events": {
+   "rep03": 2
+  }
+ },
+ {
+  "path": "/tmp/commit2.txt",
+  "replicates": [
+   "rep01"
+  ],
+  "first_touch": "2026-08-30T02:57:54.515Z",
+  "last_touch": "2026-08-30T02:58:05.345Z",
+  "events": {
+   "rep01": 2
+  }
+ },
+ {
+  "path": "/tmp/commit_0831b.txt",
+  "replicates": [
+   "rep11"
+  ],
+  "first_touch": "2026-08-30T19:24:51.738Z",
+  "last_touch": "2026-08-30T19:24:56.160Z",
+  "events": {
+   "rep11": 2
+  }
+ },
+ {
+  "path": "/tmp/commitmsg.txt",
+  "replicates": [
+   "rep01",
+   "rep11"
+  ],
+  "first_touch": "2026-08-30T02:55:27.442Z",
+  "last_touch": "2026-08-30T19:24:45.932Z",
+  "events": {
+   "rep01": 2,
+   "rep11": 1
+  }
+ },
+ {
+  "path": "/tmp/coord.py",
+  "replicates": [
+   "rep12"
+  ],
+  "first_touch": "2026-08-30T03:01:07.365Z",
+  "last_touch": "2026-08-30T03:01:28.720Z",
+  "events": {
+   "rep12": 3
+  }
+ },
+ {
+  "path": "/tmp/cp1.py",
+  "replicates": [
+   "rep15"
+  ],
+  "first_touch": "2026-08-30T04:15:20.132Z",
+  "last_touch": "2026-08-30T04:15:20.132Z",
+  "events": {
+   "rep15": 1
+  }
+ },
+ {
+  "path": "/tmp/curator.sh",
+  "replicates": [
+   "rep15"
+  ],
+  "first_touch": "2026-08-30T19:21:32.510Z",
+  "last_touch": "2026-08-30T19:26:46.132Z",
+  "events": {
+   "rep15": 5
+  }
+ },
+ {
+  "path": "/tmp/daemons.sh",
+  "replicates": [
+   "rep09"
+  ],
+  "first_touch": "2026-08-30T03:40:03.663Z",
+  "last_touch": "2026-08-30T03:41:07.190Z",
+  "events": {
+   "rep09": 3
+  }
+ },
+ {
+  "path": "/tmp/dbg16",
+  "replicates": [
+   "rep16"
+  ],
+  "first_touch": "2026-08-30T02:46:35.462Z",
+  "last_touch": "2026-08-30T03:46:41.257Z",
+  "events": {
+   "rep16": 2
+  }
+ },
+ {
+  "path": "/tmp/dedup_out.txt",
+  "replicates": [
+   "rep03"
+  ],
+  "first_touch": "2026-08-30T03:01:11.919Z",
+  "last_touch": "2026-08-30T03:01:11.919Z",
+  "events": {
+   "rep03": 1
+  }
+ },
+ {
+  "path": "/tmp/dedupe.py",
+  "replicates": [
+   "rep03"
+  ],
+  "first_touch": "2026-08-30T03:02:10.234Z",
+  "last_touch": "2026-08-30T03:02:14.089Z",
+  "events": {
+   "rep03": 2
+  }
+ },
+ {
+  "path": "/tmp/det1",
+  "replicates": [
+   "rep07"
+  ],
+  "first_touch": "2026-08-30T02:52:40.049Z",
+  "last_touch": "2026-08-30T02:52:40.049Z",
+  "events": {
+   "rep07": 1
+  }
+ },
+ {
+  "path": "/tmp/det2",
+  "replicates": [
+   "rep07"
+  ],
+  "first_touch": "2026-08-30T02:52:40.049Z",
+  "last_touch": "2026-08-30T02:52:40.049Z",
+  "events": {
+   "rep07": 1
+  }
+ },
+ {
+  "path": "/tmp/diag.py",
+  "replicates": [
+   "rep12"
+  ],
+  "first_touch": "2026-08-30T02:49:19.168Z",
+  "last_touch": "2026-08-30T02:49:23.346Z",
+  "events": {
+   "rep12": 2
+  }
+ },
+ {
+  "path": "/tmp/digest_0831.sh",
+  "replicates": [
+   "rep04"
+  ],
+  "first_touch": "2026-08-30T19:17:18.226Z",
+  "last_touch": "2026-08-30T19:17:21.314Z",
+  "events": {
+   "rep04": 2
+  }
+ },
+ {
+  "path": "/tmp/em.py",
+  "replicates": [
+   "rep12"
+  ],
+  "first_touch": "2026-08-30T03:16:58.344Z",
+  "last_touch": "2026-08-30T03:16:58.344Z",
+  "events": {
+   "rep12": 1
+  }
+ },
+ {
+  "path": "/tmp/expect.py",
+  "replicates": [
+   "rep03"
+  ],
+  "first_touch": "2026-08-30T03:33:05.214Z",
+  "last_touch": "2026-08-30T03:33:09.154Z",
+  "events": {
+   "rep03": 2
+  }
+ },
+ {
+  "path": "/tmp/extend_queue.py",
+  "replicates": [
+   "rep11"
+  ],
+  "first_touch": "2026-08-30T19:14:30.806Z",
+  "last_touch": "2026-08-30T19:14:34.697Z",
+  "events": {
+   "rep11": 2
+  }
+ },
+ {
+  "path": "/tmp/families.py",
+  "replicates": [
+   "rep03"
+  ],
+  "first_touch": "2026-08-30T02:57:13.557Z",
+  "last_touch": "2026-08-30T02:57:16.982Z",
+  "events": {
+   "rep03": 2
+  }
+ },
+ {
+  "path": "/tmp/family.py",
+  "replicates": [
+   "rep09"
+  ],
+  "first_touch": "2026-08-30T02:51:36.887Z",
+  "last_touch": "2026-08-30T02:51:40.130Z",
+  "events": {
+   "rep09": 2
+  }
+ },
+ {
+  "path": "/tmp/fix397.py",
+  "replicates": [
+   "rep11"
+  ],
+  "first_touch": "2026-08-30T04:11:54.118Z",
+  "last_touch": "2026-08-30T04:11:54.118Z",
+  "events": {
+   "rep11": 1
+  }
+ },
+ {
+  "path": "/tmp/fix_frontier.py",
+  "replicates": [
+   "rep11"
+  ],
+  "first_touch": "2026-08-30T19:23:30.018Z",
+  "last_touch": "2026-08-30T19:23:34.297Z",
+  "events": {
+   "rep11": 2
+  }
+ },
+ {
+  "path": "/tmp/fix_status.py",
+  "replicates": [
+   "rep11"
+  ],
+  "first_touch": "2026-08-30T19:15:26.764Z",
+  "last_touch": "2026-08-30T19:15:29.758Z",
+  "events": {
+   "rep11": 2
+  }
+ },
+ {
+  "path": "/tmp/fix_status2.py",
+  "replicates": [
+   "rep11"
+  ],
+  "first_touch": "2026-08-30T19:15:41.662Z",
+  "last_touch": "2026-08-30T19:15:45.165Z",
+  "events": {
+   "rep11": 2
+  }
+ },
+ {
+  "path": "/tmp/fix_worker.py",
+  "replicates": [
+   "rep03"
+  ],
+  "first_touch": "2026-08-30T03:08:32.276Z",
+  "last_touch": "2026-08-30T03:08:36.560Z",
+  "events": {
+   "rep03": 2
+  }
+ },
+ {
+  "path": "/tmp/fixlat.py",
+  "replicates": [
+   "rep12"
+  ],
+  "first_touch": "2026-08-30T03:08:20.479Z",
+  "last_touch": "2026-08-30T03:08:24.245Z",
+  "events": {
+   "rep12": 2
+  }
+ },
+ {
+  "path": "/tmp/fixlines.py",
+  "replicates": [
+   "rep11"
+  ],
+  "first_touch": "2026-08-30T03:45:30.327Z",
+  "last_touch": "2026-08-30T03:45:30.327Z",
+  "events": {
+   "rep11": 1
+  }
+ },
+ {
+  "path": "/tmp/fixlog_0831.py",
+  "replicates": [
+   "rep04"
+  ],
+  "first_touch": "2026-08-30T19:18:43.150Z",
+  "last_touch": "2026-08-30T19:18:51.465Z",
+  "events": {
+   "rep04": 2
+  }
+ },
+ {
+  "path": "/tmp/fixreps.py",
+  "replicates": [
+   "rep15"
+  ],
+  "first_touch": "2026-08-30T03:47:09.172Z",
+  "last_touch": "2026-08-30T03:47:09.172Z",
+  "events": {
+   "rep15": 1
+  }
+ },
+ {
+  "path": "/tmp/fixtest.py",
+  "replicates": [
+   "rep11"
+  ],
+  "first_touch": "2026-08-30T03:54:34.224Z",
+  "last_touch": "2026-08-30T03:54:34.224Z",
+  "events": {
+   "rep11": 1
+  }
+ },
+ {
+  "path": "/tmp/fixunits.py",
+  "replicates": [
+   "rep11"
+  ],
+  "first_touch": "2026-08-30T04:10:13.169Z",
+  "last_touch": "2026-08-30T04:10:13.169Z",
+  "events": {
+   "rep11": 1
+  }
+ },
+ {
+  "path": "/tmp/frame_0831.py",
+  "replicates": [
+   "rep04"
+  ],
+  "first_touch": "2026-08-30T19:15:09.801Z",
+  "last_touch": "2026-08-30T19:15:49.470Z",
+  "events": {
+   "rep04": 3
+  }
+ },
+ {
+  "path": "/tmp/fs.py",
+  "replicates": [
+   "rep12"
+  ],
+  "first_touch": "2026-08-30T03:39:04.271Z",
+  "last_touch": "2026-08-30T03:39:04.271Z",
+  "events": {
+   "rep12": 1
+  }
+ },
+ {
+  "path": "/tmp/g3ov.tsv",
+  "replicates": [
+   "rep13"
+  ],
+  "first_touch": "2026-08-30T03:01:42.023Z",
+  "last_touch": "2026-08-30T03:01:49.942Z",
+  "events": {
+   "rep13": 2
+  }
+ },
+ {
+  "path": "/tmp/g4.tsv",
+  "replicates": [
+   "rep13"
+  ],
+  "first_touch": "2026-08-30T03:09:21.561Z",
+  "last_touch": "2026-08-30T03:09:29.403Z",
+  "events": {
+   "rep13": 2
+  }
+ },
+ {
+  "path": "/tmp/g4_metal.py",
+  "replicates": [
+   "rep13"
+  ],
+  "first_touch": "2026-08-30T03:07:05.985Z",
+  "last_touch": "2026-08-30T03:07:05.985Z",
+  "events": {
+   "rep13": 1
+  }
+ },
+ {
+  "path": "/tmp/g4b.py",
+  "replicates": [
+   "rep13"
+  ],
+  "first_touch": "2026-08-30T03:19:30.945Z",
+  "last_touch": "2026-08-30T03:19:30.945Z",
+  "events": {
+   "rep13": 1
+  }
+ },
+ {
+  "path": "/tmp/g4b.tsv",
+  "replicates": [
+   "rep13"
+  ],
+  "first_touch": "2026-08-30T03:19:21.272Z",
+  "last_touch": "2026-08-30T03:19:30.945Z",
+  "events": {
+   "rep13": 2
+  }
+ },
+ {
+  "path": "/tmp/g5test",
+  "replicates": [
+   "rep12"
+  ],
+  "first_touch": "2026-08-30T03:10:51.179Z",
+  "last_touch": "2026-08-30T03:10:51.179Z",
+  "events": {
+   "rep12": 1
+  }
+ },
+ {
+  "path": "/tmp/g5test/2021_Cu__sql_2_ASR_6__methyl100.cif",
+  "replicates": [
+   "rep12"
+  ],
+  "first_touch": "2026-08-30T03:10:51.179Z",
+  "last_touch": "2026-08-30T03:10:51.179Z",
+  "events": {
+   "rep12": 1
+  }
+ },
+ {
+  "path": "/tmp/g5test/simulation.input",
+  "replicates": [
+   "rep12"
+  ],
+  "first_touch": "2026-08-30T03:10:51.179Z",
+  "last_touch": "2026-08-30T03:10:51.179Z",
+  "events": {
+   "rep12": 1
+  }
+ },
+ {
+  "path": "/tmp/g7fix.sh",
+  "replicates": [
+   "rep12"
+  ],
+  "first_touch": "2026-08-30T02:57:07.524Z",
+  "last_touch": "2026-08-30T02:57:10.154Z",
+  "events": {
+   "rep12": 2
+  }
+ },
+ {
+  "path": "/tmp/gate_finalize.py",
+  "replicates": [
+   "rep11"
+  ],
+  "first_touch": "2026-08-30T04:04:10.168Z",
+  "last_touch": "2026-08-30T04:04:10.168Z",
+  "events": {
+   "rep11": 1
+  }
+ },
+ {
+  "path": "/tmp/harden.py",
+  "replicates": [
+   "rep11"
+  ],
+  "first_touch": "2026-08-30T03:54:25.103Z",
+  "last_touch": "2026-08-30T03:54:25.103Z",
+  "events": {
+   "rep11": 1
+  }
+ },
+ {
+  "path": "/tmp/interp25.txt",
+  "replicates": [
+   "rep02"
+  ],
+  "first_touch": "2026-08-30T03:37:30.808Z",
+  "last_touch": "2026-08-30T03:39:10.185Z",
+  "events": {
+   "rep02": 3
+  }
+ },
+ {
+  "path": "/tmp/jobs20260831.md",
+  "replicates": [
+   "rep03"
+  ],
+  "first_touch": "2026-08-30T19:18:03.333Z",
+  "last_touch": "2026-08-30T19:18:14.736Z",
+  "events": {
+   "rep03": 2
+  }
+ },
+ {
+  "path": "/tmp/jobs_append.md",
+  "replicates": [
+   "rep12"
+  ],
+  "first_touch": "2026-08-30T02:53:26.982Z",
+  "last_touch": "2026-08-30T03:12:33.872Z",
+  "events": {
+   "rep12": 3
+  }
+ },
+ {
+  "path": "/tmp/jobsadd.md",
+  "replicates": [
+   "rep04"
+  ],
+  "first_touch": "2026-08-30T19:12:06.408Z",
+  "last_touch": "2026-08-30T19:12:10.397Z",
+  "events": {
+   "rep04": 2
+  }
+ },
+ {
+  "path": "/tmp/l3b.py",
+  "replicates": [
+   "rep12"
+  ],
+  "first_touch": "2026-08-30T03:16:32.327Z",
+  "last_touch": "2026-08-30T03:16:32.327Z",
+  "events": {
+   "rep12": 1
+  }
+ },
+ {
+  "path": "/tmp/l3c.py",
+  "replicates": [
+   "rep12"
+  ],
+  "first_touch": "2026-08-30T03:24:05.549Z",
+  "last_touch": "2026-08-30T03:24:05.549Z",
+  "events": {
+   "rep12": 1
+  }
+ },
+ {
+  "path": "/tmp/lists.out",
+  "replicates": [
+   "rep16"
+  ],
+  "first_touch": "2026-08-30T02:54:46.932Z",
+  "last_touch": "2026-08-30T02:54:46.932Z",
+  "events": {
+   "rep16": 1
+  }
+ },
+ {
+  "path": "/tmp/live.txt",
+  "replicates": [
+   "rep08"
+  ],
+  "first_touch": "2026-08-30T03:16:19.208Z",
+  "last_touch": "2026-08-30T03:17:25.107Z",
+  "events": {
+   "rep08": 4
+  }
+ },
+ {
+  "path": "/tmp/log10.md",
+  "replicates": [
+   "rep11",
+   "rep15"
+  ],
+  "first_touch": "2026-08-30T04:08:56.693Z",
+  "last_touch": "2026-08-30T04:10:54.766Z",
+  "events": {
+   "rep11": 1,
+   "rep15": 1
+  }
+ },
+ {
+  "path": "/tmp/log11.md",
+  "replicates": [
+   "rep11",
+   "rep15"
+  ],
+  "first_touch": "2026-08-30T04:11:51.954Z",
+  "last_touch": "2026-08-30T04:12:12.631Z",
+  "events": {
+   "rep11": 1,
+   "rep15": 1
+  }
+ },
+ {
+  "path": "/tmp/log12.md",
+  "replicates": [
+   "rep11"
+  ],
+  "first_touch": "2026-08-30T04:13:39.461Z",
+  "last_touch": "2026-08-30T04:13:39.461Z",
+  "events": {
+   "rep11": 1
+  }
+ },
+ {
+  "path": "/tmp/log13.md",
+  "replicates": [
+   "rep11",
+   "rep13"
+  ],
+  "first_touch": "2026-08-30T04:14:48.260Z",
+  "last_touch": "2026-08-30T19:14:01.571Z",
+  "events": {
+   "rep11": 1,
+   "rep13": 1
+  }
+ },
+ {
+  "path": "/tmp/log14.md",
+  "replicates": [
+   "rep11"
+  ],
+  "first_touch": "2026-08-30T04:17:05.527Z",
+  "last_touch": "2026-08-30T04:17:05.527Z",
+  "events": {
+   "rep11": 1
+  }
+ },
+ {
+  "path": "/tmp/log2.md",
+  "replicates": [
+   "rep03",
+   "rep09"
+  ],
+  "first_touch": "2026-08-30T02:52:44.947Z",
+  "last_touch": "2026-08-30T02:57:41.196Z",
+  "events": {
+   "rep03": 1,
+   "rep09": 2
+  }
+ },
+ {
+  "path": "/tmp/log2.py",
+  "replicates": [
+   "rep15"
+  ],
+  "first_touch": "2026-08-30T19:25:44.913Z",
+  "last_touch": "2026-08-30T19:25:53.857Z",
+  "events": {
+   "rep15": 2
+  }
+ },
+ {
+  "path": "/tmp/log20260831a.md",
+  "replicates": [
+   "rep03"
+  ],
+  "first_touch": "2026-08-30T19:14:12.080Z",
+  "last_touch": "2026-08-30T19:14:15.637Z",
+  "events": {
+   "rep03": 2
+  }
+ },
+ {
+  "path": "/tmp/log20260831b.md",
+  "replicates": [
+   "rep03"
+  ],
+  "first_touch": "2026-08-30T19:22:14.190Z",
+  "last_touch": "2026-08-30T19:22:18.026Z",
+  "events": {
+   "rep03": 2
+  }
+ },
+ {
+  "path": "/tmp/log3.md",
+  "replicates": [
+   "rep09"
+  ],
+  "first_touch": "2026-08-30T03:10:00.227Z",
+  "last_touch": "2026-08-30T03:10:07.362Z",
+  "events": {
+   "rep09": 2
+  }
+ },
+ {
+  "path": "/tmp/log4.md",
+  "replicates": [
+   "rep09"
+  ],
+  "first_touch": "2026-08-30T03:32:44.266Z",
+  "last_touch": "2026-08-30T03:32:53.758Z",
+  "events": {
+   "rep09": 2
+  }
+ },
+ {
+  "path": "/tmp/log5.md",
+  "replicates": [
+   "rep09",
+   "rep11"
+  ],
+  "first_touch": "2026-08-30T03:42:12.756Z",
+  "last_touch": "2026-08-30T03:54:53.580Z",
+  "events": {
+   "rep09": 2,
+   "rep11": 1
+  }
+ },
+ {
+  "path": "/tmp/log6.md",
+  "replicates": [
+   "rep11"
+  ],
+  "first_touch": "2026-08-30T03:56:14.491Z",
+  "last_touch": "2026-08-30T03:56:14.491Z",
+  "events": {
+   "rep11": 1
+  }
+ },
+ {
+  "path": "/tmp/log7.md",
+  "replicates": [
+   "rep11"
+  ],
+  "first_touch": "2026-08-30T03:58:08.557Z",
+  "last_touch": "2026-08-30T03:58:08.557Z",
+  "events": {
+   "rep11": 1
+  }
+ },
+ {
+  "path": "/tmp/log8.md",
+  "replicates": [
+   "rep11"
+  ],
+  "first_touch": "2026-08-30T04:01:59.434Z",
+  "last_touch": "2026-08-30T04:01:59.434Z",
+  "events": {
+   "rep11": 1
+  }
+ },
+ {
+  "path": "/tmp/log9.md",
+  "replicates": [
+   "rep11"
+  ],
+  "first_touch": "2026-08-30T04:06:41.046Z",
+  "last_touch": "2026-08-30T04:06:41.046Z",
+  "events": {
+   "rep11": 1
+  }
+ },
+ {
+  "path": "/tmp/log_0831.md",
+  "replicates": [
+   "rep11"
+  ],
+  "first_touch": "2026-08-30T19:20:55.984Z",
+  "last_touch": "2026-08-30T19:21:09.733Z",
+  "events": {
+   "rep11": 2
+  }
+ },
+ {
+  "path": "/tmp/log_add.md",
+  "replicates": [
+   "rep16"
+  ],
+  "first_touch": "2026-08-30T03:04:25.195Z",
+  "last_touch": "2026-08-30T03:04:25.195Z",
+  "events": {
+   "rep16": 1
+  }
+ },
+ {
+  "path": "/tmp/log_append.md",
+  "replicates": [
+   "rep03",
+   "rep11",
+   "rep12"
+  ],
+  "first_touch": "2026-08-30T02:51:23.984Z",
+  "last_touch": "2026-08-30T19:20:15.922Z",
+  "events": {
+   "rep03": 2,
+   "rep11": 2,
+   "rep12": 1
+  }
+ },
+ {
+  "path": "/tmp/log_audit.md",
+  "replicates": [
+   "rep03"
+  ],
+  "first_touch": "2026-08-30T03:38:21.539Z",
+  "last_touch": "2026-08-30T03:38:27.767Z",
+  "events": {
+   "rep03": 2
+  }
+ },
+ {
+  "path": "/tmp/log_bench_done.md",
+  "replicates": [
+   "rep03"
+  ],
+  "first_touch": "2026-08-30T03:34:35.393Z",
+  "last_touch": "2026-08-30T03:34:50.958Z",
+  "events": {
+   "rep03": 2
+  }
+ },
+ {
+  "path": "/tmp/log_ceiling.md",
+  "replicates": [
+   "rep03"
+  ],
+  "first_touch": "2026-08-30T03:16:44.075Z",
+  "last_touch": "2026-08-30T03:17:06.797Z",
+  "events": {
+   "rep03": 2
+  }
+ },
+ {
+  "path": "/tmp/log_claimtest.md",
+  "replicates": [
+   "rep03"
+  ],
+  "first_touch": "2026-08-30T03:40:40.112Z",
+  "last_touch": "2026-08-30T03:40:56.805Z",
+  "events": {
+   "rep03": 2
+  }
+ },
+ {
+  "path": "/tmp/log_cyc.md",
+  "replicates": [
+   "rep03"
+  ],
+  "first_touch": "2026-08-30T03:42:07.131Z",
+  "last_touch": "2026-08-30T03:42:14.442Z",
+  "events": {
+   "rep03": 2
+  }
+ },
+ {
+  "path": "/tmp/log_dedup.md",
+  "replicates": [
+   "rep03"
+  ],
+  "first_touch": "2026-08-30T03:03:43.784Z",
+  "last_touch": "2026-08-30T03:03:49.916Z",
+  "events": {
+   "rep03": 2
+  }
+ },
+ {
+  "path": "/tmp/log_dotbug.md",
+  "replicates": [
+   "rep03"
+  ],
+  "first_touch": "2026-08-30T03:09:08.321Z",
+  "last_touch": "2026-08-30T03:09:14.668Z",
+  "events": {
+   "rep03": 2
+  }
+ },
+ {
+  "path": "/tmp/log_entry.md",
+  "replicates": [
+   "rep03",
+   "rep09"
+  ],
+  "first_touch": "2026-08-30T02:51:06.953Z",
+  "last_touch": "2026-08-30T19:25:28.186Z",
+  "events": {
+   "rep03": 3,
+   "rep09": 2
+  }
+ },
+ {
+  "path": "/tmp/log_entry2.md",
+  "replicates": [
+   "rep12"
+  ],
+  "first_touch": "2026-08-30T03:10:30.027Z",
+  "last_touch": "2026-08-30T03:11:03.211Z",
+  "events": {
+   "rep12": 2
+  }
+ },
+ {
+  "path": "/tmp/log_expect.md",
+  "replicates": [
+   "rep03"
+  ],
+  "first_touch": "2026-08-30T03:33:24.856Z",
+  "last_touch": "2026-08-30T03:33:38.728Z",
+  "events": {
+   "rep03": 2
+  }
+ },
+ {
+  "path": "/tmp/log_fam.md",
+  "replicates": [
+   "rep03"
+  ],
+  "first_touch": "2026-08-30T02:57:48.269Z",
+  "last_touch": "2026-08-30T02:57:54.080Z",
+  "events": {
+   "rep03": 2
+  }
+ },
+ {
+  "path": "/tmp/log_fix.md",
+  "replicates": [
+   "rep03"
+  ],
+  "first_touch": "2026-08-30T02:56:51.860Z",
+  "last_touch": "2026-08-30T02:56:56.845Z",
+  "events": {
+   "rep03": 2
+  }
+ },
+ {
+  "path": "/tmp/log_orphan.md",
+  "replicates": [
+   "rep03"
+  ],
+  "first_touch": "2026-08-30T03:31:18.731Z",
+  "last_touch": "2026-08-30T03:31:27.974Z",
+  "events": {
+   "rep03": 2
+  }
+ },
+ {
+  "path": "/tmp/log_precision.md",
+  "replicates": [
+   "rep03"
+  ],
+  "first_touch": "2026-08-30T03:27:13.573Z",
+  "last_touch": "2026-08-30T03:27:28.720Z",
+  "events": {
+   "rep03": 2
+  }
+ },
+ {
+  "path": "/tmp/log_screen.md",
+  "replicates": [
+   "rep03"
+  ],
+  "first_touch": "2026-08-30T03:23:00.698Z",
+  "last_touch": "2026-08-30T03:23:12.263Z",
+  "events": {
+   "rep03": 2
+  }
+ },
+ {
+  "path": "/tmp/log_spacing.md",
+  "replicates": [
+   "rep03"
+  ],
+  "first_touch": "2026-08-30T03:20:32.590Z",
+  "last_touch": "2026-08-30T03:20:44.077Z",
+  "events": {
+   "rep03": 2
+  }
+ },
+ {
+  "path": "/tmp/log_state.md",
+  "replicates": [
+   "rep03"
+  ],
+  "first_touch": "2026-08-30T03:13:11.143Z",
+  "last_touch": "2026-08-30T19:25:28.186Z",
+  "events": {
+   "rep03": 3
+  }
+ },
+ {
+  "path": "/tmp/log_top0.md",
+  "replicates": [
+   "rep03"
+  ],
+  "first_touch": "2026-08-30T03:25:10.258Z",
+  "last_touch": "2026-08-30T03:25:18.282Z",
+  "events": {
+   "rep03": 2
+  }
+ },
+ {
+  "path": "/tmp/log_w2_entry.md",
+  "replicates": [
+   "rep12"
+  ],
+  "first_touch": "2026-08-30T02:53:16.150Z",
+  "last_touch": "2026-08-30T02:54:07.677Z",
+  "events": {
+   "rep12": 3
+  }
+ },
+ {
+  "path": "/tmp/logadd.md",
+  "replicates": [
+   "rep04"
+  ],
+  "first_touch": "2026-08-30T19:11:55.108Z",
+  "last_touch": "2026-08-30T19:12:10.397Z",
+  "events": {
+   "rep04": 2
+  }
+ },
+ {
+  "path": "/tmp/logapp.py",
+  "replicates": [
+   "rep02"
+  ],
+  "first_touch": "2026-08-30T19:22:31.773Z",
+  "last_touch": "2026-08-30T19:22:31.773Z",
+  "events": {
+   "rep02": 1
+  }
+ },
+ {
+  "path": "/tmp/logfix.md",
+  "replicates": [
+   "rep12"
+  ],
+  "first_touch": "2026-08-30T03:11:16.131Z",
+  "last_touch": "2026-08-30T03:11:18.812Z",
+  "events": {
+   "rep12": 2
+  }
+ },
+ {
+  "path": "/tmp/lt16",
+  "replicates": [
+   "rep16"
+  ],
+  "first_touch": "2026-08-30T03:46:41.257Z",
+  "last_touch": "2026-08-30T03:46:41.257Z",
+  "events": {
+   "rep16": 1
+  }
+ },
+ {
+  "path": "/tmp/mkclaim.py",
+  "replicates": [
+   "rep03"
+  ],
+  "first_touch": "2026-08-30T03:28:37.799Z",
+  "last_touch": "2026-08-30T03:28:42.283Z",
+  "events": {
+   "rep03": 2
+  }
+ },
+ {
+  "path": "/tmp/mkct.out",
+  "replicates": [
+   "rep03"
+  ],
+  "first_touch": "2026-08-30T03:29:28.546Z",
+  "last_touch": "2026-08-30T03:29:28.546Z",
+  "events": {
+   "rep03": 1
+  }
+ },
+ {
+  "path": "/tmp/mkcyc.py",
+  "replicates": [
+   "rep03"
+  ],
+  "first_touch": "2026-08-30T03:41:46.135Z",
+  "last_touch": "2026-08-30T03:41:50.422Z",
+  "events": {
+   "rep03": 2
+  }
+ },
+ {
+  "path": "/tmp/mkdescr_uniq.py",
+  "replicates": [
+   "rep03"
+  ],
+  "first_touch": "2026-08-30T03:03:13.860Z",
+  "last_touch": "2026-08-30T03:03:17.179Z",
+  "events": {
+   "rep03": 2
+  }
+ },
+ {
+  "path": "/tmp/mkg6.py",
+  "replicates": [
+   "rep01"
+  ],
+  "first_touch": "2026-08-30T02:57:36.627Z",
+  "last_touch": "2026-08-30T03:00:08.730Z",
+  "events": {
+   "rep01": 3
+  }
+ },
+ {
+  "path": "/tmp/mkmods.py",
+  "replicates": [
+   "rep09"
+  ],
+  "first_touch": "2026-08-30T02:56:06.957Z",
+  "last_touch": "2026-08-30T02:56:12.348Z",
+  "events": {
+   "rep09": 2
+  }
+ },
+ {
+  "path": "/tmp/mkreport.bak.py",
+  "replicates": [
+   "rep10"
+  ],
+  "first_touch": "2026-08-30T19:21:17.827Z",
+  "last_touch": "2026-08-30T19:25:29.212Z",
+  "events": {
+   "rep10": 2
+  }
+ },
+ {
+  "path": "/tmp/mkrepro.py",
+  "replicates": [
+   "rep13"
+  ],
+  "first_touch": "2026-08-30T03:00:39.509Z",
+  "last_touch": "2026-08-30T03:00:39.509Z",
+  "events": {
+   "rep13": 1
+  }
+ },
+ {
+  "path": "/tmp/mkscreen.py",
+  "replicates": [
+   "rep03"
+  ],
+  "first_touch": "2026-08-30T03:22:19.877Z",
+  "last_touch": "2026-08-30T03:22:23.962Z",
+  "events": {
+   "rep03": 2
+  }
+ },
+ {
+  "path": "/tmp/mkscreen_fix.py",
+  "replicates": [
+   "rep03"
+  ],
+  "first_touch": "2026-08-30T03:22:39.665Z",
+  "last_touch": "2026-08-30T03:22:44.085Z",
+  "events": {
+   "rep03": 2
+  }
+ },
+ {
+  "path": "/tmp/mkscreen_fix2.py",
+  "replicates": [
+   "rep03"
+  ],
+  "first_touch": "2026-08-30T03:24:45.497Z",
+  "last_touch": "2026-08-30T03:24:49.414Z",
+  "events": {
+   "rep03": 2
+  }
+ },
+ {
+  "path": "/tmp/mkseed.py",
+  "replicates": [
+   "rep03"
+  ],
+  "first_touch": "2026-08-30T03:26:54.477Z",
+  "last_touch": "2026-08-30T03:26:58.123Z",
+  "events": {
+   "rep03": 2
+  }
+ },
+ {
+  "path": "/tmp/mktop0.py",
+  "replicates": [
+   "rep03"
+  ],
+  "first_touch": "2026-08-30T03:24:25.121Z",
+  "last_touch": "2026-08-30T03:24:29.220Z",
+  "events": {
+   "rep03": 2
+  }
+ },
+ {
+  "path": "/tmp/mktopmods.py",
+  "replicates": [
+   "rep15"
+  ],
+  "first_touch": "2026-08-30T19:08:18.607Z",
+  "last_touch": "2026-08-30T19:08:22.268Z",
+  "events": {
+   "rep15": 2
+  }
+ },
+ {
+  "path": "/tmp/mkvfneg.py",
+  "replicates": [
+   "rep03"
+  ],
+  "first_touch": "2026-08-30T19:21:21.411Z",
+  "last_touch": "2026-08-30T19:25:28.186Z",
+  "events": {
+   "rep03": 3
+  }
+ },
+ {
+  "path": "/tmp/mkwave2.py",
+  "replicates": [
+   "rep12"
+  ],
+  "first_touch": "2026-08-30T02:50:15.852Z",
+  "last_touch": "2026-08-30T02:50:19.861Z",
+  "events": {
+   "rep12": 2
+  }
+ },
+ {
+  "path": "/tmp/mod2.sh",
+  "replicates": [
+   "rep02"
+  ],
+  "first_touch": "2026-08-30T19:10:16.946Z",
+  "last_touch": "2026-08-30T19:12:09.208Z",
+  "events": {
+   "rep02": 3
+  }
+ },
+ {
+  "path": "/tmp/mod2q.py",
+  "replicates": [
+   "rep02"
+  ],
+  "first_touch": "2026-08-30T19:17:26.056Z",
+  "last_touch": "2026-08-30T19:17:34.229Z",
+  "events": {
+   "rep02": 2
+  }
+ },
+ {
+  "path": "/tmp/mod6.csv",
+  "replicates": [
+   "rep02"
+  ],
+  "first_touch": "2026-08-30T03:43:12.306Z",
+  "last_touch": "2026-08-30T03:43:12.306Z",
+  "events": {
+   "rep02": 1
+  }
+ },
+ {
+  "path": "/tmp/mod_gain.py",
+  "replicates": [
+   "rep15"
+  ],
+  "first_touch": "2026-08-30T19:09:30.767Z",
+  "last_touch": "2026-08-30T19:09:33.940Z",
+  "events": {
+   "rep15": 2
+  }
+ },
+ {
+  "path": "/tmp/modify.py",
+  "replicates": [
+   "rep12"
+  ],
+  "first_touch": "2026-08-30T03:02:53.198Z",
+  "last_touch": "2026-08-30T03:02:57.884Z",
+  "events": {
+   "rep12": 2
+  }
+ },
+ {
+  "path": "/tmp/modify2.py",
+  "replicates": [
+   "rep12"
+  ],
+  "first_touch": "2026-08-30T03:06:09.229Z",
+  "last_touch": "2026-08-30T03:06:14.282Z",
+  "events": {
+   "rep12": 2
+  }
+ },
+ {
+  "path": "/tmp/monitor.sh",
+  "replicates": [
+   "rep12"
+  ],
+  "first_touch": "2026-08-30T03:00:20.503Z",
+  "last_touch": "2026-08-30T03:00:23.171Z",
+  "events": {
+   "rep12": 2
+  }
+ },
+ {
+  "path": "/tmp/mt6.txt",
+  "replicates": [
+   "rep02"
+  ],
+  "first_touch": "2026-08-30T03:43:12.306Z",
+  "last_touch": "2026-08-30T03:43:12.306Z",
+  "events": {
+   "rep02": 1
+  }
+ },
+ {
+  "path": "/tmp/newtop.txt",
+  "replicates": [
+   "rep16"
+  ],
+  "first_touch": "2026-08-30T04:49:44.740Z",
+  "last_touch": "2026-08-30T04:49:44.740Z",
+  "events": {
+   "rep16": 1
+  }
+ },
+ {
+  "path": "/tmp/orphan.py",
+  "replicates": [
+   "rep04"
+  ],
+  "first_touch": "2026-08-30T19:09:51.128Z",
+  "last_touch": "2026-08-30T19:09:54.365Z",
+  "events": {
+   "rep04": 2
+  }
+ },
+ {
+  "path": "/tmp/p1.py",
+  "replicates": [
+   "rep08"
+  ],
+  "first_touch": "2026-08-30T09:32:57.809Z",
+  "last_touch": "2026-08-30T09:32:57.809Z",
+  "events": {
+   "rep08": 1
+  }
+ },
+ {
+  "path": "/tmp/p2",
+  "replicates": [
+   "rep11"
+  ],
+  "first_touch": "2026-08-30T04:03:58.150Z",
+  "last_touch": "2026-08-30T04:03:58.150Z",
+  "events": {
+   "rep11": 1
+  }
+ },
+ {
+  "path": "/tmp/p2.py",
+  "replicates": [
+   "rep02",
+   "rep08",
+   "rep13"
+  ],
+  "first_touch": "2026-08-30T02:59:00.692Z",
+  "last_touch": "2026-08-30T19:27:06.992Z",
+  "events": {
+   "rep02": 1,
+   "rep08": 1,
+   "rep13": 1
+  }
+ },
+ {
+  "path": "/tmp/p3.py",
+  "replicates": [
+   "rep04",
+   "rep08",
+   "rep13"
+  ],
+  "first_touch": "2026-08-30T03:12:04.795Z",
+  "last_touch": "2026-08-30T14:32:16.852Z",
+  "events": {
+   "rep04": 1,
+   "rep08": 1,
+   "rep13": 1
+  }
+ },
+ {
+  "path": "/tmp/p4.py",
+  "replicates": [
+   "rep04",
+   "rep13"
+  ],
+  "first_touch": "2026-08-30T03:16:10.785Z",
+  "last_touch": "2026-08-30T03:21:24.273Z",
+  "events": {
+   "rep04": 1,
+   "rep13": 1
+  }
+ },
+ {
+  "path": "/tmp/p5.py",
+  "replicates": [
+   "rep04",
+   "rep13"
+  ],
+  "first_touch": "2026-08-30T03:22:06.120Z",
+  "last_touch": "2026-08-30T03:27:20.101Z",
+  "events": {
+   "rep04": 1,
+   "rep13": 1
+  }
+ },
+ {
+  "path": "/tmp/p6.py",
+  "replicates": [
+   "rep04",
+   "rep13"
+  ],
+  "first_touch": "2026-08-30T03:24:21.765Z",
+  "last_touch": "2026-08-30T03:30:25.999Z",
+  "events": {
+   "rep04": 1,
+   "rep13": 1
+  }
+ },
+ {
+  "path": "/tmp/patch_autopilot.py",
+  "replicates": [
+   "rep11"
+  ],
+  "first_touch": "2026-08-30T19:16:35.640Z",
+  "last_touch": "2026-08-30T19:16:40.714Z",
+  "events": {
+   "rep11": 2
+  }
+ },
+ {
+  "path": "/tmp/patch_bt.py",
+  "replicates": [
+   "rep13"
+  ],
+  "first_touch": "2026-08-30T03:03:45.688Z",
+  "last_touch": "2026-08-30T03:03:45.688Z",
+  "events": {
+   "rep13": 1
+  }
+ },
+ {
+  "path": "/tmp/patch_deadline.py",
+  "replicates": [
+   "rep11"
+  ],
+  "first_touch": "2026-08-30T19:14:51.792Z",
+  "last_touch": "2026-08-30T19:14:59.058Z",
+  "events": {
+   "rep11": 2
+  }
+ },
+ {
+  "path": "/tmp/patch_finalize.py",
+  "replicates": [
+   "rep11"
+  ],
+  "first_touch": "2026-08-30T19:14:10.735Z",
+  "last_touch": "2026-08-30T19:14:15.162Z",
+  "events": {
+   "rep11": 2
+  }
+ },
+ {
+  "path": "/tmp/patch_gates.py",
+  "replicates": [
+   "rep12"
+  ],
+  "first_touch": "2026-08-30T02:55:56.300Z",
+  "last_touch": "2026-08-30T02:55:59.677Z",
+  "events": {
+   "rep12": 2
+  }
+ },
+ {
+  "path": "/tmp/patch_mkscreen.py",
+  "replicates": [
+   "rep03"
+  ],
+  "first_touch": "2026-08-30T19:10:34.113Z",
+  "last_touch": "2026-08-30T19:10:37.390Z",
+  "events": {
+   "rep03": 2
+  }
+ },
+ {
+  "path": "/tmp/patch_neigh.py",
+  "replicates": [
+   "rep09"
+  ],
+  "first_touch": "2026-08-30T03:21:50.499Z",
+  "last_touch": "2026-08-30T03:22:05.052Z",
+  "events": {
+   "rep09": 2
+  }
+ },
+ {
+  "path": "/tmp/patch_plan.py",
+  "replicates": [
+   "rep11"
+  ],
+  "first_touch": "2026-08-30T04:01:22.116Z",
+  "last_touch": "2026-08-30T04:01:22.116Z",
+  "events": {
+   "rep11": 1
+  }
+ },
+ {
+  "path": "/tmp/patch_qworker.py",
+  "replicates": [
+   "rep02"
+  ],
+  "first_touch": "2026-08-30T19:07:35.185Z",
+  "last_touch": "2026-08-30T19:07:35.185Z",
+  "events": {
+   "rep02": 1
+  }
+ },
+ {
+  "path": "/tmp/patch_rc.py",
+  "replicates": [
+   "rep13"
+  ],
+  "first_touch": "2026-08-30T03:01:25.209Z",
+  "last_touch": "2026-08-30T03:01:25.209Z",
+  "events": {
+   "rep13": 1
+  }
+ },
+ {
+  "path": "/tmp/patch_report.py",
+  "replicates": [
+   "rep03",
+   "rep04",
+   "rep11"
+  ],
+  "first_touch": "2026-08-30T03:56:27.126Z",
+  "last_touch": "2026-08-30T19:23:10.706Z",
+  "events": {
+   "rep03": 2,
+   "rep04": 2,
+   "rep11": 1
+  }
+ },
+ {
+  "path": "/tmp/patch_report_0831.py",
+  "replicates": [
+   "rep03"
+  ],
+  "first_touch": "2026-08-30T19:23:39.357Z",
+  "last_touch": "2026-08-30T19:25:28.186Z",
+  "events": {
+   "rep03": 5
+  }
+ },
+ {
+  "path": "/tmp/patch_state.py",
+  "replicates": [
+   "rep01",
+   "rep03",
+   "rep04",
+   "rep09"
+  ],
+  "first_touch": "2026-08-30T02:58:31.681Z",
+  "last_touch": "2026-08-30T19:26:23.542Z",
+  "events": {
+   "rep01": 2,
+   "rep03": 3,
+   "rep04": 5,
+   "rep09": 2
+  }
+ },
+ {
+  "path": "/tmp/patch_state2.py",
+  "replicates": [
+   "rep03",
+   "rep09"
+  ],
+  "first_touch": "2026-08-30T03:32:14.209Z",
+  "last_touch": "2026-08-30T19:25:28.186Z",
+  "events": {
+   "rep03": 1,
+   "rep09": 2
+  }
+ },
+ {
+  "path": "/tmp/patch_state3.py",
+  "replicates": [
+   "rep03",
+   "rep09"
+  ],
+  "first_touch": "2026-08-30T03:42:47.247Z",
+  "last_touch": "2026-08-30T19:25:28.186Z",
+  "events": {
+   "rep03": 1,
+   "rep09": 2
+  }
+ },
+ {
+  "path": "/tmp/patch_state_0831.py",
+  "replicates": [
+   "rep03"
+  ],
+  "first_touch": "2026-08-30T19:24:38.992Z",
+  "last_touch": "2026-08-30T19:25:28.186Z",
+  "events": {
+   "rep03": 3
+  }
+ },
+ {
+  "path": "/tmp/patch_wave.py",
+  "replicates": [
+   "rep12"
+  ],
+  "first_touch": "2026-08-30T02:48:20.058Z",
+  "last_touch": "2026-08-30T02:48:23.987Z",
+  "events": {
+   "rep12": 2
+  }
+ },
+ {
+  "path": "/tmp/patch_wcjoin.py",
+  "replicates": [
+   "rep03"
+  ],
+  "first_touch": "2026-08-30T19:19:01.063Z",
+  "last_touch": "2026-08-30T19:19:04.780Z",
+  "events": {
+   "rep03": 2
+  }
+ },
+ {
+  "path": "/tmp/pg.py",
+  "replicates": [
+   "rep12"
+  ],
+  "first_touch": "2026-08-30T02:55:59.677Z",
+  "last_touch": "2026-08-30T02:55:59.677Z",
+  "events": {
+   "rep12": 1
+  }
+ },
+ {
+  "path": "/tmp/pq.py",
+  "replicates": [
+   "rep02"
+  ],
+  "first_touch": "2026-08-30T19:07:35.185Z",
+  "last_touch": "2026-08-30T19:07:35.185Z",
+  "events": {
+   "rep02": 1
+  }
+ },
+ {
+  "path": "/tmp/pr.py",
+  "replicates": [
+   "rep04"
+  ],
+  "first_touch": "2026-08-30T03:17:10.551Z",
+  "last_touch": "2026-08-30T03:17:10.551Z",
+  "events": {
+   "rep04": 1
+  }
+ },
+ {
+  "path": "/tmp/precision.py",
+  "replicates": [
+   "rep03"
+  ],
+  "first_touch": "2026-08-30T03:26:22.131Z",
+  "last_touch": "2026-08-30T03:26:25.539Z",
+  "events": {
+   "rep03": 2
+  }
+ },
+ {
+  "path": "/tmp/probe.tasks",
+  "replicates": [
+   "rep09"
+  ],
+  "first_touch": "2026-08-30T03:36:06.601Z",
+  "last_touch": "2026-08-30T03:36:06.601Z",
+  "events": {
+   "rep09": 1
+  }
+ },
+ {
+  "path": "/tmp/probe_out.csv",
+  "replicates": [
+   "rep09"
+  ],
+  "first_touch": "2026-08-30T03:36:06.601Z",
+  "last_touch": "2026-08-30T03:38:15.575Z",
+  "events": {
+   "rep09": 3
+  }
+ },
+ {
+  "path": "/tmp/promo1.txt",
+  "replicates": [
+   "rep16"
+  ],
+  "first_touch": "2026-08-30T10:09:35.647Z",
+  "last_touch": "2026-08-30T10:09:35.647Z",
+  "events": {
+   "rep16": 1
+  }
+ },
+ {
+  "path": "/tmp/promote_uniform.py",
+  "replicates": [
+   "rep15"
+  ],
+  "first_touch": "2026-08-30T19:16:46.202Z",
+  "last_touch": "2026-08-30T19:16:49.771Z",
+  "events": {
+   "rep15": 2
+  }
+ },
+ {
+  "path": "/tmp/ps2.py",
+  "replicates": [
+   "rep04"
+  ],
+  "first_touch": "2026-08-30T03:11:57.538Z",
+  "last_touch": "2026-08-30T03:11:57.538Z",
+  "events": {
+   "rep04": 1
+  }
+ },
+ {
+  "path": "/tmp/r2abcd.ids",
+  "replicates": [
+   "rep01"
+  ],
+  "first_touch": "2026-08-30T02:45:24.731Z",
+  "last_touch": "2026-08-30T02:45:24.731Z",
+  "events": {
+   "rep01": 1
+  }
+ },
+ {
+  "path": "/tmp/r2cd.ids",
+  "replicates": [
+   "rep01"
+  ],
+  "first_touch": "2026-08-30T02:45:24.731Z",
+  "last_touch": "2026-08-30T02:45:24.731Z",
+  "events": {
+   "rep01": 1
+  }
+ },
+ {
+  "path": "/tmp/r2s.ids",
+  "replicates": [
+   "rep01"
+  ],
+  "first_touch": "2026-08-30T02:45:24.731Z",
+  "last_touch": "2026-08-30T02:45:24.731Z",
+  "events": {
+   "rep01": 1
+  }
+ },
+ {
+  "path": "/tmp/rA",
+  "replicates": [
+   "rep16"
+  ],
+  "first_touch": "2026-08-30T03:46:41.257Z",
+  "last_touch": "2026-08-30T03:46:41.257Z",
+  "events": {
+   "rep16": 1
+  }
+ },
+ {
+  "path": "/tmp/rA/Output/System_0/",
+  "replicates": [
+   "rep16"
+  ],
+  "first_touch": "2026-08-30T03:34:50.015Z",
+  "last_touch": "2026-08-30T03:36:55.075Z",
+  "events": {
+   "rep16": 2
+  }
+ },
+ {
+  "path": "/tmp/rB",
+  "replicates": [
+   "rep16"
+  ],
+  "first_touch": "2026-08-30T03:37:06.854Z",
+  "last_touch": "2026-08-30T03:46:41.257Z",
+  "events": {
+   "rep16": 2
+  }
+ },
+ {
+  "path": "/tmp/rB/Output/System_0/",
+  "replicates": [
+   "rep16"
+  ],
+  "first_touch": "2026-08-30T03:34:50.015Z",
+  "last_touch": "2026-08-30T03:35:37.429Z",
+  "events": {
+   "rep16": 3
+  }
+ },
+ {
+  "path": "/tmp/rB/w1.txt",
+  "replicates": [
+   "rep16"
+  ],
+  "first_touch": "2026-08-30T03:34:50.015Z",
+  "last_touch": "2026-08-30T03:34:50.015Z",
+  "events": {
+   "rep16": 1
+  }
+ },
+ {
+  "path": "/tmp/rB/w2.txt",
+  "replicates": [
+   "rep16"
+  ],
+  "first_touch": "2026-08-30T03:34:45.447Z",
+  "last_touch": "2026-08-30T03:34:50.015Z",
+  "events": {
+   "rep16": 2
+  }
+ },
+ {
+  "path": "/tmp/rank.py",
+  "replicates": [
+   "rep03"
+  ],
+  "first_touch": "2026-08-30T03:00:49.332Z",
+  "last_touch": "2026-08-30T03:00:53.169Z",
+  "events": {
+   "rep03": 2
+  }
+ },
+ {
+  "path": "/tmp/rank_glob.py",
+  "replicates": [
+   "rep03"
+  ],
+  "first_touch": "2026-08-30T03:14:36.606Z",
+  "last_touch": "2026-08-30T03:14:40.352Z",
+  "events": {
+   "rep03": 2
+  }
+ },
+ {
+  "path": "/tmp/rb.bak",
+  "replicates": [
+   "rep16"
+  ],
+  "first_touch": "2026-08-30T05:00:20.875Z",
+  "last_touch": "2026-08-30T05:00:20.875Z",
+  "events": {
+   "rep16": 1
+  }
+ },
+ {
+  "path": "/tmp/rd_head.txt",
+  "replicates": [
+   "rep11"
+  ],
+  "first_touch": "2026-08-30T03:12:10.565Z",
+  "last_touch": "2026-08-30T03:12:10.565Z",
+  "events": {
+   "rep11": 1
+  }
+ },
+ {
+  "path": "/tmp/rd_new.txt",
+  "replicates": [
+   "rep11"
+  ],
+  "first_touch": "2026-08-30T03:12:10.565Z",
+  "last_touch": "2026-08-30T03:12:10.565Z",
+  "events": {
+   "rep11": 1
+  }
+ },
+ {
+  "path": "/tmp/rd_tail.txt",
+  "replicates": [
+   "rep11"
+  ],
+  "first_touch": "2026-08-30T03:12:10.565Z",
+  "last_touch": "2026-08-30T03:12:10.565Z",
+  "events": {
+   "rep11": 1
+  }
+ },
+ {
+  "path": "/tmp/reap_new.sh",
+  "replicates": [
+   "rep13"
+  ],
+  "first_touch": "2026-08-30T02:58:14.383Z",
+  "last_touch": "2026-08-30T02:58:14.383Z",
+  "events": {
+   "rep13": 1
+  }
+ },
+ {
+  "path": "/tmp/recon.py",
+  "replicates": [
+   "rep04"
+  ],
+  "first_touch": "2026-08-30T19:09:26.553Z",
+  "last_touch": "2026-08-30T19:09:30.026Z",
+  "events": {
+   "rep04": 2
+  }
+ },
+ {
+  "path": "/tmp/rep_fix.py",
+  "replicates": [
+   "rep11"
+  ],
+  "first_touch": "2026-08-30T04:15:01.670Z",
+  "last_touch": "2026-08-30T04:15:01.670Z",
+  "events": {
+   "rep11": 1
+  }
+ },
+ {
+  "path": "/tmp/rep_patch.py",
+  "replicates": [
+   "rep04",
+   "rep13"
+  ],
+  "first_touch": "2026-08-30T03:29:38.981Z",
+  "last_touch": "2026-08-30T19:13:55.820Z",
+  "events": {
+   "rep04": 2,
+   "rep13": 1
+  }
+ },
+ {
+  "path": "/tmp/rep_patch_0831.py",
+  "replicates": [
+   "rep04"
+  ],
+  "first_touch": "2026-08-30T19:14:21.217Z",
+  "last_touch": "2026-08-30T19:14:42.585Z",
+  "events": {
+   "rep04": 4
+  }
+ },
+ {
+  "path": "/tmp/replicate_id_scratch",
+  "replicates": [
+   "rep03"
+  ],
+  "first_touch": "2026-08-30T19:26:15.103Z",
+  "last_touch": "2026-08-30T19:26:15.103Z",
+  "events": {
+   "rep03": 1
+  }
+ },
+ {
+  "path": "/tmp/report20260831.md",
+  "replicates": [
+   "rep03"
+  ],
+  "first_touch": "2026-08-30T19:16:03.817Z",
+  "last_touch": "2026-08-30T19:16:07.410Z",
+  "events": {
+   "rep03": 2
+  }
+ },
+ {
+  "path": "/tmp/report_numbers.py",
+  "replicates": [
+   "rep13"
+  ],
+  "first_touch": "2026-08-30T03:18:45.337Z",
+  "last_touch": "2026-08-30T03:18:45.337Z",
+  "events": {
+   "rep13": 1
+  }
+ },
+ {
+  "path": "/tmp/report_patch.py",
+  "replicates": [
+   "rep02"
+  ],
+  "first_touch": "2026-08-30T19:21:16.660Z",
+  "last_touch": "2026-08-30T19:21:16.660Z",
+  "events": {
+   "rep02": 1
+  }
+ },
+ {
+  "path": "/tmp/report_refresh.py",
+  "replicates": [
+   "rep11"
+  ],
+  "first_touch": "2026-08-30T19:22:31.978Z",
+  "last_touch": "2026-08-30T19:22:35.887Z",
+  "events": {
+   "rep11": 2
+  }
+ },
+ {
+  "path": "/tmp/repro.sh",
+  "replicates": [
+   "rep13"
+  ],
+  "first_touch": "2026-08-30T03:00:39.509Z",
+  "last_touch": "2026-08-30T03:00:39.509Z",
+  "events": {
+   "rep13": 1
+  }
+ },
+ {
+  "path": "/tmp/repro_check.py",
+  "replicates": [
+   "rep13"
+  ],
+  "first_touch": "2026-08-30T03:01:01.130Z",
+  "last_touch": "2026-08-30T03:01:01.130Z",
+  "events": {
+   "rep13": 1
+  }
+ },
+ {
+  "path": "/tmp/reprod.py",
+  "replicates": [
+   "rep12"
+  ],
+  "first_touch": "2026-08-30T02:57:42.308Z",
+  "last_touch": "2026-08-30T02:57:45.928Z",
+  "events": {
+   "rep12": 2
+  }
+ },
+ {
+  "path": "/tmp/resize.py",
+  "replicates": [
+   "rep09"
+  ],
+  "first_touch": "2026-08-30T03:53:40.034Z",
+  "last_touch": "2026-08-30T03:53:44.139Z",
+  "events": {
+   "rep09": 2
+  }
+ },
+ {
+  "path": "/tmp/reslice.py",
+  "replicates": [
+   "rep04"
+  ],
+  "first_touch": "2026-08-30T19:08:14.884Z",
+  "last_touch": "2026-08-30T19:08:18.531Z",
+  "events": {
+   "rep04": 2
+  }
+ },
+ {
+  "path": "/tmp/revert_log.py",
+  "replicates": [
+   "rep11"
+  ],
+  "first_touch": "2026-08-30T04:12:12.631Z",
+  "last_touch": "2026-08-30T04:12:12.631Z",
+  "events": {
+   "rep11": 1
+  }
+ },
+ {
+  "path": "/tmp/rp.py",
+  "replicates": [
+   "rep12"
+  ],
+  "first_touch": "2026-08-30T03:24:53.048Z",
+  "last_touch": "2026-08-30T03:24:53.048Z",
+  "events": {
+   "rep12": 1
+  }
+ },
+ {
+  "path": "/tmp/rp5.py",
+  "replicates": [
+   "rep02"
+  ],
+  "first_touch": "2026-08-30T19:21:48.731Z",
+  "last_touch": "2026-08-30T19:21:48.731Z",
+  "events": {
+   "rep02": 1
+  }
+ },
+ {
+  "path": "/tmp/rr.txt",
+  "replicates": [
+   "rep13"
+  ],
+  "first_touch": "2026-08-30T02:58:14.383Z",
+  "last_touch": "2026-08-30T02:58:14.383Z",
+  "events": {
+   "rep13": 1
+  }
+ },
+ {
+  "path": "/tmp/rst16",
+  "replicates": [
+   "rep16"
+  ],
+  "first_touch": "2026-08-30T03:46:41.257Z",
+  "last_touch": "2026-08-30T03:46:41.257Z",
+  "events": {
+   "rep16": 1
+  }
+ },
+ {
+  "path": "/tmp/runner_2p.py",
+  "replicates": [
+   "rep03"
+  ],
+  "first_touch": "2026-08-30T02:50:26.114Z",
+  "last_touch": "2026-08-30T02:50:30.407Z",
+  "events": {
+   "rep03": 2
+  }
+ },
+ {
+  "path": "/tmp/s3.py",
+  "replicates": [
+   "rep12"
+  ],
+  "first_touch": "2026-08-30T03:28:39.406Z",
+  "last_touch": "2026-08-30T03:28:39.406Z",
+  "events": {
+   "rep12": 1
+  }
+ },
+ {
+  "path": "/tmp/slate.txt",
+  "replicates": [
+   "rep11"
+  ],
+  "first_touch": "2026-08-30T02:49:13.136Z",
+  "last_touch": "2026-08-30T02:49:13.136Z",
+  "events": {
+   "rep11": 1
+  }
+ },
+ {
+  "path": "/tmp/sp.py",
+  "replicates": [
+   "rep12"
+  ],
+  "first_touch": "2026-08-30T03:12:20.964Z",
+  "last_touch": "2026-08-30T03:12:20.964Z",
+  "events": {
+   "rep12": 1
+  }
+ },
+ {
+  "path": "/tmp/sp5.py",
+  "replicates": [
+   "rep15"
+  ],
+  "first_touch": "2026-08-30T04:04:28.825Z",
+  "last_touch": "2026-08-30T04:04:28.825Z",
+  "events": {
+   "rep15": 1
+  }
+ },
+ {
+  "path": "/tmp/sp6.py",
+  "replicates": [
+   "rep15"
+  ],
+  "first_touch": "2026-08-30T04:10:46.293Z",
+  "last_touch": "2026-08-30T04:10:46.293Z",
+  "events": {
+   "rep15": 1
+  }
+ },
+ {
+  "path": "/tmp/sp7.py",
+  "replicates": [
+   "rep15"
+  ],
+  "first_touch": "2026-08-30T04:13:17.702Z",
+  "last_touch": "2026-08-30T04:13:17.702Z",
+  "events": {
+   "rep15": 1
+  }
+ },
+ {
+  "path": "/tmp/spacing_test.py",
+  "replicates": [
+   "rep03"
+  ],
+  "first_touch": "2026-08-30T02:58:27.129Z",
+  "last_touch": "2026-08-30T02:58:30.729Z",
+  "events": {
+   "rep03": 2
+  }
+ },
+ {
+  "path": "/tmp/st.py",
+  "replicates": [
+   "rep11"
+  ],
+  "first_touch": "2026-08-30T04:07:29.503Z",
+  "last_touch": "2026-08-30T04:07:29.503Z",
+  "events": {
+   "rep11": 1
+  }
+ },
+ {
+  "path": "/tmp/st.sh",
+  "replicates": [
+   "rep03"
+  ],
+  "first_touch": "2026-08-30T03:07:55.250Z",
+  "last_touch": "2026-08-30T03:08:01.007Z",
+  "events": {
+   "rep03": 2
+  }
+ },
+ {
+  "path": "/tmp/st1.sh",
+  "replicates": [
+   "rep03"
+  ],
+  "first_touch": "2026-08-30T03:45:29.753Z",
+  "last_touch": "2026-08-30T03:45:33.109Z",
+  "events": {
+   "rep03": 2
+  }
+ },
+ {
+  "path": "/tmp/st2.py",
+  "replicates": [
+   "rep11"
+  ],
+  "first_touch": "2026-08-30T04:15:45.667Z",
+  "last_touch": "2026-08-30T04:15:45.667Z",
+  "events": {
+   "rep11": 1
+  }
+ },
+ {
+  "path": "/tmp/st3.py",
+  "replicates": [
+   "rep11"
+  ],
+  "first_touch": "2026-08-30T04:17:45.623Z",
+  "last_touch": "2026-08-30T04:17:45.623Z",
+  "events": {
+   "rep11": 1
+  }
+ },
+ {
+  "path": "/tmp/state20260831.md",
+  "replicates": [
+   "rep03"
+  ],
+  "first_touch": "2026-08-30T19:17:37.868Z",
+  "last_touch": "2026-08-30T19:17:41.549Z",
+  "events": {
+   "rep03": 2
+  }
+ },
+ {
+  "path": "/tmp/state_append.md",
+  "replicates": [
+   "rep11"
+  ],
+  "first_touch": "2026-08-30T19:24:31.535Z",
+  "last_touch": "2026-08-30T19:24:36.740Z",
+  "events": {
+   "rep11": 2
+  }
+ },
+ {
+  "path": "/tmp/state_bench.py",
+  "replicates": [
+   "rep03"
+  ],
+  "first_touch": "2026-08-30T03:34:44.095Z",
+  "last_touch": "2026-08-30T03:34:50.958Z",
+  "events": {
+   "rep03": 2
+  }
+ },
+ {
+  "path": "/tmp/state_best.py",
+  "replicates": [
+   "rep03"
+  ],
+  "first_touch": "2026-08-30T03:16:59.470Z",
+  "last_touch": "2026-08-30T03:17:06.797Z",
+  "events": {
+   "rep03": 2
+  }
+ },
+ {
+  "path": "/tmp/state_cap.py",
+  "replicates": [
+   "rep03"
+  ],
+  "first_touch": "2026-08-30T03:19:28.879Z",
+  "last_touch": "2026-08-30T03:19:36.132Z",
+  "events": {
+   "rep03": 2
+  }
+ },
+ {
+  "path": "/tmp/state_claim.py",
+  "replicates": [
+   "rep03"
+  ],
+  "first_touch": "2026-08-30T03:29:02.393Z",
+  "last_touch": "2026-08-30T03:29:09.579Z",
+  "events": {
+   "rep03": 2
+  }
+ },
+ {
+  "path": "/tmp/state_claimtest.py",
+  "replicates": [
+   "rep03"
+  ],
+  "first_touch": "2026-08-30T03:40:49.764Z",
+  "last_touch": "2026-08-30T03:40:56.805Z",
+  "events": {
+   "rep03": 2
+  }
+ },
+ {
+  "path": "/tmp/state_expect.py",
+  "replicates": [
+   "rep03"
+  ],
+  "first_touch": "2026-08-30T03:33:32.159Z",
+  "last_touch": "2026-08-30T03:33:38.728Z",
+  "events": {
+   "rep03": 2
+  }
+ },
+ {
+  "path": "/tmp/state_fix_0831.py",
+  "replicates": [
+   "rep04"
+  ],
+  "first_touch": "2026-08-30T19:15:40.210Z",
+  "last_touch": "2026-08-30T19:15:49.470Z",
+  "events": {
+   "rep04": 2
+  }
+ },
+ {
+  "path": "/tmp/state_new_rep12.md",
+  "replicates": [
+   "rep12"
+  ],
+  "first_touch": "2026-08-30T02:54:07.677Z",
+  "last_touch": "2026-08-30T02:54:07.677Z",
+  "events": {
+   "rep12": 1
+  }
+ },
+ {
+  "path": "/tmp/state_order.py",
+  "replicates": [
+   "rep03"
+  ],
+  "first_touch": "2026-08-30T03:44:12.275Z",
+  "last_touch": "2026-08-30T03:44:25.608Z",
+  "events": {
+   "rep03": 2
+  }
+ },
+ {
+  "path": "/tmp/state_patch.py",
+  "replicates": [
+   "rep02",
+   "rep03",
+   "rep11",
+   "rep12",
+   "rep15"
+  ],
+  "first_touch": "2026-08-30T03:09:44.920Z",
+  "last_touch": "2026-08-30T19:20:36.113Z",
+  "events": {
+   "rep02": 1,
+   "rep03": 2,
+   "rep11": 1,
+   "rep12": 1,
+   "rep15": 2
+  }
+ },
+ {
+  "path": "/tmp/state_patch2.py",
+  "replicates": [
+   "rep15"
+  ],
+  "first_touch": "2026-08-30T19:19:43.137Z",
+  "last_touch": "2026-08-30T19:19:50.704Z",
+  "events": {
+   "rep15": 2
+  }
+ },
+ {
+  "path": "/tmp/state_patch_rep12.py",
+  "replicates": [
+   "rep12"
+  ],
+  "first_touch": "2026-08-30T03:12:17.606Z",
+  "last_touch": "2026-08-30T03:12:20.964Z",
+  "events": {
+   "rep12": 2
+  }
+ },
+ {
+  "path": "/tmp/state_prec.py",
+  "replicates": [
+   "rep03"
+  ],
+  "first_touch": "2026-08-30T03:27:21.013Z",
+  "last_touch": "2026-08-30T03:27:28.720Z",
+  "events": {
+   "rep03": 2
+  }
+ },
+ {
+  "path": "/tmp/state_rep12_v2.md",
+  "replicates": [
+   "rep12"
+  ],
+  "first_touch": "2026-08-30T02:54:39.792Z",
+  "last_touch": "2026-08-30T02:54:48.907Z",
+  "events": {
+   "rep12": 2
+  }
+ },
+ {
+  "path": "/tmp/state_report.py",
+  "replicates": [
+   "rep03"
+  ],
+  "first_touch": "2026-08-30T03:36:32.531Z",
+  "last_touch": "2026-08-30T03:36:42.601Z",
+  "events": {
+   "rep03": 2
+  }
+ },
+ {
+  "path": "/tmp/state_rule3.py",
+  "replicates": [
+   "rep03"
+  ],
+  "first_touch": "2026-08-30T03:31:47.164Z",
+  "last_touch": "2026-08-30T03:31:53.104Z",
+  "events": {
+   "rep03": 2
+  }
+ },
+ {
+  "path": "/tmp/state_screen.py",
+  "replicates": [
+   "rep03"
+  ],
+  "first_touch": "2026-08-30T03:23:30.311Z",
+  "last_touch": "2026-08-30T03:23:36.401Z",
+  "events": {
+   "rep03": 2
+  }
+ },
+ {
+  "path": "/tmp/state_spend_0831.py",
+  "replicates": [
+   "rep04"
+  ],
+  "first_touch": "2026-08-30T19:18:09.213Z",
+  "last_touch": "2026-08-30T19:18:25.410Z",
+  "events": {
+   "rep04": 2
+  }
+ },
+ {
+  "path": "/tmp/state_st1.py",
+  "replicates": [
+   "rep03"
+  ],
+  "first_touch": "2026-08-30T03:45:42.641Z",
+  "last_touch": "2026-08-30T03:45:47.501Z",
+  "events": {
+   "rep03": 2
+  }
+ },
+ {
+  "path": "/tmp/suppatch.py",
+  "replicates": [
+   "rep02"
+  ],
+  "first_touch": "2026-08-30T04:25:34.482Z",
+  "last_touch": "2026-08-30T04:25:34.482Z",
+  "events": {
+   "rep02": 1
+  }
+ },
+ {
+  "path": "/tmp/survey_mod.py",
+  "replicates": [
+   "rep09"
+  ],
+  "first_touch": "2026-08-30T02:53:33.715Z",
+  "last_touch": "2026-08-30T02:53:36.964Z",
+  "events": {
+   "rep09": 2
+  }
+ },
+ {
+  "path": "/tmp/t.data",
+  "replicates": [
+   "rep02"
+  ],
+  "first_touch": "2026-08-30T04:40:02.819Z",
+  "last_touch": "2026-08-30T04:40:02.819Z",
+  "events": {
+   "rep02": 1
+  }
+ },
+ {
+  "path": "/tmp/t2fill.py",
+  "replicates": [
+   "rep02"
+  ],
+  "first_touch": "2026-08-30T19:08:38.475Z",
+  "last_touch": "2026-08-30T19:08:45.567Z",
+  "events": {
+   "rep02": 2
+  }
+ },
+ {
+  "path": "/tmp/t2p.tasks",
+  "replicates": [
+   "rep03"
+  ],
+  "first_touch": "2026-08-30T02:53:41.172Z",
+  "last_touch": "2026-08-30T02:53:41.172Z",
+  "events": {
+   "rep03": 1
+  }
+ },
+ {
+  "path": "/tmp/test_neighbours.py",
+  "replicates": [
+   "rep09"
+  ],
+  "first_touch": "2026-08-30T03:22:00.799Z",
+  "last_touch": "2026-08-30T03:22:05.052Z",
+  "events": {
+   "rep09": 2
+  }
+ },
+ {
+  "path": "/tmp/test_no_shadow.py",
+  "replicates": [
+   "rep09"
+  ],
+  "first_touch": "2026-08-30T03:38:48.504Z",
+  "last_touch": "2026-08-30T03:38:53.013Z",
+  "events": {
+   "rep09": 2
+  }
+ },
+ {
+  "path": "/tmp/tf.py",
+  "replicates": [
+   "rep12"
+  ],
+  "first_touch": "2026-08-30T03:33:30.182Z",
+  "last_touch": "2026-08-30T03:33:30.182Z",
+  "events": {
+   "rep12": 1
+  }
+ },
+ {
+  "path": "/tmp/tick.sh",
+  "replicates": [
+   "rep09"
+  ],
+  "first_touch": "2026-08-30T03:33:18.156Z",
+  "last_touch": "2026-08-30T03:33:22.269Z",
+  "events": {
+   "rep09": 2
+  }
+ },
+ {
+  "path": "/tmp/tick2.sh",
+  "replicates": [
+   "rep09"
+  ],
+  "first_touch": "2026-08-30T03:40:31.933Z",
+  "last_touch": "2026-08-30T03:40:36.610Z",
+  "events": {
+   "rep09": 2
+  }
+ },
+ {
+  "path": "/tmp/top12.txt",
+  "replicates": [
+   "rep02"
+  ],
+  "first_touch": "2026-08-30T03:36:59.458Z",
+  "last_touch": "2026-08-30T03:36:59.458Z",
+  "events": {
+   "rep02": 1
+  }
+ },
+ {
+  "path": "/tmp/turnshape.py",
+  "replicates": [
+   "rep04"
+  ],
+  "first_touch": "2026-08-30T19:24:10.042Z",
+  "last_touch": "2026-08-30T19:24:10.042Z",
+  "events": {
+   "rep04": 1
+  }
+ },
+ {
+  "path": "/tmp/tv/res.csv",
+  "replicates": [
+   "rep16"
+  ],
+  "first_touch": "2026-08-30T04:07:00.019Z",
+  "last_touch": "2026-08-30T04:07:00.019Z",
+  "events": {
+   "rep16": 1
+  }
+ },
+ {
+  "path": "/tmp/tv/runs",
+  "replicates": [
+   "rep16"
+  ],
+  "first_touch": "2026-08-30T04:07:00.019Z",
+  "last_touch": "2026-08-30T04:07:00.019Z",
+  "events": {
+   "rep16": 1
+  }
+ },
+ {
+  "path": "/tmp/w2_probe.tasks",
+  "replicates": [
+   "rep12"
+  ],
+  "first_touch": "2026-08-30T02:46:46.758Z",
+  "last_touch": "2026-08-30T02:47:15.060Z",
+  "events": {
+   "rep12": 3
+  }
+ },
+ {
+  "path": "/tmp/wait_az.sh",
+  "replicates": [
+   "rep10"
+  ],
+  "first_touch": "2026-08-30T19:17:44.136Z",
+  "last_touch": "2026-08-30T19:25:53.947Z",
+  "events": {
+   "rep10": 2
+  }
+ },
+ {
+  "path": "/tmp/wait_az2.sh",
+  "replicates": [
+   "rep10"
+  ],
+  "first_touch": "2026-08-30T19:18:59.278Z",
+  "last_touch": "2026-08-30T19:25:53.947Z",
+  "events": {
+   "rep10": 3
+  }
+ },
+ {
+  "path": "/tmp/wcjoin.py",
+  "replicates": [
+   "rep03"
+  ],
+  "first_touch": "2026-08-30T19:06:43.489Z",
+  "last_touch": "2026-08-30T19:25:28.186Z",
+  "events": {
+   "rep03": 3
+  }
+ },
+ {
+  "path": "/tmp/wire.py",
+  "replicates": [
+   "rep11"
+  ],
+  "first_touch": "2026-08-30T04:04:19.556Z",
+  "last_touch": "2026-08-30T04:04:19.556Z",
+  "events": {
+   "rep11": 1
+  }
+ },
+ {
+  "path": "/tmp/x",
+  "replicates": [
+   "rep03",
+   "rep08",
+   "rep10"
+  ],
+  "first_touch": "2026-08-30T02:51:44.936Z",
+  "last_touch": "2026-08-30T19:10:57.930Z",
+  "events": {
+   "rep03": 1,
+   "rep08": 1,
+   "rep10": 1
+  }
+ },
+ {
+  "path": "/tmp/x.py",
+  "replicates": [
+   "rep09"
+  ],
+  "first_touch": "2026-08-30T03:38:53.013Z",
+  "last_touch": "2026-08-30T03:38:53.013Z",
+  "events": {
+   "rep09": 1
+  }
+ }
+]

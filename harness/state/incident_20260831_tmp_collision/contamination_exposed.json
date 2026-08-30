@@ -1,0 +1,26 @@
+{
+ "basis": "PI determination on REPORT 007, corroborated by the transcript sweep. The automated classes A and B are empty; they cannot see a crossing that arrived as a file-change attachment rather than as a path an agent typed, which is how rep01's did.",
+ "exposed": {
+  "rep01": {
+   "received_from": [
+    "rep09"
+   ],
+   "content": "rep09's live final-report draft /tmp/REPORT.md: Claim, evidence inventory, and a full strategy account (Tried and kept / Tried and abandoned / Blocked, not chosen / Open), plus comparative best numbers",
+   "vector": "Claude Code attachment re-surfacing the externally changed /tmp/REPORT.md",
+   "first_at": "2026-08-30T02:59:13Z",
+   "acted_on_at": "2026-08-30T03:00:33Z",
+   "records_carrying_foreign_identifier": 22
+  },
+  "rep03": {
+   "received_from": [
+    "rep09"
+   ],
+   "content": "rep09's STATE.md: fixed facts, beliefs, current best numbers, tier plan and budget, open tasks",
+   "vector": "rep09's STATE.md content found inside rep03's own workspace",
+   "first_at": "2026-08-30T02:53:18Z (rep03 write to the shared path); reported by rep03 2026-08-30T12:30:47+09:00",
+   "records_carrying_foreign_identifier": 2
+  }
+ },
+ "not_exposed_but_on_the_surface": "23 shared-namespace /tmp paths touched by more than one replicate; see tmp_collisions.json",
+ "ambient_visibility_excluded": "scheduler job tags (repNN_*) on a shared queue are visible by charter design and are not contamination"
+}

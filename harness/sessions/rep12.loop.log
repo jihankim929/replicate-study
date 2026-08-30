@@ -55,3 +55,5 @@ Execution error
 2026-08-30T06:02:19Z iteration 1 starting (headless)
 2026-08-30T07:02:26Z iteration 1 starting (headless)
 2026-08-30T19:05:38Z iteration 1 starting (headless)
+2026-08-30T19:20:33Z iteration 1 exited rc=0 after 895s (transcript 2340650 -> 3017223)
+2026-08-30T19:20:43Z iteration 2 starting (headless)

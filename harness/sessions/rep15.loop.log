@@ -61,3 +61,7 @@ API Error: Your computer went to sleep mid-response. The response above may be i
 2026-08-30T06:02:32Z iteration 1 starting (headless)
 2026-08-30T07:02:33Z iteration 1 starting (headless)
 2026-08-30T19:05:49Z iteration 1 starting (headless)
+2026-08-30T19:20:28Z iteration 1 exited rc=0 after 879s (transcript 3041810 -> 3508838)
+2026-08-30T19:20:38Z iteration 2 starting (headless)
+2026-08-30T19:27:32Z iteration 2 exited rc=0 after 414s (transcript 3508838 -> 3675632)
+2026-08-30T19:27:42Z iteration 3 starting (headless)

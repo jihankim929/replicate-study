@@ -1,0 +1,106 @@
+2026-08-30T19:22:09Z
+bnode0
+ 04:22:09 up 25 days, 12:10,  9 users,  load average: 85.51, 86.25, 84.54
+96
+--- ALL simulate processes, full args ---
+ 182924 3835034    5311 /home1/users/Bei/ws/rep10/toolchain/raspa/bin/simulate
+ 209366  209364    5195 timeout 86400 /home1/users/Bei/ws/rep05/toolchain/raspa/bin/simulate
+ 209367  209366    5195 /home1/users/Bei/ws/rep05/toolchain/raspa/bin/simulate
+ 473817  473816    4095 timeout 86400 /home1/users/Bei/ws/rep05/toolchain/raspa/bin/simulate
+ 473819  473817    4095 /home1/users/Bei/ws/rep05/toolchain/raspa/bin/simulate
+ 513396  513390    3931 timeout 86400 /home1/users/Bei/ws/rep05/toolchain/raspa/bin/simulate
+ 513399  513396    3931 /home1/users/Bei/ws/rep05/toolchain/raspa/bin/simulate
+ 856989  856987    3235 timeout 86400 /home1/users/Bei/ws/rep05/toolchain/raspa/bin/simulate
+ 856992  856989    3235 /home1/users/Bei/ws/rep05/toolchain/raspa/bin/simulate
+ 918216  918214    3025 timeout 86400 /home1/users/Bei/ws/rep05/toolchain/raspa/bin/simulate
+ 918217  918216    3025 /home1/users/Bei/ws/rep05/toolchain/raspa/bin/simulate
+1019822 1834234    2641 /home1/users/Bei/ws/rep10/toolchain/raspa/bin/simulate
+1043335 1481436    2547 /home1/users/Bei/ws/rep10/toolchain/raspa/bin/simulate
+1094498 1094497    2332 timeout 86400 /home1/users/Bei/ws/rep05/toolchain/raspa/bin/simulate
+1094499 1094498    2332 /home1/users/Bei/ws/rep05/toolchain/raspa/bin/simulate
+1145357 1145356   13879 timeout 86400 /home1/users/Bei/ws/rep05/toolchain/raspa/bin/simulate
+1145360 1145357   13879 /home1/users/Bei/ws/rep05/toolchain/raspa/bin/simulate
+1333369 1333368    2032 timeout 86400 /home1/users/Bei/ws/rep05/toolchain/raspa/bin/simulate
+1333370 1333369    2032 /home1/users/Bei/ws/rep05/toolchain/raspa/bin/simulate
+1401713  752853    1762 /home1/users/Bei/ws/rep10/toolchain/raspa/bin/simulate
+1416178 1416177    1716 timeout 86400 /home1/users/Bei/ws/rep05/toolchain/raspa/bin/simulate
+1416179 1416178    1716 /home1/users/Bei/ws/rep05/toolchain/raspa/bin/simulate
+1425315 1067727    1681 /home1/users/Bei/ws/rep10/toolchain/raspa/bin/simulate
+1444855 1444854    1614 timeout 86400 /home1/users/Bei/ws/rep05/toolchain/raspa/bin/simulate
+1444859 1444855    1614 /home1/users/Bei/ws/rep05/toolchain/raspa/bin/simulate
+1519115 2313125    1356 /home1/users/Bei/ws/rep10/toolchain/raspa/bin/simulate
+1532975 1532973    1305 timeout 86400 /home1/users/Bei/ws/rep05/toolchain/raspa/bin/simulate
+1532978 1532975    1305 /home1/users/Bei/ws/rep05/toolchain/raspa/bin/simulate
+1559319 1559318    1229 timeout 86400 /home1/users/Bei/ws/rep05/toolchain/raspa/bin/simulate
+1559320 1559319    1229 /home1/users/Bei/ws/rep05/toolchain/raspa/bin/simulate
+1562446 1562445   13026 timeout 86400 /home1/users/Bei/ws/rep05/toolchain/raspa/bin/simulate
+1562449 1562446   13026 /home1/users/Bei/ws/rep05/toolchain/raspa/bin/simulate
+1688744 1688740     804 /home1/users/Bei/ws/rep08/toolchain/raspa/bin/simulate
+1690028 1690024     800 /home1/users/Bei/ws/rep08/toolchain/raspa/bin/simulate
+1696247 1696244     781 /home1/users/Bei/ws/rep08/toolchain/raspa/bin/simulate
+1696607 1696606     780 timeout 86400 /home1/users/Bei/ws/rep05/toolchain/raspa/bin/simulate
+1696608 1696607     780 /home1/users/Bei/ws/rep05/toolchain/raspa/bin/simulate
+1877468 1877108     567 /home1/users/Bei/ws/rep10/toolchain/raspa/bin/simulate
+1884414  752850     565 /home1/users/Bei/ws/rep10/toolchain/raspa/bin/simulate
+1913967 1913943     540 /home1/users/Bei/ws/rep16/toolchain/raspa/bin/simulate simulation.input
+1913968 1913942     540 /home1/users/Bei/ws/rep16/toolchain/raspa/bin/simulate simulation.input
+1913971 1913947     540 /home1/users/Bei/ws/rep16/toolchain/raspa/bin/simulate simulation.input
+1913972 1913945     540 /home1/users/Bei/ws/rep16/toolchain/raspa/bin/simulate simulation.input
+1913974 1913944     540 /home1/users/Bei/ws/rep16/toolchain/raspa/bin/simulate simulation.input
+1914006 1913966     540 /home1/users/Bei/ws/rep16/toolchain/raspa/bin/simulate simulation.input
+1915248 1915236     540 /home1/users/Bei/ws/rep16/toolchain/raspa/bin/simulate simulation.input
+1915274 1915266     540 /home1/users/Bei/ws/rep16/toolchain/raspa/bin/simulate simulation.input
+1915299 1915284     540 /home1/users/Bei/ws/rep16/toolchain/raspa/bin/simulate simulation.input
+1915306 1915298     540 /home1/users/Bei/ws/rep16/toolchain/raspa/bin/simulate simulation.input
+1915925 1915273     539 /home1/users/Bei/ws/rep16/toolchain/raspa/bin/simulate simulation.input
+1915926 1915283     539 /home1/users/Bei/ws/rep16/toolchain/raspa/bin/simulate simulation.input
+1916388 1915227     538 /home1/users/Bei/ws/rep16/toolchain/raspa/bin/simulate simulation.input
+1916389 1915285     538 /home1/users/Bei/ws/rep16/toolchain/raspa/bin/simulate simulation.input
+1916390 1915309     538 /home1/users/Bei/ws/rep16/toolchain/raspa/bin/simulate simulation.input
+1917320 1917306     537 /home1/users/Bei/ws/rep16/toolchain/raspa/bin/simulate simulation.input
+1917344 1917313     537 /home1/users/Bei/ws/rep16/toolchain/raspa/bin/simulate simulation.input
+1917347 1917322     537 /home1/users/Bei/ws/rep16/toolchain/raspa/bin/simulate simulation.input
+1917348 1917314     537 /home1/users/Bei/ws/rep16/toolchain/raspa/bin/simulate simulation.input
+1917349 1917316     537 /home1/users/Bei/ws/rep16/toolchain/raspa/bin/simulate simulation.input
+1917351 1917326     537 /home1/users/Bei/ws/rep16/toolchain/raspa/bin/simulate simulation.input
+1917354 1917338     537 /home1/users/Bei/ws/rep16/toolchain/raspa/bin/simulate simulation.input
+1917371 1917346     537 /home1/users/Bei/ws/rep16/toolchain/raspa/bin/simulate simulation.input
+1917392 1917383     537 /home1/users/Bei/ws/rep16/toolchain/raspa/bin/simulate simulation.input
+1917624 1917363     536 /home1/users/Bei/ws/rep16/toolchain/raspa/bin/simulate simulation.input
+1917625 1917359     536 /home1/users/Bei/ws/rep16/toolchain/raspa/bin/simulate simulation.input
+1917626 1917366     536 /home1/users/Bei/ws/rep16/toolchain/raspa/bin/simulate simulation.input
+1917629 1917355     536 /home1/users/Bei/ws/rep16/toolchain/raspa/bin/simulate simulation.input
+1952764 1952763     401 timeout 86400 /home1/users/Bei/ws/rep05/toolchain/raspa/bin/simulate
+1952765 1952764     401 /home1/users/Bei/ws/rep05/toolchain/raspa/bin/simulate
+1988823 1988819     273 /home1/users/Bei/ws/rep08/toolchain/raspa/bin/simulate
+1999760 1915244     242 /home1/users/Bei/ws/rep16/toolchain/raspa/bin/simulate simulation.input
+2012057 1917356     196 /home1/users/Bei/ws/rep16/toolchain/raspa/bin/simulate simulation.input
+2016607 1917374     182 /home1/users/Bei/ws/rep16/toolchain/raspa/bin/simulate simulation.input
+2038866 1917386     104 /home1/users/Bei/ws/rep16/toolchain/raspa/bin/simulate simulation.input
+2043422 1067726      84 /home1/users/Bei/ws/rep10/toolchain/raspa/bin/simulate
+2047222 2047218      69 timeout 86400 /home1/users/Bei/ws/rep05/toolchain/raspa/bin/simulate
+2047223 2047222      69 /home1/users/Bei/ws/rep05/toolchain/raspa/bin/simulate
+2048319 1917294      65 /home1/users/Bei/ws/rep16/toolchain/raspa/bin/simulate simulation.input
+2059713 2059710      27 /home1/users/Bei/ws/rep08/toolchain/raspa/bin/simulate
+2061707 1917312      18 /home1/users/Bei/ws/rep16/toolchain/raspa/bin/simulate simulation.input
+2067219 2067214       0 bash -c date -u +%FT%TZ; hostname; uptime; nproc; echo '--- ALL simulate processes, full args ---'; ps -eo pid,ppid,etimes,args --sort=-etimes | grep -i '[s]imulate'
+2084022  863682   11762 /home1/users/Bei/ws/rep10/toolchain/raspa/bin/simulate
+2101796 2101794   11690 /home1/users/Bei/ws/rep08/toolchain/raspa/bin/simulate
+2775113 2775112   31199 timeout 86400 /home1/users/Bei/ws/rep05/toolchain/raspa/bin/simulate
+2775116 2775113   31199 /home1/users/Bei/ws/rep05/toolchain/raspa/bin/simulate
+2880038 2880037    9320 timeout 86400 /home1/users/Bei/ws/rep05/toolchain/raspa/bin/simulate
+2880039 2880038    9320 /home1/users/Bei/ws/rep05/toolchain/raspa/bin/simulate
+2958869 2958868    9001 timeout 86400 /home1/users/Bei/ws/rep05/toolchain/raspa/bin/simulate
+2958871 2958869    9001 /home1/users/Bei/ws/rep05/toolchain/raspa/bin/simulate
+3325230 3325224    8224 timeout 86400 /home1/users/Bei/ws/rep05/toolchain/raspa/bin/simulate
+3325231 3325230    8224 /home1/users/Bei/ws/rep05/toolchain/raspa/bin/simulate
+3557766 3557745   18580 timeout 86400 /home1/users/Bei/ws/rep05/toolchain/raspa/bin/simulate
+3557775 3557766   18580 /home1/users/Bei/ws/rep05/toolchain/raspa/bin/simulate
+3580952 3580951    7204 timeout 86400 /home1/users/Bei/ws/rep05/toolchain/raspa/bin/simulate
+3580953 3580952    7204 /home1/users/Bei/ws/rep05/toolchain/raspa/bin/simulate
+3698656 3698653   59024 timeout 86400 /home1/users/Bei/ws/rep05/toolchain/raspa/bin/simulate
+3698658 3698654   59024 timeout 86400 /home1/users/Bei/ws/rep05/toolchain/raspa/bin/simulate
+3698661 3698658   59024 /home1/users/Bei/ws/rep05/toolchain/raspa/bin/simulate
+3698662 3698656   59024 /home1/users/Bei/ws/rep05/toolchain/raspa/bin/simulate
+3941993 3941991    6417 timeout 86400 /home1/users/Bei/ws/rep05/toolchain/raspa/bin/simulate
+3941994 3941993    6417 /home1/users/Bei/ws/rep05/toolchain/raspa/bin/simulate
