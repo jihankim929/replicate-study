@@ -474,3 +474,321 @@ word**.
 Until then I will not resume, deliver any notice, touch a credential, or clear the pause record.
 
 — Bei (harness)
+
+---
+
+## 2026-08-30T02:24:59Z (11:24:59 KST) — REPORT 003, on the dry-run. FLEET STILL PAUSED. Held for go.
+
+> **In one line:** `ssh dirac-bei true` now passes and I verified it myself rather than taking the
+> handoff's word for it; all three ratification items were already complete and are re-verified
+> here rather than re-done; the dry-run is clean and the measured pause stands at **4.1776 h**,
+> which every replicate gains, with rep06 gaining that **plus its ratified 9.62 h**. The one thing
+> worth your attention is that **`--dry-run` never exercises the check that would actually abort a
+> resume** — so I ran that check read-only and report it below.
+
+**Status: HOLDING.** `resume_fleet.sh` has not been run in live mode. `PAUSE.json` is untouched.
+No session resumed, no notice delivered, no deadline extended, nothing written to any workspace.
+Every cluster contact in this report is a read.
+
+### 1. The trigger condition, verified by me
+
+Provisioning was done externally and reported clean. I did not take that as the verification — the
+handoff is a claim about the host, and item (5) of `HOST_REQUIREMENTS.md` is specifically the case
+where a human's test passes and the harness's fails. Re-run here, in the exact forms the record
+specifies:
+
+| Requirement | Check | Result |
+|---|---|---|
+| 5 — alias + key, non-interactive | `ssh -o BatchMode=yes -o ConnectTimeout=10 dirac-bei true` | **exit 0, silent** |
+| 5 — the gateway it now jumps through | `ssh -o BatchMode=yes dirac-bei-gw true` | **exit 0, silent** |
+| 6 — workspace path reachable *and writable* | `/home1/users/Bei/ws/<rep>` for all sixteen | **16/16 `rw`** |
+| 1 — `screen` | `screen --version` | **4.09.01 (GNU)** |
+
+`~/.ssh/config` resolves `dirac-bei` to `143.248.125.145` via `ProxyJump dirac-bei-gw`
+(`143.248.130.178`). **The gateway hop is new** — no earlier report or requirement mentions one,
+and the retired laptop reached the cluster directly. It works and `BatchMode` is clean through it,
+so nothing is blocked; I note it because the record now understates the path, and a future host
+rebuild that follows `HOST_REQUIREMENTS.md` §5 literally would not know to configure a jump host.
+
+### 2. The ratification list — all three already complete; verified, not re-done
+
+Each of the three was executed and pushed under REPORT 002. I checked state rather than re-running
+anything, since re-running (2) or (3) would have been a write against a fleet under hold.
+
+**(a) systemd timers enabled.** `study.poll.timer` and `study.spend.timer` are both
+`enabled` and firing. `install.sh --verify` reports `linger: ENABLED`, all four suspend targets
+`static (inactive)`, `IdleAction` at the compiled default. Cadence observed in the fire logs, not
+asserted:
+
+```
+study.poll   02:00:00Z fire -> 02:00:02Z done rc=0
+             02:10:00Z fire -> 02:10:02Z done rc=0
+             02:20:00Z fire -> 02:20:02Z done rc=0      exactly 600 s, rc=0 each
+study.spend  02:18:00Z  02:20:00Z  02:22:00Z            exactly 120 s, zero drift
+```
+
+Both units are `OnCalendar=` (`*:0/10`, `*:0/2`) so `Persistent=true` is really in force, which
+was the judgement call REPORT 002 §2 flagged. **The 10-minute poll interval is still the reading I
+made and not a ruling you have given** — REPORT 002 §5(a) is open and this report does not close
+it.
+
+**(b) Meter active on the $725.47 baseline.** `spend_baseline.json` is `active: true` carrying
+token counts, and the meter binds it. Run across all sixteen just now:
+
+**$725.4712 / $4,480 = 16.19 %**, sixteen replicates, **all `OK`, none at warn**, every line
+reading `$0.00 on this host + $X carried forward`. Local tally is **$0.00 for all sixteen**, which
+is the expected shape on a host whose `~/.claude/projects` is empty and confirms the meter is
+carrying rather than double-counting — the failure mode `spend_baseline.json`'s own refusal clause
+exists to catch. The figure matches the ledger-derived total to the fourth decimal.
+
+**(c) `fleet_spend` correction appended.** `harness/state/fleet_spend.jsonl` carries the
+`fleet_spend/correction/1` entry: superseded `714.94` at its `2026-08-29T22:24:19Z` stamp, delta
+`$10.5312`, corrected `725.4712`, with `left_unedited: true`. **`fleet_spend.json` is byte-for-byte
+unchanged** — verified against git, it is not in the working tree's modified set.
+
+### 3. The dry-run — measured pause and per-replicate arithmetic
+
+```
+paused at:    2026-08-29T22:14:19.952793+00:00
+now:          2026-08-30T02:24:59.381189+00:00
+pause so far: 4.1776 h  -- gained by all sixteen, uniformly
+rep06:        +9.6200 h -- additionally, keyed on cause [PI ruling 2026-08-30, REPORT 001 §4(f)]
+```
+
+The pause is **still running** and the figure is measured at execution, not stored, so the number
+in the live run will be larger than the one above by however long the hold lasts. That is the
+design — nothing here is a round number or a judgement.
+
+| Replicate | Deadline at pause (KST) | Projected (KST) | Gain |
+|---|---|---|---|
+| rep01 | 2026-09-05T14:12:32 | 2026-09-05T18:23:12 | +4.1776 h |
+| rep02 | 2026-09-05T19:41:21 | 2026-09-05T23:52:00 | +4.1776 h |
+| rep03 | 2026-09-05T19:41:27 | 2026-09-05T23:52:06 | +4.1776 h |
+| rep04 | 2026-09-05T19:41:33 | 2026-09-05T23:52:12 | +4.1776 h |
+| rep05 | 2026-09-05T19:40:56 | 2026-09-05T23:51:36 | +4.1776 h |
+| **rep06** | 2026-09-05T19:41:02 | **2026-09-06T09:28:54** | **+4.1776 h +9.62 h** |
+| rep07 | 2026-09-05T19:41:08 | 2026-09-05T23:51:48 | +4.1776 h |
+| rep08 | 2026-09-05T19:41:15 | 2026-09-05T23:51:54 | +4.1776 h |
+| rep09 | 2026-09-05T19:41:39 | 2026-09-05T23:52:18 | +4.1776 h |
+| rep10 | 2026-09-05T20:42:28 | 2026-09-06T00:53:07 | +4.1776 h |
+| rep11 | 2026-09-05T20:42:09 | 2026-09-06T00:52:48 | +4.1776 h |
+| rep12 | 2026-09-05T20:42:16 | 2026-09-06T00:52:55 | +4.1776 h |
+| rep13 | 2026-09-05T20:42:22 | 2026-09-06T00:53:01 | +4.1776 h |
+| rep15 | 2026-09-05T20:42:34 | 2026-09-06T00:53:14 | +4.1776 h |
+| rep16 | 2026-09-05T20:42:41 | 2026-09-06T00:53:20 | +4.1776 h |
+| rep17 | 2026-09-05T20:42:48 | 2026-09-06T00:53:27 | +4.1776 h |
+
+I recomputed two rows by hand against the stored microsecond stamps rather than trusting the
+printer: rep02 `19:41:21.212177 + 4h10m39.4s = 23:52:00` ✓; rep06 `19:41:02.832166 + 4h10m39.4s =
+23:51:42`, `+ 9h37m12s = 09:28:54` ✓. The restoration is applied to the **pause-record** deadline,
+not to the extended one, so the two additions do not compound.
+
+**A consequence of §4(f) worth stating plainly, because it is visible and someone will ask.**
+The restoration moves rep06 from mid-pack to **the latest deadline in the fleet** — about 9.6 h
+behind the wave-A cohort and 8.6 h behind wave B. That is the ruling working correctly, not a
+side-effect: rep06 is being given back live-session time it lost to a harness defect, so it
+finishes later in wall-clock while holding the *same* 168 h of worked time as everyone else. The
+asymmetry is in the clock, not in the entitlement. It is also **arm-blind** — the rule keys on
+cause, the arm map stays sealed, and I do not know which arm rep06 is in.
+
+### 4. What the dry-run does **not** cover — and the check I ran read-only instead
+
+**This is the finding of this report.** `resume_fleet.sh --dry-run` returns at the end of its
+dry-run branch, *before* it ever calls `resume_fleet.py`. So the dry-run exercises the deadline
+**arithmetic** and nothing else. In particular it never runs **PASS 1** — the sixteen live
+`WORKSPACE.json` reads that compare each live deadline against the pause record and **abort the
+whole resume** on the first mismatch. That check is the single most consequential thing in the
+resume path, it is the only part that touches the cluster before anything is written, and it is
+the part a dry-run exists to rehearse. A clean `--dry-run` is therefore *not* evidence that the
+resume will proceed; it is evidence that the arithmetic is right if it does.
+
+So I ran PASS 1's logic myself, read-only — the same sixteen `grep deadline_kst` reads over the
+same alias, with the comparison and without the write:
+
+```
+match = 16    moved = 0    unreadable = 0        PASS 1 would: PASS
+```
+
+All sixteen live deadlines equal the pause record exactly, to the microsecond. **rep06's live
+value is `2026-09-05T19:41:02.832166+09:00`** — the pre-defect value that was restored by hand
+after `stamp_deadline.py` moved it +11.3 h, so that revert is confirmed still in place on the
+cluster and PASS 1 will not trip on it.
+
+**Two smaller gaps in the same shape.** `--dry-run` also does not exercise (i)
+`deliver_escalation_answers.py`, or (ii) the per-replicate relaunch. I ran the first's own
+`--dry-run` separately: **2,981 bytes of the fleet-uniform notice to all sixteen, 1,994 bytes of
+the Rev 21 notice to `rep01` alone**, escalation rows unmodified — the scoping REPORT 002 §1(5)
+verified, still correct. For the second I confirmed `config.phase_of` resolves **`main` for all
+sixteen**, which is what stops step 5 from repeating the smoke-roster defect.
+
+**I have not changed `resume_fleet.sh` to close this gap.** Extending the dry-run to perform PASS 1
+would be the right fix and it is a read-only change, but it edits the resume path itself while the
+fleet is held for a go on that exact path, and the coverage is provided above by other means. It
+is yours to rule on.
+
+### 5. Other state, verified
+
+- **The fleet is down.** No `rep-*` screen sessions on bronze4 (one socket, my own shell). All
+  **16 stop files present** under `harness/sessions/`. `PAUSE.json` in place, so
+  `restart_watch.sh` remains stood down.
+- **Suite: 88 PASS / 0 FAIL**, re-run on bronze4 just now, including SI-014's regression case
+  ("production state files unchanged by this run").
+- **`study.pollprobe` has no systemd counterpart, deliberately.** The retired host had three
+  plists; `install.sh` renders two. The third was a 60-second heartbeat that existed only to prove
+  launchd was firing, and its function is served better by `poll_fires.jsonl` and
+  `spend_fires.jsonl`, which record real fires with return codes — which is what §2 quotes. Noted
+  so the 3→2 drop is not later read as something lost in the migration.
+- **Host keys were accepted trust-on-first-use during external provisioning**, and the record
+  holds no fingerprint to check them against (`known_hosts` gained the gateway's entry; the
+  cluster's is unchanged from `known_hosts.old`). Nothing suggests a problem and the cluster key
+  is consistent across both files. But "the alias resolves and authenticates" is not the same
+  claim as "it authenticates *the right host*", and I cannot close that second one from here.
+  Flagged, not blocking.
+- **REPORT 002 §5(c) is still open and the ledger is still growing.** `harness/spend.jsonl` has
+  gained **384 rows since REPORT 002** and stands at 3,294 rows / 1.75 MiB, all of them identical
+  re-tallies of a fleet that is not moving. I have left the timer running for the reason given
+  there. The working tree is correspondingly dirty in five scheduler-written files
+  (`spend.jsonl`, `spend_fires.jsonl`, `poll_fires.jsonl`, and the two daily logs) — expected, and
+  no tracked state file is modified.
+
+### 6. What I will do on the word, and what I will not do without it
+
+On your go: `./harness/resume_fleet.sh` live — deadlines extended by the pause measured **at that
+moment**, notices delivered before the agents wake, counters reset, stops cleared, sixteen
+relaunched each in its own phase, and `PAUSE.json` retired **only** on a clean sixteen-for-sixteen.
+Then I will verify all sixteen up, meter once against the carried baseline, and report again.
+
+Until then: no resume, no notice, no workspace write, no credential touched, no pause record
+cleared, and no edit to the resume path.
+
+**Open for ruling, carried forward:** §5(a) the 10-minute poll cadence (REPORT 002) · §5(c) the
+paused-fleet ledger growth (REPORT 002) · §5(d) `charter_revisions.md` missing Rev 22/23
+(REPORT 002) · §4 above, whether `--dry-run` should perform PASS 1.
+
+— Bei (harness)
+
+---
+
+## 2026-08-30T02:37:00Z (11:37:00 KST) — REPORT 004, on the REPORT 002 rulings. FLEET STILL PAUSED. Held for go.
+
+> **In one line:** ssh re-verified and passing, and **REPORT 003 above already contains the
+> dry-run you ordered** — it was run and filed before this message arrived. (d) is executed and
+> (c) needs nothing. **I have not executed (a), because (a) was ruled on a premise I gave you in
+> REPORT 002 §5(a) and that premise is wrong.** Ten minutes is the ratified interval for the
+> **smoke** phase; **thirty is the ratified interval for main**, and the plist was keeping it. I am
+> not filing a correct number as a deviation or overwriting a correct bound with a wrong one on my
+> own error. Details below; this needs one more word from you.
+
+### 0. Your provisioning check — already satisfied
+
+`ssh -o BatchMode=yes -o ConnectTimeout=10 dirac-bei true` → **exit 0, silent**; the gateway hop
+likewise. Nothing needs relaying: `/home/Bei/.ssh/` has `config`, `id_ed25519` (0600),
+`id_ed25519.pub`, `known_hosts`, all owned by `Bei`, and all sixteen workspaces read/write over the
+alias. **The dry-run was run on that pass and reported in REPORT 003**, which also carries the
+measured pause, the per-replicate deadline table, rep06's `+9.62 h` arithmetic, and one finding
+about what `--dry-run` does not cover. It is directly above this entry.
+
+Fleet still down: 0 `rep-*` sessions, 16 stop files, `PAUSE.json` in place.
+
+### 1. (a) — NOT EXECUTED. The record does not contradict itself; my report did.
+
+I reported that `poll.sh`'s *"Run every 10 minutes (ratified interval)"* contradicted the plist's
+`StartInterval 1800`. **It does not, and I should have caught this before filing it.** The two
+numbers are scoped to different phases and both are ratified:
+
+```
+config.py  "watchdog_poll_minutes": {"smoke": 10, "main": 30}
+```
+
+`poll.sh`'s header opens *"One operational poll of the whole **smoke** fleet"* — the 10-minute
+figure in it is **smoke-scoped**, and I quoted the second half of that sentence without the first.
+SI-012's own arithmetic says the same thing in both directions:
+
+| SI-012 says | Phase | Poll | Bound |
+|---|---|---|---|
+| "Cycles expected at the ratified 10-minute interval — 393" (65.5 h = the smoke campaign) | smoke | 10 min | 8.33 CPU-h, 2.45 % |
+| "Main-run parameters **as ratified**: … **30-minute poll**" | main | **30 min** | **6.00 CPU-h, 0.375 %** |
+
+So the retired plist at 1800 s was **running the main phase at its ratified main cadence.** It was
+not a deviation and it was not three times anything. The deviation is the timer **I installed**,
+which is running main at 10 minutes — 3× tighter than ratified — and it is running that way right
+now, and would apply to all sixteen the moment the fleet resumes.
+
+**Why I did not just carry out the ruling.** Executed literally it would (i) file a correct,
+ratified figure into the record as a deviation, and (ii) restate the main compute-overshoot bound
+from **6.00 CPU-h (0.375 %)** to **2.00 CPU-h (0.124 %)**. That second number is the problem: it is
+not merely tighter, it is **a bound the harness cannot honour**, and writing it would be exactly
+what SI-012's own Proposed §3 warns against — *"a bound derived from an assumption is not a bound;
+it is the assumption wearing a number."* Reproducing that inside the fix for SI-012 is the shape I
+flagged in REPORT 002 and I am not going to author it.
+
+**Measured, not argued — 28 recorded poll cycles from `poll_fires.jsonl`:**
+
+```
+while the fleet was LIVE (N=16):   126 s, 139 s, 152 s, 158 s, 236 s, 248 s, 262 s ...
+                          max:     842 s  (14.0 min)
+current cycles (fleet paused):     2 s     <- cheap, not representative
+```
+
+A 600 s interval **is already exceeded by the observed worst case of 842 s.** At 1800 s it is not
+close. SI-012 documented the mechanism before I measured it: `poll.sh` is serial and O(N), and
+`divergence.collect()` retries 3× at a 300 s timeout, so **one unreachable workspace can consume up
+to 900 s** — "1.5× the smoke interval, half the main interval", and every replicate after it in the
+loop is skipped **silently**. SI-012 called N=20 at 30 minutes *"it fits, but not comfortably."*
+At 10 minutes it does not fit.
+
+So the tighter cadence does not buy a tighter bound. It buys overlapping cycles, silently skipped
+replicates, and a *worse* effective interval than 30 minutes — while the record would claim 2.00.
+
+**What I recommend, and what I need from you.** Revert `study.poll.timer` to `OnCalendar=*:0/30`
+for the main phase, keep the ratified **6.00 CPU-h / 0.375 %** bound exactly as it stands, and file
+the deviation against **my timer**, not against the plist. Then (a)'s remaining substance still
+holds and is worth doing: **`poll.sh`'s header is smoke-scoped in a main-phase harness** and should
+say so, and SI-012 Proposed §3 — compute the bound from the *measured* interval since the last
+`watchdog.jsonl` entry rather than from the configured constant — is the durable fix, since it
+would have made this self-correcting.
+
+I have changed **nothing** for (a): the 10-minute timer is still installed and still firing, so the
+state is exactly as REPORT 003 described it and is yours to rule on. If you read the phase scoping
+differently and still want 10 minutes for main, say so and I will restate the bound at 2.00 CPU-h
+— but the cycle-time measurement above should be on the record first.
+
+### 2. (d) — EXECUTED. Rev 22 and Rev 23 narrative sections written.
+
+`prereg/charter_revisions.md` gains two sections, written from the charter's own revision rows
+(`prereg/charter_v0.9.md` lines 46, 241–243) and the rendered §3/§4 text. **`charter_v0.9.md` is
+untouched** — verified, empty diff. Documentation of ratified history, exactly as authorized.
+
+- **Rev 22** — (a) the pinned-file rule split out of the G3 gate into §3 common core, with the
+  reason it mattered: Appendix A *is* the treatment, so a general protocol statement left sitting
+  inside the gate reached the gated arm only, giving eight replicates a pinned file set with no
+  statement of what it governed. (b) "Cost mechanics and discipline" into §4 common core,
+  byte-identical in both arms, because it is a statement about billing rather than about science
+  and a one-arm version would have confounded the pre-registered per-arm cost decomposition.
+- **Rev 23** — "Context hygiene" into §4 common core. Written as the other half of Rev 22(b)'s
+  mechanism: 22(b) governs what enters context, 23 governs what is carried forward. Carries the
+  measured basis (cache-read tokens climbing 97k → 237k per turn; rep01 71 % front-loaded) and the
+  reason it had to be common core — the gated charter is 28,929 bytes against 13,109, so that arm
+  is structurally more expensive per turn before anyone does anything, and a one-arm hygiene rule
+  would have made that structural difference inseparable from a behavioural one.
+
+Both sections state that they were written up on 2026-08-30 under your authorization, so no future
+reader mistakes the write-up date for the ruling date.
+
+### 3. (c) and (b) — no action needed
+
+**(c)** Ratified as-is; `study.spend.timer` stays running through the hold and I have not touched
+it. For the record it has now added **384 rows since REPORT 002** (3,294 rows / 1.75 MiB).
+**(b)** Noted, already corrected in STATE.md at the grooming commit.
+
+**The selftest wrong-reason pass** is filed as post-resume, low priority, and I have not touched it.
+
+### 4. Status
+
+Nothing committed — the working tree carries `prereg/charter_revisions.md`, this file, and five
+scheduler-written logs. No workspace write, no notice, no resume, no pause record cleared.
+
+**Blocking on you:** (a) — 30 minutes restored for main (my recommendation), or 10 minutes
+confirmed with the bound restated. **Ready on your word:** the live resume, per REPORT 003 §6.
+
+— Bei (harness)

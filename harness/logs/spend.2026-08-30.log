@@ -686,3 +686,1203 @@
 [spend] rep17: $   20.45 / $280.00     7.3%  OK
          $0.00 on this host + $20.45 carried forward from the previous host (spend_baseline.json)
          cache reads are 54.4% of that; $27.87 per M billable (733,617 billable vs 22,263,594 cache-read)
+[spend] rep01: $   65.14 / $280.00    23.3%  OK
+         $0.00 on this host + $65.14 carried forward from the previous host (spend_baseline.json)
+         cache reads are 76.2% of that; $61.01 per M billable (1,067,618 billable vs 99,323,960 cache-read)
+[spend] rep02: $   40.13 / $280.00    14.3%  OK
+         $0.00 on this host + $40.13 carried forward from the previous host (spend_baseline.json)
+         cache reads are 53.7% of that; $24.24 per M billable (1,655,427 billable vs 43,098,276 cache-read)
+[spend] rep03: $   23.79 / $280.00     8.5%  OK
+         $0.00 on this host + $23.79 carried forward from the previous host (spend_baseline.json)
+         cache reads are 58.0% of that; $35.19 per M billable (676,168 billable vs 27,599,630 cache-read)
+[spend] rep04: $   30.57 / $280.00    10.9%  OK
+         $0.00 on this host + $30.57 carried forward from the previous host (spend_baseline.json)
+         cache reads are 56.0% of that; $26.77 per M billable (1,141,836 billable vs 34,248,826 cache-read)
+[spend] rep05: $   32.93 / $280.00    11.8%  OK
+         $0.00 on this host + $32.93 carried forward from the previous host (spend_baseline.json)
+         cache reads are 58.5% of that; $26.63 per M billable (1,236,505 billable vs 38,547,479 cache-read)
+[spend] rep06: $   99.03 / $280.00    35.4%  OK
+         $0.00 on this host + $99.03 carried forward from the previous host (spend_baseline.json)
+         cache reads are 62.0% of that; $23.15 per M billable (4,277,733 billable vs 122,780,669 cache-read)
+[spend] rep07: $   50.55 / $280.00    18.1%  OK
+         $0.00 on this host + $50.55 carried forward from the previous host (spend_baseline.json)
+         cache reads are 54.5% of that; $21.96 per M billable (2,302,436 billable vs 55,077,911 cache-read)
+[spend] rep08: $   40.08 / $280.00    14.3%  OK
+         $0.00 on this host + $40.08 carried forward from the previous host (spend_baseline.json)
+         cache reads are 60.6% of that; $29.75 per M billable (1,347,489 billable vs 48,580,473 cache-read)
+[spend] rep09: $   37.28 / $280.00    13.3%  OK
+         $0.00 on this host + $37.28 carried forward from the previous host (spend_baseline.json)
+         cache reads are 57.9% of that; $26.24 per M billable (1,420,900 billable vs 43,196,137 cache-read)
+[spend] rep10: $   75.59 / $280.00    27.0%  OK
+         $0.00 on this host + $75.59 carried forward from the previous host (spend_baseline.json)
+         cache reads are 65.7% of that; $30.33 per M billable (2,492,029 billable vs 99,298,212 cache-read)
+[spend] rep11: $   38.74 / $280.00    13.8%  OK
+         $0.00 on this host + $38.74 carried forward from the previous host (spend_baseline.json)
+         cache reads are 57.3% of that; $26.08 per M billable (1,485,396 billable vs 44,417,946 cache-read)
+[spend] rep12: $   36.91 / $280.00    13.2%  OK
+         $0.00 on this host + $36.91 carried forward from the previous host (spend_baseline.json)
+         cache reads are 59.8% of that; $27.06 per M billable (1,363,857 billable vs 44,170,710 cache-read)
+[spend] rep13: $   35.86 / $280.00    12.8%  OK
+         $0.00 on this host + $35.86 carried forward from the previous host (spend_baseline.json)
+         cache reads are 64.0% of that; $32.29 per M billable (1,110,321 billable vs 45,876,912 cache-read)
+[spend] rep15: $   49.07 / $280.00    17.5%  OK
+         $0.00 on this host + $49.07 carried forward from the previous host (spend_baseline.json)
+         cache reads are 54.6% of that; $21.57 per M billable (2,275,306 billable vs 53,557,852 cache-read)
+[spend] rep16: $   49.34 / $280.00    17.6%  OK
+         $0.00 on this host + $49.34 carried forward from the previous host (spend_baseline.json)
+         cache reads are 51.7% of that; $18.06 per M billable (2,731,571 billable vs 50,984,830 cache-read)
+[spend] rep17: $   20.45 / $280.00     7.3%  OK
+         $0.00 on this host + $20.45 carried forward from the previous host (spend_baseline.json)
+         cache reads are 54.4% of that; $27.87 per M billable (733,617 billable vs 22,263,594 cache-read)
+[spend] rep01: $   65.14 / $280.00    23.3%  OK
+         $0.00 on this host + $65.14 carried forward from the previous host (spend_baseline.json)
+         cache reads are 76.2% of that; $61.01 per M billable (1,067,618 billable vs 99,323,960 cache-read)
+[spend] rep02: $   40.13 / $280.00    14.3%  OK
+         $0.00 on this host + $40.13 carried forward from the previous host (spend_baseline.json)
+         cache reads are 53.7% of that; $24.24 per M billable (1,655,427 billable vs 43,098,276 cache-read)
+[spend] rep03: $   23.79 / $280.00     8.5%  OK
+         $0.00 on this host + $23.79 carried forward from the previous host (spend_baseline.json)
+         cache reads are 58.0% of that; $35.19 per M billable (676,168 billable vs 27,599,630 cache-read)
+[spend] rep04: $   30.57 / $280.00    10.9%  OK
+         $0.00 on this host + $30.57 carried forward from the previous host (spend_baseline.json)
+         cache reads are 56.0% of that; $26.77 per M billable (1,141,836 billable vs 34,248,826 cache-read)
+[spend] rep05: $   32.93 / $280.00    11.8%  OK
+         $0.00 on this host + $32.93 carried forward from the previous host (spend_baseline.json)
+         cache reads are 58.5% of that; $26.63 per M billable (1,236,505 billable vs 38,547,479 cache-read)
+[spend] rep06: $   99.03 / $280.00    35.4%  OK
+         $0.00 on this host + $99.03 carried forward from the previous host (spend_baseline.json)
+         cache reads are 62.0% of that; $23.15 per M billable (4,277,733 billable vs 122,780,669 cache-read)
+[spend] rep07: $   50.55 / $280.00    18.1%  OK
+         $0.00 on this host + $50.55 carried forward from the previous host (spend_baseline.json)
+         cache reads are 54.5% of that; $21.96 per M billable (2,302,436 billable vs 55,077,911 cache-read)
+[spend] rep08: $   40.08 / $280.00    14.3%  OK
+         $0.00 on this host + $40.08 carried forward from the previous host (spend_baseline.json)
+         cache reads are 60.6% of that; $29.75 per M billable (1,347,489 billable vs 48,580,473 cache-read)
+[spend] rep09: $   37.28 / $280.00    13.3%  OK
+         $0.00 on this host + $37.28 carried forward from the previous host (spend_baseline.json)
+         cache reads are 57.9% of that; $26.24 per M billable (1,420,900 billable vs 43,196,137 cache-read)
+[spend] rep10: $   75.59 / $280.00    27.0%  OK
+         $0.00 on this host + $75.59 carried forward from the previous host (spend_baseline.json)
+         cache reads are 65.7% of that; $30.33 per M billable (2,492,029 billable vs 99,298,212 cache-read)
+[spend] rep11: $   38.74 / $280.00    13.8%  OK
+         $0.00 on this host + $38.74 carried forward from the previous host (spend_baseline.json)
+         cache reads are 57.3% of that; $26.08 per M billable (1,485,396 billable vs 44,417,946 cache-read)
+[spend] rep12: $   36.91 / $280.00    13.2%  OK
+         $0.00 on this host + $36.91 carried forward from the previous host (spend_baseline.json)
+         cache reads are 59.8% of that; $27.06 per M billable (1,363,857 billable vs 44,170,710 cache-read)
+[spend] rep13: $   35.86 / $280.00    12.8%  OK
+         $0.00 on this host + $35.86 carried forward from the previous host (spend_baseline.json)
+         cache reads are 64.0% of that; $32.29 per M billable (1,110,321 billable vs 45,876,912 cache-read)
+[spend] rep15: $   49.07 / $280.00    17.5%  OK
+         $0.00 on this host + $49.07 carried forward from the previous host (spend_baseline.json)
+         cache reads are 54.6% of that; $21.57 per M billable (2,275,306 billable vs 53,557,852 cache-read)
+[spend] rep16: $   49.34 / $280.00    17.6%  OK
+         $0.00 on this host + $49.34 carried forward from the previous host (spend_baseline.json)
+         cache reads are 51.7% of that; $18.06 per M billable (2,731,571 billable vs 50,984,830 cache-read)
+[spend] rep17: $   20.45 / $280.00     7.3%  OK
+         $0.00 on this host + $20.45 carried forward from the previous host (spend_baseline.json)
+         cache reads are 54.4% of that; $27.87 per M billable (733,617 billable vs 22,263,594 cache-read)
+[spend] rep01: $   65.14 / $280.00    23.3%  OK
+         $0.00 on this host + $65.14 carried forward from the previous host (spend_baseline.json)
+         cache reads are 76.2% of that; $61.01 per M billable (1,067,618 billable vs 99,323,960 cache-read)
+[spend] rep02: $   40.13 / $280.00    14.3%  OK
+         $0.00 on this host + $40.13 carried forward from the previous host (spend_baseline.json)
+         cache reads are 53.7% of that; $24.24 per M billable (1,655,427 billable vs 43,098,276 cache-read)
+[spend] rep03: $   23.79 / $280.00     8.5%  OK
+         $0.00 on this host + $23.79 carried forward from the previous host (spend_baseline.json)
+         cache reads are 58.0% of that; $35.19 per M billable (676,168 billable vs 27,599,630 cache-read)
+[spend] rep04: $   30.57 / $280.00    10.9%  OK
+         $0.00 on this host + $30.57 carried forward from the previous host (spend_baseline.json)
+         cache reads are 56.0% of that; $26.77 per M billable (1,141,836 billable vs 34,248,826 cache-read)
+[spend] rep05: $   32.93 / $280.00    11.8%  OK
+         $0.00 on this host + $32.93 carried forward from the previous host (spend_baseline.json)
+         cache reads are 58.5% of that; $26.63 per M billable (1,236,505 billable vs 38,547,479 cache-read)
+[spend] rep06: $   99.03 / $280.00    35.4%  OK
+         $0.00 on this host + $99.03 carried forward from the previous host (spend_baseline.json)
+         cache reads are 62.0% of that; $23.15 per M billable (4,277,733 billable vs 122,780,669 cache-read)
+[spend] rep07: $   50.55 / $280.00    18.1%  OK
+         $0.00 on this host + $50.55 carried forward from the previous host (spend_baseline.json)
+         cache reads are 54.5% of that; $21.96 per M billable (2,302,436 billable vs 55,077,911 cache-read)
+[spend] rep08: $   40.08 / $280.00    14.3%  OK
+         $0.00 on this host + $40.08 carried forward from the previous host (spend_baseline.json)
+         cache reads are 60.6% of that; $29.75 per M billable (1,347,489 billable vs 48,580,473 cache-read)
+[spend] rep09: $   37.28 / $280.00    13.3%  OK
+         $0.00 on this host + $37.28 carried forward from the previous host (spend_baseline.json)
+         cache reads are 57.9% of that; $26.24 per M billable (1,420,900 billable vs 43,196,137 cache-read)
+[spend] rep10: $   75.59 / $280.00    27.0%  OK
+         $0.00 on this host + $75.59 carried forward from the previous host (spend_baseline.json)
+         cache reads are 65.7% of that; $30.33 per M billable (2,492,029 billable vs 99,298,212 cache-read)
+[spend] rep11: $   38.74 / $280.00    13.8%  OK
+         $0.00 on this host + $38.74 carried forward from the previous host (spend_baseline.json)
+         cache reads are 57.3% of that; $26.08 per M billable (1,485,396 billable vs 44,417,946 cache-read)
+[spend] rep12: $   36.91 / $280.00    13.2%  OK
+         $0.00 on this host + $36.91 carried forward from the previous host (spend_baseline.json)
+         cache reads are 59.8% of that; $27.06 per M billable (1,363,857 billable vs 44,170,710 cache-read)
+[spend] rep13: $   35.86 / $280.00    12.8%  OK
+         $0.00 on this host + $35.86 carried forward from the previous host (spend_baseline.json)
+         cache reads are 64.0% of that; $32.29 per M billable (1,110,321 billable vs 45,876,912 cache-read)
+[spend] rep15: $   49.07 / $280.00    17.5%  OK
+         $0.00 on this host + $49.07 carried forward from the previous host (spend_baseline.json)
+         cache reads are 54.6% of that; $21.57 per M billable (2,275,306 billable vs 53,557,852 cache-read)
+[spend] rep16: $   49.34 / $280.00    17.6%  OK
+         $0.00 on this host + $49.34 carried forward from the previous host (spend_baseline.json)
+         cache reads are 51.7% of that; $18.06 per M billable (2,731,571 billable vs 50,984,830 cache-read)
+[spend] rep17: $   20.45 / $280.00     7.3%  OK
+         $0.00 on this host + $20.45 carried forward from the previous host (spend_baseline.json)
+         cache reads are 54.4% of that; $27.87 per M billable (733,617 billable vs 22,263,594 cache-read)
+[spend] rep01: $   65.14 / $280.00    23.3%  OK
+         $0.00 on this host + $65.14 carried forward from the previous host (spend_baseline.json)
+         cache reads are 76.2% of that; $61.01 per M billable (1,067,618 billable vs 99,323,960 cache-read)
+[spend] rep02: $   40.13 / $280.00    14.3%  OK
+         $0.00 on this host + $40.13 carried forward from the previous host (spend_baseline.json)
+         cache reads are 53.7% of that; $24.24 per M billable (1,655,427 billable vs 43,098,276 cache-read)
+[spend] rep03: $   23.79 / $280.00     8.5%  OK
+         $0.00 on this host + $23.79 carried forward from the previous host (spend_baseline.json)
+         cache reads are 58.0% of that; $35.19 per M billable (676,168 billable vs 27,599,630 cache-read)
+[spend] rep04: $   30.57 / $280.00    10.9%  OK
+         $0.00 on this host + $30.57 carried forward from the previous host (spend_baseline.json)
+         cache reads are 56.0% of that; $26.77 per M billable (1,141,836 billable vs 34,248,826 cache-read)
+[spend] rep05: $   32.93 / $280.00    11.8%  OK
+         $0.00 on this host + $32.93 carried forward from the previous host (spend_baseline.json)
+         cache reads are 58.5% of that; $26.63 per M billable (1,236,505 billable vs 38,547,479 cache-read)
+[spend] rep06: $   99.03 / $280.00    35.4%  OK
+         $0.00 on this host + $99.03 carried forward from the previous host (spend_baseline.json)
+         cache reads are 62.0% of that; $23.15 per M billable (4,277,733 billable vs 122,780,669 cache-read)
+[spend] rep07: $   50.55 / $280.00    18.1%  OK
+         $0.00 on this host + $50.55 carried forward from the previous host (spend_baseline.json)
+         cache reads are 54.5% of that; $21.96 per M billable (2,302,436 billable vs 55,077,911 cache-read)
+[spend] rep08: $   40.08 / $280.00    14.3%  OK
+         $0.00 on this host + $40.08 carried forward from the previous host (spend_baseline.json)
+         cache reads are 60.6% of that; $29.75 per M billable (1,347,489 billable vs 48,580,473 cache-read)
+[spend] rep09: $   37.28 / $280.00    13.3%  OK
+         $0.00 on this host + $37.28 carried forward from the previous host (spend_baseline.json)
+         cache reads are 57.9% of that; $26.24 per M billable (1,420,900 billable vs 43,196,137 cache-read)
+[spend] rep10: $   75.59 / $280.00    27.0%  OK
+         $0.00 on this host + $75.59 carried forward from the previous host (spend_baseline.json)
+         cache reads are 65.7% of that; $30.33 per M billable (2,492,029 billable vs 99,298,212 cache-read)
+[spend] rep11: $   38.74 / $280.00    13.8%  OK
+         $0.00 on this host + $38.74 carried forward from the previous host (spend_baseline.json)
+         cache reads are 57.3% of that; $26.08 per M billable (1,485,396 billable vs 44,417,946 cache-read)
+[spend] rep12: $   36.91 / $280.00    13.2%  OK
+         $0.00 on this host + $36.91 carried forward from the previous host (spend_baseline.json)
+         cache reads are 59.8% of that; $27.06 per M billable (1,363,857 billable vs 44,170,710 cache-read)
+[spend] rep13: $   35.86 / $280.00    12.8%  OK
+         $0.00 on this host + $35.86 carried forward from the previous host (spend_baseline.json)
+         cache reads are 64.0% of that; $32.29 per M billable (1,110,321 billable vs 45,876,912 cache-read)
+[spend] rep15: $   49.07 / $280.00    17.5%  OK
+         $0.00 on this host + $49.07 carried forward from the previous host (spend_baseline.json)
+         cache reads are 54.6% of that; $21.57 per M billable (2,275,306 billable vs 53,557,852 cache-read)
+[spend] rep16: $   49.34 / $280.00    17.6%  OK
+         $0.00 on this host + $49.34 carried forward from the previous host (spend_baseline.json)
+         cache reads are 51.7% of that; $18.06 per M billable (2,731,571 billable vs 50,984,830 cache-read)
+[spend] rep17: $   20.45 / $280.00     7.3%  OK
+         $0.00 on this host + $20.45 carried forward from the previous host (spend_baseline.json)
+         cache reads are 54.4% of that; $27.87 per M billable (733,617 billable vs 22,263,594 cache-read)
+[spend] rep01: $   65.14 / $280.00    23.3%  OK
+         $0.00 on this host + $65.14 carried forward from the previous host (spend_baseline.json)
+         cache reads are 76.2% of that; $61.01 per M billable (1,067,618 billable vs 99,323,960 cache-read)
+[spend] rep02: $   40.13 / $280.00    14.3%  OK
+         $0.00 on this host + $40.13 carried forward from the previous host (spend_baseline.json)
+         cache reads are 53.7% of that; $24.24 per M billable (1,655,427 billable vs 43,098,276 cache-read)
+[spend] rep03: $   23.79 / $280.00     8.5%  OK
+         $0.00 on this host + $23.79 carried forward from the previous host (spend_baseline.json)
+         cache reads are 58.0% of that; $35.19 per M billable (676,168 billable vs 27,599,630 cache-read)
+[spend] rep04: $   30.57 / $280.00    10.9%  OK
+         $0.00 on this host + $30.57 carried forward from the previous host (spend_baseline.json)
+         cache reads are 56.0% of that; $26.77 per M billable (1,141,836 billable vs 34,248,826 cache-read)
+[spend] rep05: $   32.93 / $280.00    11.8%  OK
+         $0.00 on this host + $32.93 carried forward from the previous host (spend_baseline.json)
+         cache reads are 58.5% of that; $26.63 per M billable (1,236,505 billable vs 38,547,479 cache-read)
+[spend] rep06: $   99.03 / $280.00    35.4%  OK
+         $0.00 on this host + $99.03 carried forward from the previous host (spend_baseline.json)
+         cache reads are 62.0% of that; $23.15 per M billable (4,277,733 billable vs 122,780,669 cache-read)
+[spend] rep07: $   50.55 / $280.00    18.1%  OK
+         $0.00 on this host + $50.55 carried forward from the previous host (spend_baseline.json)
+         cache reads are 54.5% of that; $21.96 per M billable (2,302,436 billable vs 55,077,911 cache-read)
+[spend] rep08: $   40.08 / $280.00    14.3%  OK
+         $0.00 on this host + $40.08 carried forward from the previous host (spend_baseline.json)
+         cache reads are 60.6% of that; $29.75 per M billable (1,347,489 billable vs 48,580,473 cache-read)
+[spend] rep09: $   37.28 / $280.00    13.3%  OK
+         $0.00 on this host + $37.28 carried forward from the previous host (spend_baseline.json)
+         cache reads are 57.9% of that; $26.24 per M billable (1,420,900 billable vs 43,196,137 cache-read)
+[spend] rep10: $   75.59 / $280.00    27.0%  OK
+         $0.00 on this host + $75.59 carried forward from the previous host (spend_baseline.json)
+         cache reads are 65.7% of that; $30.33 per M billable (2,492,029 billable vs 99,298,212 cache-read)
+[spend] rep11: $   38.74 / $280.00    13.8%  OK
+         $0.00 on this host + $38.74 carried forward from the previous host (spend_baseline.json)
+         cache reads are 57.3% of that; $26.08 per M billable (1,485,396 billable vs 44,417,946 cache-read)
+[spend] rep12: $   36.91 / $280.00    13.2%  OK
+         $0.00 on this host + $36.91 carried forward from the previous host (spend_baseline.json)
+         cache reads are 59.8% of that; $27.06 per M billable (1,363,857 billable vs 44,170,710 cache-read)
+[spend] rep13: $   35.86 / $280.00    12.8%  OK
+         $0.00 on this host + $35.86 carried forward from the previous host (spend_baseline.json)
+         cache reads are 64.0% of that; $32.29 per M billable (1,110,321 billable vs 45,876,912 cache-read)
+[spend] rep15: $   49.07 / $280.00    17.5%  OK
+         $0.00 on this host + $49.07 carried forward from the previous host (spend_baseline.json)
+         cache reads are 54.6% of that; $21.57 per M billable (2,275,306 billable vs 53,557,852 cache-read)
+[spend] rep16: $   49.34 / $280.00    17.6%  OK
+         $0.00 on this host + $49.34 carried forward from the previous host (spend_baseline.json)
+         cache reads are 51.7% of that; $18.06 per M billable (2,731,571 billable vs 50,984,830 cache-read)
+[spend] rep17: $   20.45 / $280.00     7.3%  OK
+         $0.00 on this host + $20.45 carried forward from the previous host (spend_baseline.json)
+         cache reads are 54.4% of that; $27.87 per M billable (733,617 billable vs 22,263,594 cache-read)
+[spend] rep01: $   65.14 / $280.00    23.3%  OK
+         $0.00 on this host + $65.14 carried forward from the previous host (spend_baseline.json)
+         cache reads are 76.2% of that; $61.01 per M billable (1,067,618 billable vs 99,323,960 cache-read)
+[spend] rep02: $   40.13 / $280.00    14.3%  OK
+         $0.00 on this host + $40.13 carried forward from the previous host (spend_baseline.json)
+         cache reads are 53.7% of that; $24.24 per M billable (1,655,427 billable vs 43,098,276 cache-read)
+[spend] rep03: $   23.79 / $280.00     8.5%  OK
+         $0.00 on this host + $23.79 carried forward from the previous host (spend_baseline.json)
+         cache reads are 58.0% of that; $35.19 per M billable (676,168 billable vs 27,599,630 cache-read)
+[spend] rep04: $   30.57 / $280.00    10.9%  OK
+         $0.00 on this host + $30.57 carried forward from the previous host (spend_baseline.json)
+         cache reads are 56.0% of that; $26.77 per M billable (1,141,836 billable vs 34,248,826 cache-read)
+[spend] rep05: $   32.93 / $280.00    11.8%  OK
+         $0.00 on this host + $32.93 carried forward from the previous host (spend_baseline.json)
+         cache reads are 58.5% of that; $26.63 per M billable (1,236,505 billable vs 38,547,479 cache-read)
+[spend] rep06: $   99.03 / $280.00    35.4%  OK
+         $0.00 on this host + $99.03 carried forward from the previous host (spend_baseline.json)
+         cache reads are 62.0% of that; $23.15 per M billable (4,277,733 billable vs 122,780,669 cache-read)
+[spend] rep07: $   50.55 / $280.00    18.1%  OK
+         $0.00 on this host + $50.55 carried forward from the previous host (spend_baseline.json)
+         cache reads are 54.5% of that; $21.96 per M billable (2,302,436 billable vs 55,077,911 cache-read)
+[spend] rep08: $   40.08 / $280.00    14.3%  OK
+         $0.00 on this host + $40.08 carried forward from the previous host (spend_baseline.json)
+         cache reads are 60.6% of that; $29.75 per M billable (1,347,489 billable vs 48,580,473 cache-read)
+[spend] rep09: $   37.28 / $280.00    13.3%  OK
+         $0.00 on this host + $37.28 carried forward from the previous host (spend_baseline.json)
+         cache reads are 57.9% of that; $26.24 per M billable (1,420,900 billable vs 43,196,137 cache-read)
+[spend] rep10: $   75.59 / $280.00    27.0%  OK
+         $0.00 on this host + $75.59 carried forward from the previous host (spend_baseline.json)
+         cache reads are 65.7% of that; $30.33 per M billable (2,492,029 billable vs 99,298,212 cache-read)
+[spend] rep11: $   38.74 / $280.00    13.8%  OK
+         $0.00 on this host + $38.74 carried forward from the previous host (spend_baseline.json)
+         cache reads are 57.3% of that; $26.08 per M billable (1,485,396 billable vs 44,417,946 cache-read)
+[spend] rep12: $   36.91 / $280.00    13.2%  OK
+         $0.00 on this host + $36.91 carried forward from the previous host (spend_baseline.json)
+         cache reads are 59.8% of that; $27.06 per M billable (1,363,857 billable vs 44,170,710 cache-read)
+[spend] rep13: $   35.86 / $280.00    12.8%  OK
+         $0.00 on this host + $35.86 carried forward from the previous host (spend_baseline.json)
+         cache reads are 64.0% of that; $32.29 per M billable (1,110,321 billable vs 45,876,912 cache-read)
+[spend] rep15: $   49.07 / $280.00    17.5%  OK
+         $0.00 on this host + $49.07 carried forward from the previous host (spend_baseline.json)
+         cache reads are 54.6% of that; $21.57 per M billable (2,275,306 billable vs 53,557,852 cache-read)
+[spend] rep16: $   49.34 / $280.00    17.6%  OK
+         $0.00 on this host + $49.34 carried forward from the previous host (spend_baseline.json)
+         cache reads are 51.7% of that; $18.06 per M billable (2,731,571 billable vs 50,984,830 cache-read)
+[spend] rep17: $   20.45 / $280.00     7.3%  OK
+         $0.00 on this host + $20.45 carried forward from the previous host (spend_baseline.json)
+         cache reads are 54.4% of that; $27.87 per M billable (733,617 billable vs 22,263,594 cache-read)
+[spend] rep01: $   65.14 / $280.00    23.3%  OK
+         $0.00 on this host + $65.14 carried forward from the previous host (spend_baseline.json)
+         cache reads are 76.2% of that; $61.01 per M billable (1,067,618 billable vs 99,323,960 cache-read)
+[spend] rep02: $   40.13 / $280.00    14.3%  OK
+         $0.00 on this host + $40.13 carried forward from the previous host (spend_baseline.json)
+         cache reads are 53.7% of that; $24.24 per M billable (1,655,427 billable vs 43,098,276 cache-read)
+[spend] rep03: $   23.79 / $280.00     8.5%  OK
+         $0.00 on this host + $23.79 carried forward from the previous host (spend_baseline.json)
+         cache reads are 58.0% of that; $35.19 per M billable (676,168 billable vs 27,599,630 cache-read)
+[spend] rep04: $   30.57 / $280.00    10.9%  OK
+         $0.00 on this host + $30.57 carried forward from the previous host (spend_baseline.json)
+         cache reads are 56.0% of that; $26.77 per M billable (1,141,836 billable vs 34,248,826 cache-read)
+[spend] rep05: $   32.93 / $280.00    11.8%  OK
+         $0.00 on this host + $32.93 carried forward from the previous host (spend_baseline.json)
+         cache reads are 58.5% of that; $26.63 per M billable (1,236,505 billable vs 38,547,479 cache-read)
+[spend] rep06: $   99.03 / $280.00    35.4%  OK
+         $0.00 on this host + $99.03 carried forward from the previous host (spend_baseline.json)
+         cache reads are 62.0% of that; $23.15 per M billable (4,277,733 billable vs 122,780,669 cache-read)
+[spend] rep07: $   50.55 / $280.00    18.1%  OK
+         $0.00 on this host + $50.55 carried forward from the previous host (spend_baseline.json)
+         cache reads are 54.5% of that; $21.96 per M billable (2,302,436 billable vs 55,077,911 cache-read)
+[spend] rep08: $   40.08 / $280.00    14.3%  OK
+         $0.00 on this host + $40.08 carried forward from the previous host (spend_baseline.json)
+         cache reads are 60.6% of that; $29.75 per M billable (1,347,489 billable vs 48,580,473 cache-read)
+[spend] rep09: $   37.28 / $280.00    13.3%  OK
+         $0.00 on this host + $37.28 carried forward from the previous host (spend_baseline.json)
+         cache reads are 57.9% of that; $26.24 per M billable (1,420,900 billable vs 43,196,137 cache-read)
+[spend] rep10: $   75.59 / $280.00    27.0%  OK
+         $0.00 on this host + $75.59 carried forward from the previous host (spend_baseline.json)
+         cache reads are 65.7% of that; $30.33 per M billable (2,492,029 billable vs 99,298,212 cache-read)
+[spend] rep11: $   38.74 / $280.00    13.8%  OK
+         $0.00 on this host + $38.74 carried forward from the previous host (spend_baseline.json)
+         cache reads are 57.3% of that; $26.08 per M billable (1,485,396 billable vs 44,417,946 cache-read)
+[spend] rep12: $   36.91 / $280.00    13.2%  OK
+         $0.00 on this host + $36.91 carried forward from the previous host (spend_baseline.json)
+         cache reads are 59.8% of that; $27.06 per M billable (1,363,857 billable vs 44,170,710 cache-read)
+[spend] rep13: $   35.86 / $280.00    12.8%  OK
+         $0.00 on this host + $35.86 carried forward from the previous host (spend_baseline.json)
+         cache reads are 64.0% of that; $32.29 per M billable (1,110,321 billable vs 45,876,912 cache-read)
+[spend] rep15: $   49.07 / $280.00    17.5%  OK
+         $0.00 on this host + $49.07 carried forward from the previous host (spend_baseline.json)
+         cache reads are 54.6% of that; $21.57 per M billable (2,275,306 billable vs 53,557,852 cache-read)
+[spend] rep16: $   49.34 / $280.00    17.6%  OK
+         $0.00 on this host + $49.34 carried forward from the previous host (spend_baseline.json)
+         cache reads are 51.7% of that; $18.06 per M billable (2,731,571 billable vs 50,984,830 cache-read)
+[spend] rep17: $   20.45 / $280.00     7.3%  OK
+         $0.00 on this host + $20.45 carried forward from the previous host (spend_baseline.json)
+         cache reads are 54.4% of that; $27.87 per M billable (733,617 billable vs 22,263,594 cache-read)
+[spend] rep01: $   65.14 / $280.00    23.3%  OK
+         $0.00 on this host + $65.14 carried forward from the previous host (spend_baseline.json)
+         cache reads are 76.2% of that; $61.01 per M billable (1,067,618 billable vs 99,323,960 cache-read)
+[spend] rep02: $   40.13 / $280.00    14.3%  OK
+         $0.00 on this host + $40.13 carried forward from the previous host (spend_baseline.json)
+         cache reads are 53.7% of that; $24.24 per M billable (1,655,427 billable vs 43,098,276 cache-read)
+[spend] rep03: $   23.79 / $280.00     8.5%  OK
+         $0.00 on this host + $23.79 carried forward from the previous host (spend_baseline.json)
+         cache reads are 58.0% of that; $35.19 per M billable (676,168 billable vs 27,599,630 cache-read)
+[spend] rep04: $   30.57 / $280.00    10.9%  OK
+         $0.00 on this host + $30.57 carried forward from the previous host (spend_baseline.json)
+         cache reads are 56.0% of that; $26.77 per M billable (1,141,836 billable vs 34,248,826 cache-read)
+[spend] rep05: $   32.93 / $280.00    11.8%  OK
+         $0.00 on this host + $32.93 carried forward from the previous host (spend_baseline.json)
+         cache reads are 58.5% of that; $26.63 per M billable (1,236,505 billable vs 38,547,479 cache-read)
+[spend] rep06: $   99.03 / $280.00    35.4%  OK
+         $0.00 on this host + $99.03 carried forward from the previous host (spend_baseline.json)
+         cache reads are 62.0% of that; $23.15 per M billable (4,277,733 billable vs 122,780,669 cache-read)
+[spend] rep07: $   50.55 / $280.00    18.1%  OK
+         $0.00 on this host + $50.55 carried forward from the previous host (spend_baseline.json)
+         cache reads are 54.5% of that; $21.96 per M billable (2,302,436 billable vs 55,077,911 cache-read)
+[spend] rep08: $   40.08 / $280.00    14.3%  OK
+         $0.00 on this host + $40.08 carried forward from the previous host (spend_baseline.json)
+         cache reads are 60.6% of that; $29.75 per M billable (1,347,489 billable vs 48,580,473 cache-read)
+[spend] rep09: $   37.28 / $280.00    13.3%  OK
+         $0.00 on this host + $37.28 carried forward from the previous host (spend_baseline.json)
+         cache reads are 57.9% of that; $26.24 per M billable (1,420,900 billable vs 43,196,137 cache-read)
+[spend] rep10: $   75.59 / $280.00    27.0%  OK
+         $0.00 on this host + $75.59 carried forward from the previous host (spend_baseline.json)
+         cache reads are 65.7% of that; $30.33 per M billable (2,492,029 billable vs 99,298,212 cache-read)
+[spend] rep11: $   38.74 / $280.00    13.8%  OK
+         $0.00 on this host + $38.74 carried forward from the previous host (spend_baseline.json)
+         cache reads are 57.3% of that; $26.08 per M billable (1,485,396 billable vs 44,417,946 cache-read)
+[spend] rep12: $   36.91 / $280.00    13.2%  OK
+         $0.00 on this host + $36.91 carried forward from the previous host (spend_baseline.json)
+         cache reads are 59.8% of that; $27.06 per M billable (1,363,857 billable vs 44,170,710 cache-read)
+[spend] rep13: $   35.86 / $280.00    12.8%  OK
+         $0.00 on this host + $35.86 carried forward from the previous host (spend_baseline.json)
+         cache reads are 64.0% of that; $32.29 per M billable (1,110,321 billable vs 45,876,912 cache-read)
+[spend] rep15: $   49.07 / $280.00    17.5%  OK
+         $0.00 on this host + $49.07 carried forward from the previous host (spend_baseline.json)
+         cache reads are 54.6% of that; $21.57 per M billable (2,275,306 billable vs 53,557,852 cache-read)
+[spend] rep16: $   49.34 / $280.00    17.6%  OK
+         $0.00 on this host + $49.34 carried forward from the previous host (spend_baseline.json)
+         cache reads are 51.7% of that; $18.06 per M billable (2,731,571 billable vs 50,984,830 cache-read)
+[spend] rep17: $   20.45 / $280.00     7.3%  OK
+         $0.00 on this host + $20.45 carried forward from the previous host (spend_baseline.json)
+         cache reads are 54.4% of that; $27.87 per M billable (733,617 billable vs 22,263,594 cache-read)
+[spend] rep01: $   65.14 / $280.00    23.3%  OK
+         $0.00 on this host + $65.14 carried forward from the previous host (spend_baseline.json)
+         cache reads are 76.2% of that; $61.01 per M billable (1,067,618 billable vs 99,323,960 cache-read)
+[spend] rep02: $   40.13 / $280.00    14.3%  OK
+         $0.00 on this host + $40.13 carried forward from the previous host (spend_baseline.json)
+         cache reads are 53.7% of that; $24.24 per M billable (1,655,427 billable vs 43,098,276 cache-read)
+[spend] rep03: $   23.79 / $280.00     8.5%  OK
+         $0.00 on this host + $23.79 carried forward from the previous host (spend_baseline.json)
+         cache reads are 58.0% of that; $35.19 per M billable (676,168 billable vs 27,599,630 cache-read)
+[spend] rep04: $   30.57 / $280.00    10.9%  OK
+         $0.00 on this host + $30.57 carried forward from the previous host (spend_baseline.json)
+         cache reads are 56.0% of that; $26.77 per M billable (1,141,836 billable vs 34,248,826 cache-read)
+[spend] rep05: $   32.93 / $280.00    11.8%  OK
+         $0.00 on this host + $32.93 carried forward from the previous host (spend_baseline.json)
+         cache reads are 58.5% of that; $26.63 per M billable (1,236,505 billable vs 38,547,479 cache-read)
+[spend] rep06: $   99.03 / $280.00    35.4%  OK
+         $0.00 on this host + $99.03 carried forward from the previous host (spend_baseline.json)
+         cache reads are 62.0% of that; $23.15 per M billable (4,277,733 billable vs 122,780,669 cache-read)
+[spend] rep07: $   50.55 / $280.00    18.1%  OK
+         $0.00 on this host + $50.55 carried forward from the previous host (spend_baseline.json)
+         cache reads are 54.5% of that; $21.96 per M billable (2,302,436 billable vs 55,077,911 cache-read)
+[spend] rep08: $   40.08 / $280.00    14.3%  OK
+         $0.00 on this host + $40.08 carried forward from the previous host (spend_baseline.json)
+         cache reads are 60.6% of that; $29.75 per M billable (1,347,489 billable vs 48,580,473 cache-read)
+[spend] rep09: $   37.28 / $280.00    13.3%  OK
+         $0.00 on this host + $37.28 carried forward from the previous host (spend_baseline.json)
+         cache reads are 57.9% of that; $26.24 per M billable (1,420,900 billable vs 43,196,137 cache-read)
+[spend] rep10: $   75.59 / $280.00    27.0%  OK
+         $0.00 on this host + $75.59 carried forward from the previous host (spend_baseline.json)
+         cache reads are 65.7% of that; $30.33 per M billable (2,492,029 billable vs 99,298,212 cache-read)
+[spend] rep11: $   38.74 / $280.00    13.8%  OK
+         $0.00 on this host + $38.74 carried forward from the previous host (spend_baseline.json)
+         cache reads are 57.3% of that; $26.08 per M billable (1,485,396 billable vs 44,417,946 cache-read)
+[spend] rep12: $   36.91 / $280.00    13.2%  OK
+         $0.00 on this host + $36.91 carried forward from the previous host (spend_baseline.json)
+         cache reads are 59.8% of that; $27.06 per M billable (1,363,857 billable vs 44,170,710 cache-read)
+[spend] rep13: $   35.86 / $280.00    12.8%  OK
+         $0.00 on this host + $35.86 carried forward from the previous host (spend_baseline.json)
+         cache reads are 64.0% of that; $32.29 per M billable (1,110,321 billable vs 45,876,912 cache-read)
+[spend] rep15: $   49.07 / $280.00    17.5%  OK
+         $0.00 on this host + $49.07 carried forward from the previous host (spend_baseline.json)
+         cache reads are 54.6% of that; $21.57 per M billable (2,275,306 billable vs 53,557,852 cache-read)
+[spend] rep16: $   49.34 / $280.00    17.6%  OK
+         $0.00 on this host + $49.34 carried forward from the previous host (spend_baseline.json)
+         cache reads are 51.7% of that; $18.06 per M billable (2,731,571 billable vs 50,984,830 cache-read)
+[spend] rep17: $   20.45 / $280.00     7.3%  OK
+         $0.00 on this host + $20.45 carried forward from the previous host (spend_baseline.json)
+         cache reads are 54.4% of that; $27.87 per M billable (733,617 billable vs 22,263,594 cache-read)
+[spend] rep01: $   65.14 / $280.00    23.3%  OK
+         $0.00 on this host + $65.14 carried forward from the previous host (spend_baseline.json)
+         cache reads are 76.2% of that; $61.01 per M billable (1,067,618 billable vs 99,323,960 cache-read)
+[spend] rep02: $   40.13 / $280.00    14.3%  OK
+         $0.00 on this host + $40.13 carried forward from the previous host (spend_baseline.json)
+         cache reads are 53.7% of that; $24.24 per M billable (1,655,427 billable vs 43,098,276 cache-read)
+[spend] rep03: $   23.79 / $280.00     8.5%  OK
+         $0.00 on this host + $23.79 carried forward from the previous host (spend_baseline.json)
+         cache reads are 58.0% of that; $35.19 per M billable (676,168 billable vs 27,599,630 cache-read)
+[spend] rep04: $   30.57 / $280.00    10.9%  OK
+         $0.00 on this host + $30.57 carried forward from the previous host (spend_baseline.json)
+         cache reads are 56.0% of that; $26.77 per M billable (1,141,836 billable vs 34,248,826 cache-read)
+[spend] rep05: $   32.93 / $280.00    11.8%  OK
+         $0.00 on this host + $32.93 carried forward from the previous host (spend_baseline.json)
+         cache reads are 58.5% of that; $26.63 per M billable (1,236,505 billable vs 38,547,479 cache-read)
+[spend] rep06: $   99.03 / $280.00    35.4%  OK
+         $0.00 on this host + $99.03 carried forward from the previous host (spend_baseline.json)
+         cache reads are 62.0% of that; $23.15 per M billable (4,277,733 billable vs 122,780,669 cache-read)
+[spend] rep07: $   50.55 / $280.00    18.1%  OK
+         $0.00 on this host + $50.55 carried forward from the previous host (spend_baseline.json)
+         cache reads are 54.5% of that; $21.96 per M billable (2,302,436 billable vs 55,077,911 cache-read)
+[spend] rep08: $   40.08 / $280.00    14.3%  OK
+         $0.00 on this host + $40.08 carried forward from the previous host (spend_baseline.json)
+         cache reads are 60.6% of that; $29.75 per M billable (1,347,489 billable vs 48,580,473 cache-read)
+[spend] rep09: $   37.28 / $280.00    13.3%  OK
+         $0.00 on this host + $37.28 carried forward from the previous host (spend_baseline.json)
+         cache reads are 57.9% of that; $26.24 per M billable (1,420,900 billable vs 43,196,137 cache-read)
+[spend] rep10: $   75.59 / $280.00    27.0%  OK
+         $0.00 on this host + $75.59 carried forward from the previous host (spend_baseline.json)
+         cache reads are 65.7% of that; $30.33 per M billable (2,492,029 billable vs 99,298,212 cache-read)
+[spend] rep11: $   38.74 / $280.00    13.8%  OK
+         $0.00 on this host + $38.74 carried forward from the previous host (spend_baseline.json)
+         cache reads are 57.3% of that; $26.08 per M billable (1,485,396 billable vs 44,417,946 cache-read)
+[spend] rep12: $   36.91 / $280.00    13.2%  OK
+         $0.00 on this host + $36.91 carried forward from the previous host (spend_baseline.json)
+         cache reads are 59.8% of that; $27.06 per M billable (1,363,857 billable vs 44,170,710 cache-read)
+[spend] rep13: $   35.86 / $280.00    12.8%  OK
+         $0.00 on this host + $35.86 carried forward from the previous host (spend_baseline.json)
+         cache reads are 64.0% of that; $32.29 per M billable (1,110,321 billable vs 45,876,912 cache-read)
+[spend] rep15: $   49.07 / $280.00    17.5%  OK
+         $0.00 on this host + $49.07 carried forward from the previous host (spend_baseline.json)
+         cache reads are 54.6% of that; $21.57 per M billable (2,275,306 billable vs 53,557,852 cache-read)
+[spend] rep16: $   49.34 / $280.00    17.6%  OK
+         $0.00 on this host + $49.34 carried forward from the previous host (spend_baseline.json)
+         cache reads are 51.7% of that; $18.06 per M billable (2,731,571 billable vs 50,984,830 cache-read)
+[spend] rep17: $   20.45 / $280.00     7.3%  OK
+         $0.00 on this host + $20.45 carried forward from the previous host (spend_baseline.json)
+         cache reads are 54.4% of that; $27.87 per M billable (733,617 billable vs 22,263,594 cache-read)
+[spend] rep01: $   65.14 / $280.00    23.3%  OK
+         $0.00 on this host + $65.14 carried forward from the previous host (spend_baseline.json)
+         cache reads are 76.2% of that; $61.01 per M billable (1,067,618 billable vs 99,323,960 cache-read)
+[spend] rep02: $   40.13 / $280.00    14.3%  OK
+         $0.00 on this host + $40.13 carried forward from the previous host (spend_baseline.json)
+         cache reads are 53.7% of that; $24.24 per M billable (1,655,427 billable vs 43,098,276 cache-read)
+[spend] rep03: $   23.79 / $280.00     8.5%  OK
+         $0.00 on this host + $23.79 carried forward from the previous host (spend_baseline.json)
+         cache reads are 58.0% of that; $35.19 per M billable (676,168 billable vs 27,599,630 cache-read)
+[spend] rep04: $   30.57 / $280.00    10.9%  OK
+         $0.00 on this host + $30.57 carried forward from the previous host (spend_baseline.json)
+         cache reads are 56.0% of that; $26.77 per M billable (1,141,836 billable vs 34,248,826 cache-read)
+[spend] rep05: $   32.93 / $280.00    11.8%  OK
+         $0.00 on this host + $32.93 carried forward from the previous host (spend_baseline.json)
+         cache reads are 58.5% of that; $26.63 per M billable (1,236,505 billable vs 38,547,479 cache-read)
+[spend] rep06: $   99.03 / $280.00    35.4%  OK
+         $0.00 on this host + $99.03 carried forward from the previous host (spend_baseline.json)
+         cache reads are 62.0% of that; $23.15 per M billable (4,277,733 billable vs 122,780,669 cache-read)
+[spend] rep07: $   50.55 / $280.00    18.1%  OK
+         $0.00 on this host + $50.55 carried forward from the previous host (spend_baseline.json)
+         cache reads are 54.5% of that; $21.96 per M billable (2,302,436 billable vs 55,077,911 cache-read)
+[spend] rep08: $   40.08 / $280.00    14.3%  OK
+         $0.00 on this host + $40.08 carried forward from the previous host (spend_baseline.json)
+         cache reads are 60.6% of that; $29.75 per M billable (1,347,489 billable vs 48,580,473 cache-read)
+[spend] rep09: $   37.28 / $280.00    13.3%  OK
+         $0.00 on this host + $37.28 carried forward from the previous host (spend_baseline.json)
+         cache reads are 57.9% of that; $26.24 per M billable (1,420,900 billable vs 43,196,137 cache-read)
+[spend] rep10: $   75.59 / $280.00    27.0%  OK
+         $0.00 on this host + $75.59 carried forward from the previous host (spend_baseline.json)
+         cache reads are 65.7% of that; $30.33 per M billable (2,492,029 billable vs 99,298,212 cache-read)
+[spend] rep11: $   38.74 / $280.00    13.8%  OK
+         $0.00 on this host + $38.74 carried forward from the previous host (spend_baseline.json)
+         cache reads are 57.3% of that; $26.08 per M billable (1,485,396 billable vs 44,417,946 cache-read)
+[spend] rep12: $   36.91 / $280.00    13.2%  OK
+         $0.00 on this host + $36.91 carried forward from the previous host (spend_baseline.json)
+         cache reads are 59.8% of that; $27.06 per M billable (1,363,857 billable vs 44,170,710 cache-read)
+[spend] rep13: $   35.86 / $280.00    12.8%  OK
+         $0.00 on this host + $35.86 carried forward from the previous host (spend_baseline.json)
+         cache reads are 64.0% of that; $32.29 per M billable (1,110,321 billable vs 45,876,912 cache-read)
+[spend] rep15: $   49.07 / $280.00    17.5%  OK
+         $0.00 on this host + $49.07 carried forward from the previous host (spend_baseline.json)
+         cache reads are 54.6% of that; $21.57 per M billable (2,275,306 billable vs 53,557,852 cache-read)
+[spend] rep16: $   49.34 / $280.00    17.6%  OK
+         $0.00 on this host + $49.34 carried forward from the previous host (spend_baseline.json)
+         cache reads are 51.7% of that; $18.06 per M billable (2,731,571 billable vs 50,984,830 cache-read)
+[spend] rep17: $   20.45 / $280.00     7.3%  OK
+         $0.00 on this host + $20.45 carried forward from the previous host (spend_baseline.json)
+         cache reads are 54.4% of that; $27.87 per M billable (733,617 billable vs 22,263,594 cache-read)
+[spend] rep01: $   65.14 / $280.00    23.3%  OK
+         $0.00 on this host + $65.14 carried forward from the previous host (spend_baseline.json)
+         cache reads are 76.2% of that; $61.01 per M billable (1,067,618 billable vs 99,323,960 cache-read)
+[spend] rep02: $   40.13 / $280.00    14.3%  OK
+         $0.00 on this host + $40.13 carried forward from the previous host (spend_baseline.json)
+         cache reads are 53.7% of that; $24.24 per M billable (1,655,427 billable vs 43,098,276 cache-read)
+[spend] rep03: $   23.79 / $280.00     8.5%  OK
+         $0.00 on this host + $23.79 carried forward from the previous host (spend_baseline.json)
+         cache reads are 58.0% of that; $35.19 per M billable (676,168 billable vs 27,599,630 cache-read)
+[spend] rep04: $   30.57 / $280.00    10.9%  OK
+         $0.00 on this host + $30.57 carried forward from the previous host (spend_baseline.json)
+         cache reads are 56.0% of that; $26.77 per M billable (1,141,836 billable vs 34,248,826 cache-read)
+[spend] rep05: $   32.93 / $280.00    11.8%  OK
+         $0.00 on this host + $32.93 carried forward from the previous host (spend_baseline.json)
+         cache reads are 58.5% of that; $26.63 per M billable (1,236,505 billable vs 38,547,479 cache-read)
+[spend] rep06: $   99.03 / $280.00    35.4%  OK
+         $0.00 on this host + $99.03 carried forward from the previous host (spend_baseline.json)
+         cache reads are 62.0% of that; $23.15 per M billable (4,277,733 billable vs 122,780,669 cache-read)
+[spend] rep07: $   50.55 / $280.00    18.1%  OK
+         $0.00 on this host + $50.55 carried forward from the previous host (spend_baseline.json)
+         cache reads are 54.5% of that; $21.96 per M billable (2,302,436 billable vs 55,077,911 cache-read)
+[spend] rep08: $   40.08 / $280.00    14.3%  OK
+         $0.00 on this host + $40.08 carried forward from the previous host (spend_baseline.json)
+         cache reads are 60.6% of that; $29.75 per M billable (1,347,489 billable vs 48,580,473 cache-read)
+[spend] rep09: $   37.28 / $280.00    13.3%  OK
+         $0.00 on this host + $37.28 carried forward from the previous host (spend_baseline.json)
+         cache reads are 57.9% of that; $26.24 per M billable (1,420,900 billable vs 43,196,137 cache-read)
+[spend] rep10: $   75.59 / $280.00    27.0%  OK
+         $0.00 on this host + $75.59 carried forward from the previous host (spend_baseline.json)
+         cache reads are 65.7% of that; $30.33 per M billable (2,492,029 billable vs 99,298,212 cache-read)
+[spend] rep11: $   38.74 / $280.00    13.8%  OK
+         $0.00 on this host + $38.74 carried forward from the previous host (spend_baseline.json)
+         cache reads are 57.3% of that; $26.08 per M billable (1,485,396 billable vs 44,417,946 cache-read)
+[spend] rep12: $   36.91 / $280.00    13.2%  OK
+         $0.00 on this host + $36.91 carried forward from the previous host (spend_baseline.json)
+         cache reads are 59.8% of that; $27.06 per M billable (1,363,857 billable vs 44,170,710 cache-read)
+[spend] rep13: $   35.86 / $280.00    12.8%  OK
+         $0.00 on this host + $35.86 carried forward from the previous host (spend_baseline.json)
+         cache reads are 64.0% of that; $32.29 per M billable (1,110,321 billable vs 45,876,912 cache-read)
+[spend] rep15: $   49.07 / $280.00    17.5%  OK
+         $0.00 on this host + $49.07 carried forward from the previous host (spend_baseline.json)
+         cache reads are 54.6% of that; $21.57 per M billable (2,275,306 billable vs 53,557,852 cache-read)
+[spend] rep16: $   49.34 / $280.00    17.6%  OK
+         $0.00 on this host + $49.34 carried forward from the previous host (spend_baseline.json)
+         cache reads are 51.7% of that; $18.06 per M billable (2,731,571 billable vs 50,984,830 cache-read)
+[spend] rep17: $   20.45 / $280.00     7.3%  OK
+         $0.00 on this host + $20.45 carried forward from the previous host (spend_baseline.json)
+         cache reads are 54.4% of that; $27.87 per M billable (733,617 billable vs 22,263,594 cache-read)
+[spend] rep01: $   65.14 / $280.00    23.3%  OK
+         $0.00 on this host + $65.14 carried forward from the previous host (spend_baseline.json)
+         cache reads are 76.2% of that; $61.01 per M billable (1,067,618 billable vs 99,323,960 cache-read)
+[spend] rep02: $   40.13 / $280.00    14.3%  OK
+         $0.00 on this host + $40.13 carried forward from the previous host (spend_baseline.json)
+         cache reads are 53.7% of that; $24.24 per M billable (1,655,427 billable vs 43,098,276 cache-read)
+[spend] rep03: $   23.79 / $280.00     8.5%  OK
+         $0.00 on this host + $23.79 carried forward from the previous host (spend_baseline.json)
+         cache reads are 58.0% of that; $35.19 per M billable (676,168 billable vs 27,599,630 cache-read)
+[spend] rep04: $   30.57 / $280.00    10.9%  OK
+         $0.00 on this host + $30.57 carried forward from the previous host (spend_baseline.json)
+         cache reads are 56.0% of that; $26.77 per M billable (1,141,836 billable vs 34,248,826 cache-read)
+[spend] rep05: $   32.93 / $280.00    11.8%  OK
+         $0.00 on this host + $32.93 carried forward from the previous host (spend_baseline.json)
+         cache reads are 58.5% of that; $26.63 per M billable (1,236,505 billable vs 38,547,479 cache-read)
+[spend] rep06: $   99.03 / $280.00    35.4%  OK
+         $0.00 on this host + $99.03 carried forward from the previous host (spend_baseline.json)
+         cache reads are 62.0% of that; $23.15 per M billable (4,277,733 billable vs 122,780,669 cache-read)
+[spend] rep07: $   50.55 / $280.00    18.1%  OK
+         $0.00 on this host + $50.55 carried forward from the previous host (spend_baseline.json)
+         cache reads are 54.5% of that; $21.96 per M billable (2,302,436 billable vs 55,077,911 cache-read)
+[spend] rep08: $   40.08 / $280.00    14.3%  OK
+         $0.00 on this host + $40.08 carried forward from the previous host (spend_baseline.json)
+         cache reads are 60.6% of that; $29.75 per M billable (1,347,489 billable vs 48,580,473 cache-read)
+[spend] rep09: $   37.28 / $280.00    13.3%  OK
+         $0.00 on this host + $37.28 carried forward from the previous host (spend_baseline.json)
+         cache reads are 57.9% of that; $26.24 per M billable (1,420,900 billable vs 43,196,137 cache-read)
+[spend] rep10: $   75.59 / $280.00    27.0%  OK
+         $0.00 on this host + $75.59 carried forward from the previous host (spend_baseline.json)
+         cache reads are 65.7% of that; $30.33 per M billable (2,492,029 billable vs 99,298,212 cache-read)
+[spend] rep11: $   38.74 / $280.00    13.8%  OK
+         $0.00 on this host + $38.74 carried forward from the previous host (spend_baseline.json)
+         cache reads are 57.3% of that; $26.08 per M billable (1,485,396 billable vs 44,417,946 cache-read)
+[spend] rep12: $   36.91 / $280.00    13.2%  OK
+         $0.00 on this host + $36.91 carried forward from the previous host (spend_baseline.json)
+         cache reads are 59.8% of that; $27.06 per M billable (1,363,857 billable vs 44,170,710 cache-read)
+[spend] rep13: $   35.86 / $280.00    12.8%  OK
+         $0.00 on this host + $35.86 carried forward from the previous host (spend_baseline.json)
+         cache reads are 64.0% of that; $32.29 per M billable (1,110,321 billable vs 45,876,912 cache-read)
+[spend] rep15: $   49.07 / $280.00    17.5%  OK
+         $0.00 on this host + $49.07 carried forward from the previous host (spend_baseline.json)
+         cache reads are 54.6% of that; $21.57 per M billable (2,275,306 billable vs 53,557,852 cache-read)
+[spend] rep16: $   49.34 / $280.00    17.6%  OK
+         $0.00 on this host + $49.34 carried forward from the previous host (spend_baseline.json)
+         cache reads are 51.7% of that; $18.06 per M billable (2,731,571 billable vs 50,984,830 cache-read)
+[spend] rep17: $   20.45 / $280.00     7.3%  OK
+         $0.00 on this host + $20.45 carried forward from the previous host (spend_baseline.json)
+         cache reads are 54.4% of that; $27.87 per M billable (733,617 billable vs 22,263,594 cache-read)
+[spend] rep01: $   65.14 / $280.00    23.3%  OK
+         $0.00 on this host + $65.14 carried forward from the previous host (spend_baseline.json)
+         cache reads are 76.2% of that; $61.01 per M billable (1,067,618 billable vs 99,323,960 cache-read)
+[spend] rep02: $   40.13 / $280.00    14.3%  OK
+         $0.00 on this host + $40.13 carried forward from the previous host (spend_baseline.json)
+         cache reads are 53.7% of that; $24.24 per M billable (1,655,427 billable vs 43,098,276 cache-read)
+[spend] rep03: $   23.79 / $280.00     8.5%  OK
+         $0.00 on this host + $23.79 carried forward from the previous host (spend_baseline.json)
+         cache reads are 58.0% of that; $35.19 per M billable (676,168 billable vs 27,599,630 cache-read)
+[spend] rep04: $   30.57 / $280.00    10.9%  OK
+         $0.00 on this host + $30.57 carried forward from the previous host (spend_baseline.json)
+         cache reads are 56.0% of that; $26.77 per M billable (1,141,836 billable vs 34,248,826 cache-read)
+[spend] rep05: $   32.93 / $280.00    11.8%  OK
+         $0.00 on this host + $32.93 carried forward from the previous host (spend_baseline.json)
+         cache reads are 58.5% of that; $26.63 per M billable (1,236,505 billable vs 38,547,479 cache-read)
+[spend] rep06: $   99.03 / $280.00    35.4%  OK
+         $0.00 on this host + $99.03 carried forward from the previous host (spend_baseline.json)
+         cache reads are 62.0% of that; $23.15 per M billable (4,277,733 billable vs 122,780,669 cache-read)
+[spend] rep07: $   50.55 / $280.00    18.1%  OK
+         $0.00 on this host + $50.55 carried forward from the previous host (spend_baseline.json)
+         cache reads are 54.5% of that; $21.96 per M billable (2,302,436 billable vs 55,077,911 cache-read)
+[spend] rep08: $   40.08 / $280.00    14.3%  OK
+         $0.00 on this host + $40.08 carried forward from the previous host (spend_baseline.json)
+         cache reads are 60.6% of that; $29.75 per M billable (1,347,489 billable vs 48,580,473 cache-read)
+[spend] rep09: $   37.28 / $280.00    13.3%  OK
+         $0.00 on this host + $37.28 carried forward from the previous host (spend_baseline.json)
+         cache reads are 57.9% of that; $26.24 per M billable (1,420,900 billable vs 43,196,137 cache-read)
+[spend] rep10: $   75.59 / $280.00    27.0%  OK
+         $0.00 on this host + $75.59 carried forward from the previous host (spend_baseline.json)
+         cache reads are 65.7% of that; $30.33 per M billable (2,492,029 billable vs 99,298,212 cache-read)
+[spend] rep11: $   38.74 / $280.00    13.8%  OK
+         $0.00 on this host + $38.74 carried forward from the previous host (spend_baseline.json)
+         cache reads are 57.3% of that; $26.08 per M billable (1,485,396 billable vs 44,417,946 cache-read)
+[spend] rep12: $   36.91 / $280.00    13.2%  OK
+         $0.00 on this host + $36.91 carried forward from the previous host (spend_baseline.json)
+         cache reads are 59.8% of that; $27.06 per M billable (1,363,857 billable vs 44,170,710 cache-read)
+[spend] rep13: $   35.86 / $280.00    12.8%  OK
+         $0.00 on this host + $35.86 carried forward from the previous host (spend_baseline.json)
+         cache reads are 64.0% of that; $32.29 per M billable (1,110,321 billable vs 45,876,912 cache-read)
+[spend] rep15: $   49.07 / $280.00    17.5%  OK
+         $0.00 on this host + $49.07 carried forward from the previous host (spend_baseline.json)
+         cache reads are 54.6% of that; $21.57 per M billable (2,275,306 billable vs 53,557,852 cache-read)
+[spend] rep16: $   49.34 / $280.00    17.6%  OK
+         $0.00 on this host + $49.34 carried forward from the previous host (spend_baseline.json)
+         cache reads are 51.7% of that; $18.06 per M billable (2,731,571 billable vs 50,984,830 cache-read)
+[spend] rep17: $   20.45 / $280.00     7.3%  OK
+         $0.00 on this host + $20.45 carried forward from the previous host (spend_baseline.json)
+         cache reads are 54.4% of that; $27.87 per M billable (733,617 billable vs 22,263,594 cache-read)
+[spend] rep01: $   65.14 / $280.00    23.3%  OK
+         $0.00 on this host + $65.14 carried forward from the previous host (spend_baseline.json)
+         cache reads are 76.2% of that; $61.01 per M billable (1,067,618 billable vs 99,323,960 cache-read)
+[spend] rep02: $   40.13 / $280.00    14.3%  OK
+         $0.00 on this host + $40.13 carried forward from the previous host (spend_baseline.json)
+         cache reads are 53.7% of that; $24.24 per M billable (1,655,427 billable vs 43,098,276 cache-read)
+[spend] rep03: $   23.79 / $280.00     8.5%  OK
+         $0.00 on this host + $23.79 carried forward from the previous host (spend_baseline.json)
+         cache reads are 58.0% of that; $35.19 per M billable (676,168 billable vs 27,599,630 cache-read)
+[spend] rep04: $   30.57 / $280.00    10.9%  OK
+         $0.00 on this host + $30.57 carried forward from the previous host (spend_baseline.json)
+         cache reads are 56.0% of that; $26.77 per M billable (1,141,836 billable vs 34,248,826 cache-read)
+[spend] rep05: $   32.93 / $280.00    11.8%  OK
+         $0.00 on this host + $32.93 carried forward from the previous host (spend_baseline.json)
+         cache reads are 58.5% of that; $26.63 per M billable (1,236,505 billable vs 38,547,479 cache-read)
+[spend] rep06: $   99.03 / $280.00    35.4%  OK
+         $0.00 on this host + $99.03 carried forward from the previous host (spend_baseline.json)
+         cache reads are 62.0% of that; $23.15 per M billable (4,277,733 billable vs 122,780,669 cache-read)
+[spend] rep07: $   50.55 / $280.00    18.1%  OK
+         $0.00 on this host + $50.55 carried forward from the previous host (spend_baseline.json)
+         cache reads are 54.5% of that; $21.96 per M billable (2,302,436 billable vs 55,077,911 cache-read)
+[spend] rep08: $   40.08 / $280.00    14.3%  OK
+         $0.00 on this host + $40.08 carried forward from the previous host (spend_baseline.json)
+         cache reads are 60.6% of that; $29.75 per M billable (1,347,489 billable vs 48,580,473 cache-read)
+[spend] rep09: $   37.28 / $280.00    13.3%  OK
+         $0.00 on this host + $37.28 carried forward from the previous host (spend_baseline.json)
+         cache reads are 57.9% of that; $26.24 per M billable (1,420,900 billable vs 43,196,137 cache-read)
+[spend] rep10: $   75.59 / $280.00    27.0%  OK
+         $0.00 on this host + $75.59 carried forward from the previous host (spend_baseline.json)
+         cache reads are 65.7% of that; $30.33 per M billable (2,492,029 billable vs 99,298,212 cache-read)
+[spend] rep11: $   38.74 / $280.00    13.8%  OK
+         $0.00 on this host + $38.74 carried forward from the previous host (spend_baseline.json)
+         cache reads are 57.3% of that; $26.08 per M billable (1,485,396 billable vs 44,417,946 cache-read)
+[spend] rep12: $   36.91 / $280.00    13.2%  OK
+         $0.00 on this host + $36.91 carried forward from the previous host (spend_baseline.json)
+         cache reads are 59.8% of that; $27.06 per M billable (1,363,857 billable vs 44,170,710 cache-read)
+[spend] rep13: $   35.86 / $280.00    12.8%  OK
+         $0.00 on this host + $35.86 carried forward from the previous host (spend_baseline.json)
+         cache reads are 64.0% of that; $32.29 per M billable (1,110,321 billable vs 45,876,912 cache-read)
+[spend] rep15: $   49.07 / $280.00    17.5%  OK
+         $0.00 on this host + $49.07 carried forward from the previous host (spend_baseline.json)
+         cache reads are 54.6% of that; $21.57 per M billable (2,275,306 billable vs 53,557,852 cache-read)
+[spend] rep16: $   49.34 / $280.00    17.6%  OK
+         $0.00 on this host + $49.34 carried forward from the previous host (spend_baseline.json)
+         cache reads are 51.7% of that; $18.06 per M billable (2,731,571 billable vs 50,984,830 cache-read)
+[spend] rep17: $   20.45 / $280.00     7.3%  OK
+         $0.00 on this host + $20.45 carried forward from the previous host (spend_baseline.json)
+         cache reads are 54.4% of that; $27.87 per M billable (733,617 billable vs 22,263,594 cache-read)
+[spend] rep01: $   65.14 / $280.00    23.3%  OK
+         $0.00 on this host + $65.14 carried forward from the previous host (spend_baseline.json)
+         cache reads are 76.2% of that; $61.01 per M billable (1,067,618 billable vs 99,323,960 cache-read)
+[spend] rep02: $   40.13 / $280.00    14.3%  OK
+         $0.00 on this host + $40.13 carried forward from the previous host (spend_baseline.json)
+         cache reads are 53.7% of that; $24.24 per M billable (1,655,427 billable vs 43,098,276 cache-read)
+[spend] rep03: $   23.79 / $280.00     8.5%  OK
+         $0.00 on this host + $23.79 carried forward from the previous host (spend_baseline.json)
+         cache reads are 58.0% of that; $35.19 per M billable (676,168 billable vs 27,599,630 cache-read)
+[spend] rep04: $   30.57 / $280.00    10.9%  OK
+         $0.00 on this host + $30.57 carried forward from the previous host (spend_baseline.json)
+         cache reads are 56.0% of that; $26.77 per M billable (1,141,836 billable vs 34,248,826 cache-read)
+[spend] rep05: $   32.93 / $280.00    11.8%  OK
+         $0.00 on this host + $32.93 carried forward from the previous host (spend_baseline.json)
+         cache reads are 58.5% of that; $26.63 per M billable (1,236,505 billable vs 38,547,479 cache-read)
+[spend] rep06: $   99.03 / $280.00    35.4%  OK
+         $0.00 on this host + $99.03 carried forward from the previous host (spend_baseline.json)
+         cache reads are 62.0% of that; $23.15 per M billable (4,277,733 billable vs 122,780,669 cache-read)
+[spend] rep07: $   50.55 / $280.00    18.1%  OK
+         $0.00 on this host + $50.55 carried forward from the previous host (spend_baseline.json)
+         cache reads are 54.5% of that; $21.96 per M billable (2,302,436 billable vs 55,077,911 cache-read)
+[spend] rep08: $   40.08 / $280.00    14.3%  OK
+         $0.00 on this host + $40.08 carried forward from the previous host (spend_baseline.json)
+         cache reads are 60.6% of that; $29.75 per M billable (1,347,489 billable vs 48,580,473 cache-read)
+[spend] rep09: $   37.28 / $280.00    13.3%  OK
+         $0.00 on this host + $37.28 carried forward from the previous host (spend_baseline.json)
+         cache reads are 57.9% of that; $26.24 per M billable (1,420,900 billable vs 43,196,137 cache-read)
+[spend] rep10: $   75.59 / $280.00    27.0%  OK
+         $0.00 on this host + $75.59 carried forward from the previous host (spend_baseline.json)
+         cache reads are 65.7% of that; $30.33 per M billable (2,492,029 billable vs 99,298,212 cache-read)
+[spend] rep11: $   38.74 / $280.00    13.8%  OK
+         $0.00 on this host + $38.74 carried forward from the previous host (spend_baseline.json)
+         cache reads are 57.3% of that; $26.08 per M billable (1,485,396 billable vs 44,417,946 cache-read)
+[spend] rep12: $   36.91 / $280.00    13.2%  OK
+         $0.00 on this host + $36.91 carried forward from the previous host (spend_baseline.json)
+         cache reads are 59.8% of that; $27.06 per M billable (1,363,857 billable vs 44,170,710 cache-read)
+[spend] rep13: $   35.86 / $280.00    12.8%  OK
+         $0.00 on this host + $35.86 carried forward from the previous host (spend_baseline.json)
+         cache reads are 64.0% of that; $32.29 per M billable (1,110,321 billable vs 45,876,912 cache-read)
+[spend] rep15: $   49.07 / $280.00    17.5%  OK
+         $0.00 on this host + $49.07 carried forward from the previous host (spend_baseline.json)
+         cache reads are 54.6% of that; $21.57 per M billable (2,275,306 billable vs 53,557,852 cache-read)
+[spend] rep16: $   49.34 / $280.00    17.6%  OK
+         $0.00 on this host + $49.34 carried forward from the previous host (spend_baseline.json)
+         cache reads are 51.7% of that; $18.06 per M billable (2,731,571 billable vs 50,984,830 cache-read)
+[spend] rep17: $   20.45 / $280.00     7.3%  OK
+         $0.00 on this host + $20.45 carried forward from the previous host (spend_baseline.json)
+         cache reads are 54.4% of that; $27.87 per M billable (733,617 billable vs 22,263,594 cache-read)
+[spend] rep01: $   65.14 / $280.00    23.3%  OK
+         $0.00 on this host + $65.14 carried forward from the previous host (spend_baseline.json)
+         cache reads are 76.2% of that; $61.01 per M billable (1,067,618 billable vs 99,323,960 cache-read)
+[spend] rep02: $   40.13 / $280.00    14.3%  OK
+         $0.00 on this host + $40.13 carried forward from the previous host (spend_baseline.json)
+         cache reads are 53.7% of that; $24.24 per M billable (1,655,427 billable vs 43,098,276 cache-read)
+[spend] rep03: $   23.79 / $280.00     8.5%  OK
+         $0.00 on this host + $23.79 carried forward from the previous host (spend_baseline.json)
+         cache reads are 58.0% of that; $35.19 per M billable (676,168 billable vs 27,599,630 cache-read)
+[spend] rep04: $   30.57 / $280.00    10.9%  OK
+         $0.00 on this host + $30.57 carried forward from the previous host (spend_baseline.json)
+         cache reads are 56.0% of that; $26.77 per M billable (1,141,836 billable vs 34,248,826 cache-read)
+[spend] rep05: $   32.93 / $280.00    11.8%  OK
+         $0.00 on this host + $32.93 carried forward from the previous host (spend_baseline.json)
+         cache reads are 58.5% of that; $26.63 per M billable (1,236,505 billable vs 38,547,479 cache-read)
+[spend] rep06: $   99.03 / $280.00    35.4%  OK
+         $0.00 on this host + $99.03 carried forward from the previous host (spend_baseline.json)
+         cache reads are 62.0% of that; $23.15 per M billable (4,277,733 billable vs 122,780,669 cache-read)
+[spend] rep07: $   50.55 / $280.00    18.1%  OK
+         $0.00 on this host + $50.55 carried forward from the previous host (spend_baseline.json)
+         cache reads are 54.5% of that; $21.96 per M billable (2,302,436 billable vs 55,077,911 cache-read)
+[spend] rep08: $   40.08 / $280.00    14.3%  OK
+         $0.00 on this host + $40.08 carried forward from the previous host (spend_baseline.json)
+         cache reads are 60.6% of that; $29.75 per M billable (1,347,489 billable vs 48,580,473 cache-read)
+[spend] rep09: $   37.28 / $280.00    13.3%  OK
+         $0.00 on this host + $37.28 carried forward from the previous host (spend_baseline.json)
+         cache reads are 57.9% of that; $26.24 per M billable (1,420,900 billable vs 43,196,137 cache-read)
+[spend] rep10: $   75.59 / $280.00    27.0%  OK
+         $0.00 on this host + $75.59 carried forward from the previous host (spend_baseline.json)
+         cache reads are 65.7% of that; $30.33 per M billable (2,492,029 billable vs 99,298,212 cache-read)
+[spend] rep11: $   38.74 / $280.00    13.8%  OK
+         $0.00 on this host + $38.74 carried forward from the previous host (spend_baseline.json)
+         cache reads are 57.3% of that; $26.08 per M billable (1,485,396 billable vs 44,417,946 cache-read)
+[spend] rep12: $   36.91 / $280.00    13.2%  OK
+         $0.00 on this host + $36.91 carried forward from the previous host (spend_baseline.json)
+         cache reads are 59.8% of that; $27.06 per M billable (1,363,857 billable vs 44,170,710 cache-read)
+[spend] rep13: $   35.86 / $280.00    12.8%  OK
+         $0.00 on this host + $35.86 carried forward from the previous host (spend_baseline.json)
+         cache reads are 64.0% of that; $32.29 per M billable (1,110,321 billable vs 45,876,912 cache-read)
+[spend] rep15: $   49.07 / $280.00    17.5%  OK
+         $0.00 on this host + $49.07 carried forward from the previous host (spend_baseline.json)
+         cache reads are 54.6% of that; $21.57 per M billable (2,275,306 billable vs 53,557,852 cache-read)
+[spend] rep16: $   49.34 / $280.00    17.6%  OK
+         $0.00 on this host + $49.34 carried forward from the previous host (spend_baseline.json)
+         cache reads are 51.7% of that; $18.06 per M billable (2,731,571 billable vs 50,984,830 cache-read)
+[spend] rep17: $   20.45 / $280.00     7.3%  OK
+         $0.00 on this host + $20.45 carried forward from the previous host (spend_baseline.json)
+         cache reads are 54.4% of that; $27.87 per M billable (733,617 billable vs 22,263,594 cache-read)
+[spend] rep01: $   65.14 / $280.00    23.3%  OK
+         $0.00 on this host + $65.14 carried forward from the previous host (spend_baseline.json)
+         cache reads are 76.2% of that; $61.01 per M billable (1,067,618 billable vs 99,323,960 cache-read)
+[spend] rep02: $   40.13 / $280.00    14.3%  OK
+         $0.00 on this host + $40.13 carried forward from the previous host (spend_baseline.json)
+         cache reads are 53.7% of that; $24.24 per M billable (1,655,427 billable vs 43,098,276 cache-read)
+[spend] rep03: $   23.79 / $280.00     8.5%  OK
+         $0.00 on this host + $23.79 carried forward from the previous host (spend_baseline.json)
+         cache reads are 58.0% of that; $35.19 per M billable (676,168 billable vs 27,599,630 cache-read)
+[spend] rep04: $   30.57 / $280.00    10.9%  OK
+         $0.00 on this host + $30.57 carried forward from the previous host (spend_baseline.json)
+         cache reads are 56.0% of that; $26.77 per M billable (1,141,836 billable vs 34,248,826 cache-read)
+[spend] rep05: $   32.93 / $280.00    11.8%  OK
+         $0.00 on this host + $32.93 carried forward from the previous host (spend_baseline.json)
+         cache reads are 58.5% of that; $26.63 per M billable (1,236,505 billable vs 38,547,479 cache-read)
+[spend] rep06: $   99.03 / $280.00    35.4%  OK
+         $0.00 on this host + $99.03 carried forward from the previous host (spend_baseline.json)
+         cache reads are 62.0% of that; $23.15 per M billable (4,277,733 billable vs 122,780,669 cache-read)
+[spend] rep07: $   50.55 / $280.00    18.1%  OK
+         $0.00 on this host + $50.55 carried forward from the previous host (spend_baseline.json)
+         cache reads are 54.5% of that; $21.96 per M billable (2,302,436 billable vs 55,077,911 cache-read)
+[spend] rep08: $   40.08 / $280.00    14.3%  OK
+         $0.00 on this host + $40.08 carried forward from the previous host (spend_baseline.json)
+         cache reads are 60.6% of that; $29.75 per M billable (1,347,489 billable vs 48,580,473 cache-read)
+[spend] rep09: $   37.28 / $280.00    13.3%  OK
+         $0.00 on this host + $37.28 carried forward from the previous host (spend_baseline.json)
+         cache reads are 57.9% of that; $26.24 per M billable (1,420,900 billable vs 43,196,137 cache-read)
+[spend] rep10: $   75.59 / $280.00    27.0%  OK
+         $0.00 on this host + $75.59 carried forward from the previous host (spend_baseline.json)
+         cache reads are 65.7% of that; $30.33 per M billable (2,492,029 billable vs 99,298,212 cache-read)
+[spend] rep11: $   38.74 / $280.00    13.8%  OK
+         $0.00 on this host + $38.74 carried forward from the previous host (spend_baseline.json)
+         cache reads are 57.3% of that; $26.08 per M billable (1,485,396 billable vs 44,417,946 cache-read)
+[spend] rep12: $   36.91 / $280.00    13.2%  OK
+         $0.00 on this host + $36.91 carried forward from the previous host (spend_baseline.json)
+         cache reads are 59.8% of that; $27.06 per M billable (1,363,857 billable vs 44,170,710 cache-read)
+[spend] rep13: $   35.86 / $280.00    12.8%  OK
+         $0.00 on this host + $35.86 carried forward from the previous host (spend_baseline.json)
+         cache reads are 64.0% of that; $32.29 per M billable (1,110,321 billable vs 45,876,912 cache-read)
+[spend] rep15: $   49.07 / $280.00    17.5%  OK
+         $0.00 on this host + $49.07 carried forward from the previous host (spend_baseline.json)
+         cache reads are 54.6% of that; $21.57 per M billable (2,275,306 billable vs 53,557,852 cache-read)
+[spend] rep16: $   49.34 / $280.00    17.6%  OK
+         $0.00 on this host + $49.34 carried forward from the previous host (spend_baseline.json)
+         cache reads are 51.7% of that; $18.06 per M billable (2,731,571 billable vs 50,984,830 cache-read)
+[spend] rep17: $   20.45 / $280.00     7.3%  OK
+         $0.00 on this host + $20.45 carried forward from the previous host (spend_baseline.json)
+         cache reads are 54.4% of that; $27.87 per M billable (733,617 billable vs 22,263,594 cache-read)
+[spend] rep01: $   65.14 / $280.00    23.3%  OK
+         $0.00 on this host + $65.14 carried forward from the previous host (spend_baseline.json)
+         cache reads are 76.2% of that; $61.01 per M billable (1,067,618 billable vs 99,323,960 cache-read)
+[spend] rep02: $   40.13 / $280.00    14.3%  OK
+         $0.00 on this host + $40.13 carried forward from the previous host (spend_baseline.json)
+         cache reads are 53.7% of that; $24.24 per M billable (1,655,427 billable vs 43,098,276 cache-read)
+[spend] rep03: $   23.79 / $280.00     8.5%  OK
+         $0.00 on this host + $23.79 carried forward from the previous host (spend_baseline.json)
+         cache reads are 58.0% of that; $35.19 per M billable (676,168 billable vs 27,599,630 cache-read)
+[spend] rep04: $   30.57 / $280.00    10.9%  OK
+         $0.00 on this host + $30.57 carried forward from the previous host (spend_baseline.json)
+         cache reads are 56.0% of that; $26.77 per M billable (1,141,836 billable vs 34,248,826 cache-read)
+[spend] rep05: $   32.93 / $280.00    11.8%  OK
+         $0.00 on this host + $32.93 carried forward from the previous host (spend_baseline.json)
+         cache reads are 58.5% of that; $26.63 per M billable (1,236,505 billable vs 38,547,479 cache-read)
+[spend] rep06: $   99.03 / $280.00    35.4%  OK
+         $0.00 on this host + $99.03 carried forward from the previous host (spend_baseline.json)
+         cache reads are 62.0% of that; $23.15 per M billable (4,277,733 billable vs 122,780,669 cache-read)
+[spend] rep07: $   50.55 / $280.00    18.1%  OK
+         $0.00 on this host + $50.55 carried forward from the previous host (spend_baseline.json)
+         cache reads are 54.5% of that; $21.96 per M billable (2,302,436 billable vs 55,077,911 cache-read)
+[spend] rep08: $   40.08 / $280.00    14.3%  OK
+         $0.00 on this host + $40.08 carried forward from the previous host (spend_baseline.json)
+         cache reads are 60.6% of that; $29.75 per M billable (1,347,489 billable vs 48,580,473 cache-read)
+[spend] rep09: $   37.28 / $280.00    13.3%  OK
+         $0.00 on this host + $37.28 carried forward from the previous host (spend_baseline.json)
+         cache reads are 57.9% of that; $26.24 per M billable (1,420,900 billable vs 43,196,137 cache-read)
+[spend] rep10: $   75.59 / $280.00    27.0%  OK
+         $0.00 on this host + $75.59 carried forward from the previous host (spend_baseline.json)
+         cache reads are 65.7% of that; $30.33 per M billable (2,492,029 billable vs 99,298,212 cache-read)
+[spend] rep11: $   38.74 / $280.00    13.8%  OK
+         $0.00 on this host + $38.74 carried forward from the previous host (spend_baseline.json)
+         cache reads are 57.3% of that; $26.08 per M billable (1,485,396 billable vs 44,417,946 cache-read)
+[spend] rep12: $   36.91 / $280.00    13.2%  OK
+         $0.00 on this host + $36.91 carried forward from the previous host (spend_baseline.json)
+         cache reads are 59.8% of that; $27.06 per M billable (1,363,857 billable vs 44,170,710 cache-read)
+[spend] rep13: $   35.86 / $280.00    12.8%  OK
+         $0.00 on this host + $35.86 carried forward from the previous host (spend_baseline.json)
+         cache reads are 64.0% of that; $32.29 per M billable (1,110,321 billable vs 45,876,912 cache-read)
+[spend] rep15: $   49.07 / $280.00    17.5%  OK
+         $0.00 on this host + $49.07 carried forward from the previous host (spend_baseline.json)
+         cache reads are 54.6% of that; $21.57 per M billable (2,275,306 billable vs 53,557,852 cache-read)
+[spend] rep16: $   49.34 / $280.00    17.6%  OK
+         $0.00 on this host + $49.34 carried forward from the previous host (spend_baseline.json)
+         cache reads are 51.7% of that; $18.06 per M billable (2,731,571 billable vs 50,984,830 cache-read)
+[spend] rep17: $   20.45 / $280.00     7.3%  OK
+         $0.00 on this host + $20.45 carried forward from the previous host (spend_baseline.json)
+         cache reads are 54.4% of that; $27.87 per M billable (733,617 billable vs 22,263,594 cache-read)
+[spend] rep01: $   65.14 / $280.00    23.3%  OK
+         $0.00 on this host + $65.14 carried forward from the previous host (spend_baseline.json)
+         cache reads are 76.2% of that; $61.01 per M billable (1,067,618 billable vs 99,323,960 cache-read)
+[spend] rep02: $   40.13 / $280.00    14.3%  OK
+         $0.00 on this host + $40.13 carried forward from the previous host (spend_baseline.json)
+         cache reads are 53.7% of that; $24.24 per M billable (1,655,427 billable vs 43,098,276 cache-read)
+[spend] rep03: $   23.79 / $280.00     8.5%  OK
+         $0.00 on this host + $23.79 carried forward from the previous host (spend_baseline.json)
+         cache reads are 58.0% of that; $35.19 per M billable (676,168 billable vs 27,599,630 cache-read)
+[spend] rep04: $   30.57 / $280.00    10.9%  OK
+         $0.00 on this host + $30.57 carried forward from the previous host (spend_baseline.json)
+         cache reads are 56.0% of that; $26.77 per M billable (1,141,836 billable vs 34,248,826 cache-read)
+[spend] rep05: $   32.93 / $280.00    11.8%  OK
+         $0.00 on this host + $32.93 carried forward from the previous host (spend_baseline.json)
+         cache reads are 58.5% of that; $26.63 per M billable (1,236,505 billable vs 38,547,479 cache-read)
+[spend] rep06: $   99.03 / $280.00    35.4%  OK
+         $0.00 on this host + $99.03 carried forward from the previous host (spend_baseline.json)
+         cache reads are 62.0% of that; $23.15 per M billable (4,277,733 billable vs 122,780,669 cache-read)
+[spend] rep07: $   50.55 / $280.00    18.1%  OK
+         $0.00 on this host + $50.55 carried forward from the previous host (spend_baseline.json)
+         cache reads are 54.5% of that; $21.96 per M billable (2,302,436 billable vs 55,077,911 cache-read)
+[spend] rep08: $   40.08 / $280.00    14.3%  OK
+         $0.00 on this host + $40.08 carried forward from the previous host (spend_baseline.json)
+         cache reads are 60.6% of that; $29.75 per M billable (1,347,489 billable vs 48,580,473 cache-read)
+[spend] rep09: $   37.28 / $280.00    13.3%  OK
+         $0.00 on this host + $37.28 carried forward from the previous host (spend_baseline.json)
+         cache reads are 57.9% of that; $26.24 per M billable (1,420,900 billable vs 43,196,137 cache-read)
+[spend] rep10: $   75.59 / $280.00    27.0%  OK
+         $0.00 on this host + $75.59 carried forward from the previous host (spend_baseline.json)
+         cache reads are 65.7% of that; $30.33 per M billable (2,492,029 billable vs 99,298,212 cache-read)
+[spend] rep11: $   38.74 / $280.00    13.8%  OK
+         $0.00 on this host + $38.74 carried forward from the previous host (spend_baseline.json)
+         cache reads are 57.3% of that; $26.08 per M billable (1,485,396 billable vs 44,417,946 cache-read)
+[spend] rep12: $   36.91 / $280.00    13.2%  OK
+         $0.00 on this host + $36.91 carried forward from the previous host (spend_baseline.json)
+         cache reads are 59.8% of that; $27.06 per M billable (1,363,857 billable vs 44,170,710 cache-read)
+[spend] rep13: $   35.86 / $280.00    12.8%  OK
+         $0.00 on this host + $35.86 carried forward from the previous host (spend_baseline.json)
+         cache reads are 64.0% of that; $32.29 per M billable (1,110,321 billable vs 45,876,912 cache-read)
+[spend] rep15: $   49.07 / $280.00    17.5%  OK
+         $0.00 on this host + $49.07 carried forward from the previous host (spend_baseline.json)
+         cache reads are 54.6% of that; $21.57 per M billable (2,275,306 billable vs 53,557,852 cache-read)
+[spend] rep16: $   49.34 / $280.00    17.6%  OK
+         $0.00 on this host + $49.34 carried forward from the previous host (spend_baseline.json)
+         cache reads are 51.7% of that; $18.06 per M billable (2,731,571 billable vs 50,984,830 cache-read)
+[spend] rep17: $   20.45 / $280.00     7.3%  OK
+         $0.00 on this host + $20.45 carried forward from the previous host (spend_baseline.json)
+         cache reads are 54.4% of that; $27.87 per M billable (733,617 billable vs 22,263,594 cache-read)
+[spend] rep01: $   65.14 / $280.00    23.3%  OK
+         $0.00 on this host + $65.14 carried forward from the previous host (spend_baseline.json)
+         cache reads are 76.2% of that; $61.01 per M billable (1,067,618 billable vs 99,323,960 cache-read)
+[spend] rep02: $   40.13 / $280.00    14.3%  OK
+         $0.00 on this host + $40.13 carried forward from the previous host (spend_baseline.json)
+         cache reads are 53.7% of that; $24.24 per M billable (1,655,427 billable vs 43,098,276 cache-read)
+[spend] rep03: $   23.79 / $280.00     8.5%  OK
+         $0.00 on this host + $23.79 carried forward from the previous host (spend_baseline.json)
+         cache reads are 58.0% of that; $35.19 per M billable (676,168 billable vs 27,599,630 cache-read)
+[spend] rep04: $   30.57 / $280.00    10.9%  OK
+         $0.00 on this host + $30.57 carried forward from the previous host (spend_baseline.json)
+         cache reads are 56.0% of that; $26.77 per M billable (1,141,836 billable vs 34,248,826 cache-read)
+[spend] rep05: $   32.93 / $280.00    11.8%  OK
+         $0.00 on this host + $32.93 carried forward from the previous host (spend_baseline.json)
+         cache reads are 58.5% of that; $26.63 per M billable (1,236,505 billable vs 38,547,479 cache-read)
+[spend] rep06: $   99.03 / $280.00    35.4%  OK
+         $0.00 on this host + $99.03 carried forward from the previous host (spend_baseline.json)
+         cache reads are 62.0% of that; $23.15 per M billable (4,277,733 billable vs 122,780,669 cache-read)
+[spend] rep07: $   50.55 / $280.00    18.1%  OK
+         $0.00 on this host + $50.55 carried forward from the previous host (spend_baseline.json)
+         cache reads are 54.5% of that; $21.96 per M billable (2,302,436 billable vs 55,077,911 cache-read)
+[spend] rep08: $   40.08 / $280.00    14.3%  OK
+         $0.00 on this host + $40.08 carried forward from the previous host (spend_baseline.json)
+         cache reads are 60.6% of that; $29.75 per M billable (1,347,489 billable vs 48,580,473 cache-read)
+[spend] rep09: $   37.28 / $280.00    13.3%  OK
+         $0.00 on this host + $37.28 carried forward from the previous host (spend_baseline.json)
+         cache reads are 57.9% of that; $26.24 per M billable (1,420,900 billable vs 43,196,137 cache-read)
+[spend] rep10: $   75.59 / $280.00    27.0%  OK
+         $0.00 on this host + $75.59 carried forward from the previous host (spend_baseline.json)
+         cache reads are 65.7% of that; $30.33 per M billable (2,492,029 billable vs 99,298,212 cache-read)
+[spend] rep11: $   38.74 / $280.00    13.8%  OK
+         $0.00 on this host + $38.74 carried forward from the previous host (spend_baseline.json)
+         cache reads are 57.3% of that; $26.08 per M billable (1,485,396 billable vs 44,417,946 cache-read)
+[spend] rep12: $   36.91 / $280.00    13.2%  OK
+         $0.00 on this host + $36.91 carried forward from the previous host (spend_baseline.json)
+         cache reads are 59.8% of that; $27.06 per M billable (1,363,857 billable vs 44,170,710 cache-read)
+[spend] rep13: $   35.86 / $280.00    12.8%  OK
+         $0.00 on this host + $35.86 carried forward from the previous host (spend_baseline.json)
+         cache reads are 64.0% of that; $32.29 per M billable (1,110,321 billable vs 45,876,912 cache-read)
+[spend] rep15: $   49.07 / $280.00    17.5%  OK
+         $0.00 on this host + $49.07 carried forward from the previous host (spend_baseline.json)
+         cache reads are 54.6% of that; $21.57 per M billable (2,275,306 billable vs 53,557,852 cache-read)
+[spend] rep16: $   49.34 / $280.00    17.6%  OK
+         $0.00 on this host + $49.34 carried forward from the previous host (spend_baseline.json)
+         cache reads are 51.7% of that; $18.06 per M billable (2,731,571 billable vs 50,984,830 cache-read)
+[spend] rep17: $   20.45 / $280.00     7.3%  OK
+         $0.00 on this host + $20.45 carried forward from the previous host (spend_baseline.json)
+         cache reads are 54.4% of that; $27.87 per M billable (733,617 billable vs 22,263,594 cache-read)
+[spend] rep01: $   65.14 / $280.00    23.3%  OK
+         $0.00 on this host + $65.14 carried forward from the previous host (spend_baseline.json)
+         cache reads are 76.2% of that; $61.01 per M billable (1,067,618 billable vs 99,323,960 cache-read)
+[spend] rep02: $   40.13 / $280.00    14.3%  OK
+         $0.00 on this host + $40.13 carried forward from the previous host (spend_baseline.json)
+         cache reads are 53.7% of that; $24.24 per M billable (1,655,427 billable vs 43,098,276 cache-read)
+[spend] rep03: $   23.79 / $280.00     8.5%  OK
+         $0.00 on this host + $23.79 carried forward from the previous host (spend_baseline.json)
+         cache reads are 58.0% of that; $35.19 per M billable (676,168 billable vs 27,599,630 cache-read)
+[spend] rep04: $   30.57 / $280.00    10.9%  OK
+         $0.00 on this host + $30.57 carried forward from the previous host (spend_baseline.json)
+         cache reads are 56.0% of that; $26.77 per M billable (1,141,836 billable vs 34,248,826 cache-read)
+[spend] rep05: $   32.93 / $280.00    11.8%  OK
+         $0.00 on this host + $32.93 carried forward from the previous host (spend_baseline.json)
+         cache reads are 58.5% of that; $26.63 per M billable (1,236,505 billable vs 38,547,479 cache-read)
+[spend] rep06: $   99.03 / $280.00    35.4%  OK
+         $0.00 on this host + $99.03 carried forward from the previous host (spend_baseline.json)
+         cache reads are 62.0% of that; $23.15 per M billable (4,277,733 billable vs 122,780,669 cache-read)
+[spend] rep07: $   50.55 / $280.00    18.1%  OK
+         $0.00 on this host + $50.55 carried forward from the previous host (spend_baseline.json)
+         cache reads are 54.5% of that; $21.96 per M billable (2,302,436 billable vs 55,077,911 cache-read)
+[spend] rep08: $   40.08 / $280.00    14.3%  OK
+         $0.00 on this host + $40.08 carried forward from the previous host (spend_baseline.json)
+         cache reads are 60.6% of that; $29.75 per M billable (1,347,489 billable vs 48,580,473 cache-read)
+[spend] rep09: $   37.28 / $280.00    13.3%  OK
+         $0.00 on this host + $37.28 carried forward from the previous host (spend_baseline.json)
+         cache reads are 57.9% of that; $26.24 per M billable (1,420,900 billable vs 43,196,137 cache-read)
+[spend] rep10: $   75.59 / $280.00    27.0%  OK
+         $0.00 on this host + $75.59 carried forward from the previous host (spend_baseline.json)
+         cache reads are 65.7% of that; $30.33 per M billable (2,492,029 billable vs 99,298,212 cache-read)
+[spend] rep11: $   38.74 / $280.00    13.8%  OK
+         $0.00 on this host + $38.74 carried forward from the previous host (spend_baseline.json)
+         cache reads are 57.3% of that; $26.08 per M billable (1,485,396 billable vs 44,417,946 cache-read)
+[spend] rep12: $   36.91 / $280.00    13.2%  OK
+         $0.00 on this host + $36.91 carried forward from the previous host (spend_baseline.json)
+         cache reads are 59.8% of that; $27.06 per M billable (1,363,857 billable vs 44,170,710 cache-read)
+[spend] rep13: $   35.86 / $280.00    12.8%  OK
+         $0.00 on this host + $35.86 carried forward from the previous host (spend_baseline.json)
+         cache reads are 64.0% of that; $32.29 per M billable (1,110,321 billable vs 45,876,912 cache-read)
+[spend] rep15: $   49.07 / $280.00    17.5%  OK
+         $0.00 on this host + $49.07 carried forward from the previous host (spend_baseline.json)
+         cache reads are 54.6% of that; $21.57 per M billable (2,275,306 billable vs 53,557,852 cache-read)
+[spend] rep16: $   49.34 / $280.00    17.6%  OK
+         $0.00 on this host + $49.34 carried forward from the previous host (spend_baseline.json)
+         cache reads are 51.7% of that; $18.06 per M billable (2,731,571 billable vs 50,984,830 cache-read)
+[spend] rep17: $   20.45 / $280.00     7.3%  OK
+         $0.00 on this host + $20.45 carried forward from the previous host (spend_baseline.json)
+         cache reads are 54.4% of that; $27.87 per M billable (733,617 billable vs 22,263,594 cache-read)
+[spend] rep01: $   65.14 / $280.00    23.3%  OK
+         $0.00 on this host + $65.14 carried forward from the previous host (spend_baseline.json)
+         cache reads are 76.2% of that; $61.01 per M billable (1,067,618 billable vs 99,323,960 cache-read)
+[spend] rep02: $   40.13 / $280.00    14.3%  OK
+         $0.00 on this host + $40.13 carried forward from the previous host (spend_baseline.json)
+         cache reads are 53.7% of that; $24.24 per M billable (1,655,427 billable vs 43,098,276 cache-read)
+[spend] rep03: $   23.79 / $280.00     8.5%  OK
+         $0.00 on this host + $23.79 carried forward from the previous host (spend_baseline.json)
+         cache reads are 58.0% of that; $35.19 per M billable (676,168 billable vs 27,599,630 cache-read)
+[spend] rep04: $   30.57 / $280.00    10.9%  OK
+         $0.00 on this host + $30.57 carried forward from the previous host (spend_baseline.json)
+         cache reads are 56.0% of that; $26.77 per M billable (1,141,836 billable vs 34,248,826 cache-read)
+[spend] rep05: $   32.93 / $280.00    11.8%  OK
+         $0.00 on this host + $32.93 carried forward from the previous host (spend_baseline.json)
+         cache reads are 58.5% of that; $26.63 per M billable (1,236,505 billable vs 38,547,479 cache-read)
+[spend] rep06: $   99.03 / $280.00    35.4%  OK
+         $0.00 on this host + $99.03 carried forward from the previous host (spend_baseline.json)
+         cache reads are 62.0% of that; $23.15 per M billable (4,277,733 billable vs 122,780,669 cache-read)
+[spend] rep07: $   50.55 / $280.00    18.1%  OK
+         $0.00 on this host + $50.55 carried forward from the previous host (spend_baseline.json)
+         cache reads are 54.5% of that; $21.96 per M billable (2,302,436 billable vs 55,077,911 cache-read)
+[spend] rep08: $   40.08 / $280.00    14.3%  OK
+         $0.00 on this host + $40.08 carried forward from the previous host (spend_baseline.json)
+         cache reads are 60.6% of that; $29.75 per M billable (1,347,489 billable vs 48,580,473 cache-read)
+[spend] rep09: $   37.28 / $280.00    13.3%  OK
+         $0.00 on this host + $37.28 carried forward from the previous host (spend_baseline.json)
+         cache reads are 57.9% of that; $26.24 per M billable (1,420,900 billable vs 43,196,137 cache-read)
+[spend] rep10: $   75.59 / $280.00    27.0%  OK
+         $0.00 on this host + $75.59 carried forward from the previous host (spend_baseline.json)
+         cache reads are 65.7% of that; $30.33 per M billable (2,492,029 billable vs 99,298,212 cache-read)
+[spend] rep11: $   38.74 / $280.00    13.8%  OK
+         $0.00 on this host + $38.74 carried forward from the previous host (spend_baseline.json)
+         cache reads are 57.3% of that; $26.08 per M billable (1,485,396 billable vs 44,417,946 cache-read)
+[spend] rep12: $   36.91 / $280.00    13.2%  OK
+         $0.00 on this host + $36.91 carried forward from the previous host (spend_baseline.json)
+         cache reads are 59.8% of that; $27.06 per M billable (1,363,857 billable vs 44,170,710 cache-read)
+[spend] rep13: $   35.86 / $280.00    12.8%  OK
+         $0.00 on this host + $35.86 carried forward from the previous host (spend_baseline.json)
+         cache reads are 64.0% of that; $32.29 per M billable (1,110,321 billable vs 45,876,912 cache-read)
+[spend] rep15: $   49.07 / $280.00    17.5%  OK
+         $0.00 on this host + $49.07 carried forward from the previous host (spend_baseline.json)
+         cache reads are 54.6% of that; $21.57 per M billable (2,275,306 billable vs 53,557,852 cache-read)
+[spend] rep16: $   49.34 / $280.00    17.6%  OK
+         $0.00 on this host + $49.34 carried forward from the previous host (spend_baseline.json)
+         cache reads are 51.7% of that; $18.06 per M billable (2,731,571 billable vs 50,984,830 cache-read)
+[spend] rep17: $   20.45 / $280.00     7.3%  OK
+         $0.00 on this host + $20.45 carried forward from the previous host (spend_baseline.json)
+         cache reads are 54.4% of that; $27.87 per M billable (733,617 billable vs 22,263,594 cache-read)
+[spend] rep01: $   65.14 / $280.00    23.3%  OK
+         $0.00 on this host + $65.14 carried forward from the previous host (spend_baseline.json)
+         cache reads are 76.2% of that; $61.01 per M billable (1,067,618 billable vs 99,323,960 cache-read)
+[spend] rep02: $   40.13 / $280.00    14.3%  OK
+         $0.00 on this host + $40.13 carried forward from the previous host (spend_baseline.json)
+         cache reads are 53.7% of that; $24.24 per M billable (1,655,427 billable vs 43,098,276 cache-read)
+[spend] rep03: $   23.79 / $280.00     8.5%  OK
+         $0.00 on this host + $23.79 carried forward from the previous host (spend_baseline.json)
+         cache reads are 58.0% of that; $35.19 per M billable (676,168 billable vs 27,599,630 cache-read)
+[spend] rep04: $   30.57 / $280.00    10.9%  OK
+         $0.00 on this host + $30.57 carried forward from the previous host (spend_baseline.json)
+         cache reads are 56.0% of that; $26.77 per M billable (1,141,836 billable vs 34,248,826 cache-read)
+[spend] rep05: $   32.93 / $280.00    11.8%  OK
+         $0.00 on this host + $32.93 carried forward from the previous host (spend_baseline.json)
+         cache reads are 58.5% of that; $26.63 per M billable (1,236,505 billable vs 38,547,479 cache-read)
+[spend] rep06: $   99.03 / $280.00    35.4%  OK
+         $0.00 on this host + $99.03 carried forward from the previous host (spend_baseline.json)
+         cache reads are 62.0% of that; $23.15 per M billable (4,277,733 billable vs 122,780,669 cache-read)
+[spend] rep07: $   50.55 / $280.00    18.1%  OK
+         $0.00 on this host + $50.55 carried forward from the previous host (spend_baseline.json)
+         cache reads are 54.5% of that; $21.96 per M billable (2,302,436 billable vs 55,077,911 cache-read)
+[spend] rep08: $   40.08 / $280.00    14.3%  OK
+         $0.00 on this host + $40.08 carried forward from the previous host (spend_baseline.json)
+         cache reads are 60.6% of that; $29.75 per M billable (1,347,489 billable vs 48,580,473 cache-read)
+[spend] rep09: $   37.28 / $280.00    13.3%  OK
+         $0.00 on this host + $37.28 carried forward from the previous host (spend_baseline.json)
+         cache reads are 57.9% of that; $26.24 per M billable (1,420,900 billable vs 43,196,137 cache-read)
+[spend] rep10: $   75.59 / $280.00    27.0%  OK
+         $0.00 on this host + $75.59 carried forward from the previous host (spend_baseline.json)
+         cache reads are 65.7% of that; $30.33 per M billable (2,492,029 billable vs 99,298,212 cache-read)
+[spend] rep11: $   38.74 / $280.00    13.8%  OK
+         $0.00 on this host + $38.74 carried forward from the previous host (spend_baseline.json)
+         cache reads are 57.3% of that; $26.08 per M billable (1,485,396 billable vs 44,417,946 cache-read)
+[spend] rep12: $   36.91 / $280.00    13.2%  OK
+         $0.00 on this host + $36.91 carried forward from the previous host (spend_baseline.json)
+         cache reads are 59.8% of that; $27.06 per M billable (1,363,857 billable vs 44,170,710 cache-read)
+[spend] rep13: $   35.86 / $280.00    12.8%  OK
+         $0.00 on this host + $35.86 carried forward from the previous host (spend_baseline.json)
+         cache reads are 64.0% of that; $32.29 per M billable (1,110,321 billable vs 45,876,912 cache-read)
+[spend] rep15: $   49.07 / $280.00    17.5%  OK
+         $0.00 on this host + $49.07 carried forward from the previous host (spend_baseline.json)
+         cache reads are 54.6% of that; $21.57 per M billable (2,275,306 billable vs 53,557,852 cache-read)
+[spend] rep16: $   49.34 / $280.00    17.6%  OK
+         $0.00 on this host + $49.34 carried forward from the previous host (spend_baseline.json)
+         cache reads are 51.7% of that; $18.06 per M billable (2,731,571 billable vs 50,984,830 cache-read)
+[spend] rep17: $   20.45 / $280.00     7.3%  OK
+         $0.00 on this host + $20.45 carried forward from the previous host (spend_baseline.json)
+         cache reads are 54.4% of that; $27.87 per M billable (733,617 billable vs 22,263,594 cache-read)
+[spend] rep01: $   65.14 / $280.00    23.3%  OK
+         $0.00 on this host + $65.14 carried forward from the previous host (spend_baseline.json)
+         cache reads are 76.2% of that; $61.01 per M billable (1,067,618 billable vs 99,323,960 cache-read)
+[spend] rep02: $   40.13 / $280.00    14.3%  OK
+         $0.00 on this host + $40.13 carried forward from the previous host (spend_baseline.json)
+         cache reads are 53.7% of that; $24.24 per M billable (1,655,427 billable vs 43,098,276 cache-read)
+[spend] rep03: $   23.79 / $280.00     8.5%  OK
+         $0.00 on this host + $23.79 carried forward from the previous host (spend_baseline.json)
+         cache reads are 58.0% of that; $35.19 per M billable (676,168 billable vs 27,599,630 cache-read)
+[spend] rep04: $   30.57 / $280.00    10.9%  OK
+         $0.00 on this host + $30.57 carried forward from the previous host (spend_baseline.json)
+         cache reads are 56.0% of that; $26.77 per M billable (1,141,836 billable vs 34,248,826 cache-read)
+[spend] rep05: $   32.93 / $280.00    11.8%  OK
+         $0.00 on this host + $32.93 carried forward from the previous host (spend_baseline.json)
+         cache reads are 58.5% of that; $26.63 per M billable (1,236,505 billable vs 38,547,479 cache-read)
+[spend] rep06: $   99.03 / $280.00    35.4%  OK
+         $0.00 on this host + $99.03 carried forward from the previous host (spend_baseline.json)
+         cache reads are 62.0% of that; $23.15 per M billable (4,277,733 billable vs 122,780,669 cache-read)
+[spend] rep07: $   50.55 / $280.00    18.1%  OK
+         $0.00 on this host + $50.55 carried forward from the previous host (spend_baseline.json)
+         cache reads are 54.5% of that; $21.96 per M billable (2,302,436 billable vs 55,077,911 cache-read)
+[spend] rep08: $   40.08 / $280.00    14.3%  OK
+         $0.00 on this host + $40.08 carried forward from the previous host (spend_baseline.json)
+         cache reads are 60.6% of that; $29.75 per M billable (1,347,489 billable vs 48,580,473 cache-read)
+[spend] rep09: $   37.28 / $280.00    13.3%  OK
+         $0.00 on this host + $37.28 carried forward from the previous host (spend_baseline.json)
+         cache reads are 57.9% of that; $26.24 per M billable (1,420,900 billable vs 43,196,137 cache-read)
+[spend] rep10: $   75.59 / $280.00    27.0%  OK
+         $0.00 on this host + $75.59 carried forward from the previous host (spend_baseline.json)
+         cache reads are 65.7% of that; $30.33 per M billable (2,492,029 billable vs 99,298,212 cache-read)
+[spend] rep11: $   38.74 / $280.00    13.8%  OK
+         $0.00 on this host + $38.74 carried forward from the previous host (spend_baseline.json)
+         cache reads are 57.3% of that; $26.08 per M billable (1,485,396 billable vs 44,417,946 cache-read)
+[spend] rep12: $   36.91 / $280.00    13.2%  OK
+         $0.00 on this host + $36.91 carried forward from the previous host (spend_baseline.json)
+         cache reads are 59.8% of that; $27.06 per M billable (1,363,857 billable vs 44,170,710 cache-read)
+[spend] rep13: $   35.86 / $280.00    12.8%  OK
+         $0.00 on this host + $35.86 carried forward from the previous host (spend_baseline.json)
+         cache reads are 64.0% of that; $32.29 per M billable (1,110,321 billable vs 45,876,912 cache-read)
+[spend] rep15: $   49.07 / $280.00    17.5%  OK
+         $0.00 on this host + $49.07 carried forward from the previous host (spend_baseline.json)
+         cache reads are 54.6% of that; $21.57 per M billable (2,275,306 billable vs 53,557,852 cache-read)
+[spend] rep16: $   49.34 / $280.00    17.6%  OK
+         $0.00 on this host + $49.34 carried forward from the previous host (spend_baseline.json)
+         cache reads are 51.7% of that; $18.06 per M billable (2,731,571 billable vs 50,984,830 cache-read)
+[spend] rep17: $   20.45 / $280.00     7.3%  OK
+         $0.00 on this host + $20.45 carried forward from the previous host (spend_baseline.json)
+         cache reads are 54.4% of that; $27.87 per M billable (733,617 billable vs 22,263,594 cache-read)
