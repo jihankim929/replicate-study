@@ -133,7 +133,21 @@ def check_budget(ws: Path, meta: dict) -> list:
     if spend_cap:
         try:
             import meter_spend
-            rows.append(("spend_usd", meter_spend.tally(meta["replicate_id"])["total_usd"], spend_cap))
+            # WITH the carried baseline. This call omitted it from the resume until 2026-08-31,
+            # so the panel reported spend-on-this-host only and understated every replicate by
+            # its carry -- rep01 read `ok` at 40% of cap while standing at 69% of it. The cap
+            # cannot bind against a number that resets when the study changes machines, which is
+            # the whole reason the baseline exists. REPORT 006 section 4; PI ruling 2026-08-31.
+            #
+            # Safe to pass only because the double-count guard now tests transcript AGE rather
+            # than arithmetic, and RAISES rather than sys.exit()s -- SystemExit derives from
+            # BaseException and would have gone straight through the `except Exception` below,
+            # taking the watchdog down instead of degrading one row to `unknown`.
+            rows.append(("spend_usd",
+                         meter_spend.tally(meta["replicate_id"],
+                                           meter_spend.load_baseline(),
+                                           meter_spend.carried_cutoff())["total_usd"],
+                         spend_cap))
         except Exception as exc:                       # never let metering break the watchdog
             events.append({"resource": "spend_usd", "used": None, "cap": spend_cap,
                            "fraction": None, "level": "unknown",

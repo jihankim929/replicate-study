@@ -58,7 +58,13 @@ for REP in $ACTIVE; do
   # deliberate fleet pause is not a replicate failure, and a campaign that is resumed must not
   # inherit a cap that was spent before it. The ledger stays APPEND-ONLY -- the reset is a row
   # in it, not a deletion -- so the full restart history is still readable above the marker.
-  RESET_LN=$(grep -n '"event":"COUNTER_RESET"' "$LEDGER" 2>/dev/null | tail -1 | cut -d: -f1)
+  # SPACING, again. This grep required "event":"COUNTER_RESET" with no space, while json.dumps
+  # writes "event": "COUNTER_RESET" with one -- so a reset row written by any Python tool was
+  # invisible here and the cap it was meant to clear stayed spent. Same family as SI-007's two
+  # counter bugs and as the `"replicate": ?` tolerance three lines below, which is why the fix is
+  # the same one: tolerate both spacings rather than dictate a writer. Found while giving effect
+  # to the PI's COUNTER_RESET ruling of 2026-08-31, whose row this grep did not match.
+  RESET_LN=$(grep -nE '"event": ?"COUNTER_RESET"' "$LEDGER" 2>/dev/null | tail -1 | cut -d: -f1)
   RESET_LN=${RESET_LN:-0}
   N=$(tail -n +$((RESET_LN+1)) "$LEDGER" 2>/dev/null | grep -cE "\"replicate\": ?\"$REP\"" | head -1)
   N=${N:-0}
@@ -73,7 +79,25 @@ for REP in $ACTIVE; do
     echo "     session gone but no positive evidence of death -- not restarting"; continue
   fi
   if [ "$N" -ge "$MAX_RESTARTS" ]; then
-    echo "     !! restart cap reached -- left DOWN deliberately, notify the PI"; continue
+    echo "     !! restart cap reached -- left DOWN deliberately, notify the PI"
+    # "notify the PI" is now something this line DOES, not something it says. It printed that
+    # instruction 221 times into a log on an unattended host while ten replicates stayed down
+    # for twelve hours. The pager exits 0 whatever happens and records its own outcome, so a
+    # poll cannot be broken by it and a pager that is not working cannot look like one that is.
+    # PI ruling 2026-08-31; REPORT 006 section 7(5).
+    ./harness/page_pi.sh "restart-cap-$REP" "$REP is DOWN and out of restarts" <<PAGE || true
+$REP has reached the restart cap ($N/$MAX_RESTARTS) and has been left DOWN deliberately.
+
+- transcript age at detection: ${AGE} min
+- screen session: absent
+- workspace: $WS
+
+The harness will not restart it again without a COUNTER_RESET row in harness/restarts.jsonl.
+Its cluster jobs are unaffected and keep running. Its deadline is still moving.
+
+Raised automatically by harness/restart_watch.sh.
+PAGE
+    continue
   fi
   TS=$(date -u +%FT%TZ)
   echo "     restarting (#$((N+1)))"

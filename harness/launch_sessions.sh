@@ -86,8 +86,34 @@ Your workspace_root is: $WS"
   # macOS ships screen 4.00.03 (2006), which has no -Logfile. Start screen FROM the session
   # directory instead, so its `-L` log (screenlog.0) lands there and the two replicates do not
   # collide on one file in the repo root.
-  ( cd "$CWD" && screen -dmS "$SESSION" -L \
-      "$LOOP" "$REP" "$WS" "$MODEL" "$DEADLINE" )
+  #
+  # THE SESSION MUST OUTLIVE ITS LAUNCHER. restart_watch.sh runs inside study.poll.service, which
+  # is Type=oneshot and therefore takes systemd's default KillMode=control-group: a screen started
+  # from it lives in the POLL's cgroup and is killed the moment the poll finishes. That is how
+  # thirty restarts died on 2026-08-30 -- each about twenty seconds after starting, each leaving a
+  # transcript that stops mid-orientation and a loop log with no exit line, and each charged to a
+  # restart counter that then hit its cap of 3 and left ten replicates down for twelve hours.
+  # REPORT 006 section 2(b); `systemd-run --user --scope` ratified by the PI 2026-08-31.
+  #
+  # A transient scope is its OWN unit. It is not in the caller's cgroup and does not die with it.
+  # Verified on this host both ways: a screen started through a scope from inside a oneshot unit
+  # outlives that unit; started directly from the same place it does not.
+  #
+  # This lives here rather than in restart_watch.sh on purpose. Every launch path -- restart,
+  # resume, first launch, a hand-run relaunch -- goes through this line, and the property wanted
+  # is "a replicate session outlives whatever started it", which is a property of launching and
+  # not of restarting. Guarded, not assumed: a host without a systemd user manager (the retired
+  # macOS laptop) has no systemd-run, and this must not become the next thing that works on
+  # exactly one machine.
+  if command -v systemd-run >/dev/null 2>&1 && systemctl --user show-environment >/dev/null 2>&1; then
+    ( cd "$CWD" && systemd-run --user --scope --quiet \
+        --description="replicate session $REP" \
+        screen -dmS "$SESSION" -L \
+        "$LOOP" "$REP" "$WS" "$MODEL" "$DEADLINE" )
+  else
+    ( cd "$CWD" && screen -dmS "$SESSION" -L \
+        "$LOOP" "$REP" "$WS" "$MODEL" "$DEADLINE" )
+  fi
   UP=0
   for i in $(seq 1 10); do
     sleep 1

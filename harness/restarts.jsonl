@@ -8,3 +8,34 @@
 {"ts":"2026-08-29T14:17:40Z","replicate":"s01","restart_number":3,"reason":"screen session absent and transcript not grown (556.1 min)","downtime_min":556.1}
 {"ts":"2026-08-29T14:18:05Z","replicate":"s02","restart_number":3,"reason":"screen session absent and transcript not grown (556.5 min)","downtime_min":556.5}
 {"event":"COUNTER_RESET","ts":"2026-08-30T02:42:33Z","reason":"deliberate fleet pause/resume, not replicate failure","scope":["rep01","rep02","rep03","rep04","rep05","rep06","rep07","rep08","rep09","rep10","rep11","rep12","rep13","rep15","rep16","rep17"]}
+{"ts":"2026-08-30T04:02:12Z","replicate":"rep04","restart_number":1,"reason":"screen session absent and transcript not grown (30.6 min)","downtime_min":30.6}
+{"ts":"2026-08-30T04:02:25Z","replicate":"rep13","restart_number":1,"reason":"screen session absent and transcript not grown (30.6 min)","downtime_min":30.6}
+{"ts":"2026-08-30T05:01:42Z","replicate":"rep03","restart_number":1,"reason":"screen session absent and transcript not grown (60.1 min)","downtime_min":60.1}
+{"ts":"2026-08-30T05:01:49Z","replicate":"rep04","restart_number":2,"reason":"screen session absent and transcript not grown (30.7 min)","downtime_min":30.7}
+{"ts":"2026-08-30T05:01:56Z","replicate":"rep06","restart_number":1,"reason":"screen session absent and transcript not grown (60.2 min)","downtime_min":60.2}
+{"ts":"2026-08-30T05:02:05Z","replicate":"rep10","restart_number":1,"reason":"screen session absent and transcript not grown (60.2 min)","downtime_min":60.2}
+{"ts":"2026-08-30T05:02:11Z","replicate":"rep11","restart_number":1,"reason":"screen session absent and transcript not grown (30.8 min)","downtime_min":30.8}
+{"ts":"2026-08-30T05:02:18Z","replicate":"rep12","restart_number":1,"reason":"screen session absent and transcript not grown (60.3 min)","downtime_min":60.3}
+{"ts":"2026-08-30T05:02:25Z","replicate":"rep13","restart_number":2,"reason":"screen session absent and transcript not grown (31.0 min)","downtime_min":31.0}
+{"ts":"2026-08-30T05:02:32Z","replicate":"rep15","restart_number":1,"reason":"screen session absent and transcript not grown (31.1 min)","downtime_min":31.1}
+{"ts":"2026-08-30T05:31:38Z","replicate":"rep07","restart_number":1,"reason":"screen session absent and transcript not grown (30.3 min)","downtime_min":30.3}
+{"ts":"2026-08-30T06:01:34Z","replicate":"rep02","restart_number":1,"reason":"screen session absent and transcript not grown (30.4 min)","downtime_min":30.4}
+{"ts":"2026-08-30T06:01:41Z","replicate":"rep03","restart_number":2,"reason":"screen session absent and transcript not grown (30.5 min)","downtime_min":30.5}
+{"ts":"2026-08-30T06:01:48Z","replicate":"rep04","restart_number":3,"reason":"screen session absent and transcript not grown (30.6 min)","downtime_min":30.6}
+{"ts":"2026-08-30T06:01:55Z","replicate":"rep06","restart_number":2,"reason":"screen session absent and transcript not grown (30.6 min)","downtime_min":30.6}
+{"ts":"2026-08-30T06:02:04Z","replicate":"rep10","restart_number":2,"reason":"screen session absent and transcript not grown (30.7 min)","downtime_min":30.7}
+{"ts":"2026-08-30T06:02:11Z","replicate":"rep11","restart_number":2,"reason":"screen session absent and transcript not grown (30.8 min)","downtime_min":30.8}
+{"ts":"2026-08-30T06:02:18Z","replicate":"rep12","restart_number":2,"reason":"screen session absent and transcript not grown (30.8 min)","downtime_min":30.8}
+{"ts":"2026-08-30T06:02:24Z","replicate":"rep13","restart_number":3,"reason":"screen session absent and transcript not grown (30.9 min)","downtime_min":30.9}
+{"ts":"2026-08-30T06:02:31Z","replicate":"rep15","restart_number":2,"reason":"screen session absent and transcript not grown (31.0 min)","downtime_min":31.0}
+{"ts":"2026-08-30T06:31:38Z","replicate":"rep07","restart_number":2,"reason":"screen session absent and transcript not grown (30.3 min)","downtime_min":30.3}
+{"ts":"2026-08-30T07:01:47Z","replicate":"rep02","restart_number":2,"reason":"screen session absent and transcript not grown (30.6 min)","downtime_min":30.6}
+{"ts":"2026-08-30T07:01:54Z","replicate":"rep03","restart_number":3,"reason":"screen session absent and transcript not grown (30.7 min)","downtime_min":30.7}
+{"ts":"2026-08-30T07:02:02Z","replicate":"rep06","restart_number":3,"reason":"screen session absent and transcript not grown (30.7 min)","downtime_min":30.7}
+{"ts":"2026-08-30T07:02:11Z","replicate":"rep10","restart_number":3,"reason":"screen session absent and transcript not grown (30.8 min)","downtime_min":30.8}
+{"ts":"2026-08-30T07:02:17Z","replicate":"rep11","restart_number":3,"reason":"screen session absent and transcript not grown (30.9 min)","downtime_min":30.9}
+{"ts":"2026-08-30T07:02:24Z","replicate":"rep12","restart_number":3,"reason":"screen session absent and transcript not grown (30.9 min)","downtime_min":30.9}
+{"ts":"2026-08-30T07:02:32Z","replicate":"rep15","restart_number":3,"reason":"screen session absent and transcript not grown (31.0 min)","downtime_min":31.0}
+{"ts":"2026-08-30T07:31:41Z","replicate":"rep07","restart_number":3,"reason":"screen session absent and transcript not grown (30.2 min)","downtime_min":30.2}
+{"ts":"2026-08-30T08:01:40Z","replicate":"rep02","restart_number":3,"reason":"screen session absent and transcript not grown (30.4 min)","downtime_min":30.4}
+{"event": "COUNTER_RESET", "ts": "2026-08-30T19:03:35.409210Z", "reason": "the three restarts charged to each of these ten never ran: every one was killed by systemd within ~20 s because restart_watch.sh started the replacement screen inside study.poll.service's control group (Type=oneshot, default KillMode=control-group). The cap of 3 was therefore reached against thirty launches that did nothing, and the counters record a restart history that did not happen. Fixed in launch_sessions.sh (systemd-run --user --scope) and reset here. REPORT 006 s2(b); PI ruling 2026-08-31.", "scope": ["rep02", "rep03", "rep04", "rep06", "rep07", "rep10", "rep11", "rep12", "rep13", "rep15"], "ruling": "PI ruling 2026-08-31, REPORT 006 section 7(4)"}

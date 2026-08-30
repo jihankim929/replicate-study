@@ -99,6 +99,7 @@ Candidate structures are limited to the provided database; structural modificati
   clause of this charter.** If you find yourself inferring your own deadline from §8's
   interim-status cadence or from anything else, that is a defect in this document: file
   `[ESC: charter / ...]` rather than proceeding on an inference.
+- **Endgame and the spend warning (Rev 24).** Budget exhaustion ends the campaign exactly as the deadline does. At the 75% spend warning, begin securing your claim: prioritize claim-grade verification of your current best candidate over further exploration, and keep REPORT.md continuously current such that a stop at any moment leaves a complete, defensible report of your best-supported finding. An honest report of a verified intermediate result outranks an ambitious campaign with no filed claim.
 - A **final report is mandatory at end**, in the §7 format, whatever state you are in. An honest incomplete report is compliant; a missing or padded one is not.
 - You may **file early** if you judge your mandate complete. Early filing ends your campaign.
 
@@ -241,6 +242,7 @@ Amendments to this document before seal. Append-only.
 | 2026-08-29 | §3, Appendix A G3 | **Rev 22 — pinned-file rule split out of the gate.** Rev 21 bundled a gate-scoped permission with a general statement about the pinned protocol; the general statement now sits in §3 common core and reaches both arms, while the gate keeps only what is about the gate | PI |
 | 2026-08-29 | §4 | **Rev 22 — "Cost mechanics and discipline" added to the common core**, both arms identically: context accumulates and is re-read every turn, so the norms govern how output enters the session | PI |
 | 2026-08-29 | §4 | **Rev 23 — "Context hygiene" added to the common core**, both arms identically: the file record carries durable knowledge, sessions compact at phase boundaries, and waiting sleeps scale to expected job duration | PI |
+| 2026-08-31 | §5 | **Rev 24 — "Endgame and the spend warning" added to the common core**, both arms identically: budget exhaustion ends a campaign exactly as the deadline does, and the 75% spend warning is the point at which securing a defensible claim outranks further exploration | PI |
 
 ## Note on the G3 density bounds
 

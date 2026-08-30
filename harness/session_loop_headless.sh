@@ -21,8 +21,11 @@
 # different interaction mode than the main run's, and any smoke-to-main extrapolation of
 # behaviour (not of budget arithmetic) inherits that difference.
 #
-# Runs inside screen. Stops on: deadline reached, stop-file present, repeated fast failure, or
-# repeated hard failure of the invocation itself.
+# Runs inside screen. Stops on: deadline reached, stop-file present, repeated hard failure of the
+# invocation itself, or a run of sub-minute turns that write NOTHING to the transcript. A run of
+# sub-minute turns that DOES write is an agent waiting on the cluster, and backs the inter-turn
+# sleep off to ten minutes instead of ending the campaign -- see the guard near the foot of this
+# file, and REPORT 006 section 2(a).
 set -uo pipefail
 REP="${1:?rep}"; WS="${2:?workspace}"; MODEL="${3:?model}"; DEADLINE="${4:?deadline epoch}"
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
@@ -66,6 +69,8 @@ trap 'kill $HB 2>/dev/null' EXIT
 MAX_HARD_FAILS=5
 hard=0
 i=0; fast=0
+SLEEP=10          # inter-turn pause; backs off to IDLE_SLEEP while the agent is correctly idle
+IDLE_SLEEP=600
 while true; do
   NOW=$(date +%s)
   if [ "$NOW" -ge "$DEADLINE" ]; then
@@ -106,12 +111,36 @@ while true; do
   fi
   hard=0
 
-  # A turn that ends in seconds, repeatedly, means something is broken -- do not hot-loop.
-  if [ "$DUR" -lt 60 ]; then fast=$((fast+1)); else fast=0; fi
+  # A run of sub-minute turns means one of two things, and they are opposites.
+  #
+  # It can mean the loop is spinning on something broken -- the case this guard was written for.
+  # It can also mean the agent has correctly run out of work: everything is queued on the
+  # cluster, the charter's own session rhythm says waiting is not working, and each turn is a
+  # short honest "nothing has changed, holding". On 2026-08-30 the guard could not tell those
+  # apart and ended TEN campaigns of the sixteen for the second one, 44 min to 2 h 23 min after
+  # the fleet resumed, while the six that survived were merely the ones inside long turns.
+  # rep02's last four turns were "Holding for the next results batch", "Holding.", "Holding."
+  # REPORT 006 section 2(a); ruled 2026-08-31.
+  #
+  # The discriminator is the transcript. A turn that ends in seconds having WRITTEN something is
+  # an agent doing its job briefly; a turn that ends in seconds having written nothing is a loop
+  # spinning. So growth backs the inter-turn sleep off to ten minutes and says so; no growth
+  # still breaks. Backing off rather than resetting the counter matters for cost as well as for
+  # noise: five quick turns then a fresh ten seconds is ~24 turns an hour of full re-read
+  # context against a spend cap, and ten minutes between turns is ~6.
+  if [ "$DUR" -lt 60 ]; then fast=$((fast+1)); else fast=0; SLEEP=10; fi
   if [ "$fast" -ge 5 ]; then
-    echo "$(date -u +%FT%TZ) 5 consecutive sub-minute turns, stopping to avoid a hot loop" >> "$LOG"
-    break
+    if [ "$AFTER" -gt "$BEFORE" ]; then
+      if [ "$SLEEP" -ne "$IDLE_SLEEP" ]; then
+        echo "$(date -u +%FT%TZ) 5 consecutive sub-minute turns WITH transcript growth -- the agent is working and waiting, not spinning; inter-turn sleep ${SLEEP}s -> ${IDLE_SLEEP}s" >> "$LOG"
+      fi
+      SLEEP="$IDLE_SLEEP"
+      fast=4                      # hold the backed-off state; the next fast turn re-evaluates it
+    else
+      echo "$(date -u +%FT%TZ) 5 consecutive sub-minute turns with NO transcript growth, stopping to avoid a hot loop" >> "$LOG"
+      break
+    fi
   fi
-  sleep 10
+  sleep "$SLEEP"
 done
 echo "$(date -u +%FT%TZ) headless session loop for $REP finished after $i iteration(s)" >> "$LOG"
