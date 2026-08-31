@@ -1751,3 +1751,151 @@ deadline with no final report filed.
 5. The eight older escalation rows remain open as recorded in REPORT 008.
 
 — Bei (harness)
+
+---
+
+## 2026-08-31T03:43:03Z (12:43:03 KST) — REPORT 010, on your status check. **NOTHING EXECUTED. rep01 IS MINUTES FROM ITS CAP.**
+
+> **In one line:** REPORT 009's 09:40–11:15 KST window passed without either replicate stopping,
+> because burn fell again — but that reprieve is spent: **rep01 stands at $277.58 of $280 (99.1%)
+> and reaches its cap inside the next few minutes**, rep06 in **0.8–1.1 h**, against 126 h and
+> 156 h of deadline. Fleet is at **$3,076 of $4,480** with **11–20 h** of runway. Ruling 1 has
+> reached exactly **one** session so far, rep01's, and it arrived by the session breaking — which
+> is ruling 4's mechanism working, at the cost of 30.5 min of downtime and a catch-up spike that
+> is what put rep01 on the cap today. Nothing has been executed on any of it.
+
+### 0. Read this section first
+
+**(a) rep01 lands now; rep06 within the hour.** Latest spend record, 12:42 KST, with 1 h and 2 h
+trailing rates from `harness/spend.jsonl` and deadlines from `harness/watchdog.jsonl`:
+
+| replicate | spend | %cap | $/h (1 h) | $/h (2 h) | hours to $280 | deadline left |
+|---|---|---|---|---|---|---|
+| **rep01** | $277.58 | **99.1%** | 36.25 | 19.07 | **0.1** | 126.2 h |
+| **rep06** | $273.85 | **97.8%** | 7.56 | 5.37 | **0.8 – 1.1** | 156.3 h |
+| rep11 | $232.20 | 82.9% | 14.16 | 11.14 | 3.4 – 4.3 | 147.4 h |
+| rep16 | $231.30 | 82.6% | 14.23 | 8.70 | 3.4 – 5.6 | 132.7 h |
+| rep10 | $224.16 | 80.1% | 5.98 | 3.34 | 9.3 – 16.7 | 147.8 h |
+| rep15 | $220.70 | 78.8% | 6.63 | 6.76 | 8.8 – 8.9 | 147.5 h |
+| rep07 | $216.79 | 77.4% | 1.39 | 1.44 | 43.8 – 45.5 | 146.1 h |
+| rep02 | $204.29 | 73.0% | 3.37 | 5.13 | 14.8 – 22.5 | 145.6 h |
+| rep03 | $187.68 | 67.0% | 3.86 | 3.24 | 23.9 – 28.5 | 147.0 h |
+| rep17 | $164.93 | 58.9% | 0.00 | 0.00 | flat (closed) | 140.4 h |
+| rep09 | $162.37 | 58.0% | 3.31 | 2.21 | 35.5 – 53.2 | 131.6 h |
+| rep05 | $153.25 | 54.7% | 13.65 | 8.36 | 9.3 – 15.2 | 131.6 h |
+| rep08 | $149.85 | 53.5% | 1.57 | 1.71 | 76.0 – 83.0 | 131.6 h |
+| rep13 | $144.32 | 51.5% | 6.12 | 3.82 | 22.2 – 35.5 | 148.2 h |
+| rep12 | $129.67 | 46.3% | 4.35 | 2.43 | 34.6 – 61.8 | 148.0 h |
+| rep04 | $103.09 | 36.8% | 2.09 | 2.11 | 84.0 – 84.8 | 147.3 h |
+
+REPORT 009 gave rep06 1.6–3.2 h at 08:01 and it is still running at 12:42, so the four hours since
+have cost it $18. Its rate has not changed; the estimate was honest and the replicate is simply
+close. **rep01 is the different case** — it was given 2.4–3.8 h and is arriving four hours late for
+the opposite reason: it stopped entirely at 02:59 UTC, sat down for 30.5 min, and has since burned
+at $36/h on catch-up. See (c). **Every live replicate still reaches its cap before its deadline
+except rep04 and rep12**; that finding from REPORT 009 §0(a) is unchanged.
+
+**(b) Fleet burn is back up, and the runway is shorter than REPORT 009's.** Main-16 basis, s01/s02
+excluded, same basis REPORT 009 used:
+
+| window ending 12:42 KST | fleet burn | implied runway |
+|---|---|---|
+| trailing 0.5 h | $129.34/h | 10.9 h |
+| trailing 1 h | $129.54/h | 10.8 h |
+| trailing 2 h | $86.34/h | 16.3 h |
+| trailing 3 h | $70.89/h | 19.8 h |
+| since REPORT 009 (4.5 h) | $73.89/h | 19.0 h |
+
+Fleet stands at **$3,076.00 of $4,480**, leaving **$1,404.00** — **11–20 h** against 126–156 h of
+deadline. REPORT 009 measured $52–76/h and called 23–33 h; the 3 h and 4.5 h windows above still
+agree with that, and the sharp 1 h figure is rep01's catch-up plus rep11 and rep16 accelerating
+(both roughly doubled their 2 h rate in the last hour). I am not calling $129/h the fleet's rate.
+**The honest statement is that the campaign ends on spend in well under a day of burn either way,
+and the ordering of §0(a) is what needs the ruling, not the fleet total.**
+
+**(c) Ruling 1 is now in force on exactly one session, and it got there by breaking.** This is the
+binding item STATE.md flagged after REPORT 008, and it has moved:
+
+- `IDLE_SLEEP` is **2700 s in `session_loop_headless.sh`** (edited 05:10 KST today, uncommitted).
+- It is read **once, at loop start**. The ten relaunched at 04:05 KST started before that edit and
+  hold **600 s**. Nothing about them has changed.
+- rep01 was one of the five **old-guard** sessions. At 02:59:56 UTC it hit the old guard —
+  *"5 consecutive sub-minute turns, stopping to avoid a hot loop"* — and ended its campaign. The
+  restart watcher caught it 30.5 min later and relaunched it at 03:31:27 UTC (`restarts.jsonl`,
+  restart 1 of 3). The replacement runs the fixed guard and picked up the new value: its log reads
+  *"5 consecutive sub-minute turns WITH transcript growth — the agent is working and waiting, not
+  spinning; inter-turn sleep 10s -> 2700s"* at 03:40:05 UTC.
+
+**That is ruling 4's mechanism delivering ruling 1, exactly as predicted, and the bill for it is
+visible.** rep01 lost 30.5 min, then burned $36/h re-reading context — which is the immediate
+reason it is at 99.1% rather than the 82.2% REPORT 009 recorded. **Four old-guard sessions remain
+(rep05, rep08, rep09, rep16)**, each carrying the same downtime-plus-spike on whenever it breaks;
+rep16 is at 82.6% and rep05 is running at $13.65/h, so for those two the spike may not fit under
+the cap. The ten expensive ones will not break at all and keep the 10-minute idle for the rest of
+the campaign unless cycled, which ruling 4 declines to do during peak burn.
+
+**(d) One instrument is miscounting, and it is the escalation panel.** It prints **51 awaiting a
+human answer**; **4 are actually open.** Mechanism, verified in the source:
+`deliver_escalation_answers.py:68` stamps `answered_at` **in place** in
+`harness/escalation_queue.jsonl` and never removes the row, while `escalate.py:show_queue()`
+reports `len(pending)` — the queue's whole length — without filtering on `answered_at`. All 51
+queue rows are also present in the ledger `escalations.jsonl`, and 47 of them carry an
+`answered_at`. So the queue has never been drained and the panel has been reporting total
+escalations ever filed, not backlog, including in REPORT 008's and REPORT 009's carried-forward
+lists. **The genuinely open four**, all `infra`, all filed today:
+
+| replicate | queued (KST) | question |
+|---|---|---|
+| rep03 | 05:00 | audit result requested by the 2026-08-30T19:38:28Z notice, from `bin/auditx3.py` |
+| rep16 | 05:00 | its `bin/reap.sh` matched processes by script name under a shared UNIX user and will have killed siblings |
+| rep13 | 05:30 | correction to its 04:44 filing: the $3.8-per-turn and hard-stop-in-45-turns figures are withdrawn |
+| rep02 | 11:30 | 886 tasks failed instantly with `FileNotFoundError` across both compute nodes in one interval |
+
+Logged, not repaired — under the standing order this is a ledger entry, not an investigation. The
+count is wrong in the safe direction (it overstates), but it made the backlog unreadable and it
+should be corrected before collection reads these ledgers.
+
+### 1. What is holding
+
+- **15 sessions up**, all 15 `liveness: alive` on `transcript-growth` at the 12:31 poll, none
+  stale. rep01's row read `session=DOWN … restarting (#1)` at that poll and the replacement is up.
+- **rep17 is correctly closed.** Stop file in place since 04:59, no rep17 process or screen, spend
+  **flat at $164.93** since. Its §5 filing is terminal and the roster removal is mechanical.
+- **The compute meter has a writer again** (REPORT 008 §6 / REPORT 009 §0(c), ruling 5 executed).
+  `meter_has_data: true` in all 16 workspaces, basis *finished-job PBS cput*, with in-flight CPU-h
+  and job counts now carried alongside. It reads `unaccounted` in 15 of 16 rather than `ok`,
+  because in-flight work is deliberately excluded from the enforced figure — rep07 shows 0.0 used
+  against 1,139.5 CPU-h in flight across 11 jobs. **Enforcement is real but lags job completion.**
+  Nobody is near 1,610 CPU-h; rep17 leads at 774.1.
+- **Poll cadence as ratified:** measured 30.05 min against 30, verdict `as-ratified`, overshoot
+  bound 6.01 CPU-h measured against the ratified 6.00 (0.37% of budget).
+- **Spend meter live**, 2-minute cadence, last fire 12:42 KST, no gap.
+- **Tokens are not binding:** highest is rep11 at 44.0% of 32 M.
+- **Host healthy:** load 0.23, 19 GB free of 62 GB, disk 2% of 3.6 TB. Cluster queue R=167 across
+  4 users with **Q=0** — nothing of ours is waiting.
+- **Record is pushed.** `main` level with `origin/main`, 0 ahead / 0 behind at the time of writing.
+  45 files dirty in the working tree, all of them machine-written logs, ledgers and STATE.
+
+### 2. What I have not done
+
+**Nothing.** No cap raised, no deadline moved, no replicate paused or cycled, no session relaunched
+to pick up `IDLE_SLEEP`, no compaction forced, no harness edit, no escalation answered outside the
+09:00 / 21:00 KST cadence, and no repair to the escalation counter in §0(d). rep01 will reach $280
+and stop on its own enforcement, mid-campaign, with no final report filed, unless you rule
+otherwise in the next few minutes.
+
+### 3. Open, carried forward
+
+1. **§0(a) — the ruling on rep01 (now) and rep06 (within the hour).** Unchanged in kind from
+   REPORT 009 §3(1); only the clock has moved.
+2. **§0(c) — the four remaining old-guard sessions.** Ruling 4 says let them break. rep01 shows
+   what breaking costs: 30.5 min down plus a catch-up spike. rep16 at 82.6% and rep05 at $13.65/h
+   may not have room for it. This is new information about a ruling already made.
+3. **§0(d) — the escalation panel counts 51 where 4 are open.** Unrepaired, logged.
+4. REPORT 008 §0(a) — the idle-backoff / compaction question for the ten that will not break.
+   rep10's escalation on forced re-invocation is among the rows the panel was hiding.
+5. REPORT 009 §3(4) — rep06's MakeGrid segfault; the false answer is withdrawn and the row
+   reopened and answered under ruling 6.
+6. **Next planned work remains collection**, per the standing order of 05:1x KST.
+
+— Bei (harness)
