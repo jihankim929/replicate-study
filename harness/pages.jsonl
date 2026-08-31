@@ -1,1 +1,2 @@
 {"ts":"2026-08-30T19:12:12Z","key":"pager-selftest","title":"pager installation test","outcome":"forbidden","detail":"HTTP 403 -- the token lacks issues:write. {\n  \"message\": \"Resource not accessible by personal access token\",\n  \"documentation_url\": \"https://docs.github.com/rest/issues/issues#create-an-issue\",\n  \"status\": \"403\"\n}\n\n403"}
+{"ts":"2026-08-31T04:01:14Z","key":"escalation-count-defect","title":"PAGER TEST, NON-URGENT -- escalation panel reports 51 awaiting where 4 are open","outcome":"sent","detail":"issue created"}

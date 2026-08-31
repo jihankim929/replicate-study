@@ -27,8 +27,15 @@ first thing a cold reader of this file should apply.**
   planned work is **collection**.
 - **Log over investigate.** When something surfaces, record it accurately in the right ledger and
   move on. A three-attempt audit is the exception that needs a reason, not the default.
-- **Page on URGENT only.** `harness/page_pi.sh` exists and works; use it for conditions that
-  cannot wait for the next report, and not otherwise.
+- **Page on URGENT only.** `harness/page_pi.sh` **is live as of 2026-08-31T04:01:14Z** — the PI
+  updated the token, `issues:write` now carries, and the first real delivery is
+  [issue #1](https://github.com/jihankim929/replicate-study/issues/1), HTTP 201, ledgered `sent`.
+  Before today it was installed and inert: the one prior fire (`pager-selftest`,
+  2026-08-30T19:12:12Z) took a 403 and this line still read "exists and works", which it did not.
+  Use it for conditions that cannot wait for the next report, and not otherwise. **Note that the
+  script hardcodes `"URGENT: "` onto every title, so it has no non-urgent mode** — issue #1 is a
+  PI-instructed test and says so in its title and first line. Unrepaired; the prefix is left as
+  written because a pager that can be sent quietly is a different instrument.
 - **Next planned work: collection.**
 
 **What this order does NOT suspend:** the 30-minute poll and everything in it, the spend meter, the
