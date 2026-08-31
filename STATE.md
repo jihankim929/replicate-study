@@ -18,6 +18,76 @@ to the extended values, meter **$746.06 / $4,480 (16.65 %)**, all `OK`, none at 
 
 ---
 
+# STANDING ORDER — MINIMAL SUPERVISION, in force from 2026-08-31 05:1x KST
+
+**PI order, on the REPORT 008 rulings. This governs the harness operator's own conduct and is the
+first thing a cold reader of this file should apply.**
+
+- **Idle by default.** Do not open work that nobody asked for. The rulings are executed; the next
+  planned work is **collection**.
+- **Log over investigate.** When something surfaces, record it accurately in the right ledger and
+  move on. A three-attempt audit is the exception that needs a reason, not the default.
+- **Page on URGENT only.** `harness/page_pi.sh` exists and works; use it for conditions that
+  cannot wait for the next report, and not otherwise.
+- **Next planned work: collection.**
+
+**What this order does NOT suspend:** the 30-minute poll and everything in it, the spend meter, the
+watchdog, the restart watcher, and the escalation queue. Those are the scripted protocol and they
+run. The order constrains discretionary work, not the instruments.
+
+## The REPORT 010 ruling — 2026-08-31 12:4x KST, RATIFIED, executed as a no-op
+
+**REPORT 010 is accepted into the record as authoritative. §0(a) answered: caps stand.** No cap
+raised, no deadline moved, no replicate paused, cycled or closed, `IDLE_SLEEP` not pushed to the
+ten, the §0(d) escalation counter not repaired. Executed by taking no action, which is the whole
+of it.
+
+**REPORT 011 corrects the premise it was given on, and the correction is open.** I told the PI in
+REPORTS 009 §2 and 010 §2 that a replicate reaching $280 stops on its own enforcement.
+`watchdog.py:268 act_on_stop()` **does not stop a replicate on spend** — it appends a notice to the
+workspace `INBOX.md` and returns; the queue hold is guarded `if resource == "compute"`. Nothing
+writes `harness/sessions/<rep>.stop`, kills the `screen`, or signals the loop. The only writer of a
+stop file is `close_campaign.sh`, an operator command run by hand — which is how rep17 was closed,
+so rep17 is **not** evidence this path works. `STOP_FRACTION` is 1.00, the level is computed
+correctly, and **`level: "stop"` has never once occurred in `watchdog.jsonl`.** The path has never
+run. The notice it sends says a §5 final report **remains mandatory**, the opposite of what I
+reported twice.
+
+**So the spend cap is advisory in implementation and enforced only in the record**, and there is
+**no fleet-level enforcement at all** — $4,480 is 16 × $280 arithmetic carried in the reports and
+read by no code. The live trajectory is not replicate-by-replicate closure; it is the fleet
+running out of money and every session failing at once on the API with no §5 reports filed.
+
+**Open to the PI (REPORT 011 §4): is the cap meant to terminate a session, or to instruct one?**
+Until that is ruled, `act_on_stop()` is untouched. Wiring `close_campaign.sh` into it is not a
+harness fix — it changes what the study measures.
+
+---
+
+## The REPORT 008 rulings — all executed 2026-08-31
+
+| # | ruling | state |
+|---|---|---|
+| 1 | `IDLE_SLEEP` 10 → 45 min, fleet-uniform, effective as loops pick it up | **in the script**; reaches a session only at its next loop start — see the caveat below |
+| 2 | compaction sharpened → **charter Rev 25**, uniform notice | in all 15 live charters, arm split verified; notice delivered |
+| 3 | rep17's filing stands; §5 filing drops a replicate from the roster mechanically | **rep17 closed**; `harness/close_campaign.sh` does stop-file + roster removal together; `restart_watch.sh` reconciles |
+| 4 | the five old-guard sessions: let them break naturally | recorded, no action taken — that is the ruling |
+| 5 | compute meter writer ratified | `cpu_h` restored in all 16 workspaces; `prereg/compute_meter_RATIFIED.md` |
+| 6 | rep06's segfault: answer with facts | prior false answer withdrawn, row reopened and answered |
+| 7 | close the eight rows against today's notices | 14 rows closed; 2 left open deliberately |
+
+**THE ONE THING RULING 1 DOES NOT REACH, and it is the binding item.** `IDLE_SLEEP` is read once,
+when a loop starts. The five old-guard sessions will pick up 45 minutes when they break and
+restart, which is ruling 4's own mechanism. **The ten relaunched at 04:05 KST run the FIXED guard,
+so they will not break — and they are the expensive ones.** They keep the 10-minute idle cadence
+for the rest of the campaign unless they are cycled, which ruling 4 declines to do during peak
+burn. Measured at 20:06 UTC: fleet burn **$282/h** (down from $480/h as the 10-minute backoff
+engaged), remaining **$1,980 of $4,480**, **7.0 h to exhaustion**. Ruling 1 fully in force would
+cut the idle component roughly 4.5×. **This is stated for the PI and nothing has been done about
+it beyond executing the ruling as written.**
+
+---
+
 # STATE — current tasks and beliefs
 
 *Updated before any long wait. Supersedes itself; history lives in LOG.md and git.*
