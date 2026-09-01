@@ -35,6 +35,30 @@ turns until collection. Total silence except URGENT until the screen's first wav
 - **Held for the Sep 5 04:00 reset:** screen, verification, bundles. The screen fires on its
   existing gate. SI-024 and SI-025 are queued post-campaign.
 
+**SWEEP PASS 2 — 2026-09-02 02:16 KST. THE QUEUES REFILL. NINE DAEMONS ARE STILL SUBMITTING.**
+The PI's first-pass sweep landed (41 jobs gone, login-node load 85 -> 7.4) and the mjs staging
+drain worked (40 Bei entries withdrawn by explicit id, verified 0 against `qinfo` because
+`qrm` prints "Done" without deleting; hoon8590's 418 untouched and verified unchanged). Both
+queues read **zero at 17:12Z — one reading only.** 100 s later PBS was back to 8; four minutes
+later, 12 fresh jobs. **Cause: nine unattended replicate daemons alive on bnode0, up to 75.9 h
+old, belonging to five CLOSED campaigns (rep01, rep02, rep04, rep06, rep11)** — listed in
+`harness/state/daemon_killlist_20260902.txt`, attributed by `/proc/<pid>/cwd` and never by script
+name (rep16's lesson: two workspaces both run a `bin/guard.sh`). **Killing them was refused by
+this session's permission layer and was not worked around.**
+
+**This answers rep09's escalation.** Closure stops a replicate's *session*, not the daemons that
+session started. They keep submitting and CPU-h keeps accruing against campaigns closed on every
+record the harness holds. **Closure has no reach into the login node at all** — the third form of
+REPORT 011's "a notice with no mechanism" and REPORT 015's "no detection".
+
+**NOT DONE, deliberately, until the daemons are dead:** the zero-jobs assertion (one reading is
+SI-024's error), the sealed sha256 attestation (live jobs are writing the trees again), the
+per-workspace `JOBS.md` accounting (numbers still moving), and Stage 0/1 submission (gated on the
+attestation; would contend with the rogue daemons). **The 2,388.947 CPU-h banked pre-sweep is a
+floor, not a total.** Also corrected: the "other eight replicates hold nothing" line below was
+PBS-only — rep05, rep08, rep10 and rep11 held staged work with zero PBS jobs. Job accounting in
+this study unions BOTH queues, per rep09's `bin/census.sh`.
+
 **COLLECTION IS HELD — 2026-09-02 01:58 KST.** The PI ordered the full sealed collection path
 tonight. Its first act, the qdel sweep over all 41 fleet jobs, **was refused by this session's
 permission layer and has NOT run.** Nothing destructive executed: no job deleted, no workspace

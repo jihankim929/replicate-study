@@ -1,0 +1,23 @@
+# Unattended replicate daemons found ALIVE on bnode0 at 2026-09-02 02:13 KST, after all sixteen
+# campaigns were closed. These are the resubmitters behind the mjs/PBS refill rep09 documented.
+#
+# ATTRIBUTED BY /proc/<pid>/cwd, NEVER BY SCRIPT NAME. rep16's isolation incident
+# (state/incident_20260831_cross_replicate_kills/) is exactly the lesson: all sixteen replicates
+# run as the single UNIX user Bei, so `pkill -f guard.sh` is a fleet-wide command wearing the
+# costume of a local one. Two workspaces here run a file called bin/guard.sh and they are
+# different processes belonging to different campaigns.
+#
+# Every one belongs to a CLOSED campaign. Killing all nine is the intended scope.
+#
+# pid|etimes_s|hours|workspace|cmd
+2131843|273091|75.9|rep11|bash scripts/watch.sh
+3166529|242367|67.3|rep04|bash bin/snap.sh
+3386491|224725|62.4|rep01|bash scripts/monitor2.sh
+1102855|219775|61.0|rep01|bash scripts/qpos_loop.sh
+1444961|218890|60.8|rep02|bash scripts/supervisor.sh
+1725331|165779|46.0|rep06|bash bin/keepalive.sh 12
+554858|158874|44.1|rep06|bash bin/guard.sh
+803808|158274|44.0|rep06|bash bin/cycle.sh 750 1100 150 1.5
+2434883|45285|12.6|rep04|bash bin/guard.sh
+#
+# Note 554858 is the parent of 803808 (guard -> cycle). Kill by explicit pid list, all nine.

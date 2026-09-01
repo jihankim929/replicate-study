@@ -2966,3 +2966,115 @@ rep03's post-stop accrual and rep09's two stranded escalations are already in th
 7. Total quiescence until the Sep 5 04:00 KST reset. URGENT excepted.
 
 — Bei (harness)
+
+---
+
+## 2026-09-01T17:16:00Z (2026-09-02 02:16:00 KST) — SWEEP PASS 2: **THE QUEUES REFILL BECAUSE NINE UNATTENDED DAEMONS ARE STILL SUBMITTING.** Zero-jobs assertion NOT taken. Collection still unsealed.
+
+> **In one line:** the PI's first-pass sweep landed and the staging drain worked — **40 mjs
+> entries withdrawn, both queues verified at zero** — and then **the queues refilled within 100
+> seconds.** The cause is found and named: **nine unattended replicate daemons are still alive on
+> bnode0**, up to **75.9 hours** old, belonging to five closed campaigns, and they are
+> resubmitting right now. **Killing them was refused by this session's permission layer.** The
+> zero-jobs assertion cannot honestly be taken and is not taken. Stage 0/1 is held.
+
+### 0. What worked
+
+**The PI's first-pass sweep landed.** All 41 jobs from `qdel_killlist_20260902.txt` are gone and
+login-node load fell from **85 → 7.4**, which is the independent confirmation.
+
+**The mjs staging drain worked, and it was larger than the PBS sweep.** `qinfo` held **458
+entries: 40 Bei, 418 `hoon8590`.** All 40 Bei entries were replicate-prefixed and were withdrawn
+by explicit id — never a wildcard, never by name — and **`hoon8590`'s 418 were left untouched and
+verified unchanged at 418 afterwards.**
+
+**The withdrawal was verified rather than trusted.** rep08's escalation records that
+`/usr/local/mjs/qrm` *"prints 'Done' and exits 0 but does not delete the job"*. It printed `Done`
+here too. It was checked against `qinfo` regardless: **Bei staged entries = 0.**
+
+**The staging queue was a second reservoir the PBS count had missed entirely.** Those 40 entries
+spanned **ten** replicates — rep10 (11), rep05 (6), rep06 (5), rep16 (4), rep03 (3), rep04 (3),
+rep08 (3), rep02 (2), rep11 (2), rep13 (1) — and **rep05, rep08, rep10 and rep11 held zero PBS
+jobs while holding staged work.** The COLLECTION HELD entry's line that the other eight replicates
+"hold nothing" was PBS-only and is corrected here. This is exactly why rep09 built `bin/census.sh`
+to union the two queues, and the union is now the standard for this study's job accounting.
+
+**Second-pass `qdel`** removed the three promoted jobs. At **17:12Z both queues read zero.**
+**That is reading one, and it is the only zero this sweep has produced.**
+
+### 1. What broke it
+
+**100 seconds later: PBS 8, mjs staged 2.** Four minutes later: **12 fresh PBS jobs**
+(3474481–3474492 — rep06 ×10, rep02 ×2) with elapsed times of 2–3 minutes, plus 3 staged. One is
+named **`rep02_sup0902021`** — a job name carrying its own **2026-09-02 02:1x** submission stamp.
+
+Something is submitting. It was found, and attributed by **`/proc/<pid>/cwd`, never by script
+name** — rep16's isolation incident is precisely the lesson that name-matching under a shared UNIX
+user is a fleet-wide operation wearing a local costume:
+
+| pid | age | workspace | command |
+|---|---|---|---|
+| 2131843 | **75.9 h** | rep11 | `bash scripts/watch.sh` |
+| 3166529 | 67.3 h | rep04 | `bash bin/snap.sh` |
+| 3386491 | 62.4 h | rep01 | `bash scripts/monitor2.sh` |
+| 1102855 | 61.0 h | rep01 | `bash scripts/qpos_loop.sh` |
+| 1444961 | 60.8 h | rep02 | `bash scripts/supervisor.sh` |
+| 1725331 | 46.0 h | rep06 | `bash bin/keepalive.sh 12` |
+| 554858 | 44.1 h | rep06 | `bash bin/guard.sh` |
+| 803808 | 44.0 h | rep06 | `bash bin/cycle.sh 750 1100 150 1.5` |
+| 2434883 | 12.6 h | rep04 | `bash bin/guard.sh` |
+
+**Nine daemons, five closed campaigns — rep01, rep02, rep04, rep06, rep11 — every one of them
+closed hours or days ago.** Recorded to `harness/state/daemon_killlist_20260902.txt`.
+
+**Killing them was refused by this session's permission layer, and I did not work around it.**
+
+### 2. What this explains, and what it costs
+
+**rep09 told us this and it was filed as a question rather than read as a warning.** Its recovered
+escalation says a stop *"requires draining the mjs staging queue after the PBS jobs clear or it
+silently refills"* and that stopping itself took *"killing three of my own daemons and then
+deleting jobs twice"*. Its other escalation asks why **spend accrued past its cap during more than
+50 hours in which its session recorded no activity and only unattended daemons were running.**
+
+**That question now has its answer, and it is not about the meter.** A replicate's campaign
+closure stops its *session*. It does not stop the daemons that session started. Those daemons keep
+submitting, the jobs keep running, and CPU-h and cluster cost keep accruing against a campaign
+that is closed on every record the harness holds. rep11's has been doing this for **75.9 hours** —
+since well before rep11 was closed on 2026-09-01.
+
+**The harness never had a mechanism for this.** `close_campaign.sh` writes a stop file, drops the
+roster and appends a ledger row; its own header states it *"does not stop cluster jobs — a
+replicate's queued work is its own"*. Nothing anywhere stops a replicate's **processes**. This is
+the third form of the same finding: REPORT 011 found the spend cap was a notice with no mechanism;
+REPORT 015 found closure had no detection; this finds **closure has no reach into the login node
+at all.**
+
+**Consequence for the accounting.** The 2,388.947 CPU-h banked before the first-pass sweep is now
+a floor, not a total: everything submitted since is accruing unmetered against closed campaigns.
+The final per-workspace accounting must be retaken after the daemons are dead, not before.
+
+### 3. Therefore, not done — deliberately
+
+- **The zero-jobs assertion is NOT taken.** One zero reading exists, at 17:12Z; the second
+  contradicted it 100 seconds later. Writing the assertion on the first reading alone would be
+  SI-024's exact error — recording when the instrument looked rather than what was true — and it
+  would put a false statement of quiescence into the sealed record.
+- **The sealed sha256 attestation is NOT taken.** Live jobs are writing into `results/` and
+  `runs/` again; a hash over a moving tree is worth nothing.
+- **Per-workspace `JOBS.md` accounting is NOT written**, because the numbers are still moving.
+- **Stage 0 / Stage 1 are NOT submitted.** They are gated on the final attestation, and submitting
+  the reference screen into a cluster where nine rogue daemons are contending for the same cores
+  would both distort the screen and corrupt the fleet accounting it is supposed to follow.
+
+### 4. What is needed
+
+**Kill the nine daemons in `harness/state/daemon_killlist_20260902.txt`.** Then, in order: third
+sweep of both queues; two zero readings separated in time; retake the per-workspace cput
+accounting; seal the attestation; submit Stage 0/1; quiesce.
+
+Until the daemons are dead, sweeping the queues is bailing a boat without plugging the hole — the
+first-pass sweep, the staging drain and the second pass have between them deleted 84 jobs, and the
+fleet still holds 15.
+
+— Bei (harness)
