@@ -3489,3 +3489,140 @@ quiescence** and are now a known, ruled-on, unresolved exception rather than an 
 Holding to total silence except URGENT until the Sep 5 04:00 KST reset.
 
 — Bei (harness)
+
+---
+
+## 2026-09-01T19:30:00Z (2026-09-02 04:30:00 KST) — THE PULL IS BUILT AND THE COLLECTION HALTED AT YOUR GATE. **1/16 VERIFIED. THE SEAL IS STALE, THE PULL IS CLEAN.** Ruling (1) reconciled: no vantage split, the eight are dead.
+
+> **In one line:** the missing inbound half of collection now exists and works — sixteen records
+> pulled, independently fingerprinted — but **verification against the seal returns 1/16 and the
+> run halted**, because the retired Mac's poll fired **one more full cycle at 18:58–19:07Z** and
+> rewrote `INBOX.md` in fifteen of sixteen workspaces. It stopped after rep16 and never reached
+> rep17 — **which is exactly why rep17 is the single workspace that still reproduces the seal.**
+> The pull is not at fault and the diagnostic says so by name.
+
+### 1. Ruling (1) reconciled — no vantage split, and the exception is closed
+
+Re-verified from this seat, as the ruling directed:
+
+```
+hostname -f    : bnode0.kaist.ac.kr
+SSH_CONNECTION : 143.248.130.178 -> 143.248.125.145 : 22
+ALIVE_COUNT=0    all eight dead; no until-loop, no orphan sleep under Bei
+load 7.59 -> 6.80
+```
+
+**The two-hosts hypothesis is tested and disproved, and is recorded as a negative result** because
+the ruling asked for it either way: `ssh dirac-bei` resolves through `dirac-bei-gw`
+(143.248.130.178) to **143.248.125.145 = bnode0.kaist.ac.kr**, the same node the PI's kill reached
+and the same node every `qstat`, `qinfo` and `/proc` reading tonight has come from. **There is no
+second host and there never was.** Tonight's refill mysteries are therefore not explained by
+vantage, and their explanations stand as already recorded: nine resubmitting daemons, then eight
+nameless wait-loops, then a retired Mac.
+
+The 19:10Z sighting of fresh `sleep` children was real, and so is `ALIVE_COUNT=0` now. The likeliest
+reconciliation with a kill that printed `No such process` for all eight is a **two-stage
+`TERM`-then-`KILL`**, where the first landed and the second reported on pids it had just removed.
+**Recorded as likely, not asserted** — the log that would settle it is on the PI's side.
+
+**The one stated exception to quiescence is closed.** Screens 0, session loops 0, daemons 0,
+wait-loops 0, PBS 0, mjs 0.
+
+### 2. The pull exists now — `harness/pull_collect.sh`
+
+The gap was never subtle: **`transfer.sh` only ever pushes, and `collect.sh` reads a local workspace
+the main phase never had.** The smoke was pulled by hand on the macOS host that has since been
+retired, so the inbound half of collection left with that host. That is what refused Stage 0/1 at
+§7.1 twice.
+
+| step | result |
+|---|---|
+| `rsync` of the eight sealed files + `AUDIT.jsonl`, all 16 | **8/8 each**, commit counts matching the seal |
+| transfer size | **12.6 MB** — record only |
+| `git log` captured **remotely** | `.git` trees never pulled |
+| independent post-copy fingerprint | **128 hashes**, `BELL_FINGERPRINT.log` |
+
+**12.6 MB against the smoke's 3.6 GB is deliberate.** The seal covers eight files per workspace and
+§7.1 gates on the report; results, `db/` and `toolchain/` are tens of GB and nothing downstream
+reads them, since §7.2 forbids the screen any view of a replicate workspace. **The consequence is
+stated rather than discovered later: the results remain on `bnode0` only**, outside the seal and
+outside this collection. Pulling them is a separate act under a separate authority.
+
+`REPORT.md` is kept under its own name and **never renamed** — it is the name the seal hashes *and*
+the name §7.1's gate reads, so the gate is satisfied by the sealed name rather than by any
+arrangement of mine. `FINAL_REPORT.md` is written as a **copy, not a move**, for the smoke's shape.
+
+### 3. The halt
+
+```
+verified 1/16
+HALT — the collection does not reproduce the seal. Nothing downstream may proceed.
+No COLLECTION.md written.
+```
+
+For all fifteen failures the check reports **`local copy matches remote — the SEAL disagrees`**.
+That distinction is why `BELL_FINGERPRINT.log` is taken at all: it separates *a bad transfer* from
+*a workspace that moved after the seal*. **This is the second, and the pull is clean.**
+
+### 4. Cause — the retired Mac's poll got one more cycle in
+
+`INBOX.md` mtimes:
+
+| rep01 | rep02 | rep03 | … | rep16 | **rep17** |
+|---|---|---|---|---|---|
+| 18:58:22Z | 18:58:59Z | 18:59:37Z | ~37 s apart | 19:07:05Z | **17:10:41Z — untouched** |
+
+Roster order, evenly spaced, **cut off one short of the end.** rep17 is the only workspace that
+still reproduces the seal *because the sweep never got to it*. A cleaner demonstration of the cause
+than any log would have been.
+
+**The content is benign.** Appended harness notices — *"Usage warning — compute at 51 % of budget
+(821.634 / 1610)"*, and 821.634 is rep01's own sealed final CPU-h, so the poll was reading the
+post-sweep accounting. **No replicate ran, no compute was spent, nothing was submitted.** The damage
+is to the seal, not to the record's substance.
+
+**Nothing else moved.** At 18:53:39Z the remote reproduced the seal 16/16; `INBOX.md` is the only
+sealed file changed since. **No poll, meter or watchdog process is alive now** — the writer is gone.
+
+**Timing, stated as fact and not as complaint:** the Mac was reported at ~19:05Z as no longer able
+to reach the workspaces; the final write landed at **19:07:05Z**. The unload took effect — a few
+writes later than the close did.
+
+### 5. What this costs
+
+**This is the second seal tonight invalidated by a write landing after it.** The first was
+self-inflicted, caught, and retaken at 17:32Z under the rule *a seal that does not cover the final
+write is not a seal.* This one is external, and it is the previous entry's own formulation earning
+its keep a third time: **retirement was recorded as an event at 19:05Z, and the state it named was
+not yet true.** The seal is not wrong about 17:32Z. It has simply been overtaken.
+
+Three ways forward. **None taken; the seal is the authority and replacing the authority is not mine
+to do:**
+
+1. **Re-seal, then re-run the pull.** Conditions are now strictly better than at 17:32Z — Mac
+   unloaded, eight loops dead, both queues zero, no writer alive. The new seal supersedes; both
+   remain in the record with this entry as the reason. One command. **Recommended.**
+2. **Drop `INBOX.md` from the manifest.** Argued against: it redefines the authority so that a
+   failure passes, which is the shape of every instrument fault tonight.
+3. **Restore the fifteen `INBOX.md` files.** Argued against: it destroys the evidence of the write
+   being documented.
+
+### 6. What was NOT done
+
+- **`COLLECTION.md` was not written** and `reps/main/collected/` **does not exist** — the dry run
+  wrote to a temporary directory and left the real path untouched. `screen_launch.sh --check` still
+  reads REFUSED, unchanged.
+- **`screen_submit.py` was not written.** Ruling (3)'s four parameters are settled and it does not
+  depend on the collection, so it can be built while the seal question is decided; it simply cannot
+  submit until §7.1 clears on a verification that passes.
+- **Stage 0 and Stage 1 were not submitted. Nothing reached the cluster from this session.**
+
+### 7. Standing
+
+**PBS 0, mjs 0, daemons 0, wait-loops 0, screens 0, session loops 0, timers stopped and disabled,
+Mac launchd unloaded, roster empty, 16/16 closed, escalation queue 0 open.** Decks regenerated and
+verified 25,598/25,598. **Quiescence now has no stated exception.** The open item is the seal.
+
+Holding to total silence except URGENT until the Sep 5 04:00 KST reset.
+
+— Bei (harness)

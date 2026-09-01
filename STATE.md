@@ -16,8 +16,8 @@ caps. `harness/state/fleet_spend.json` states the basis — *"latest metered row
 smoke excluded"*. The corrected figure at REPORT 014's own 16:04Z snapshot was $4,684.17 (104.6%).
 
 # QUIESCENT — 2026-09-02 01:50 KST. NOTHING IS SCHEDULED AND NOTHING IS RUNNING.
-# — AMENDED 04:15 KST: *nothing is scheduled; **eight stranded wait-loops ARE running**, and the
-# PI's ruling that they were killed is contradicted by `/proc` — see the rulings block below.*
+# — RE-AMENDED 04:30 KST: *true again. The eight wait-loops are dead (`ALIVE_COUNT=0`), the Mac's
+# launchd is unloaded, and **quiescence now has no stated exception.** The open item is the seal.*
 
 *PI order of 2026-09-02, executed. **Do not start anything.** Zero scheduled work, zero session
 turns until collection. Total silence except URGENT until the screen's first wave.*
@@ -36,6 +36,47 @@ turns until collection. Total silence except URGENT until the screen's first wav
   two stranded escalations recovered verbatim into the ledger. Attestation in `reports/REPORTS.md`.
 - **Held for the Sep 5 04:00 reset:** screen, verification, bundles. The screen fires on its
   existing gate. SI-024 and SI-025 are queued post-campaign.
+
+**PULL BUILT; COLLECTION HALTED AT THE SEAL — 2026-09-02 04:30 KST. 1/16 VERIFIED.**
+PI rulings of 04:20 KST. **Ruling (1) reconciled and CLOSED:** `hostname -f` = **bnode0.kaist.ac.kr**,
+`SSH_CONNECTION` 143.248.130.178 -> 143.248.125.145, the same node every reading tonight came from.
+**The two-hosts hypothesis is tested and DISPROVED — recorded as a negative result.** There is no
+second host; tonight's refills stand explained by the nine daemons, the eight loops and the Mac.
+`ALIVE_COUNT=0`, no until-loop or orphan sleep under Bei, load 7.59 -> 6.80. The 19:10Z sighting was
+real and the kill landed after it; a two-stage TERM-then-KILL is the likely reason it printed
+`No such process`, recorded as likely and not asserted.
+
+**THE PULL EXISTS — `harness/pull_collect.sh` + `write_collection_md.sh`.** The gap it closes:
+`transfer.sh` only pushes and `collect.sh` reads a local workspace the main phase never had, the
+smoke having been pulled by hand on the now-retired Mac. All 16 pulled, **8/8 sealed files each**,
+commit counts matching, **12.6 MB** (record only), `git log` captured remotely, independent
+post-copy fingerprint of **128 hashes**. `REPORT.md` kept under its own name and never renamed — it
+is both what the seal hashes and what §7.1 reads; `FINAL_REPORT.md` is a copy, not a move.
+**Stated consequence: the RESULTS remain on bnode0 only**, outside the seal and this collection, and
+pulling them is a separate act under a separate authority.
+
+**HALTED: verified 1/16, and the diagnostic reports `local copy matches remote — the SEAL
+disagrees` for all fifteen. The pull is clean; the seal is stale.** Cause: **the retired Mac's poll
+fired one more full cycle at 18:58:22Z -> 19:07:05Z**, rewriting `INBOX.md` in roster order ~37 s
+apart across fifteen workspaces and **stopping after rep16, never reaching rep17 — which is exactly
+why rep17 is the only workspace that still reproduces the seal.** Content benign (harness usage
+notices; the 821.634 figure is rep01's own sealed CPU-h): no replicate ran, no compute, nothing
+submitted. Nothing else moved — the remote reproduced the seal 16/16 at 18:53:39Z and `INBOX.md` is
+the only sealed file changed since. No poll/meter/watchdog process is alive now. **Timing as fact:
+the Mac was reported unable to reach the workspaces at ~19:05Z; the last write landed 19:07:05Z.**
+
+**SECOND SEAL TONIGHT INVALIDATED BY A WRITE LANDING AFTER IT** — the first self-inflicted and
+caught at 17:32Z, this one external. The 04:15 formulation earns its keep a third time: retirement
+was recorded as an event at 19:05Z and the state it named was not yet true. **Not resolved: the seal
+is the authority and replacing the authority is not mine to do.** Recommended: **re-seal, then
+re-run the pull** — conditions are strictly better than at 17:32Z. Rejected on argument: dropping
+`INBOX.md` from the manifest (redefines the authority so a failure passes) and restoring the fifteen
+files (destroys the evidence).
+
+**NOT DONE:** `COLLECTION.md` unwritten and `reps/main/collected/` does not exist — the dry run used
+a temp dir and `screen_launch.sh --check` still reads REFUSED, unchanged. `screen_submit.py` not
+written, though ruling (3)'s four parameters are settled and it does not depend on the collection.
+**Stage 0/1 not submitted; nothing reached the cluster.** REPORTS entry of 04:30 KST.
 
 **RULINGS EXECUTED IN PART — 2026-09-02 04:15 KST. DECKS DONE; SUBMISSION BLOCKED BY §7.1.**
 PI rulings of 04:10 KST. **Deck regeneration is mechanical execution and it succeeded:** 25,598
