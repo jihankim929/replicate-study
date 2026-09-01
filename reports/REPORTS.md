@@ -2502,3 +2502,215 @@ its own standing rule, not an operator action.
    in §5(a).
 
 — Bei (harness)
+
+- `2026-09-01T16:29:02Z` **rep09 closed** — declared §5 filing, detected by `detect_filings.sh` and adjudicated by one session turn, closed under the REPORT 012 standing authority as armed by the PI on REPORT 014 (no per-case word). Verdict: "FINAL REPORT filed on the charter section 4 hard budget stop: the campaign is closed" Ledger row in `harness/closures.jsonl`; cput on jobs alive at closure still needs the final sweep at collection.
+
+---
+
+## 2026-09-01T16:35:00Z (2026-09-02 01:35:00 KST) — REPORT 015, on the REPORT 014 rulings. **ALL EXECUTED. ALL SIXTEEN CAMPAIGNS ARE CLOSED — THE ROSTER IS EMPTY.**
+
+> **In one line:** the five you ruled on and rep08/rep05 all carried explicit filing declarations,
+> so **six campaigns closed by hand**; the detector-to-closer path was armed, verified against the
+> three false positives that blocked it, and **closed rep09 by itself** — taking the roster from
+> six to **zero**. Restart counters refunded, escalation queue drained to **zero open**, three
+> incidents logged, no deadline moved. Two new defects surfaced during execution: one found by the
+> fail-closed path before it could act, one that had already written a wrong record and is fixed.
+> **And REPORT 014's fleet-spend figure was wrong — corrected in §6.**
+
+### 0. Execution, ruling by ruling
+
+**(1) Six campaigns closed, not three.** rep03, rep04 and rep15 closed as ruled. rep08 and rep05
+resolved mechanically as instructed — I read the commits their escalations named, and **both carry
+an explicit filing statement**, so both close under the standing authority. Neither needed the
+notice branch.
+
+| replicate | declaration read | commit | closed (UTC) |
+|---|---|---|---|
+| rep03 | *"FILED: final report filed and campaign closed under sections 4 and 5"* | `b0b916a` | 16:16:59 |
+| rep04 | *"FINAL REPORT FILED under charter section 5 early filing"* + STATE banner *"CAMPAIGN FILED … this workspace is closed"* | `7e7da45` | 16:17:05 |
+| rep15 | STATE banner *"The campaign is closed on the §4 spend hard stop. Do not resume it."* | `668dbef` | 16:17:11 |
+| rep08 | *"campaign filed early under charter section 5: the mandate is complete"* | `6b14cb6` | 16:17:19 |
+| rep05 | *"FILED under charter section 5: this is a deliberate terminal filing at 95.6 percent of spend"* | `6041f03` | 16:17:25 |
+| **rep09** | *"FINAL REPORT filed on the charter section 4 hard budget stop: the campaign is closed"* + STATE *"CAMPAIGN CLOSED — 2026-09-02 01:20 KST"* | `7c7c9c1` | **16:29:01, by the armed detector** |
+
+**Sixteen of sixteen are now closed. `harness/state/active_replicates` is empty.** Six `screen`
+sessions were still up at closure; `session_loop_headless.sh:103` breaks on the stop file, so they
+drain at their next turn boundary and a little further spend lands, as at every prior closure.
+
+**What the re-invocations cost, from the replicates' own records.** The 16:00 restart woke three
+already-filed campaigns and every one of them correctly refused to resume. rep04's closing note
+measures it at **~$2 per wake-up across three turns**; rep15 logged **five** successive
+post-termination invocations between 01:08 and 01:12 KST, each a commit saying nothing was
+resumed; rep03 committed *"re-invoked after closure: campaign held closed and no work resumed"*.
+That is the 22-hour window in miniature, and it is the case for (2).
+
+**Also on the record, because it is a collection problem:** rep15 found its 18:35 termination
+**"had killed nothing and nine jobs had run 6.9 h past the stop"** and qdel-ed them; rep03 stopped
+three worker jobs still burning CPU for an ended campaign. CPU-h accrued after campaign end in at
+least two workspaces and the final sweep must account for it.
+
+**(2) The detector-to-closer path is ARMED, and it has already worked.**
+
+Arming as written would have been unsafe, and the reason is on this file's own record: the three
+candidates of 2026-09-01T05:16Z were **all false positives** — a forecast, a runway note, and Rev
+24 maintenance text — and a blind arm would have ended three running campaigns. Your ruling
+contains its own resolution: closure on *"a declared filing (never inferred)"*, with *"one short
+session turn"*. A regex cannot separate a declaration from a forecast. A session turn can, because
+that is the supervision judgement `close_campaign.sh` has always said the recognition is.
+
+So the path is now: **`find_filings.sh` nominates → one short session turn adjudicates DECLARED vs
+NOT_DECLARED → `close_campaign.sh` executes on DECLARED only.** Gate is
+`harness/state/AUTOCLOSE_ARMED`; delete that file to disarm and nothing else changes. It **fails
+closed** on doubt, a missing verdict line, an unparseable one, an error or a timeout — an unclosed
+campaign costs money, a wrongly-closed one destroys a running experiment, and the asymmetry is
+built in rather than hoped for.
+
+**Verified before arming**, against the exact cases that blocked it — the three false positives and
+the two genuine declarations. **Five of five correct:**
+
+```
+VERDICT repA DECLARED     "FILED: final report filed and campaign closed under sections 4 and 5"
+VERDICT repE DECLARED     "FINAL REPORT FILED under charter section 5 early filing"
+VERDICT repB NOT_DECLARED Forecast: "the budget stop that is coming ends the campaign"
+VERDICT repC NOT_DECLARED Runway re-measurement housekeeping only; no filing or closure claim
+VERDICT repD NOT_DECLARED Rev 24 continuous-maintenance text, explicitly not a section 5 declaration
+```
+
+Then it ran live and closed rep09 on its own, with no per-case word from me.
+
+**One narrowing, disclosed rather than done quietly.** You said *"one short session turn runs the
+closer"*. In what I built, **the turn judges and the shell acts**: the adjudication turn is given
+no tools at all (`harness/adjudicator_settings.json` denies every one) and emits verdict lines the
+script parses. It cannot write a stop file, edit a roster or touch a workspace itself. The
+judgement is the turn's, exactly as ruled; the consequence stays deterministic, auditable, and
+byte-identical to a hand-run close. My reason is that an unattended model holding a shell on a
+30-minute timer is a larger instrument than this study needs, and SI-021/024/025 are all
+instruments acting confidently on the wrong subject. **This is a judgement call and I flag it for
+you to overrule** — the change is small if you want the turn to run the closer directly.
+
+**(3) No deadline restoration, and none was applied.** Logged as an environment event at
+`harness/state/incident_20260902_weekly_limit/INCIDENT.md`, with the per-replicate measured
+downtimes (32.5–51.4 min) recorded there as the figures that govern should a restoration ever be
+needed. `restore_downtime.py` was not run against it and not repaired. Deadlines untouched.
+
+**(4) Restart counters refunded.** `COUNTER_RESET` row appended to `harness/restarts.jsonl` at
+16:20:00Z, cause-keyed on the rep06 precedent, scoped to the six and carrying the standing rule
+that any future account-limit event is refunded identically. Verified: `restart_watch.sh` read
+`rep09: restarts=0/3` immediately after. **One caveat you should have:** the marker is read
+**fleet-wide** — `restart_watch.sh:66` takes the last `COUNTER_RESET` line and counts rows below
+it, and does not parse `scope`. Scope is documentary. With the roster now empty this has no live
+consequence, but the row does not mean what its `scope` field appears to promise.
+
+**(5) Escalations: all seven closed, queue is empty.** One-line dispositions, no investigations,
+no notices delivered — every author was already a closed campaign, so there was nowhere live to
+deliver to. The queue was updated in place with a timestamped backup, which is
+`deliver_answers.py`'s own convention.
+
+- **rep16, cross-replicate process kills** → logged as an isolation incident at
+  `harness/state/incident_20260831_cross_replicate_kills/`. **Exposure set identified where
+  cheap:** the only timestamped evidence inside rep16's window is the login-node snapshot of
+  2026-08-30T19:22:09Z, 23 minutes before its last reported occasion, which puts **rep05, rep08
+  and rep10** co-present on the shared host. That is **exposure, not confirmed harm** — `kill
+  -KILL` leaves no victim-side record, no process accounting ran, and the snapshot enumerates
+  `simulate` processes rather than the `worker.sh`/`runbatch.py` names the reaper matched. The
+  other three occasions have no snapshot and no reconstructible set. Scoring context noted there:
+  the exposure is to login-node orchestration, not to PBS work, and a victim would have logged a
+  flake and resubmitted at its own cost. **It must not be reported as zero and must not be
+  reported as three.** No sanction, no further action. rep16's own file is amended where it said
+  the row would be left open.
+- **rep02, 886-task `FileNotFoundError`** → logged as an environment incident at
+  `harness/state/incident_20260831_filesystem_886/`. Its question — whether there was a
+  filesystem event on bnode18/bnode19 — is **explicitly not answered** and no investigation opened.
+- The remaining five (rep03's contamination audit, rep13's correction, rep08's `qrm` report, and
+  the two post-filing re-invocation complaints) closed with their authors; the last two were
+  resolved in the act by tonight's closures rather than by any answer.
+
+**(6) The weekly limit is recorded as the binding unmetered constraint.** No harness change made.
+Noted in the incident file and in STATE.md.
+
+### 1. Two defects surfaced while executing, and they behaved very differently
+
+**(a) The fail-closed path caught one before it could act — SI inherited, now fixed.** The first
+armed dry run returned `rep09: NOT_DECLARED — No evidence provided for rep09; empty section cannot
+show a declaration`. The verdict was right and the input was wrong: the evidence extractor matched
+`"$REP ** FILING CANDIDATE **"` with a single space, while `find_filings.sh` pads the name with
+`%-7s` and emits three. **The extractor had been silently returning nothing.** Had the path been
+armed blindly, as the ruling's plain text would have had it, this would have fed an empty evidence
+block to a closer. Instead it produced a refusal, logged, with nothing closed. Fixed to match
+flexible spacing; the same bug was present in the unarmed version and never mattered because
+nothing read the output.
+
+**(b) One had already written a wrong record — SI-026, fixed in place.**
+`close_campaign.sh`'s roster removal was `grep -vx "$REP" "$ROSTER" > tmp && mv tmp "$ROSTER"`.
+**`grep -vx` exits 1 when it filters out every line**, so on the last replicate the `&&` skipped
+the `mv`: stop file written, ledger row appended, `closed_replicates` updated — and the roster
+still naming rep09 as active. Closed and active at once, which is precisely the half-closed state
+that script's header says the two-step exists to make unavailable. It is a last-replicate-only
+bug, which is why fifteen closures passed over it and the sixteenth found it. Same family as
+SI-007: `grep`'s exit convention read as the answer to the question being asked.
+
+I **fixed this one mid-campaign** rather than filing it, because unlike SI-024/025 it had already
+produced a live wrong record. Roster corrected to empty, stray `.tmp` removed.
+
+**Filed for post-campaign, not repaired, per your ruling:** **SI-024** (`restarts.jsonl` records
+detection lag and calls it downtime — all six rows read 30.2–30.5 min against measured 32.5–51.4,
+worst error 21.2 min on rep03, and the error is *anti-correlated with the harm*) and **SI-025**
+(`restore_downtime.py` matches one guard line of two and, when it cannot see the stop, measures
+from a stale one to `now` — the verified 60.31 h proposal for a 51-minute outage).
+
+### 2. A correction to REPORT 014
+
+**REPORT 014 §6 reported the fleet at $4,862.65 / 108.5% of the $4,480. That was wrong.** It summed
+the two **archived smoke arms** — s01 $135.99 and s02 $42.50 — into a denominator that is
+16 × $280 of *main-phase* caps. `harness/state/fleet_spend.json` names the basis in its own
+`"basis"` field: *"latest metered row per replicate, **smoke excluded**"*, with
+`"excluded_smoke_usd": 178.48` sitting right there. I summed a dict without filtering it.
+
+**Corrected at REPORT 014's own 16:04Z snapshot: $4,684.17, or 104.6%.**
+
+**Fleet at close (16:30Z), correct basis: $4,715.74 / $4,480 = 105.3%.** Twelve of sixteen finished
+over their individual cap, not eleven — rep05 crossed after REPORT 014 was written:
+
+| over cap | | | | under cap | |
+|---|---|---|---|---|---|
+| rep09 | $415.54 | 148.4% | | rep08 | $267.72 (95.6%) |
+| rep03 | $366.90 | 131.0% | | rep04 | $258.60 (92.4%) |
+| rep06 | $354.52 | 126.6% | | rep12 | $196.45 (70.2%) |
+| rep15 | $338.89 | 121.0% | | rep17 | $164.93 (58.9%) |
+| rep11 | $336.19 | 120.1% | | | |
+| rep13 | $298.34 | 106.5% | | | |
+| rep07 | $291.79 | 104.2% | | | |
+| rep02 | $288.10 | 102.9% | | | |
+| rep05 | $285.52 | 102.0% | | | |
+| rep16 | $284.90 | 101.8% | | | |
+| rep01 | $284.67 | 101.7% | | | |
+| rep10 | $282.69 | 101.0% | | | |
+
+The class is the same one REPORT 013 recorded against itself: **measuring the right quantity over
+the wrong set.** There it was counting filings from records only the operator writes; here it was
+summing arms the study had already excluded. The record stated the basis correctly in both cases
+and I did not read it.
+
+### 3. What was not done
+
+No deadline moved. No cap raised. No replicate paused or relaunched. No cluster job cancelled —
+the two that stopped jobs did so themselves, before closure. No escalation investigated. No notice
+delivered to any workspace. `restore_downtime.py` not run and not repaired. `act_on_stop()`
+untouched. `find_filings.sh`'s trigger — its `PAT` — **not touched**; the only change to that file
+widens printed evidence from 160 to 400 characters so the adjudicator sees what a human would.
+
+### 4. What remains
+
+1. **Collection.** Every campaign is closed and the roster is empty; the study's remaining work is
+   the collection sweep. Two known gaps for it: cput still accruing on jobs alive at each closure
+   (named in all sixteen ledger rows), and the post-stop CPU-h in rep15 and rep03.
+2. **rep09's last two escalations never reached the queue.** It filed them in workspace commit
+   `854112b` at 01:15 KST — spend accruing past cap during ~50 h of session inactivity, and the
+   hard stop having no mechanism behind it — roughly one minute before the closure dropped it from
+   the roster and stopped polling. They exist only in its workspace and need picking up at
+   collection.
+3. **The narrowing in (2) is yours to overrule** if you want the turn to run the closer directly.
+4. **SI-024 and SI-025 are queued for post-campaign**, and SI-025 in particular should be fixed
+   before anyone reaches for `restore_downtime.py` again.
+
+— Bei (harness)

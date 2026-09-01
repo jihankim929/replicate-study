@@ -1610,3 +1610,150 @@ notice.
 **Class.** Same family as SI-018 and SI-019: **a phase-scoped value read out of phase.** The
 smoke-era literal here was not in a script's roster but in a *scheduler interval*, and the harness
 it was installed into was in `main`.
+
+---
+
+## SI-024 — `restarts.jsonl` records when the harness noticed, and calls it downtime [Bei, 2026-09-02]
+
+**Status: FILED FOR POST-CAMPAIGN FIX.** PI ruling on REPORT 014: not repaired mid-campaign.
+
+**The defect.** `restart_watch.sh:149` writes the ledger row as
+
+```sh
+printf '{... "reason":"screen session absent and transcript not grown (%s min)","downtime_min":%s}\n' \
+  "$TS" "$REP" "$((N+1))" "$AGE" "$AGE" >> "$LEDGER"
+```
+
+where `$AGE` is `liveness.py --age-min`, the minutes since the transcript last grew **as measured
+at the moment of detection**. Detection happens on the 30-minute poll, and the restart follows
+within seconds. So `downtime_min` is bounded below by the poll cadence and bounded above by
+cadence + scan time: it is a **measurement of the polling interval**, not of the outage.
+
+**Measured, 2026-09-02.** All six rows from the account-limit outage read **30.2–30.5 min**. The
+true down times, from each loop log's own stop line to its restart line, were **32.5–51.4 min**:
+
+| rep | ledger `downtime_min` | measured | understated by |
+|---|---|---|---|
+| rep03 | 30.2 | 51.4 | **21.2 min** |
+| rep15 | 30.5 | 48.7 | 18.2 min |
+| rep09 | 30.5 | 45.8 | 15.3 min |
+| rep04 | 30.2 | 43.6 | 13.4 min |
+| rep05 | 30.3 | 33.4 | 3.1 min |
+| rep08 | 30.4 | 32.5 | 2.1 min |
+
+**Why it matters.** The figure exists to make downtime restorable, and a restoration computed from
+it would under-credit every replicate, worst for the one that was down longest — the error is
+**anti-correlated with the harm**. It is also silently plausible: 30.2 looks like a measurement.
+
+**Class.** An instrument reporting confidently against the wrong subject — the family of SI-021
+(compute meter reads zero while compute burns) and of REPORT 013's own error, measuring the
+operator's view of the fleet as though it were the fleet.
+
+**Fix, for post-campaign.** Record both, and name them: `detected_after_min` for `$AGE`, and
+`downtime_min` computed from the loop log's own stop line to the restart timestamp. The loop log
+already carries both timestamps; nothing new needs collecting.
+
+**Interim rule [PI, 2026-09-02].** Any restoration that is ever needed uses the measured
+per-replicate figures from `harness/sessions/<rep>.loop.log`, computed by hand. Not this field.
+
+---
+
+## SI-025 — `restore_downtime.py` cannot see half the ways the loop stops, and silently measures the wrong interval when it can't [Bei, 2026-09-02]
+
+**Status: FILED FOR POST-CAMPAIGN FIX.** PI ruling on REPORT 014: not run against the 2026-09-02
+outage, and not repaired mid-campaign.
+
+**The defect, in two parts.**
+
+*(1) It matches one guard line of two.* `session_loop_headless.sh` can end a campaign two ways:
+
+```sh
+:136  "$MAX_HARD_FAILS consecutive hard failures, stopping -- this is a fact about the run, ..."
+:182  "5 consecutive sub-minute turns with NO transcript growth, stopping to avoid a hot loop"
+```
+
+`restore_downtime.py:57` matches **only the second**:
+
+```python
+GUARD_LINE = re.compile(r"^(\S+) 5 consecutive sub-minute turns, stopping to avoid a hot loop")
+```
+
+So the entire hard-failure class — which includes every API, auth, quota and account-limit
+outage, i.e. **the whole class of stop most likely to need restoring** — is invisible to it.
+
+*(2) When it cannot see the stop, it does not fail. It measures from the wrong one.* `loop_end()`
+takes the **last** matching line in the log and `main()` computes `(now - end)`. A log that has
+ever hit the hot-loop guard therefore yields a stale timestamp, and the "downtime" is the interval
+from an old, already-resolved incident **to whenever the operator happens to run the script**.
+
+**Measured, read-only, 2026-09-02.** `restore_downtime.py --dry-run rep03`:
+
+```
+rep03   down since 2026-08-30T03:45:55    60.3075 h   2026-09-06T15:28:14 -> 2026-09-09T03:46:41
+```
+
+**It proposes moving rep03's deadline by 60.31 hours for a 51-minute outage**, off a hot-loop line
+from five days earlier describing a different incident. Five of the six actives carry such a line;
+rep09 does not, so for rep09 the same command aborts instead — the two failure modes are
+*under*-restoring nobody and *over*-restoring by two and a half days, and which one you get depends
+on whether the replicate ever spun.
+
+**Why it survived this long.** It was written for, and correctly applied to, one incident: the
+2026-08-30 harness-fault restoration, where the hot-loop guard *was* the stop. It has never been
+run against any other class. `--dry-run` exists and works, and is what caught this.
+
+**Class.** A tool that is correct on the case it was written for and silently wrong on the next
+one — SI-018/019/023's family (a phase-scoped value read out of phase), here scoped to an
+*incident* rather than a phase.
+
+**Fix, for post-campaign.** Match both guard lines; take the **first** stop at or after the
+incident under restoration rather than the last in the file; take the end of the outage from the
+restart row rather than from `now`; and refuse — as it already knows how to — when the interval
+cannot be evidenced from the log rather than falling back to a stale line.
+
+---
+
+## SI-026 — `close_campaign.sh` could not remove the LAST replicate from the roster [Bei, 2026-09-02]
+
+**Status: FOUND AND FIXED IN PLACE, same day.** Record corrected.
+
+**The defect.** Roster removal was:
+
+```sh
+grep -vx "$REP" "$ROSTER" > "$ROSTER.tmp" && mv "$ROSTER.tmp" "$ROSTER"
+```
+
+`grep -vx` **exits 1 when it filters out every line.** With one name on the roster, the filtered
+output is empty, grep returns 1, and `&&` therefore skips the `mv`. The closure's other three
+steps all succeeded — stop file written, `closures.jsonl` row appended, `closed_replicates`
+updated — and the roster went on naming the replicate as active. An empty `active_replicates.tmp`
+was left behind as the only visible trace.
+
+**It is a last-replicate-only bug**, which is why fifteen closures passed over it. It fired on the
+sixteenth: **rep09, 2026-09-01T16:29:01Z**, the final campaign of the study.
+
+**Consequence, measured.** rep09 was simultaneously in `closed_replicates` and in
+`active_replicates`, i.e. closed and active at once. The stop file meant `restart_watch.sh:104`
+would not have relaunched it, so no spend followed; but `poll.sh` reads the roster and would have
+gone on metering a closed campaign and reporting a deadline it will never reach — the exact
+half-closed state `close_campaign.sh`'s own header says the two-step exists to make unavailable:
+
+> *"a closure that does one of them is the bug this script exists to make unavailable"*
+
+**Class.** A shell exit status treated as a boolean about the data when it is a boolean about the
+*match* — the same family as SI-007, where `grep -c || echo 0` yielded `0\n0` and `[ -ge 3 ]`
+exited 2 and fell through as though the cap were clear. Both are `grep`'s exit convention read as
+if it were the answer to the question being asked.
+
+**Fix.** rc 0 and rc 1 are both success for a filter that may legitimately empty the file; only
+rc > 1 is a real failure, and it must not be allowed to blank the roster:
+
+```sh
+grep -vx "$REP" "$ROSTER" > "$ROSTER.tmp"; GREP_RC=$?
+if [ "$GREP_RC" -le 1 ]; then mv "$ROSTER.tmp" "$ROSTER"
+else rm -f "$ROSTER.tmp"; echo "  !! roster filter failed rc=$GREP_RC -- $REP left ON the roster" >&2; fi
+```
+
+**Record corrected 2026-09-02:** `active_replicates` truncated to empty (all sixteen campaigns are
+closed), stray `active_replicates.tmp` removed. Fixed in place rather than filed for post-campaign
+because it had already written a wrong record, and the wrong record was live.

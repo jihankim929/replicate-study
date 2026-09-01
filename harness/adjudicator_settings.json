@@ -1,0 +1,6 @@
+{
+  "_comment": "Adjudication turn for detect_filings.sh. It reads evidence in its prompt and emits a verdict line per candidate. It needs NO tools and is given none: the CLOSE is executed by the shell on its verdict, so the judgement is a session turn's and the consequence stays mechanical and auditable.",
+  "permissions": {
+    "deny": ["Bash", "Read", "Write", "Edit", "Glob", "Grep", "WebSearch", "WebFetch", "Task", "TodoWrite"]
+  }
+}

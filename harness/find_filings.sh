@@ -55,7 +55,7 @@ for r in $REPS; do
   if [ "$hits" -gt 0 ]; then
     printf '  %-7s ** FILING CANDIDATE ** (last commit %s)\n' "$r" "$last"
     echo "$out" | sed -n '/--COMMITS--/,$p' | grep -vE '^--(COMMITS|STATE)--$' \
-      | cut -c1-160 | sed 's/^/             /'
+      | cut -c1-400 | sed 's/^/             /'
   else
     printf '  %-7s no declaration (last commit %s)\n' "$r" "$last"
   fi

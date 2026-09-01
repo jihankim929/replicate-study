@@ -65,7 +65,18 @@ USAGE=${USAGE:-\{\}}
 
 printf '%s campaign closed on the record: %s\n' "$TS" "$REASON" >> "$STOP"
 if [ $ON_ROSTER -eq 0 ]; then
-  grep -vx "$REP" "$ROSTER" > "$ROSTER.tmp" && mv "$ROSTER.tmp" "$ROSTER"
+  # SI-026. `grep -vx` EXITS 1 when it filters out every line, so `&& mv` silently did not run
+  # when the replicate being closed was the LAST one on the roster: stop file written, ledger row
+  # appended, closed_replicates updated -- and the roster still naming it. It bit exactly once,
+  # on rep09, the sixteenth and final closure, 2026-09-02T16:29Z. rc 0 and rc 1 are both success
+  # here; anything above 1 is a real grep failure and must NOT be allowed to empty the roster.
+  grep -vx "$REP" "$ROSTER" > "$ROSTER.tmp"; GREP_RC=$?
+  if [ "$GREP_RC" -le 1 ]; then
+    mv "$ROSTER.tmp" "$ROSTER"
+  else
+    rm -f "$ROSTER.tmp"
+    echo "  !! roster filter failed rc=$GREP_RC -- $REP left ON the roster, fix by hand" >&2
+  fi
 fi
 grep -qx "$REP" "$CLOSED" 2>/dev/null || echo "$REP" >> "$CLOSED"
 

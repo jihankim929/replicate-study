@@ -44,3 +44,11 @@
 {"ts":"2026-09-01T15:15:03Z","event":"scanned","armed":false,"candidates":4,"candidate_reps":["rep03","rep04","rep05","rep15"],"closed":[]}
 {"ts":"2026-09-01T15:45:00Z","epoch":1788277500,"event":"fire"}
 {"ts":"2026-09-01T15:45:03Z","event":"scanned","armed":false,"candidates":4,"candidate_reps":["rep03","rep04","rep05","rep15"],"closed":[]}
+{"ts":"2026-09-01T16:15:00Z","epoch":1788279300,"event":"fire"}
+{"ts":"2026-09-01T16:15:03Z","event":"scanned","armed":false,"candidates":5,"candidate_reps":["rep03","rep04","rep05","rep09","rep15"],"closed":[]}
+{"ts":"2026-09-01T16:26:36Z","epoch":1788279996,"event":"fire"}
+{"ts":"2026-09-01T16:26:40Z","event":"scanned","armed":true,"candidates":1,"closed":[],"not_declared":["rep09"],"unjudged":[]}
+{"ts":"2026-09-01T16:28:12Z","epoch":1788280092,"event":"fire"}
+{"ts":"2026-09-01T16:28:19Z","event":"scanned","armed":true,"candidates":1,"closed":[],"not_declared":[],"unjudged":[]}
+{"ts":"2026-09-01T16:28:55Z","epoch":1788280135,"event":"fire"}
+{"ts":"2026-09-01T16:29:02Z","event":"scanned","armed":true,"candidates":1,"closed":["rep09"],"not_declared":[],"unjudged":[]}

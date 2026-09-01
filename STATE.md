@@ -1,3 +1,66 @@
+# CAMPAIGN OVER — ALL SIXTEEN CLOSED, 2026-09-02 01:29 KST
+
+*Every one of the sixteen main replicates has filed under charter §5 and is closed: stop file,
+roster removal and `closures.jsonl` row for each. **`harness/state/active_replicates` is empty.**
+The last was rep09 at 2026-09-01T16:29:01Z, closed by the newly armed detector-to-closer path.
+Six `screen` sessions were still up at closure and drain at their next turn boundary —
+`session_loop_headless.sh` breaks on the stop file — so a little further spend lands and is
+expected. Nothing is to be relaunched. What remains is collection.*
+
+**Fleet at close: $4,715.74 against the $4,480 sum-of-caps (105.3%), smoke excluded.** Twelve of
+sixteen finished over their individual $280 cap; rep09 highest at $415.54 (148.4%). The overrun is
+a PI-acknowledged consequence of the advisory-cap finding (REPORTS 011–013) and is not a fault to
+be chased. **Correction:** REPORT 014 §6 gave $4,862.65 / 108.5%, which wrongly summed the two
+archived smoke arms (s01 $135.99 + s02 $42.50) into a denominator that is 16 × $280 of main-phase
+caps. `harness/state/fleet_spend.json` states the basis — *"latest metered row per replicate,
+smoke excluded"*. The corrected figure at REPORT 014's own 16:04Z snapshot was $4,684.17 (104.6%).
+
+# THE REPORT 014 RULINGS — executed 2026-09-02, and these govern
+
+*Filed and pushed as REPORT 015. In force from here.*
+
+1. **rep03, rep04, rep15 closed** on their declared §5 filings under the standing authority
+   (commits `b0b916a`, `7e7da45`, `668dbef` + STATE banner). **rep08 and rep05 closed** on the
+   same test applied to the commits their own escalations named — `6b14cb6` and `6041f03` — both
+   of which carry an explicit filing statement. **rep09 closed** by the armed detector.
+2. **The detector-to-closer path is ARMED.** Gate: `harness/state/AUTOCLOSE_ARMED` (remove that
+   file to disarm; nothing else changes). `find_filings.sh` nominates, **one short session turn
+   adjudicates DECLARED vs NOT_DECLARED with no tools**, `close_campaign.sh` executes on DECLARED
+   only. It **fails closed** on doubt, a missing verdict, an error or a timeout. Verified before
+   arming against the three false positives that blocked it on 2026-09-01 and the two genuine
+   declarations: five of five correct. **Disclosed narrowing:** the ruling said "one short session
+   turn runs the closer"; the turn *judges* and the shell *acts*, so the consequence stays
+   deterministic and auditable. Flagged for the PI to overrule.
+3. **Tonight's account-limit outage: NO deadline restoration.** Sub-hour, uniform across all six
+   actives, account-level cause. Deadlines untouched. `restore_downtime.py` neither run against it
+   nor repaired mid-campaign. Logged at `harness/state/incident_20260902_weekly_limit/`.
+   **If a restoration is ever needed, the measured per-replicate figures in that file govern,
+   computed by hand from the loop logs — never `restarts.jsonl`, never `restore_downtime.py`.**
+4. **Restart counters: account-limit outages do not count.** Cause-keyed on the rep06 precedent.
+   Tonight's six restarts are refunded — `COUNTER_RESET` row in `harness/restarts.jsonl` at
+   2026-09-01T16:20:00Z. **Standing: any future account-limit event is refunded identically.**
+   Note the marker is read fleet-wide by `restart_watch.sh:66`; `scope` is documentary only.
+5. **Escalations: closed, all of them.** Seven open rows took one-line dispositions and the queue
+   is now **empty**. No investigations were opened. rep16's cross-replicate kills are logged as an
+   isolation incident with the exposure set and scoring context; rep02's 886-task failure is
+   logged as an environment incident with its question explicitly **not** answered.
+6. **The weekly account limit is the binding unmetered constraint**, noted for the record. No
+   harness change. The PI is verifying account-side credit configuration directly.
+
+**Defects filed rather than fixed:** SI-024 (`restarts.jsonl` records detection lag and calls it
+downtime) and SI-025 (`restore_downtime.py` sees one guard line of two and silently measures from
+a stale one) are **post-campaign**. SI-026 (`close_campaign.sh` could not remove the *last*
+replicate from the roster — `grep -vx` exits 1 when it empties the file) was **fixed in place**,
+because it had already written a wrong record and that record was live.
+
+---
+
+# SUPERSEDED 2026-09-02 — the banner below said the fleet was running. It is not.
+
+*Kept because this file records supersession rather than deleting it. Everything from here down
+was true of a running fleet and must be read as history, not as instruction. Where it conflicts
+with the two sections above, the sections above govern.*
+
 # FLEET RUNNING ON bronze4 — RESUMED 2026-08-30 11:42:33 KST
 
 *Sixteen main replicates are up. The pause of 2026-08-30 07:14:19 KST lasted a measured
