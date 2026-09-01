@@ -1,0 +1,42 @@
+# Stranded replicate WAIT-LOOPS found ALIVE on bnode0 at 2026-09-02 03:52 KST (18:52Z), AFTER the
+# sealed collection attestation of 02:35 KST declared the fleet quiescent.
+#
+# THESE ARE NOT THE NINE DAEMONS. daemon_killlist_20260902.txt covered resubmitters, all nine of
+# which are confirmed dead (/proc check, 18:49Z and 18:54Z). These eight are a different class and
+# were missed by every previous census for one reason:
+#
+#   THEY HAVE NO SCRIPT NAME. Each is a bare `bash -c ... until [ ... ]; do sleep N; done; ...`
+#   with the whole program in argv. The verification grep used by the 02:35 sweep matched script
+#   names -- guard|cycle|watch|snap|monitor2|qpos|supervisor|keepalive|autopilot -- and a nameless
+#   loop matches none of them. The killlist header was right that attribution must be by
+#   /proc/<pid>/cwd and never by script name; the VERIFICATION then went back to names, and that
+#   is the hole. Attributed below by cwd, as the doctrine requires.
+#
+# Every one belongs to a CLOSED campaign (rep01, rep10). None submits: rep10's two only put
+# /usr/local/mjs on PATH; their command bodies concatenate CSVs. Ages 76.6-83.3 h -- they predate
+# the closures by days and survived the screen kill, the timer disable and both qdel sweeps.
+#
+# ALL EIGHT CONDITIONS ARE UNREACHABLE and the loops will spin until the node reboots:
+#   rep01 results/pilot/*.csv = 39, waits for >= 47
+#   rep01 results/r1/*.csv    = 269, waits for >= 540
+#   rep10 work/hqueue/claim_*/OK = 38, waits for >= 40   <-- TWO short of firing
+# With every PBS job deleted and nothing submitting, no new result can appear. But rep10's trigger
+# sits two events from running `head -1 ... > data/hist_all.csv` INSIDE A SEALED WORKSPACE, which
+# would change rep10's dirty count and break the seal recorded at 17:32Z.
+#
+# Kill by explicit pid list, all eight. NOT by pattern: all sixteen replicates run as the single
+# UNIX user Bei (incident_20260831_cross_replicate_kills), and `pkill -f "until"` is a fleet-wide
+# command wearing the costume of a local one.
+#
+# pid|etimes_s|hours|workspace|waits_for
+489758|300052|83.3|rep01|results/pilot/*.csv >= 47
+824123|299374|83.2|rep01|results/pilot/*.csv >= 47
+1121213|298769|83.0|rep01|results/pilot/*.csv >= 47, then runs scripts/select.py
+1423191|298154|82.8|rep01|results/pilot/*.csv >= 47
+1720336|297550|82.7|rep01|results/pilot/*.csv >= 47
+2114494|296751|82.4|rep01|results/r1/*.csv >= 540
+2580986|278103|77.3|rep10|work/hqueue/claim_*/OK >= 40, then WRITES data/hist_all.csv
+3301734|275884|76.6|rep10|work/hqueue/claim_*/OK >= 40, then WRITES data/hist_all.csv
+#
+# Each loop has one `sleep` child which dies with it. NOT APPROVED AND NOT EXECUTED -- awaiting
+# the PI's ruling. Nothing was killed to produce this file; it is the output of a read-only census.

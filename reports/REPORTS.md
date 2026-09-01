@@ -3206,3 +3206,157 @@ Sep 5 04:00 KST reset** — with the three Stage 0/1 blockers above awaiting a r
 PI next reads.
 
 — Bei (harness)
+
+---
+
+## 2026-09-01T19:00:00Z (2026-09-02 04:00:00 KST) — COLLECTION RE-VERIFIED INDEPENDENTLY. **THE SEAL HOLDS 16/16. TWO THINGS THE 02:35 SWEEP GOT WRONG.** Eight stranded wait-loops are still alive; Stage 0/1 still blocked. Nothing killed, nothing built, nothing submitted.
+
+> **In one line:** three of the five items in tonight's order were already done at 02:35 and I
+> re-derived rather than trusted them — the seal recomputes **16/16 exact** — but doing the
+> quiescence check properly instead of reproducing the prior numbers turned up **a zero that was
+> really `command not found`** and **eight unattended loops that every previous census missed
+> because they have no script name.** Both queues are genuinely zero. The eight are alive.
+
+### 0. Why this entry exists
+
+The order was issued against a record one entry stale: the sealed collection attestation of
+02:35 KST (`ea6f158`, this file above) had already **retaken the per-workspace cput accounting into
+all sixteen `JOBS.md`, sealed the sha256 attestation, and written its own entry.** Three of the
+five queued items were complete before this session opened.
+
+I did not take that on trust, because a report asserting its own completion is exactly the thing
+that needs checking. **Everything below is re-derived from the cluster, not read back from the
+record.**
+
+### 1. Quiescence, verified twice as ordered
+
+| reading | time (UTC) | PBS `Bei` | mjs `Bei` | killlist daemons | screens | hoon8590 |
+|---|---|---|---|---|---|---|
+| 1 | 18:49:48 / 18:50:35 | 0 | 0 | 0 / 9 alive | 0 | 408, untouched |
+| 2 | 18:54:05 | 0 | 0 | 0 / 9 alive | 0 | 408, untouched |
+
+Separation **4m 17s**, chosen to sit well outside the 100-second refill window that forced three
+readings last time. Union of both queues, per rep09's `census.sh` doctrine. PBS counted with
+`qselect -u Bei | wc -l` rather than a `qstat` column, per rep08's truncation finding. **The nine
+daemons of `daemon_killlist_20260902.txt` are confirmed dead by `/proc/<pid>` presence, not by
+`ps` output** — see §2. hoon8590's staging drifted 418 → 408 by their own dispatch and was never
+touched. Login-node load **6.4 → 5.4**.
+
+### 2. A zero that was really an error — `qinfo` is not on `PATH`
+
+**`qinfo` does not exist on `PATH` on bnode0, not even in a login shell.** It lives at
+`/usr/local/mjs/qinfo`. My first reading returned `MJS_Bei=0` — and that zero was
+`bash: qinfo: command not found`, exit **127**, counted through a `grep -c` that found no `Bei` in
+an error message.
+
+**A queue that cannot be reached reads exactly like a queue that is empty.** I caught it only
+because the same command reported hoon8590 at 0 when it had held 418 an hour earlier, and that
+number had no business changing. Both readings in §1 use the absolute path and check exit status.
+
+The same class of fault sat in the process check: this host's `ps` silently mis-parses the
+`-o pid=,args=` empty-header form, printing one bare ` ,args=` line **whether the pid exists or
+not**. My first census read nine such lines and could have been reported either way. Re-checked
+against `/proc/<pid>` directly, which is unambiguous: **all nine dead.**
+
+This is the 02:35 entry's own doctrine turned back on itself — `qrm` printed `Done` without
+deleting, so withdrawal was verified rather than trusted. **A tool that fails open must be checked
+for having failed, and the check must not be the same tool.**
+
+### 3. Eight stranded wait-loops are alive — and why every sweep missed them
+
+`harness/state/waitloop_killlist_20260902.txt`.
+
+| pid | age | workspace | waits for |
+|---|---|---|---|
+| 489758 | 83.3 h | rep01 | `results/pilot/*.csv >= 47` |
+| 824123 | 83.2 h | rep01 | `results/pilot/*.csv >= 47` |
+| 1121213 | 83.0 h | rep01 | `>= 47`, **then runs `scripts/select.py`** |
+| 1423191 | 82.8 h | rep01 | `results/pilot/*.csv >= 47` |
+| 1720336 | 82.7 h | rep01 | `results/pilot/*.csv >= 47` |
+| 2114494 | 82.4 h | rep01 | `results/r1/*.csv >= 540` |
+| 2580986 | 77.3 h | rep10 | `claim_*/OK >= 40`, **then writes `data/hist_all.csv`** |
+| 3301734 | 76.6 h | rep10 | `claim_*/OK >= 40`, **then writes `data/hist_all.csv`** |
+
+**These are not the nine daemons.** Those were resubmitters and they are dead. These are a
+different class, and the reason they survived the screen kill, the timer disable, both qdel sweeps
+and three censuses is precise:
+
+**They have no script name.** Each is a bare `bash -c ... until [ ... ]; do sleep N; done; ...`
+with the entire program in `argv`. The 02:35 verification searched for
+`guard|cycle|watch|snap|monitor2|qpos|supervisor|keepalive|autopilot` — **and a nameless loop
+matches none of them.** `daemon_killlist_20260902.txt` opens by insisting attribution be made by
+`/proc/<pid>/cwd` and never by script name. It was right, and then the *verification* went back to
+names. **The hole was not in the kill; it was in the proof that the kill was complete.**
+
+**None of them submits.** rep10's two only put `/usr/local/mjs` on `PATH`; their bodies
+concatenate CSVs. All eight belong to **closed** campaigns.
+
+**All eight conditions are unreachable:** rep01 has 39 of 47 pilot CSVs and 269 of 540 r1 CSVs;
+rep10 has 38 of 40 claims. With every PBS job deleted and nothing submitting, no new result can
+appear, so they will spin until the node reboots. **But rep10 is two events short**, and if it
+ever fired it would write `data/hist_all.csv` into a sealed workspace and break rep10's dirty
+count. A trigger that cannot fire is still an armed trigger.
+
+**Nothing was killed.** That file is the output of a read-only census and awaits a ruling.
+
+### 4. The seal recomputes 16/16 — formula reproduced from scratch
+
+I did not read the seal back; I rebuilt it. The manifest line names its inputs but not their
+composition, so I tested five candidate formulas against rep01 and found the one that reproduces
+the recorded digest: **`sha256sum LOG.md STATE.md REPORT.md JOBS.md ESCALATIONS.md INBOX.md
+WORKSPACE.json usage.json`, that output text hashed** — not the digests concatenated, which was my
+first guess and is wrong.
+
+Applied to all sixteen and compared against `sealed_attestation_20260902.json` on four fields each
+— `record_sha256`, `head`, `commits`, `dirty_paths`:
+
+**MATCH 16/16. DRIFT 0/16.** The seal still describes the workspaces, 90 minutes on. The
+14,345.703 CPU-h accounting it covers is intact, rep05's 0.000 data gap included.
+
+### 5. An unattributed fleet-wide write at 18:47Z — flagged, not explained
+
+All sixteen `usage.json` files were rewritten in roster order, **one every ~6.6 s, 18:47:00Z →
+18:48:40Z**, finishing as this session opened and 75 minutes after the fleet was declared
+quiescent.
+
+It was **not** local automation: the three study timers are stopped and disabled, there is no
+`crontab` on either host, no system or user timer, and no meter process on this host — the last
+harness log write was 16:40Z. The 6.6 s spacing has the shape of a per-workspace `ssh` round trip.
+The most likely explanation is the PI's own verification pass by hand, at the time the PI reports
+having checked `qstat`.
+
+**It changed nothing that is sealed** — §4's 16/16 is the proof, and rep01's content hash is
+identical across the rewrite. **Recorded as observed and unattributed rather than assumed benign.**
+If it was not the PI's hand, something reaches all sixteen workspaces that nothing in this record
+accounts for, and that would matter more than anything else in this entry.
+
+### 6. Stage 0/1 remains blocked — all three verified again
+
+`reps/main/collected/` absent and **no pull exists anywhere in the harness** (`transfer.sh` only
+ever `rsync`s outbound); `screen/decks/` absent, `screen/` holding only `deck_manifest.sha256` and
+`screen_meta_12499.json`; and `harness/screen_submit.py` **absent from the working tree and from
+the entire history** (`git log --all` finds nothing), while being the last line of
+`screen_launch.sh --go`.
+
+**The order to "submit per the sealed screen plan" cannot be executed as written, because the
+plan's submitter was never implemented.** Building it is authoring, not executing, and it is the
+PI's call. Unchanged from 02:35; re-verified, not assumed.
+
+### 7. What was NOT done, and awaits a ruling
+
+- **The eight loops are alive.** Killing processes under the shared `Bei` user is what
+  `incident_20260831_cross_replicate_kills` is about, and these are a target class no approved
+  list covers. Kill list is written, by explicit pid, ready.
+- **Stage 0/1 not submitted, and nothing built toward it.**
+- Both were put to the PI at 03:55 KST and are open.
+
+### 8. Standing
+
+**PBS 0, mjs 0, daemons 0, screens 0, session loops 0, timers stopped and disabled, detector
+disarmed, roster empty, 16/16 closed and sealed, escalation queue 0 open.** Nothing was scheduled,
+started, killed, built or submitted by this work. **The eight stranded loops are the one stated
+exception to total quiescence**, and they are stranded rather than active.
+
+Holding to total silence except URGENT until the Sep 5 04:00 KST reset.
+
+— Bei (harness)

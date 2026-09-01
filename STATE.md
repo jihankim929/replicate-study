@@ -16,6 +16,7 @@ caps. `harness/state/fleet_spend.json` states the basis — *"latest metered row
 smoke excluded"*. The corrected figure at REPORT 014's own 16:04Z snapshot was $4,684.17 (104.6%).
 
 # QUIESCENT — 2026-09-02 01:50 KST. NOTHING IS SCHEDULED AND NOTHING IS RUNNING.
+# — AMENDED 04:00 KST: *nothing is scheduled; **eight stranded wait-loops ARE running.*** See the re-verification block below.
 
 *PI order of 2026-09-02, executed. **Do not start anything.** Zero scheduled work, zero session
 turns until collection. Total silence except URGENT until the screen's first wave.*
@@ -34,6 +35,44 @@ turns until collection. Total silence except URGENT until the screen's first wav
   two stranded escalations recovered verbatim into the ledger. Attestation in `reports/REPORTS.md`.
 - **Held for the Sep 5 04:00 reset:** screen, verification, bundles. The screen fires on its
   existing gate. SI-024 and SI-025 are queued post-campaign.
+
+**RE-VERIFIED INDEPENDENTLY — 2026-09-02 04:00 KST. THE SEAL HOLDS 16/16; TWO FAULTS FOUND.**
+The seal below was not read back, it was **rebuilt**: the formula was re-derived from scratch
+(`sha256sum` over the eight files per workspace, *that output text* hashed) and applied to all
+sixteen, compared on `record_sha256`, `head`, `commits` and `dirty_paths` — **MATCH 16/16,
+DRIFT 0/16.** The 14,345.703 CPU-h accounting is intact. Quiescence re-asserted over the union of
+both queues at **18:49:48Z and 18:54:05Z** (4m 17s apart, outside the 100 s refill window): PBS
+`Bei` 0, mjs `Bei` 0, nine killlist daemons dead, screens 0, hoon8590 untouched, load 6.4 -> 5.4.
+
+**(1) A zero that was really an error. `qinfo` is NOT on `PATH` on bnode0** — not even in a login
+shell; it is at `/usr/local/mjs/qinfo`. The first reading's `mjs Bei = 0` was
+`command not found`, exit 127. **An unreachable queue reads exactly like an empty one.** Caught
+only because the same command put hoon8590 at 0 when it had held 418. Likewise this host's `ps`
+mis-parses `-o pid=,args=`, printing an identical bare line whether a pid lives or not; daemon
+death was re-confirmed against `/proc/<pid>`. **A tool that fails open must be checked for having
+failed, and not with the same tool.**
+
+**(2) EIGHT STRANDED WAIT-LOOPS ARE ALIVE** — `harness/state/waitloop_killlist_20260902.txt`.
+Six in rep01, two in rep10, **76.6-83.3 h old, both campaigns CLOSED.** They are not the nine
+daemons; those are dead. They are bare `bash -c ... until [ ... ]; do sleep N; done` with the whole
+program in `argv`, and **they have no script name** — so the 02:35 verification, which grepped
+`guard|cycle|watch|snap|monitor2|qpos|supervisor|keepalive|autopilot`, could not have seen them.
+The killlist doctrine says attribute by `/proc/<pid>/cwd`, never by name; the *verification* then
+used names. **The hole was in the proof of completeness, not in the kill.** None submits. All
+conditions are unreachable (39/47, 269/540, 38/40) so they spin until reboot — **but rep10 is two
+events short of writing `data/hist_all.csv` into a sealed workspace.** An armed trigger that
+cannot fire is still armed. **Nothing was killed; the list awaits a ruling.**
+
+**(3) An unattributed fleet-wide write, flagged not explained.** All sixteen `usage.json` rewritten
+in roster order, one per ~6.6 s, **18:47:00Z -> 18:48:40Z**, 75 min after quiescence was declared.
+Not local automation (timers stopped and disabled, no crontab on either host, no meter process,
+last harness log write 16:40Z); the spacing has the shape of a per-workspace `ssh`. Most likely the
+PI's own hand. **It changed nothing sealed** — the 16/16 above is the proof. Recorded as observed
+and unattributed. If it was not the PI, something reaches all sixteen workspaces that this record
+does not account for.
+
+**Stage 0/1 re-verified still blocked** on all three missing pieces. Nothing was scheduled,
+started, killed, built or submitted. REPORTS entry of 04:00 KST.
 
 **COLLECTION SEALED — 2026-09-02 02:35 KST. ZERO FLEET JOBS, ASSERTED THREE TIMES.**
 The PI killed the nine daemons; the third sweep held. **Zero in PBS and in mjs staging at 17:26Z,
