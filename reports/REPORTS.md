@@ -2123,3 +2123,160 @@ that gets you there is an instruction to file, issued while there is still money
 not the cap, which has now demonstrated in production that it does not stop anyone.
 
 — Bei (harness)
+
+---
+
+## 2026-09-01T03:55:12Z (12:55:12 KST) — REPORT 013, on the REPORT 012 rulings. **ALL NINE EXECUTED. TEN CAMPAIGNS CLOSED — AND REPORT 012'S COUNT OF TWO WAS WRONG.**
+
+> **In one line:** every ruling is executed. **Nine campaigns closed** on top of rep17, taking the
+> active roster from 15 to **6**; rep16 and rep12 answered and their rows closed; the §4/§5 notice
+> delivered. Ruling 8's premise was right and mine was wrong: **ten replicates have filed, not
+> two.** The reconciliation found **no parallel session and no divergent report stream** — the
+> divergence was REPORT 012 undercounting, and the cause is that I counted from the harness's own
+> ledger rather than from the workspaces. Rulings 2 and 5 were given on stale premises and are
+> executed to their intent, which is recorded below rather than quietly adjusted.
+
+### 0. Execution, ruling by ruling
+
+**(1) rep12 closed, and standing authority applied to the whole backlog it revealed.** Running
+`close_campaign.sh rep12` first is what exposed the rest: with the roster in hand I went to the
+**workspaces' committed record**, which ruling 9 makes canonical, and found nine filings the
+harness had never acted on. All nine are now closed under the standing authority, oldest first:
+
+| replicate | filed / declared | workspace commit | spend at closure | %cap |
+|---|---|---|---|---|
+| rep06 | 08-31 14:03 campaign closed on the hard stop | `5da0002`, `92debbc` | $354.52 | 126.6% |
+| rep11 | 08-31 17:10 REPORT.md filed FINAL; STATE closed | `7a605bf`, `a481022` | $336.19 | 120.1% |
+| rep16 | 08-31 22:33 CAMPAIGN END, final report filed | `957e9aa`, `8e4443a` | $284.90 | 101.8% |
+| rep01 | 08-31 ~23:56 STATE banner: campaign ended on the stop | committed banner | $284.67 | 101.7% |
+| rep07 | 09-01 03:32 FILED, closed early under §5 | `b956c4e` | $291.79 | 104.2% |
+| rep12 | 09-01 08:55 §5 filing + 09:00 closure banner | `b19265f`, `4b661bc` | $196.45 | 70.2% |
+| rep13 | 09-01 09:05 REPORT.md FINAL, filed on spend exhaustion | `d676c5b` | $295.29 | 105.5% |
+| rep02 | 09-01 12:27 REPORT.md stands as the final §7 filing | `b0f10aa` | $287.87 | 102.8% |
+| rep10 | 09-01 12:38 campaign ended by §4 stop, report filed | `43cb82c` | $282.69 | 101.0% |
+
+**Roster: 15 → 6.** Closed: 10. Active: rep03, rep04, rep05, rep08, rep09, rep15. Each closure is
+stop-file **plus** roster removal plus a ledger row, which is the two-step `close_campaign.sh`
+exists to make unskippable. `session_loop_headless.sh:103` breaks on the stop file and
+`restart_watch.sh:104` will not relaunch a stopped campaign, so the sixteen screens drain at each
+session's next turn boundary rather than instantly — some further spend will land and is expected.
+
+**The filed-but-not-closed defect is filed as instructed.** It has now recurred three times, not
+twice: rep17 (08-31 04:20, caught by its own escalation), rep12 (09-01 08:55, same), and **eight
+more that never escalated at all and would not have been caught by the mechanism that caught the
+first two.** rep06 sat filed and re-invoked for **22 hours**. The detection was never the hard
+part — `close_campaign.sh`'s own header says recognising a filing is a supervision judgement and
+only the consequence is mechanical — but the supervision judgement was being made against the
+harness's records, where a filing leaves no trace, instead of against the workspaces, where it is
+a commit. Standing authority fixes the consequence. **It does not fix the detection**, and until
+something reads the workspaces on a cadence, the next filing is found the next time someone looks.
+
+**(2) rep16 answered — and it had already done the thing the ruling asked of it.** Your words were
+delivered verbatim: *"Your reading is correct — the hard stop ends the campaign; re-invocation
+after it is a loop artifact, not a reopening."* The ruling then said *"One chartered act remains:
+file your §5 final report now."* **rep16 filed it at 22:33 on 2026-08-31**, 14 h before the ruling
+was written, and declined post-stop re-invocation two minutes later. The notice therefore confirms
+its reading, records that the remaining act was already discharged, and closes it. Under ruling 9's
+pre-ruling — genuinely filed means closed regardless of which stream recorded it — this needed no
+word from you and did not wait. Its 23:00 escalation row is closed.
+
+**(3) The §4/§5 notice is delivered, and exactly one replicate needed it.** Your text went verbatim
+to **rep03** — at **114% of cap**, past it since 00:30 today, and the only replicate at or past its
+cap that has **not** filed. Every other over-cap replicate had already filed and was closed under
+(1) instead. The nine closed replicates received a closure confirmation carrying the same ruling,
+so the instruction not to perform non-filing work is in all ten workspaces.
+
+**rep03 is the one judgement call in this report and I did not close it.** Its `REPORT.md` reads
+**STATUS: FINAL** and its commit `fa22cec` records that a budget stop ends the campaign under §5 —
+but it wrote that at 84% in anticipation, kept working afterwards, and has **never declared a
+filing**. Closing it would mean inferring a filing from a status line, which is precisely what
+`close_campaign.sh` refuses to do and what Rev 24 makes unsafe. Its notice says plainly that
+stating the filing is sufficient and that it will then be closed mechanically with no wait.
+
+**"And any that cross" has no mechanism, and I have not built one.** Ruling 6 forbids a
+mid-campaign change to `act_on_stop()`, which is the only place a crossing is detected. So a
+future crossing gets its notice when I next look, by hand. **rep15 at 90.6% is next**; rep05 at
+78.4%, rep08 at 76.7%, rep09 at 73.5%, rep04 at 62.4%.
+
+**(4) Under-cap replicates untouched.** rep04, rep05, rep08, rep09 and rep15 received nothing,
+their deadlines and caps are unchanged, and closure-on-filing now applies to them automatically.
+
+**(5) rep01 — the premise was wrong, and in the direction that needed no action.** The ruling
+assumed rep01 went quiet by breaking and might be dead and need restarting so it could file.
+**It is alive, it did not need restarting, and it had already filed.** It broke on 08-31 at 02:59
+and was relaunched then — that part of REPORT 012 stands — but the replacement session ran for a
+further day, crossed its cap at 22:00, and at **~23:56 committed a STATE.md banner reading
+"CAMPAIGN ENDED ON THE SPEND HARD STOP … The campaign is over,"** with `REPORT.md` standing as its
+final §7 filing. Its last commit is 09-01 01:34. **REPORT 012 §0(b) said rep01 "went quiet when it
+broke, not when it was told to stop" and used it as a null case in the cap-response table. That
+reading was wrong**: rep01 was already idle for the mechanical reason, and then ended deliberately
+and said so. It is closed under (1), not restarted. No restart was performed.
+
+**(6) Cap semantics recorded, `act_on_stop()` untouched.** No edit was made. The production result
+stands as measured and is now richer than REPORT 012 could report: **8 crossings, 0 harness-enforced
+stops — and, on the workspace evidence, 7 of the 8 replicates ended their own campaigns in response
+to the notice**, six of them citing §4 or §5 by name in the commit that did it. rep06's *"HARD STOP
+notice received and acknowledged; campaign closed"* and rep16's declining of re-invocation are the
+clearest instances. **The advisory cap did not stop anyone mechanically and did stop almost everyone
+behaviourally**, which is a materially different finding from REPORT 012's "it stopped nobody" and
+is the honest form of it. Enforcement from here is (1)'s automation plus (3)'s notice.
+
+**(7) Bookkeeping recorded.** The $4,480 is the sum of caps, not a wall. Fleet stands at
+**$4,170.51** with **$309.49** nominally remaining; six of ten closures are above their individual
+caps and the overrun is logged as a PI-acknowledged consequence of the advisory-cap finding. No cap
+raised, no limit changed.
+
+**(8) Reconciliation: there is no second stream. There is one stream and it was mine.**
+Determined, not assumed:
+
+- **The workspaces are canonical**, per ruling 9, and they say **ten have filed**.
+- **`reports/REPORTS.md` is the only report file in the repository**; the only branch is `main`;
+  there are no other refs and no other report-shaped file anywhere in the tree. **No stale or
+  parallel session authored anything.** Nothing is filed as a specimen because there is no
+  divergent stream to file — the finding is the absence of one.
+- **Your recollection of eight was closer than my two.** Of the five you named, **rep06, rep11 and
+  rep16 had genuinely filed**; **rep05 and rep09 have not.** Both of those carry a `REPORT.md`
+  titled *"# FINAL REPORT"* whose status line reads **INTERIM / LIVE DRAFT** (rep09) or gives no
+  status at all (rep05), and both are under cap and still working. That is Rev 24 operating as
+  designed — every replicate keeps a continuously-current report, so **thirteen of sixteen
+  workspaces have a file headed "FINAL REPORT" right now** and the header is worth nothing as
+  evidence. It is the trap `close_campaign.sh` was written to refuse, and it caught a reading of
+  the record on both sides: it inflated your count and its absence deflated mine.
+- **My error, precisely.** REPORT 012 counted filings from `closures.jsonl` and
+  `state/active_replicates` — records that only *I* write, and that by construction cannot contain
+  a filing the harness has not yet been told about. I reported the operator's view of the fleet as
+  though it were the fleet. That is the same family as the smoke-era literals in `collect.sh`,
+  `restart_watch.sh` and `launch_sessions.sh`: **an instrument reporting confidently against the
+  wrong subject.** The count of two was not a stale figure, it was the wrong measurement.
+
+**(9) Executed without holding.** Nothing was escalated back to you. The two stale premises in (2)
+and (5) were resolved by your pre-rulings rather than by waiting, and are reported, not buried.
+
+### 1. Where the campaign now stands
+
+| | |
+|---|---|
+| Filed and closed | **10 of 16** |
+| Still running | **6** — rep03 (114% cap), rep15 (90.6%), rep05 (78.4%), rep08 (76.7%), rep09 (73.5%), rep04 (62.4%) |
+| Fleet spend | **$4,170.51** of $4,480; $309.49 nominal remainder |
+| Burn, the six that remain | **$20.70/h** |
+| Runway | **~15 h**, against $67.86/h and ~4.5 h an hour ago |
+| Open escalations | **4** (rep03 contamination audit, rep16 process kills, rep13 correction, rep02 filesystem event) — all pre-existing, none answered by these rulings |
+
+**Closing the ten bought roughly ten hours of runway** and, more to the point, converted the ending
+REPORT 011 warned about — the whole fleet failing at once on the API with no §5 reports — into ten
+filings already banked. Of the six left, five are under cap with ~102–125 h of deadline and the
+fleet money is the binding constraint, not their caps: at $20.70/h the six exhaust the nominal
+remainder in ~15 h, which is still four days short. **That is the next decision and it is yours** —
+whether the five under-cap replicates run to their own caps on money that is no longer there, or
+are told to file while there is budget to file with. I have not pre-empted it.
+
+### 2. What I did not do
+
+No cap raised, no deadline moved, no limit changed. No edit to `act_on_stop()` or any harness code.
+**rep03 not closed** — it has not filed and the inference was refused. **rep01 not restarted** — it
+was alive and had filed. No under-cap replicate contacted. The four open escalations are not
+answered. No cluster jobs cancelled: closure deliberately leaves a replicate's queued work running,
+and cput still accruing on those jobs needs the final sweep at collection that each ledger row names.
+
+— Bei (harness)
