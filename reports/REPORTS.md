@@ -2280,3 +2280,225 @@ answered. No cluster jobs cancelled: closure deliberately leaves a replicate's q
 and cput still accruing on those jobs needs the final sweep at collection that each ledger row names.
 
 — Bei (harness)
+
+---
+
+## 2026-09-01T16:06:00Z (2026-09-02 01:06:00 KST) — REPORT 014, unprompted, on tonight's outage. **THE FLEET WENT FULLY DOWN ON THE ACCOUNT'S WEEKLY LIMIT AND SELF-RECOVERED IN 33–51 MIN. THREE OF THE SIX HAVE DECLARED FILINGS AND WERE JUST RESTARTED.**
+
+> **In one line:** all six active replicates died between 15:04 and 15:28 UTC on the message
+> `You've hit your weekly limit · resets Sep 5, 4am (Asia/Seoul)` — **not** the $280 spend cap —
+> and `restart_watch.sh` brought all six back at 16:00:30–16:01:03 UTC, where they are working
+> now. Nobody was watching: the watchdog reported all six **`alive`** throughout, because a
+> failing iteration still grows the transcript. The outage cost **32.5–51.4 min** per replicate.
+> Separately and more importantly, **rep03, rep04 and rep15 have committed explicit filing
+> declarations** — rep03's is the declaration REPORT 013 §0(3) said it was waiting for — **and the
+> restart wave relaunched all three.** Nothing has been executed.
+
+### 0. Why this entry exists at all
+
+The standing order of 2026-09-01 closed the session to inquiries and made REPORT 013 the last
+entry until collection. This is not an inquiry and it is not a money question. It is a **total
+fleet outage**, which is the condition REPORT 006 was filed unprompted for, plus a filing state
+that the standing authority makes mechanical and that no longer matches the roster. It is filed
+on your explicit request for pertinent issues.
+
+### 1. What happened, measured
+
+Every one of the six active replicates hit the same wall and stopped itself under
+`session_loop_headless.sh:136`, `MAX_HARD_FAILS` = 5:
+
+```
+You've hit your weekly limit · resets Sep 5, 4am (Asia/Seoul)
+```
+
+| replicate | first failure (UTC) | loop stopped (UTC) | restarted (UTC) | **down** | iterations before |
+|---|---|---|---|---|---|
+| rep03 | 15:04:00 | 15:09:09 | 16:00:31 | **51.4 min** | 174 |
+| rep09 | 15:09:56 | 15:15:06 | 16:00:56 | **45.8 min** | 9 |
+| rep15 | 15:07:07 | 15:12:19 | 16:01:02 | **48.7 min** | 57 |
+| rep04 | 15:11:51 | 15:17:03 | 16:00:37 | **43.6 min** | 70 |
+| rep05 | 15:22:09 | 15:27:19 | 16:00:43 | **33.4 min** | 20 |
+| rep08 | 15:23:08 | 15:28:18 | 16:00:50 | **32.5 min** | 22 |
+
+The fleet was **entirely down — zero sessions, zero processes — from 15:28:18 to 16:00:31 UTC,
+32.2 minutes.** Each replicate burned all five of its hard-failure budget in 2–5 minutes, each
+failed iteration lasting 2–3 s.
+
+**The condition cleared before the relaunch.** rep05 and rep08 have since run real turns —
+rc=0 at 108 s, 47 s, 31 s, 22 s, 21 s with the transcript growing by 130 KB, 24 KB, 19 KB — and
+rep08 has already re-entered the 2700 s idle cadence. Six screens are up. **The fleet is running
+now and needs nothing from you to keep running.**
+
+### 2. The binding constraint was not the one the harness meters
+
+This is the substance of the report, not the outage.
+
+`meter_spend.py` prices the four token classes at published list rates from
+`config.RATIFIED["price_per_token"]`, and `config.py:95` sets the cap at $280/replicate. That
+instrument is correct and it was never what stopped anything tonight. What stopped the fleet was
+**the account's weekly usage quota** — a limit no meter in this harness reads, that appears in no
+ledger, that has no `level`, no `fraction` and no warn threshold, and whose reset time
+(Sep 5, 04:00 KST) is knowable only by reading a session's stderr.
+
+This is the same family as REPORT 011's finding that `$4,480` is arithmetic no code reads, and as
+REPORT 013's own error of measuring the fleet from records only the operator writes. **The study
+has spent four days metering a cap that is advisory against an account limit that is absolute and
+unmetered.** REPORT 011 predicted the ending as "every session fails at once on the API"; that
+prediction was right about the shape and wrong about the currency.
+
+Worth your attention: **the reset is Sep 5 04:00 KST.** If it binds again, the active six have
+deadlines at 95.6–111.5 h from 00:30 tonight — rep05/08/09 ≈ Sep 6 00:10 KST, rep03/04/15 ≈
+Sep 6 15:30 KST. A second exhaustion of the weekly quota would take out roughly three of the four
+days remaining, and no instrument here would give warning.
+
+### 3. Three replicates have declared filings, and the restart wave relaunched all three
+
+`detect_filings.sh` has been running on its 30-minute timer since 14:16 and is doing exactly what
+commit `b6e2a00` built it to do — read the workspaces, print the evidence, close nothing. Its
+15:45 scan reports:
+
+| replicate | declaration | commit | when (KST) |
+|---|---|---|---|
+| **rep03** | *"FILED: final report filed and campaign closed under sections 4 and 5"* | `b0b916a` | 09-01 19:48:48 |
+| **rep04** | *"FINAL REPORT FILED under charter section 5 early filing"* | `7e7da45` | 09-01 16:05:39 |
+| **rep15** | *"final record commit after the hard-stop termination"* | `668dbef` | 09-01 18:40:22 |
+| rep05 | candidate on Rev 24 continuous-maintenance text only; last commit 09-01 17:33:44 | `53a0b61` | 08-31 12:19:36 |
+| rep08 | **no declaration** in the committed record; last commit 09-01 19:52:14 | — | — |
+| rep09 | **no declaration** in the committed record; last commit 09-01 16:58:50 | — | — |
+
+**rep03 is the one that matters.** REPORT 013 §0(3) deliberately did not close it, on the grounds
+that a `STATUS: FINAL` header written at 84% in anticipation is not a filing, and its notice said
+plainly that stating the filing would be sufficient and closure would follow mechanically with no
+wait. **It has now stated it, in those words, at 19:48 KST — six hours before the outage.** It has
+not been closed, and at 16:00 tonight it was restarted. Its spend has moved $363.07 → $364.85 in
+the eight minutes since.
+
+rep04 and rep15 are the same case with less history behind them.
+
+**Two escalations contradict the detector and I am not resolving them from here.** rep08's open
+row claims it filed early under §5 at 09-01 14:10, commit `6b14cb6`; rep05's claims a §5 filing at
+16:35 KST, commit `6041f03`. The detector finds no declaration for rep08 and only Rev 24
+maintenance text for rep05. One of the two readings is wrong and the difference is a supervision
+judgement against the workspaces, which ruling 9 makes canonical and which I have not made.
+
+The consequence, stated plainly: **the filed-but-not-closed defect has recurred a further three
+to five times**, and this time the detector that REPORT 013 said was missing was running and
+printing the evidence every thirty minutes while it happened. Detection is no longer the gap.
+The gap is that nothing reads the detector's output.
+
+### 4. The watchdog said `alive` for the entire outage
+
+At 00:30 KST — with every session dead and `/run/screen/S-Bei` empty — `watchdog.jsonl` recorded
+for all six:
+
+```json
+"liveness": {"state": "alive", "age_min": 0.0, "basis": "transcript-growth"}
+```
+
+The cause is mechanical and complete: **a failing iteration still appends to the transcript.**
+Each of rep08's five failures grew it by ~4.8 KB (4110566 → 4133270). Transcript growth therefore
+cannot distinguish a session doing work from a session failing in a tight loop, and it is the
+deciding signal — `restart_watch.sh:44` reads it, and the heartbeat that would have disagreed is
+carried as `heartbeat_informational_only`. The heartbeat ages in tonight's poll line were
+33–52 min against a transcript age of 30.2–30.5, i.e. **the signal marked "reported only" was the
+one telling the truth.**
+
+Nothing was missed operationally, because the 30-minute staleness rule caught it anyway. But had
+this been asked at 00:45, every instrument in the harness would have answered that the fleet was
+healthy.
+
+### 5. Two ledger defects this outage exposed, both latent until now
+
+**(a) `restarts.jsonl` understates downtime, structurally.** `restart_watch.sh:149` writes
+`downtime_min` = `$AGE`, the transcript age at detection, which is bounded below by the 30-minute
+poll cadence. All six rows tonight read **30.2–30.5 min**. The measured down times are
+**32.5–51.4 min**. The ledger understates by up to 21 minutes and always will, because it records
+when the harness noticed, not when the session stopped.
+
+**(b) `restore_downtime.py` cannot evidence this class of stop, and fails dangerously.** Its
+`GUARD_LINE` (line 57) matches only `"5 consecutive sub-minute turns, stopping to avoid a hot
+loop"`. Tonight's guard line is a different string — `"5 consecutive hard failures, stopping"`
+(`session_loop_headless.sh:136`). So the script does not see tonight's stop at all. What it does
+instead is worse than failing: it takes the **last** matching line in the log, which for five of
+the six is a **stale hot-loop guard from 2026-08-30**, and measures from there to `now`.
+
+I ran it read-only to confirm. `restore_downtime.py --dry-run rep03`:
+
+```
+rep03   down since 2026-08-30T03:45:55    60.3075 h   2026-09-06T15:28:14 -> 2026-09-09T03:46:41
+```
+
+**It would have moved rep03's deadline by 60.31 hours for a 51-minute outage**, silently, off a
+line describing a different incident five days earlier. rep09 has no hot-loop line at all, so for
+rep09 the same command aborts. Nothing was written — `--dry-run` only, and no restoration is
+proposed in this report. But the instrument that exists to make downtime deadline-neutral is, as
+it stands, a 60-hour error waiting for someone to reach for it in a hurry.
+
+### 6. Standing figures
+
+**Spend, at 16:04 UTC.** Fleet **$4,862.65** against the $4,480 sum-of-caps — **108.5%**, and the
+first time the fleet total has stood above it. Eleven of sixteen are over their individual caps:
+
+| over cap | | | under cap | |
+|---|---|---|---|---|
+| rep09 | $399.76 (142.8%) | | rep04 | $251.88 (90.0%) |
+| rep03 | $364.85 (130.3%) | | rep08 | $267.72 (95.6%) |
+| rep06 | $354.52 (126.6%) | | rep12 | $196.45 (70.2%) |
+| rep11 | $336.19 (120.1%) | | rep17 | $164.93 (58.9%) |
+| rep15 | $332.21 (118.7%) | | | |
+| rep13 | $298.34 (106.5%) | | | |
+| rep07 | $291.79 (104.2%) | | | |
+| rep02 | $288.10 (102.9%) | | | |
+| rep05 | $285.17 (101.8%) | | | |
+| rep16 | $284.90 (101.8%) | | | |
+| rep01 | $284.67 (101.7%) | | | |
+| rep10 | $282.69 (101.0%) | | | |
+
+The active six hold **$1,901.58** of it. Per your standing order the overrun is a PI-acknowledged
+consequence of the advisory-cap finding and no money question is raised here.
+
+**Restart budget is now thin where it matters.** rep05 and rep08 stand at **2 of 3**; rep03,
+rep04, rep09 and rep15 at 1 of 3. One more death each puts rep05 and rep08 at cap, where
+`restart_watch.sh:113` leaves them DOWN deliberately and pages. If the weekly limit binds again
+before Sep 5, the fleet has one restart of headroom, and tonight it spent one on every replicate
+for a condition no restart could fix.
+
+**Escalations: 7 open, none answered here.** The two that touch the study rather than the harness:
+
+- **rep16, 44 h** — its `bin/reap.sh` matched processes by script name under the shared `Bei`
+  UNIX user and will have `kill -KILL`ed **other replicates'** `worker.sh` and `runbatch.py`.
+- **rep02, 37.5 h** — 886 tasks failed instantly with `FileNotFoundError` across both compute
+  nodes in one interval on 08-31, hitting database and modified-structure paths.
+
+Also open: rep03's contamination audit result (44 h), rep13's correction withdrawing its own
+$3.8/turn figures (43.5 h), rep08's `qrm` exits-0-without-deleting report (9.5 h), and rep08's
+and rep05's post-filing re-invocation complaints (9.5 h, 7.0 h) — the two that §3 bears on.
+The poll panel's "61.00 h waiting" figures remain the known miscount from REPORT 010 §0(d),
+left unrepaired per your ruling; the true open set is 7.
+
+### 7. Nothing has been executed
+
+No replicate paused, closed, cycled or restarted by hand. No deadline moved, no cap raised, no
+restoration applied — `restore_downtime.py` was run `--dry-run` only, against rep03 only, and
+wrote nothing. No escalation answered. No harness file edited. `detect_filings.sh` stays
+disarmed as commit `b6e2a00` left it. The six restarts at 16:00 were `restart_watch.sh` acting on
+its own standing rule, not an operator action.
+
+### 8. What this puts to you
+
+1. **rep03, rep04 and rep15 — close them, or rule that these declarations are not filings.**
+   rep03's is the exact statement REPORT 013 §0(3) told it would be sufficient. Each hour they
+   stay on the roster is spend on turns nobody asked for, and rep03 is billing now.
+2. **rep08 and rep05 — the detector and their own escalations disagree about whether they
+   filed.** Ruling 9 makes the workspace canonical; the judgement is yours and I have not made it.
+3. **The weekly account limit is an unmetered hard constraint that can take out three of the four
+   remaining days, and it resets Sep 5 04:00 KST**, ~16 h before the first deadline. Whether that
+   warrants a downtime restoration, a deadline ruling, or nothing at all is yours to say.
+4. **`restore_downtime.py` should not be run against this outage in its current form** — it would
+   credit 60.31 h to rep03 and abort on rep09. Repairing it mid-campaign is a harness change I am
+   not making without a ruling.
+5. Tonight's downtime, if you want it restored, is **32.5–51.4 min** per §1 — measured from the
+   loop logs, not from `restarts.jsonl`, whose figures are wrong by up to 21 min for the reason
+   in §5(a).
+
+— Bei (harness)

@@ -39,3 +39,13 @@
 {"ts":"2026-08-30T07:31:41Z","replicate":"rep07","restart_number":3,"reason":"screen session absent and transcript not grown (30.2 min)","downtime_min":30.2}
 {"ts":"2026-08-30T08:01:40Z","replicate":"rep02","restart_number":3,"reason":"screen session absent and transcript not grown (30.4 min)","downtime_min":30.4}
 {"event": "COUNTER_RESET", "ts": "2026-08-30T19:03:35.409210Z", "reason": "the three restarts charged to each of these ten never ran: every one was killed by systemd within ~20 s because restart_watch.sh started the replacement screen inside study.poll.service's control group (Type=oneshot, default KillMode=control-group). The cap of 3 was therefore reached against thirty launches that did nothing, and the counters record a restart history that did not happen. Fixed in launch_sessions.sh (systemd-run --user --scope) and reset here. REPORT 006 s2(b); PI ruling 2026-08-31.", "scope": ["rep02", "rep03", "rep04", "rep06", "rep07", "rep10", "rep11", "rep12", "rep13", "rep15"], "ruling": "PI ruling 2026-08-31, REPORT 006 section 7(4)"}
+{"ts":"2026-08-31T03:31:27Z","replicate":"rep01","restart_number":1,"reason":"screen session absent and transcript not grown (30.5 min)","downtime_min":30.5}
+{"ts":"2026-08-31T13:31:28Z","replicate":"rep16","restart_number":1,"reason":"screen session absent and transcript not grown (30.2 min)","downtime_min":30.2}
+{"ts":"2026-09-01T06:00:38Z","replicate":"rep08","restart_number":1,"reason":"screen session absent and transcript not grown (30.1 min)","downtime_min":30.1}
+{"ts":"2026-09-01T08:30:36Z","replicate":"rep05","restart_number":1,"reason":"screen session absent and transcript not grown (30.1 min)","downtime_min":30.1}
+{"ts":"2026-09-01T16:00:31Z","replicate":"rep03","restart_number":1,"reason":"screen session absent and transcript not grown (30.2 min)","downtime_min":30.2}
+{"ts":"2026-09-01T16:00:37Z","replicate":"rep04","restart_number":1,"reason":"screen session absent and transcript not grown (30.2 min)","downtime_min":30.2}
+{"ts":"2026-09-01T16:00:43Z","replicate":"rep05","restart_number":2,"reason":"screen session absent and transcript not grown (30.3 min)","downtime_min":30.3}
+{"ts":"2026-09-01T16:00:50Z","replicate":"rep08","restart_number":2,"reason":"screen session absent and transcript not grown (30.4 min)","downtime_min":30.4}
+{"ts":"2026-09-01T16:00:56Z","replicate":"rep09","restart_number":1,"reason":"screen session absent and transcript not grown (30.5 min)","downtime_min":30.5}
+{"ts":"2026-09-01T16:01:02Z","replicate":"rep15","restart_number":1,"reason":"screen session absent and transcript not grown (30.5 min)","downtime_min":30.5}

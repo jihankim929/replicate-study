@@ -21,3 +21,24 @@ Execution error
 2026-08-30T04:23:43Z iteration 4 starting (headless)
 2026-08-30T07:08:56Z iteration 4 exited rc=0 after 9913s (transcript 1269678 -> 1819300)
 2026-08-30T07:09:06Z iteration 5 starting (headless)
+2026-09-01T15:09:56Z iteration 5 exited rc=1 after 201650s (transcript 1819300 -> 3537877)
+2026-09-01T15:09:56Z iteration 5 FAILED rc=1 (hard failure 1/5). first 500 bytes of output:
+You've hit your weekly limit · resets Sep 5, 4am (Asia/Seoul)
+2026-09-01T15:10:26Z iteration 6 starting (headless)
+2026-09-01T15:10:28Z iteration 6 exited rc=1 after 2s (transcript 3537877 -> 3545465)
+2026-09-01T15:10:28Z iteration 6 FAILED rc=1 (hard failure 2/5). first 500 bytes of output:
+You've hit your weekly limit · resets Sep 5, 4am (Asia/Seoul)
+2026-09-01T15:11:28Z iteration 7 starting (headless)
+2026-09-01T15:11:31Z iteration 7 exited rc=1 after 3s (transcript 3545465 -> 3553053)
+2026-09-01T15:11:31Z iteration 7 FAILED rc=1 (hard failure 3/5). first 500 bytes of output:
+You've hit your weekly limit · resets Sep 5, 4am (Asia/Seoul)
+2026-09-01T15:13:01Z iteration 8 starting (headless)
+2026-09-01T15:13:04Z iteration 8 exited rc=1 after 3s (transcript 3553053 -> 3560641)
+2026-09-01T15:13:04Z iteration 8 FAILED rc=1 (hard failure 4/5). first 500 bytes of output:
+You've hit your weekly limit · resets Sep 5, 4am (Asia/Seoul)
+2026-09-01T15:15:04Z iteration 9 starting (headless)
+2026-09-01T15:15:06Z iteration 9 exited rc=1 after 2s (transcript 3560641 -> 3568504)
+2026-09-01T15:15:06Z iteration 9 FAILED rc=1 (hard failure 5/5). first 500 bytes of output:
+You've hit your weekly limit · resets Sep 5, 4am (Asia/Seoul)
+2026-09-01T15:15:06Z 5 consecutive hard failures, stopping -- this is a fact about the run, not a thing to hide
+2026-09-01T16:00:57Z iteration 1 starting (headless)
