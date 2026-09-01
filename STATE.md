@@ -16,7 +16,8 @@ caps. `harness/state/fleet_spend.json` states the basis — *"latest metered row
 smoke excluded"*. The corrected figure at REPORT 014's own 16:04Z snapshot was $4,684.17 (104.6%).
 
 # QUIESCENT — 2026-09-02 01:50 KST. NOTHING IS SCHEDULED AND NOTHING IS RUNNING.
-# — AMENDED 04:00 KST: *nothing is scheduled; **eight stranded wait-loops ARE running.*** See the re-verification block below.
+# — AMENDED 04:15 KST: *nothing is scheduled; **eight stranded wait-loops ARE running**, and the
+# PI's ruling that they were killed is contradicted by `/proc` — see the rulings block below.*
 
 *PI order of 2026-09-02, executed. **Do not start anything.** Zero scheduled work, zero session
 turns until collection. Total silence except URGENT until the screen's first wave.*
@@ -35,6 +36,52 @@ turns until collection. Total silence except URGENT until the screen's first wav
   two stranded escalations recovered verbatim into the ledger. Attestation in `reports/REPORTS.md`.
 - **Held for the Sep 5 04:00 reset:** screen, verification, bundles. The screen fires on its
   existing gate. SI-024 and SI-025 are queued post-campaign.
+
+**RULINGS EXECUTED IN PART — 2026-09-02 04:15 KST. DECKS DONE; SUBMISSION BLOCKED BY §7.1.**
+PI rulings of 04:10 KST. **Deck regeneration is mechanical execution and it succeeded:** 25,598
+decks reproducing `screen/deck_manifest.sha256` **byte-for-byte** (`8981626786e7...`, aggregate
+`e237130f...`), **25,598/25,598 verifying, 0 failures**, now at `screen/decks/`. The ruling's halt
+condition did not fire. **Trap named:** `screen_gen_decks.py` rewrites the manifest as its last
+act, so run in place it would have overwritten the authority and then "verified" against its own
+output — generation was done in a scratch tree and diffed against the untouched sealed file, and
+the repo's manifest is unchanged.
+
+**RULING (1) IS CONTRADICTED BY THE CLUSTER. The eight wait-loops are ALIVE** — `ALIVE_COUNT=8`,
+same pids, with **fresh `sleep` children** that did not exist at the 18:52Z census, so they are
+actively cycling. Load moved 6.5 -> **7.59**. The fourth instrument failure of the night, after
+`qrm` printing Done without deleting, `qinfo` off `PATH` returning command-not-found as a zero, and
+`ps -o pid=,args=` printing an identical line for live and dead pids. **Not killed, not proceeded
+on.** List ready by explicit pid.
+
+**STAGE 0/1 NOT SUBMITTED — the sealed plan's own §7.1 write barrier refuses.** `screen_launch.sh`
+exits at the collection gate: `reps/main/collected/` holds none of the sixteen and no
+`COLLECTION.md`, and there is still no pull in the harness. **The ruling authorised the submitter
+and the decks; it did not authorise the collection, which is what the barrier gates on.** Not
+bypassed and will not be. `reps/smoke/collected/` shows the completed shape, so what is missing is
+the pull, not the definition. **Nothing reached the cluster from this session.**
+
+**`screen_submit.py` NOT WRITTEN — a halt on the ruling's own terms.** Sealed and transcribable:
+`nsim`-quartile wave sizing with batches 40/8, the 480 ceiling and 3-poll/2-poll back-off to 240,
+retry x3 with attempt 3 re-deriving the cell, status by output parseability never exit code, both
+ledger schemas, and `qas` by absolute path with `#PBS` directives inside the script. **Not
+specified anywhere:** walltime, node group, ppn, the RASPA invocation/environment for the screen
+root, and the batch->job mapping. Those are design decisions with contention consequences at
+480-way, and the ruling says **no design decisions taken**. Established for whoever fills them:
+`/home1/users/Bei/toolchain_frozen` exists with its `.sha256` outside every workspace (so §7.2
+isolation is satisfiable), `qas` is at `/usr/local/mjs/qas`, the binary is `simulate`, and
+`/home1/users/Bei/screen/` does not exist yet.
+
+**THE 18:47Z WRITE IS CLOSED.** Attributed by the PI to the **retired macOS host**, whose `launchd`
+jobs were still loaded with `study.poll` live; all three booted out and the plists deleted, and the
+Mac can no longer reach the workspaces. **The finding worth keeping: a host this study calls
+retired held live, scheduled, write-capable reach into all sixteen sealed workspaces for three
+days**, surfacing only because a timestamp looked wrong during an unrelated check. SI-012 in the
+mirror — not a layer that failed to travel but **a layer that failed to stop.** Retirement was
+recorded as an event and never verified as a state.
+
+**Open and asked, in order:** (a) the eight loops; (b) the collection/pull to clear §7.1
+legitimately; (c) the four unspecified job parameters, supplied or authorised as mine.
+REPORTS entry of 04:15 KST.
 
 **RE-VERIFIED INDEPENDENTLY — 2026-09-02 04:00 KST. THE SEAL HOLDS 16/16; TWO FAULTS FOUND.**
 The seal below was not read back, it was **rebuilt**: the formula was re-derived from scratch

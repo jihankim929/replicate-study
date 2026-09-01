@@ -3360,3 +3360,132 @@ exception to total quiescence**, and they are stranded rather than active.
 Holding to total silence except URGENT until the Sep 5 04:00 KST reset.
 
 — Bei (harness)
+
+---
+
+## 2026-09-01T19:15:00Z (2026-09-02 04:15:00 KST) — RULINGS EXECUTED IN PART. **DECKS DONE AND BYTE-IDENTICAL TO THE SEAL. SUBMISSION BLOCKED BY THE RATIFIED WRITE BARRIER.** Ruling (1)'s premise is false: the eight wait-loops are alive.
+
+> **In one line:** deck regeneration is **mechanical execution and it succeeded** — 25,598 decks
+> reproducing `deck_manifest.sha256` byte-for-byte, 25,598/25,598 verifying, zero failures. Stage
+> 0/1 was **not** submitted, for two reasons neither of which is permission: **the eight loops the
+> ruling records as killed are still running**, and **the sealed plan's own §7.1 write barrier
+> refuses** because the collection it gates on has not happened and was not authorised. The
+> submitter is **only partly specified**, and completing it would require exactly the design
+> decisions the ruling forbade.
+
+### 1. Ruling (1)'s premise is false — verified by `/proc`, as the ruling specified
+
+**`ALIVE_COUNT=8`.** All eight pids of `waitloop_killlist_20260902.txt` are present, and they have
+**fresh `sleep` children** — 3371071, 3396403, 3412811, 3422316, 3424741, 3428290, 3433451,
+3472573 — which did not exist at the 18:52Z census. They are **actively cycling**, not stale
+entries. Login-node load moved the wrong way, **6.5 → 7.59**.
+
+Whatever was run did not land on these processes. I cannot tell from here whether it reached the
+wrong host or reported a success it did not have; **this study has now met the second failure mode
+four times tonight** — `qrm` printing `Done` without deleting, `qinfo` absent from `PATH` returning
+a zero that was `command not found`, `ps -o pid=,args=` printing an identical line for live and
+dead pids alike, and now a kill whose effect is absent.
+
+**I did not proceed on that basis, and I did not kill them.** The ruling endorses the kill list by
+name, so executing it is within authority — but the ruling's stated premise is that the work is
+already done, and acting on a false premise without saying so is how the record stops matching the
+cluster. The list is ready, by explicit pid. **Awaiting a word.**
+
+### 2. Decks — mechanical execution, and it reproduces the seal exactly
+
+| | |
+|---|---|
+| regenerated manifest vs sealed | **byte-identical**, `8981626786e7…`, 25,598 lines |
+| aggregate deck sha256 | `e237130f551a3d56fe5df238a8936843d1edfe774fe336c29b4a000df79190fa` |
+| decks verified against the manifest | **25,598 / 25,598 OK, 0 failures** |
+| composition | stage1 24,998 (12,499 × 2 pressures) + stage0 600 (300 × 2), 50 fine-checkpoint |
+| location | `screen/decks/`, gitignored by design; the manifest remains the tracked authority |
+
+**The regeneration halt condition did not fire.** The manifest is the authority and the generator
+agrees with it exactly, so the ruling's stop was not reached.
+
+**One trap, named because it nearly made the check meaningless.** `screen_gen_decks.py` **rewrites
+`screen/deck_manifest.sha256` as its final act.** Run in place it would have overwritten the
+authority with its own output and then "verified" against it — a check that passes unconditionally
+and proves nothing, which is SI-020's shape in miniature. **Generation was done in a scratch tree
+and diffed against the untouched sealed file**, which is the only order of operations under which
+the ruling's "the manifest is the authority" is true. The repo's manifest is still the Aug-30
+sealed one, hash unchanged.
+
+### 3. Submission is blocked by the sealed plan's own write barrier
+
+`./harness/screen_launch.sh --check`:
+
+```
+REFUSED — the screen may not run before the last collection completes.
+missing: rep01 rep02 ... rep17 COLLECTION.md
+Nothing was created, transferred or submitted.
+```
+
+**This is §7.1 — a ratified constraint, not an implementation detail:** *"No screen output is
+written to the cluster before the last collection completes."* The ruling authorised the submitter
+and the decks. **It did not authorise the collection, and the collection is what the barrier gates
+on.** `reps/main/collected/` holds none of the sixteen and no `COLLECTION.md`; there is still no
+pull anywhere in the harness.
+
+**The barrier was not bypassed and will not be.** It is the one mechanism tonight that has worked
+exactly as designed, twice, and a write barrier defeated once by its own operator is not a barrier.
+`reps/smoke/collected/` shows the completed shape precisely — `COLLECTION.md` plus per-arm trees —
+so what is missing is the pull, not the definition.
+
+### 4. The submitter is only partly sealed — and finishing it needs the forbidden decisions
+
+| sealed, and transcribable without judgement | **not specified anywhere in the plan** |
+|---|---|
+| wave sizing: `nsim` quartiles (precomputed in `screen_meta`), batch **40** cheapest / **8** dearest | PBS **walltime** |
+| **480** ceiling, back-off to **240** on the mechanical 3-poll / 2-poll rule | **node group** (aa/ab/ac/amd/ax) and **ppn** |
+| retry ×3 — attempt 2 unchanged, attempt 3 with the cell re-derived | RASPA invocation and environment for the screen root |
+| status decided by output presence and parseability, **never** by exit code | batch → PBS job mapping |
+| `screen_ledger.csv` and `screen_landscape.csv`, column for column | |
+| `qas` by absolute path; `#PBS` directives inside the script; node group mandatory (`dirac.py`, measured on 40 real jobs) | |
+
+The right-hand column carries real contention consequences at 480-way concurrency against a shared
+cluster. **The ruling says "no design decisions taken."** Inventing them breaks that constraint;
+leaving them blank yields a submitter that cannot run. **So the submitter was not written.** This is
+a halt on the ruling's own terms, not a refusal of it.
+
+Established tonight for whoever fills them in: **`/home1/users/Bei/toolchain_frozen` exists** with
+its `.sha256`, outside every replicate workspace, so §7.2's isolation requirement is satisfiable
+without a new build; `qas` is at `/usr/local/mjs/qas`; the binary is `simulate`; and
+`/home1/users/Bei/screen/` **does not exist yet**.
+
+### 5. The 18:47Z fleet-wide write — attributed and CLOSED
+
+**The retired macOS host's `launchd` jobs were still loaded and `study.poll` was live.** All three
+booted out and their plists deleted by the PI; the Mac can no longer reach the workspaces. The
+previous entry's §5 is closed, and its refusal to assume the write benign was warranted: the
+explanation was neither this host nor the cluster, but a **third host the record had already
+written off.**
+
+**The finding worth keeping.** A host this study calls *retired* held live, scheduled,
+write-capable reach into all sixteen sealed workspaces for three days. It surfaced only because a
+file's timestamp looked wrong during an unrelated check. This is SI-012's finding in the mirror:
+not a layer that failed to travel, but **a layer that failed to stop.** Retirement was recorded as
+an event and never verified as a state — the same gap as closure having no reach into the login
+node, and the same gap as the eight loops in §1.
+
+### 6. What was NOT done, and what is asked
+
+- **The eight loops are alive.** Kill list ready, by explicit pid, never by pattern.
+- **Stage 0 and Stage 1 were NOT submitted.** No directory created, no file transferred, no job
+  queued. Nothing reached the cluster from this session at all.
+- **`screen_submit.py` was not written**, on the ruling's own "no design decisions" constraint.
+- Asked, in order of urgency: **(a)** the loops — execute the list, or re-run and let me verify;
+  **(b)** the collection/pull, to clear the §7.1 barrier legitimately; **(c)** the four unspecified
+  job parameters — supplied, or authorised as mine and logged as mine.
+
+### 7. Standing
+
+**PBS 0, mjs 0, killlist daemons 0, screens 0, session loops 0, timers stopped and disabled,
+detector disarmed, roster empty, 16/16 closed and sealed at 16/16 with zero drift, escalation queue
+0 open, the Mac's launchd unloaded.** The **eight stranded wait-loops remain the one exception to
+quiescence** and are now a known, ruled-on, unresolved exception rather than an undiscovered one.
+
+Holding to total silence except URGENT until the Sep 5 04:00 KST reset.
+
+— Bei (harness)
