@@ -3626,3 +3626,143 @@ verified 25,598/25,598. **Quiescence now has no stated exception.** The open ite
 Holding to total silence except URGENT until the Sep 5 04:00 KST reset.
 
 — Bei (harness)
+
+---
+
+## 2026-09-01T19:55:00Z (2026-09-02 04:55:00 KST) — **THE SCREEN IS RUNNING.** Reseal 16/16, collection complete, §7.1 cleared legitimately, `screen_submit.py` written, wave 1 submitted and verified. Five faults found and fixed on the way, one of them mine.
+
+> **In one line:** the whole chain executed — **reseal 16/16 → pull verified 16/16 → COLLECTION.md →
+> §7.1 PASSED → submitter written → wave 1 submitted, 6 jobs / 98 runs, verified present in both
+> queues and confirmed producing output.** The sealed 480-core ceiling was **not** reached and
+> should not have been: a third party holds 92 % of the cluster and only **107 cores were free.**
+> The first submission attempt **failed every run** and had to be withdrawn — the structure corpus
+> had never been staged, a fifth missing piece of the screen layer.
+
+### 1. Reseal — and the check the hand-taken seals lacked
+
+`harness/seal_attestation.sh`, written because two seals in a row were overtaken by writes.
+It refuses to seal unless the fleet is quiescent, records the newest sealed-file mtime per workspace
+**before** hashing, and re-reads them **after** — refusing if anything moved during the seal.
+
+```
+quiescence gate: PBS=0 MJS=0 WRITERS=0
+mtimes stable — no sealed file moved during the seal
+sealed 16/16 -> harness/state/sealed_attestation_20260902T1930Z.json
+```
+
+It cannot prevent a write *after* a seal completes. It makes a write *during* one impossible to
+miss, which is the gap both hand-taken seals fell through. **Both seals remain in the record**, the
+04:30 entry the bridge between them.
+
+### 2. Collection — 16/16, and §7.1 cleared on a check that passed
+
+Re-run against the new seal: **verified 16/16, zero drift.** The per-workspace hashes are
+byte-identical to the ones the *failed* run computed at 19:15Z — proof the pull was always clean and
+only the seal was stale. `COLLECTION.md` written, 18 entries under `reps/main/collected/`.
+
+```
+collection gate PASSED — all 16 replicates collected and attested
+decks verified 25598 / 25598
+```
+
+**The barrier was never bypassed, argued around, or satisfied by arrangement.** It refused three
+times tonight and passed once, on the merits.
+
+### 3. `screen_submit.py` — and the four parameters, logged as mine
+
+Written to the sealed wave/tier spec: `nsim` quartile bins, batches 40/23/14/8, retry ×3 with
+attempt 3 re-deriving the cell, status by **output presence and parseability and never by exit
+code**, both ledger schemas, `qas` by absolute path with `#PBS` directives inside the script.
+
+The four unspecified parameters, **implementation decisions, not plan amendments**, each with its
+basis in the file's header: **walltime** from the plan's own measured cost (0.913 / 4.565 CPU-h per
+run) scaled by `nsim`/median with a stated ×3.0 safety factor; **node group and ppn** by measured
+node shape; **RASPA environment** from `toolchain_frozen`, verified before use; **batch→job
+mapping** one job per batch at `ppn` = batch size.
+
+### 4. Five faults found on the way — the fourth is the one that matters
+
+**(a) My batch mapping was wrong, and its own output caught it.** I implemented batches as running
+*serially* and it produced **82–107 h walltimes for a single job.** The plan's sentence *"a batch
+finishes when its slowest member finishes"* is only true of **parallel** members, and the measured
+node shapes confirm it: `ac` nodes are 40 and 44 cores, so **the sealed batch size of 40 IS an ac
+node.** Corrected to parallel, `ppn` = batch size, walltime = max not sum. The plan's own arithmetic
+settles the unit too — 32,471 CPU-h / 480 = 67.6 h, its stated figure, so **480 is concurrent
+cores, not jobs.**
+
+**(b) 456 stale job scripts would have been submitted.** The rejected serial draft left its scripts
+in the wave directory and the remote submit loop is `for f in *.pbs`. Caught before any submission;
+the directory is now cleared each run and the staging rsync uses `--delete`.
+
+**(c) The sealed 480-core ceiling is unreachable, and was not forced.**
+
+| group | cores | in use | free |
+|---|---:|---:|---:|
+| aa | 76 | 58 | 18 |
+| ac | 204 | 165 | 39 |
+| amd | 160 | 110 | 50 |
+| ax | 64 | 64 | 0 |
+| | | | **107** |
+
+A third party holds **92 % of the cluster**. §6 ratified 480 *"post-collection"* on the premise that
+the fleet's own cores would free — they did, the fleet is at zero — but someone else took them.
+**480 is a ceiling, not a target, and §6 exists to avoid displacing others**, so wave 1 was sized to
+measured free capacity: **6 jobs, 98 cores.** A `ppn=40` batch is unplaceable tonight because no
+`ac` node is empty. 1,699 batches are deferred. Logged to `screen/excursions.jsonl` per §6.3.
+
+**(d) THE FIRST SUBMISSION FAILED EVERY RUN — the structure corpus was never staged.** Six jobs went
+in, one ran, and all fifteen of its runs failed in the same second:
+
+```
+Error: .../raspa_home/share/raspa/structures/cif/2017[Ag][hcb]2[FSR]17.cif does not exist.
+```
+
+RASPA resolves frameworks from `$RASPA_DIR/share/raspa/structures/cif/<stem>.cif`. **Nothing in the
+screen layer stages them** — `screen_launch.sh` stages decks and the manifest and stops. This is the
+**fifth** missing piece, after the pull, the decks, the submitter and the toolchain. The corpus was
+found at `/home1/users/Bei/benchmark/frozen/CoRE_MOF_2024_CR_united` — **outside every replicate
+workspace, so §7.2's isolation clause holds without reading a sealed workspace's `db/`.** It is now
+**verified 12,499/12,499 against its own MANIFEST** and linked into `RASPA_DIR` as a flat symlink
+farm. The four doomed jobs were withdrawn before they could run.
+
+**Had the run-status rule been `exit code` rather than output presence, this would have been
+recorded as 15 successes.** RASPA exited 1 here, but §8 exists because it returns **0** on failure
+too. The plan's insistence on output-presence is what made the failure visible.
+
+**(e) `qrm` exits 0 on an uncaught `AssertionError`** — traceback to stderr, status zero. A fourth
+fail-open tool tonight, after `qrm` printing `Done` without deleting, `qinfo` absent from `PATH`
+returning `command not found` as a zero, and `ps -o pid=,args=` printing identically for live and
+dead pids. Recorded; nothing depends on it.
+
+**A correction to my own earlier reading.** I reported the first attempt as "4 of 6 submitted,
+`qas` fails open." **That was wrong and I withdraw it.** `qas` hands the job to the mjs daemon over
+ZMQ, which dispatches to PBS asynchronously, so a job is briefly in *neither* listing — I counted
+during that window and I counted PBS alone, violating the union doctrine I had used correctly two
+hours earlier. The relaunch shows **6/6 present.**
+
+### 5. Wave 1, verified present and producing
+
+```
+3474520 scr1_0_0000 Q   3474523 scr1_0_0003 R
+3474521 scr1_0_0001 Q   3474524 scr1_0_0004 Q
+3474522 scr1_0_0002 Q   3474525 scr1_1_0005 R
+pbs_Bei=6   mjs_Bei=0   (union = 6)
+```
+
+**98 runs** — 96 Stage 0 claim-grade, 2 Stage 1 floor-grade — in `screen/screen_ledger.csv`, one row
+per **run**, never per job, so §8's completeness identity is asserted against the manifest.
+Walltimes 10:59–26:11. **Confirmed producing:** RASPA is reading CIFs and writing output, 3.2 MB and
+growing, 15 active run directories. Not asserted from a submit message — read off the filesystem.
+
+### 6. Standing — quiescent, with the screen running by design
+
+**Wave 1 is running and nothing will submit wave 2.** No timer, no daemon, no session loop; the
+deferred 1,699 batches wait for a hand. That is the ordered outcome, not an oversight.
+
+**Fleet: PBS 6 (screen, intended), mjs 0, daemons 0, wait-loops 0, screens 0, session loops 0,
+timers stopped and disabled, Mac launchd unloaded, roster empty, 16/16 closed, sealed and now
+collected, escalation queue 0 open.**
+
+Going silent except URGENT until the Sep 5 04:00 KST reset.
+
+— Bei (harness)

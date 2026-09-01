@@ -1,0 +1,144 @@
+{
+  "record": "SEALED COLLECTION ATTESTATION (RESEAL) \u2014 all sixteen workspaces",
+  "ts": "2026-09-01T19:32:13Z",
+  "status": "SEALED",
+  "supersedes": "harness/state/sealed_attestation_20260902.json",
+  "why_retaken": "The 17:32Z seal was overtaken by an external write: the retired macOS host's study.poll fired one more full cycle at 18:58:22Z-19:07:05Z and appended harness usage notices to INBOX.md in fifteen of sixteen workspaces, stopping after rep16 and never reaching rep17 -- which is why rep17 was the only workspace that still reproduced it. The content was benign and no replicate ran; the seal was not wrong about 17:32Z, it was overtaken. Authorised by PI ruling 2026-09-02 04:35 KST. BOTH SEALS REMAIN IN THE RECORD.",
+  "authority": "PI ruling 2026-09-02 04:35 KST (option 1 ratified)",
+  "manifest": "sha256 over the concatenated sha256sum of LOG.md STATE.md REPORT.md JOBS.md ESCALATIONS.md INBOX.md WORKSPACE.json usage.json, per workspace",
+  "taken_under": "quiescence gate passed (PBS 0, mjs 0, no writer processes) and mtime-stability verified before and after hashing -- the check the two hand-taken seals lacked",
+  "n": 16,
+  "all_reachable": true,
+  "fleet_final_cpu_h": 14345.703,
+  "known_gap": "rep05 finished-job cput reads 0.000 against 3 finished jobs (SI-021 family: compute meter reads zero while compute burns). Recorded as a data gap, NOT as zero compute.",
+  "per_replicate": {
+    "rep01": {
+      "record_sha256": "1f956d6f919ab3f76ecf34fa355a05c02509a066e3dc78893c2b349c34cd9d42",
+      "head": "1cf4687ced0f13af596dc99e0299534bfed159ef",
+      "commits": 79,
+      "dirty_paths": 391,
+      "final_cpu_h": 821.634,
+      "newest_sealed_mtime": 1788289102
+    },
+    "rep02": {
+      "record_sha256": "b677ee6ca5af5d7393b8b9529398911acfcc43e62dfc525a579188ab667a2d19",
+      "head": "0bac6ea3e8ae783e8914a03710e57ebf6674793a",
+      "commits": 106,
+      "dirty_paths": 2696,
+      "final_cpu_h": 1116.841,
+      "newest_sealed_mtime": 1788289139
+    },
+    "rep03": {
+      "record_sha256": "435b11b8273e57f7da60220b744bdeea069ee6295c386a70b92d3fb730ab0ea8",
+      "head": "11b9b4b39ac5914c8ad0ea2f6485c6a7c12981b5",
+      "commits": 94,
+      "dirty_paths": 12,
+      "final_cpu_h": 344.996,
+      "newest_sealed_mtime": 1788289177
+    },
+    "rep04": {
+      "record_sha256": "2ecfff89e03f4708abb1e7227a33bd233d4c79c8a8b2a46cf8e76bdf6ebb0987",
+      "head": "5b37b896d86b8583afd20aa517828d252261aac4",
+      "commits": 60,
+      "dirty_paths": 17,
+      "final_cpu_h": 1071.482,
+      "newest_sealed_mtime": 1788289214
+    },
+    "rep05": {
+      "record_sha256": "30486187fe3ba3fc8545c2644b34f35dfabca4e876cb2efb955d963d2d1d423c",
+      "head": "a83d9034ae4e0b075400584b39070df296092055",
+      "commits": 64,
+      "dirty_paths": 3,
+      "final_cpu_h": 0.0,
+      "newest_sealed_mtime": 1788289251
+    },
+    "rep06": {
+      "record_sha256": "88fe5938a50b6e04da3b28643c3b1f78fb583b5468ad59423270c7163de1bcd4",
+      "head": "ffc93f99087f302a7b2e44bfb628749c4327de1f",
+      "commits": 110,
+      "dirty_paths": 556,
+      "final_cpu_h": 660.991,
+      "newest_sealed_mtime": 1788289290
+    },
+    "rep07": {
+      "record_sha256": "f32b564276042858c69869b702eecfe6043820bf7440063709a81139c351f890",
+      "head": "441bcdf942ce33b788446e29ac13ca9520bc934f",
+      "commits": 134,
+      "dirty_paths": 3,
+      "final_cpu_h": 1490.025,
+      "newest_sealed_mtime": 1788289326
+    },
+    "rep08": {
+      "record_sha256": "22ba9f46e66902fd95ba6f6842b481b7bdcd3fb18b0c9882237429a587311125",
+      "head": "fdb0129bb4eb5ceaed203b2995f13e20fb2aa7cb",
+      "commits": 69,
+      "dirty_paths": 3,
+      "final_cpu_h": 1064.844,
+      "newest_sealed_mtime": 1788289362
+    },
+    "rep09": {
+      "record_sha256": "ed179c90b547dc1f1e87a3517fa8a918abcf91628dcc146954d29cff6a58eeb3",
+      "head": "a2da451b8f7914e52af4e80047807a829726fc9a",
+      "commits": 58,
+      "dirty_paths": 5,
+      "final_cpu_h": 592.761,
+      "newest_sealed_mtime": 1788289400
+    },
+    "rep10": {
+      "record_sha256": "34902a5e4726aa3b88a5b00676259dd5f2df64372293933e933418aa4259377b",
+      "head": "43cb82c0b67ddf3ec37e31dc45e8a3e1305f2aef",
+      "commits": 84,
+      "dirty_paths": 6,
+      "final_cpu_h": 315.436,
+      "newest_sealed_mtime": 1788289438
+    },
+    "rep11": {
+      "record_sha256": "bcb4543b8910fb9cdf9210f27133f17c5bc2b351eb319a2dec7dce3c35813e85",
+      "head": "8dd2f302a06b7c9db46bee0d106d7e0a641ab259",
+      "commits": 86,
+      "dirty_paths": 20,
+      "final_cpu_h": 1931.693,
+      "newest_sealed_mtime": 1788289477
+    },
+    "rep12": {
+      "record_sha256": "199baadddd17383db0dd0723d3af05751d3d2be6ca94d69dec9161bc5639abbe",
+      "head": "1140ee9b63d887309f7da6715299bc6cffb8c68c",
+      "commits": 48,
+      "dirty_paths": 21,
+      "final_cpu_h": 1580.566,
+      "newest_sealed_mtime": 1788289514
+    },
+    "rep13": {
+      "record_sha256": "cc9cd7bce7be78e4434b7622d938b54d3bb506454ba5170fe637acc169bc9225",
+      "head": "d676c5b1260963d39a998c74e1b5105074ceb847",
+      "commits": 79,
+      "dirty_paths": 1891,
+      "final_cpu_h": 989.817,
+      "newest_sealed_mtime": 1788289551
+    },
+    "rep15": {
+      "record_sha256": "1409a91e37d1afe4db6b1b73836d42bbcc384e82181332a17a40a52ea70dfa56",
+      "head": "f935e15bad5a0d20ad997b641f649affd712d393",
+      "commits": 209,
+      "dirty_paths": 5,
+      "final_cpu_h": 1222.695,
+      "newest_sealed_mtime": 1788289589
+    },
+    "rep16": {
+      "record_sha256": "5f5a37fc26d22935ed1aacff9c42483efc8e0e73b2bc4f383709c43704f23659",
+      "head": "1bfed01d95d0337138650dd15345fc64e5a891c8",
+      "commits": 80,
+      "dirty_paths": 5,
+      "final_cpu_h": 227.855,
+      "newest_sealed_mtime": 1788289625
+    },
+    "rep17": {
+      "record_sha256": "cd37b685a31ba8ce9e54292f570fa2404bd93eef9119b2a94c0c2a5c5ec992bd",
+      "head": "20632918450cb428e35c7c33e54139a59169a4dc",
+      "commits": 79,
+      "dirty_paths": 32,
+      "final_cpu_h": 914.067,
+      "newest_sealed_mtime": 1788288520
+    }
+  }
+}

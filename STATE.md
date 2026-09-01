@@ -15,9 +15,10 @@ archived smoke arms (s01 $135.99 + s02 $42.50) into a denominator that is 16 × 
 caps. `harness/state/fleet_spend.json` states the basis — *"latest metered row per replicate,
 smoke excluded"*. The corrected figure at REPORT 014's own 16:04Z snapshot was $4,684.17 (104.6%).
 
-# QUIESCENT — 2026-09-02 01:50 KST. NOTHING IS SCHEDULED AND NOTHING IS RUNNING.
-# — RE-AMENDED 04:30 KST: *true again. The eight wait-loops are dead (`ALIVE_COUNT=0`), the Mac's
-# launchd is unloaded, and **quiescence now has no stated exception.** The open item is the seal.*
+# QUIESCENT EXCEPT THE SCREEN — 2026-09-02 04:55 KST.
+# *Nothing is scheduled and nothing supervises. **Wave 1 of the reference screen IS running** — 6
+# jobs, 98 runs — and NOTHING WILL SUBMIT WAVE 2. The deferred 1,699 batches wait for a hand. That
+# is the ordered outcome, not an oversight.*
 
 *PI order of 2026-09-02, executed. **Do not start anything.** Zero scheduled work, zero session
 turns until collection. Total silence except URGENT until the screen's first wave.*
@@ -36,6 +37,47 @@ turns until collection. Total silence except URGENT until the screen's first wav
   two stranded escalations recovered verbatim into the ledger. Attestation in `reports/REPORTS.md`.
 - **Held for the Sep 5 04:00 reset:** screen, verification, bundles. The screen fires on its
   existing gate. SI-024 and SI-025 are queued post-campaign.
+
+**THE SCREEN IS RUNNING — 2026-09-02 04:55 KST. THE WHOLE CHAIN EXECUTED.**
+PI ruling 04:35 KST, option 1 ratified. **Reseal 16/16 -> pull verified 16/16 -> COLLECTION.md ->
+section 7.1 PASSED -> screen_submit.py written -> wave 1 submitted and verified.**
+
+**RESEAL** at `harness/state/sealed_attestation_20260902T1930Z.json` via the new
+`harness/seal_attestation.sh`, which refuses to seal unless the fleet is quiescent and re-reads
+every sealed file's mtime AFTER hashing, refusing if anything moved during the seal — the check both
+hand-taken seals lacked. **Both seals stay in the record**, the 04:30 entry the bridge.
+
+**COLLECTION 16/16, zero drift**, and the per-workspace hashes are byte-identical to those the
+FAILED 19:15Z run computed — proof the pull was always clean and only the seal was stale.
+**Section 7.1 cleared on the merits**: gate PASSED, decks 25,598/25,598. It refused three times
+tonight and passed once; it was never bypassed or satisfied by arrangement.
+
+**`harness/screen_submit.py` WRITTEN** to the sealed spec, with the four unspecified parameters
+recorded in its header as **implementation decisions, not plan amendments**.
+
+**FIVE FAULTS FOUND AND FIXED.** (a) My batch mapping was wrong and its own output caught it —
+serial batching produced 82-107 h single-job walltimes; the plan's "a batch finishes when its
+slowest member finishes" is only true of PARALLEL members, and `ac` nodes being 40 and 44 cores
+means the sealed batch size of 40 IS an ac node. 480 is concurrent CORES, confirmed by the plan's
+own 32,471/480 = 67.6 h. (b) 456 stale job scripts from the rejected draft would have been submitted
+by the remote `for f in *.pbs` loop — caught before any submission. (c) **The sealed 480-core ceiling
+is UNREACHABLE: only 107 cores are free, a third party holds 92% of the cluster.** 480 is a ceiling,
+not a target, and section 6 exists to avoid displacing others, so wave 1 was sized to measured free
+capacity. (d) **THE FIRST SUBMISSION FAILED EVERY RUN** — the 12,499-structure corpus was never
+staged, a FIFTH missing piece after the pull, decks, submitter and toolchain; found at
+`/home1/users/Bei/benchmark/frozen/CoRE_MOF_2024_CR_united`, outside every workspace so section 7.2
+holds, now verified 12,499/12,499 and linked into RASPA_DIR, the doomed jobs withdrawn first.
+**Had status been decided by exit code this would have been logged as 15 successes** — section 8's
+output-presence rule is what made it visible. (e) `qrm` exits 0 on an uncaught AssertionError, a
+fourth fail-open tool tonight. **CORRECTION: my "4 of 6, qas fails open" was WRONG and is withdrawn**
+— `qas` hands off to the mjs daemon which dispatches asynchronously, so a job is briefly in neither
+listing; I counted in that window and counted PBS alone, violating the union doctrine I had used
+correctly two hours earlier.
+
+**WAVE 1: 3474520-3474525, 6 jobs, 98 runs** (96 Stage 0 claim-grade, 2 Stage 1 floor-grade),
+walltimes 10:59-26:11, union pbs 6 / mjs 0. **Confirmed PRODUCING** — RASPA reading CIFs and writing
+output, 3.2 MB and growing across 15 active run directories, read off the filesystem rather than
+asserted from a submit message. Ledger one row per RUN, never per job. REPORTS entry of 04:55 KST.
 
 **PULL BUILT; COLLECTION HALTED AT THE SEAL — 2026-09-02 04:30 KST. 1/16 VERIFIED.**
 PI rulings of 04:20 KST. **Ruling (1) reconciled and CLOSED:** `hostname -f` = **bnode0.kaist.ac.kr**,

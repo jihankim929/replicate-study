@@ -23,7 +23,8 @@ cd "$(dirname "$0")/.."
 
 REMOTE="dirac-bei"; WSROOT="/home1/users/Bei/ws"
 OUT="reps/main/collected"
-SEAL="harness/state/sealed_attestation_20260902.json"
+# Overridable; defaults to the 19:30Z reseal that supersedes the overtaken 17:32Z seal.
+SEAL="${SEAL:-harness/state/sealed_attestation_20260902T1930Z.json}"
 # The eight files the seal's manifest covers, IN THE SEAL'S ORDER. The recomputation below is only
 # valid if this list and its order match the manifest exactly -- see §4 of the 02:35 REPORTS entry.
 SEALED_FILES="LOG.md STATE.md REPORT.md JOBS.md ESCALATIONS.md INBOX.md WORKSPACE.json usage.json"

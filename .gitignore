@@ -16,6 +16,12 @@ known_hosts*
 reps/smoke/s01/
 reps/smoke/s02/
 reps/main/*/
+# ...but the COLLECTION is the terminal record, not a pulled workspace. reps/smoke/collected/ is
+# tracked (29 files) and the main phase's is the same kind of artifact: the sixteen sealed records
+# plus their attestation. The rule above exists to keep 30 GB of pulled workspaces out; it caught
+# the 14 MB collection as collateral. Un-ignored 2026-09-02 when the collection was first made.
+!reps/main/collected/
+!reps/main/collected/**
 
 # Archive tarballs are DATA, not record: 1.19 GB of binaries that GitHub hard-rejects at 100 MB
 # per file. Committing them made the branch permanently unpushable and would have stranded the
