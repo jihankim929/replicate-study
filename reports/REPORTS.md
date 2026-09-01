@@ -2848,3 +2848,121 @@ URGENT — and the one item above that needs a word rather than silence: **the 4
 cluster jobs on closed campaigns.**
 
 — Bei (harness)
+
+---
+
+## 2026-09-01T16:58:27Z (2026-09-02 01:58:27 KST) — COLLECTION HELD. **THE QDEL SWEEP IS NOT RUN.** Accounting banked, attestation provisional, nothing destructive executed.
+
+> **In one line:** the pre-sweep CPU accounting is captured and safe — **41 jobs, every one
+> replicate-prefixed, 2,388.947 CPU-h** — but **the qdel sweep was refused by the operator
+> harness's permission layer and has not run**, so the sealed collection path stops here. The full
+> sha256 attestation was killed by its own timeout under login-node load 85; it is retaken as git
+> anchors for all sixteen and recorded **PROVISIONAL, NOT SEALED**. Quiescence from the previous
+> order stands and was not re-executed.
+
+### 0. What was refused, stated plainly
+
+The order was the full sealed collection path, and its first act is the qdel sweep over every job
+bearing a replicate prefix in any state. **I could not run it.** The command was denied by the
+permission classifier governing this operator session — a bulk destructive deletion of 41 cluster
+jobs over `ssh` is exactly the shape it exists to stop.
+
+I did not reformulate it to get past the refusal. A denial worked around is a denial defeated, and
+the whole of SI-024/025/026 is instruments doing confident work on a premise nobody checked; this
+is the one place where the check is a human. **The sweep needs the PI's hand or the PI's
+permission.** The exact command is in `harness/state/qdel_killlist_20260902.txt` and was given to
+the PI directly.
+
+**Nothing destructive ran. No job was deleted, no workspace written, no ledger row closed.**
+
+### 1. The accounting that had to be taken first, and was
+
+This was the irreversible half, and it is banked. Read from `qstat -f` **before** anything was
+touched, because a deleted job's accrued cput is not recoverable afterwards. Persisted to
+`harness/state/qdel_killlist_20260902.txt`.
+
+| replicate | jobs | R | Q | accrued CPU-h |
+|---|---|---|---|---|
+| rep13 | 10 | 10 | 0 | 726.112 |
+| rep04 | 6 | 6 | 0 | 472.367 |
+| rep06 | 5 | 5 | 0 | 410.619 |
+| rep02 | 9 | 7 | 2 | 368.990 |
+| rep01 | 5 | 5 | 0 | 205.399 |
+| rep12 | 1 | 1 | 0 | 150.171 |
+| rep03 | 3 | 3 | 0 | 55.128 |
+| rep16 | 2 | 0 | 2 | 0.163 |
+| **total** | **41** | **37** | **4** | **2,388.947** |
+
+**Every one of the 41 bears a replicate prefix; zero unmatched.** The sweep's scope is therefore
+exactly the fleet and nothing else, which is the property that had to be established before a
+`qdel` list could be trusted — and it is established now rather than at the moment of deletion.
+
+The eight replicates above are the ones whose closure rows each promised a final sweep. The other
+eight hold nothing: rep05, rep07, rep08, rep09, rep10, rep11, rep15 and rep17 are already at zero
+queued jobs.
+
+### 2. Attestation: attempted, killed, retaken lighter, and provisional
+
+The full `sha256sum` manifest over `LOG.md`, `STATE.md`, `REPORT.md`, `JOBS.md`, `ESCALATIONS.md`,
+`INBOX.md`, `WORKSPACE.json` and `usage.json` for all sixteen **was killed at its 300 s timeout,
+exit 143.** The cause is measured, not guessed: the login node was at **load average 85** under
+the 37 running fleet jobs — the same jobs the sweep exists to clear. The instrument was starved by
+the condition the order was written to remove.
+
+Retaken in a light form that the loaded node could serve — git anchors per workspace, recorded to
+`harness/state/attest_heads_20260902.json`. **All sixteen reachable, all sixteen attested.**
+
+**It is recorded PROVISIONAL, NOT SEALED, and the dirty counts are the reason:**
+
+| replicate | live jobs | dirty paths |
+|---|---|---|
+| rep02 | 7R + 2Q | 2,601 |
+| rep13 | 10R | 1,879 |
+| rep06 | 5R | 522 |
+| rep01 | 5R | 384 |
+
+**The committed record is fixed** — every session is dead, nothing can commit, and HEAD cannot
+move. **The working trees are not.** The four workspaces churning hardest are precisely the four
+with the most running jobs, because those jobs are still writing into `results/` and `runs/`.
+Sealing a hash over a tree that live jobs are writing attests a moving target and would be worth
+nothing at collection.
+
+**So the ordering in the PI's instruction is load-bearing and is now demonstrated rather than
+assumed: the sweep must precede the seal.** The full manifest is to be retaken after it, when the
+load clears.
+
+### 3. One thing the sweep will need when it runs
+
+rep09's recovered escalation is a warning about this exact operation, from the only replicate that
+has performed it: a stop here *"requires draining the mjs staging queue after the PBS jobs clear
+or it silently refills"*. It had to delete jobs **twice**, because the staging queue promoted four
+more into PBS after the first eight cleared.
+
+**Therefore the closing assertion that zero fleet jobs remain in any state will not be written on
+one pass.** It requires a second sweep after the staging queue drains and a re-read that returns
+zero twice. An assertion of quiescence taken on the first pass would be the same class of error as
+SI-024 — recording when the instrument looked rather than what was true.
+
+### 4. What stands, unchanged, from the previous order
+
+Not re-executed, because it was already done and verified:
+
+**Quiescent.** Screens 0, session loops 0, study timers 0 (all three stopped *and* disabled),
+detector disarmed (`AUTOCLOSE_ARMED` deleted), active roster empty, 16/16 closed. Closing spend
+figure taken before the meters stopped and recorded to `harness/state/closing_spend.json`:
+**$4,715.74 / $4,480 = 105.26%**, 268,854,032 billable tokens, 12 of 16 over cap. rep15's and
+rep03's post-stop accrual and rep09's two stranded escalations are already in the record.
+
+### 5. Queued behind the sweep, in order
+
+1. qdel sweep, **awaiting the PI**; second pass for the mjs staging queue.
+2. Per-workspace kill list and final cput into each `JOBS.md` — the accounting all sixteen closure
+   rows promised.
+3. Closing assertion: zero fleet jobs in any state, confirmed twice.
+4. Full sha256 attestation retaken and **sealed**.
+5. Sealed collection attestation to this file.
+6. Reference screen Stage 0 and Stage 1 first waves — CPU-only, zero session supervision, on the
+   cores the sweep frees.
+7. Total quiescence until the Sep 5 04:00 KST reset. URGENT excepted.
+
+— Bei (harness)

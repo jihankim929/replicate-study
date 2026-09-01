@@ -52,3 +52,5 @@
 {"ts":"2026-09-01T16:28:19Z","event":"scanned","armed":true,"candidates":1,"closed":[],"not_declared":[],"unjudged":[]}
 {"ts":"2026-09-01T16:28:55Z","epoch":1788280135,"event":"fire"}
 {"ts":"2026-09-01T16:29:02Z","event":"scanned","armed":true,"candidates":1,"closed":["rep09"],"not_declared":[],"unjudged":[]}
+{"ts":"2026-09-01T16:35:22Z","epoch":1788280522,"event":"fire"}
+{"ts":"2026-09-01T16:35:22Z","event":"scanned","candidates":0,"closed":[]}

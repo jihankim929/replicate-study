@@ -35,6 +35,23 @@ turns until collection. Total silence except URGENT until the screen's first wav
 - **Held for the Sep 5 04:00 reset:** screen, verification, bundles. The screen fires on its
   existing gate. SI-024 and SI-025 are queued post-campaign.
 
+**COLLECTION IS HELD — 2026-09-02 01:58 KST.** The PI ordered the full sealed collection path
+tonight. Its first act, the qdel sweep over all 41 fleet jobs, **was refused by this session's
+permission layer and has NOT run.** Nothing destructive executed: no job deleted, no workspace
+written. The irreversible half is banked — accrued cput for all 41 read from `qstat -f` before
+anything was touched, at `harness/state/qdel_killlist_20260902.txt`, **2,388.947 CPU-h, every job
+replicate-prefixed, zero unmatched.** Record attestation is `harness/state/attest_heads_20260902.json`
+and is **PROVISIONAL, NOT SEALED**: HEAD is fixed because every session is dead, but the working
+trees of the four workspaces with the most running jobs are churning (rep02 2,601 dirty paths,
+rep13 1,879, rep06 522, rep01 384) because those jobs are still writing. **The sweep must precede
+the seal.** The full sha256 manifest was killed at its timeout under login-node load 85 and is to
+be retaken after the sweep. See REPORTS.md, COLLECTION HELD entry.
+
+**When the sweep runs it needs two passes.** rep09's recovered escalation, from the only replicate
+that has done this: a stop here *"requires draining the mjs staging queue after the PBS jobs clear
+or it silently refills"* — it deleted jobs twice, because four more were promoted into PBS after
+the first eight cleared. The zero-jobs assertion is not to be written on one pass.
+
 **THE ONE OPEN ITEM.** **41 cluster jobs are still queued or running for closed campaigns** —
 rep13 (10), rep02 (9), rep04 (6), rep01 (5), rep06 (5), rep03 (3), rep16 (2), rep12 (1) — and
 their `cpu_h_scheduler` keeps climbing. `close_campaign.sh` deliberately does not stop cluster
