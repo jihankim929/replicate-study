@@ -1,0 +1,16 @@
+# See study.spend.service.in for why @REPO@ is substituted rather than written.
+[Unit]
+Description=study filing detector (scan for declared section 5 filings, close what is declared)
+Documentation=file://@REPO@/harness/detect_filings.sh
+
+[Service]
+Type=oneshot
+WorkingDirectory=@REPO@
+ExecStart=@REPO@/harness/detect_filings.sh
+# 25 min, as study.poll.service.in and for the same reason. The scan is a SERIAL loop of one ssh
+# per rostered replicate at `timeout 60` each, so 16 unreachable workspaces is ~16 min of real
+# work, not a hang; a cap tight enough to look sensible on a healthy fleet would kill a scan that
+# is merely reaching a slow cluster and record it as a failure. 25 min still bounds the first
+# instance strictly inside the 30-minute interval, and systemd will not start a second while
+# this one is active.
+TimeoutStartSec=25min

@@ -1,0 +1,22 @@
+# THIRTY minutes, OFFSET FROM THE POLL. The cadence is the bound on the exposure this timer
+# exists to close: REPORT 013's bill was nine filed replicates still being invoked, one for 22
+# hours, because detection only ever happened when an operator ran find_filings.sh by hand. At
+# this cadence the worst case between a replicate declaring and the closer running is 30 minutes.
+#
+# :15/:45, not :00/:30 -- study.poll.timer already opens one ssh per replicate at :00 and :30,
+# and this scan opens another. Interleaving keeps the two serial ssh loops off each other rather
+# than doubling the peak connection load on the login node, which is the same host that
+# state/incident_20260831_login_node is about.
+[Unit]
+Description=scan for declared section 5 filings every 30 minutes, offset from the operational poll
+
+[Timer]
+OnCalendar=*:15/30
+AccuracySec=1s
+RandomizedDelaySec=0
+# As study.poll.timer: a missed fire lands on resume instead of being dropped, and systemd
+# honours this ONLY on an OnCalendar= timer.
+Persistent=true
+
+[Install]
+WantedBy=timers.target

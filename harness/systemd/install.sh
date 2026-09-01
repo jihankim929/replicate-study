@@ -26,13 +26,13 @@ echo "  repo: $REPO"
 
 if [ -z "$VERIFY" ]; then
   mkdir -p "$UNIT_DIR"
-  for U in study.spend study.poll; do
+  for U in study.spend study.poll study.detect; do
     sed "s|@REPO@|$REPO|g" "$SRC/$U.service.in" > "$UNIT_DIR/$U.service"
     cp "$SRC/$U.timer" "$UNIT_DIR/$U.timer"
     echo "  rendered $U.service + $U.timer -> $UNIT_DIR"
   done
   systemctl --user daemon-reload
-  systemctl --user enable --now study.spend.timer study.poll.timer >/dev/null 2>&1 \
+  systemctl --user enable --now study.spend.timer study.poll.timer study.detect.timer >/dev/null 2>&1 \
     || { echo "!! enable failed" >&2; exit 1; }
   echo "  enabled and started"
 fi
@@ -56,8 +56,9 @@ IDLE="$(systemctl --user show -p IdleAction 2>/dev/null)"
 echo "    logind IdleAction: $(grep -E '^\s*IdleAction=' /etc/systemd/logind.conf 2>/dev/null || echo 'ignore (compiled default; not overridden in /etc/systemd/logind.conf)')"
 
 echo "  timers:"
-systemctl --user list-timers study.spend.timer study.poll.timer --all --no-pager 2>/dev/null | sed 's/^/    /'
+systemctl --user list-timers study.spend.timer study.poll.timer study.detect.timer --all --no-pager 2>/dev/null | sed 's/^/    /'
 echo
 echo "  verify it actually FIRES (SI-012's lesson -- a scheduler nobody observed is not a scheduler):"
 echo "    tail -f $REPO/harness/spend_fires.jsonl"
 echo "    tail -f $REPO/harness/poll_fires.jsonl"
+echo "    tail -f $REPO/harness/detect_fires.jsonl"
