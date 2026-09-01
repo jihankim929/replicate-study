@@ -3078,3 +3078,131 @@ first-pass sweep, the staging drain and the second pass have between them delete
 fleet still holds 15.
 
 — Bei (harness)
+
+---
+
+## 2026-09-01T17:35:00Z (2026-09-02 02:35:00 KST) — SEALED COLLECTION ATTESTATION. **ZERO FLEET JOBS, ASSERTED THREE TIMES. ALL SIXTEEN SEALED.** Stage 0/1 refused by its own write barrier — the screen layer did not travel.
+
+> **In one line:** the daemons are dead, the queues are empty and **stayed** empty — zero asserted
+> at 17:26Z, 17:28:35Z and 17:29:25Z — every workspace's final CPU accounting is written into its
+> own `JOBS.md`, and all sixteen records are **sealed by sha256**. Fleet final: **14,345.703
+> CPU-h.** **Stage 0/1 was not submitted**, and not for want of permission: `screen_launch.sh`
+> refused at its own collection gate, and behind that gate two of the three things it needs do not
+> exist on this host.
+
+### 0. The sweep converged
+
+With the nine daemons killed by the PI's hand, the third sweep held. Verified dead first: none of
+the nine pids present, no `guard`/`cycle`/`watch`/`snap`/`monitor2`/`qpos`/`supervisor`/
+`keepalive`/`autopilot` process under `Bei`.
+
+**Third sweep:** PBS was already clear; three mjs staging entries remained (`4544 rep06_k08`,
+`4552 rep06_k04`, `4556 rep02_sup09020213_3`), withdrawn by explicit id. As before the withdrawal
+was **verified against `qinfo` rather than trusted**, because rep08's escalation records that
+`qrm` prints `Done` without deleting — and it printed `Done` here too.
+
+### 1. The zero-jobs assertion, taken three times
+
+| reading | time (UTC) | PBS `Bei` | mjs `Bei` | daemons | other users' mjs |
+|---|---|---|---|---|---|
+| 1 | 17:26:00 | 0 | 0 | 0 | 418 |
+| 2 | 17:28:35 | 0 | 0 | 0 | 418 |
+| 3 | 17:29:25 | 0 | 0 | 0 | 418 |
+
+**Asserted: zero fleet jobs remain in any state, in PBS or in mjs staging.** The order asked for
+two readings; three were taken because the previous refill appeared within 100 seconds and two
+readings 155 seconds apart would have been only just outside it. The assertion is over the
+**union** of both queues, per rep09's `bin/census.sh` doctrine — a job leaves the mjs listing the
+moment it is dispatched, so either queue alone can read zero while work remains.
+
+**`hoon8590`'s 418 staging entries were untouched throughout and verified unchanged at every
+reading.** Nothing outside the fleet was deleted at any point in this operation.
+
+### 2. Final CPU accounting — written into all sixteen workspaces
+
+Every replicate now reads **`cpu_h == cpu_h_scheduler`, `queued_jobs = 0`** — fully harvested,
+nothing unaccounted. This is the accounting all sixteen closure rows promised, and it closes them.
+
+| rep | final CPU-h | rep | final CPU-h | rep | final CPU-h | rep | final CPU-h |
+|---|---|---|---|---|---|---|---|
+| rep11 | 1,931.693 | rep12 | 1,580.566 | rep07 | 1,490.025 | rep15 | 1,222.695 |
+| rep02 | 1,116.841 | rep04 | 1,071.482 | rep08 | 1,064.844 | rep13 | 989.817 |
+| rep17 | 914.067 | rep01 | 821.634 | rep06 | 660.991 | rep09 | 592.761 |
+| rep03 | 344.996 | rep10 | 315.436 | rep16 | 227.855 | rep05 | **0.000** |
+
+**Fleet total: 14,345.703 CPU-h.**
+
+Each workspace's `JOBS.md` now carries a `FINAL CPU ACCOUNTING` section with its own kill list —
+every PBS job deleted with the cput it had accrued **at deletion**, every mjs staging entry
+withdrawn, and the closing assertion. Written to 16/16, spot-checked on rep01, rep09 and rep17.
+
+**The 2,388.947 CPU-h captured before the first sweep was a floor, as stated, and the accounting
+above supersedes it.** Of note: rep11's 1,931.693 and rep12's 1,580.566 are dominated by work
+that finished *after* their campaigns closed, which is the daemon finding priced.
+
+**rep05 remains 0.000 CPU-h against 3 finished jobs.** SI-021's family — the compute meter reading
+zero while compute burns. **Recorded as a data gap, not as zero compute**, and it is the one hole
+in an otherwise complete accounting.
+
+### 3. Sealed
+
+`harness/state/sealed_attestation_20260902.json` — sha256 over the concatenated `sha256sum` of
+`LOG.md STATE.md REPORT.md JOBS.md ESCALATIONS.md INBOX.md WORKSPACE.json usage.json` per
+workspace, plus HEAD, commit count and dirty count. **16/16, all reachable.**
+
+**The seal was taken twice and the first was discarded.** The first ran at 17:26Z, before the
+`JOBS.md` accounting was written — appending to `JOBS.md` changed a file the manifest covers, so
+that seal described a superseded state. It was retaken at 17:32Z over the completed record. A seal
+that does not cover the final write is not a seal.
+
+### 4. Stage 0 / Stage 1: refused, and the refusal is correct
+
+`screen_launch.sh --check`:
+
+```
+REFUSED — the screen may not run before the last collection completes.
+missing: rep01 … rep17 COLLECTION.md
+Nothing was created, transferred or submitted.
+```
+
+**The write barrier worked exactly as the sealed plan section 7 designed it** — it refused before
+creating a directory, transferring a file or submitting a job. Behind it, three things are missing
+and only the first is a matter of doing the work:
+
+1. **`reps/main/collected/` does not exist.** `collect.sh` reads from local `reps/main/<rep>/`,
+   which holds only provision receipts — the sixteen workspaces have never been pulled to this
+   host. **And there is no pull in the harness at all:** `transfer.sh` only ever pushes
+   (`rsync -a "$LOCAL/" "dirac-bei:$WS/"`). The smoke phase has `reps/smoke/collected/` and a
+   `PULLED_MANIFEST.sha256`, so the smoke *was* pulled — by hand, on the macOS host that is now
+   retired.
+2. **`screen/decks/` does not exist.** The 25,598 pre-generated decks are untracked by design and
+   were never generated on bronze4. `deck_manifest.sha256` holds all 25,598 hashes, and step 2 of
+   the launcher would refuse against them. They are regenerable from `screen_gen_decks.py` +
+   `screen_meta_12499.json`, both present.
+3. **`harness/screen_submit.py` does not exist**, and `git log --all --diff-filter=D` finds it
+   never existed in this repository's history. It is the last line of `screen_launch.sh --go`.
+   **The submission step of the sealed screen plan was never implemented.**
+
+**This is SI-012's finding for the fourth time: the layer did not travel.** The scheduling layer
+did not travel and was rebuilt as systemd units; the closure layer had no detection; the closure
+layer had no reach into the login node; and now **the screen layer did not travel either** — its
+decks, its pull step and its submitter are all absent on the host that inherited it. Each was
+discovered only when something tried to use it.
+
+**I did not build the missing pieces tonight.** Writing a submitter that fires 480-way concurrency
+at a shared cluster, and generating 25,598 decks, is not executing a sealed plan — it is authoring
+one, and it is the PI's call whether that is what the reference screen should now be. The freed
+fleet cores are therefore idle and available to the answer key, which is the one part of the
+intent that survives tonight intact.
+
+### 5. Quiescent
+
+Unchanged and re-verified: **screens 0, session loops 0, study timers 0 (stopped and disabled),
+detector disarmed, active roster empty, 16/16 closed, escalation queue 0 open.** Nothing was
+scheduled or started by this work. Login-node load has fallen **85 → 6.3**.
+
+Standing from here: **no scheduled work, no session turns, total silence except URGENT until the
+Sep 5 04:00 KST reset** — with the three Stage 0/1 blockers above awaiting a ruling whenever the
+PI next reads.
+
+— Bei (harness)

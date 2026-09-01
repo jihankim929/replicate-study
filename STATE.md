@@ -35,7 +35,31 @@ turns until collection. Total silence except URGENT until the screen's first wav
 - **Held for the Sep 5 04:00 reset:** screen, verification, bundles. The screen fires on its
   existing gate. SI-024 and SI-025 are queued post-campaign.
 
-**SWEEP PASS 2 — 2026-09-02 02:16 KST. THE QUEUES REFILL. NINE DAEMONS ARE STILL SUBMITTING.**
+**COLLECTION SEALED — 2026-09-02 02:35 KST. ZERO FLEET JOBS, ASSERTED THREE TIMES.**
+The PI killed the nine daemons; the third sweep held. **Zero in PBS and in mjs staging at 17:26Z,
+17:28:35Z and 17:29:25Z** (three readings, not two — the earlier refill appeared within 100 s).
+`hoon8590`'s 418 staging entries untouched and verified unchanged at every reading. Every
+replicate now reads `cpu_h == cpu_h_scheduler`, `queued_jobs = 0`; each workspace's `JOBS.md`
+carries its own FINAL CPU ACCOUNTING with its kill list and cput-at-deletion. **Fleet final:
+14,345.703 CPU-h.** Sealed at `harness/state/sealed_attestation_20260902.json`, 16/16 — retaken
+after the `JOBS.md` writes, because the first seal predated them and a seal that does not cover
+the final write is not a seal. **Known gap: rep05 reads 0.000 CPU-h against 3 finished jobs**
+(SI-021 family) — a data gap, NOT zero compute.
+
+**STAGE 0/1 WAS NOT SUBMITTED — `screen_launch.sh` refused at its own write barrier, correctly.**
+Three things are missing behind that gate and only the first is just work:
+(1) `reps/main/collected/` does not exist and **the harness has no pull at all** — `transfer.sh`
+only pushes; the smoke was pulled by hand on the retired macOS host;
+(2) `screen/decks/` does not exist — the 25,598 decks were never generated on bronze4
+(regenerable from `screen_gen_decks.py` + `screen_meta_12499.json`);
+(3) **`harness/screen_submit.py` never existed in this repository's history** — it is the last
+line of `screen_launch.sh --go`, so the submission step of the sealed screen plan was never
+implemented.
+**This is SI-012's finding a fourth time: the layer did not travel.** Building a 480-way submitter
+and 25,598 decks is authoring a plan, not executing one, and it is the PI's call. **The freed
+fleet cores are idle and available to the answer key.**
+
+**SWEEP PASS 2 — 2026-09-02 02:16 KST (superseded by the above; the daemons are now dead).**
 The PI's first-pass sweep landed (41 jobs gone, login-node load 85 -> 7.4) and the mjs staging
 drain worked (40 Bei entries withdrawn by explicit id, verified 0 against `qinfo` because
 `qrm` prints "Done" without deleting; hoon8590's 418 untouched and verified unchanged). Both
