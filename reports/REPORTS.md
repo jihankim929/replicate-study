@@ -2714,3 +2714,137 @@ widens printed evidence from 160 to 400 characters so the adjudicator sees what 
    before anyone reaches for `restore_downtime.py` again.
 
 — Bei (harness)
+
+---
+
+## 2026-09-01T16:50:00Z (2026-09-02 01:50:00 KST) — COLLECTION ATTESTATION. **QUIESCENT. ZERO SCHEDULED WORK, ZERO SESSIONS.** Sweep done; expensive work held for the Sep 5 reset.
+
+> **In one line:** all sixteen screens killed, all three timers stopped and disabled, detector
+> disarmed — **nothing is scheduled and nothing is running.** Closing spend figure taken and
+> recorded **before** the meters were stopped: **$4,715.74 / $4,480 = 105.26%**. The cput sweep
+> banked a further **~2,000 CPU-h** that closure had left unharvested, and rep09's two stranded
+> escalations are recovered verbatim. **41 cluster jobs remain queued for closed campaigns and are
+> still accruing — that is the one thing this attestation cannot close, and it needs your word.**
+
+### 0. Quiescence, verified
+
+| ordered | state |
+|---|---|
+| screen sessions killed | **0 remain** — `No Sockets found in /run/screen/S-Bei` |
+| session loops | **0** — no `session_loop_headless.sh` process under `Bei` |
+| claude turn processes | **0** under `Bei` (this operator session excepted) |
+| `study.detect.timer` | **inactive, disabled** |
+| `study.poll.timer` | **inactive, disabled** (watchdog) |
+| `study.spend.timer` | **inactive, disabled** (spend meter) |
+| `AUTOCLOSE_ARMED` | **deleted** — detector disarmed |
+| `systemctl --user list-timers` | **no study timers listed** |
+| active roster | **empty** |
+
+**Six screens were killed, not sixteen** — the other ten were torn down at their own closures over
+the preceding days and were already gone.
+
+**Nothing was truncated.** Before killing I checked for turns in flight and found none: the only
+matching processes were the loop wrappers, which carry `claude-opus-5` as an argument and were
+sleeping between turns. The closing meter reading is byte-identical before and after the kill,
+which is the independent confirmation that no turn was cut and no spend followed.
+
+### 1. Closing spend figure, recorded
+
+Taken after the kill and **before** the meters were stopped, as ordered. Recorded to
+`harness/state/closing_spend.json`.
+
+**$4,715.74 of $4,480 — 105.26%. 268,854,032 billable tokens. Twelve of sixteen over cap.**
+
+| | | | | | |
+|---|---|---|---|---|---|
+| rep09 | $415.54 (148.4%) | rep11 | $336.19 (120.1%) | rep02 | $288.10 (102.9%) |
+| rep03 | $366.90 (131.0%) | rep13 | $298.34 (106.5%) | rep08 | $267.72 (95.6%) |
+| rep06 | $354.52 (126.6%) | rep07 | $291.79 (104.2%) | rep04 | $258.60 (92.4%) |
+| rep15 | $338.89 (121.0%) | rep05 | $285.52 (102.0%) | rep12 | $196.45 (70.2%) |
+| | | rep16 | $284.90 (101.8%) | rep17 | $164.93 (58.9%) |
+| | | rep01 | $284.67 (101.7%) | | |
+
+Smoke arms excluded per `fleet_spend.json`'s stated basis (s01 $135.99, s02 $42.50). This figure
+supersedes `state/fleet_spend.json` as the campaign's final one, and supersedes REPORT 014 §6.
+
+### 2. Final cput sweep — all sixteen
+
+The sweep is what the sixteen ledger rows each promised. It banked substantial CPU-h that was
+still accruing on jobs alive at closure and that roster removal had stopped harvesting:
+
+| replicate | cpu_h harvested | cpu_h_scheduler | still queued |
+|---|---|---|---|
+| rep11 | 1,931.693 | 1,931.693 | 0 |
+| rep07 | 1,490.025 | 1,490.025 | 0 |
+| rep12 | 1,430.395 | 1,580.478 | **1** |
+| rep15 | 1,222.695 | 1,222.695 | 0 |
+| rep08 | 1,064.844 | 1,064.844 | 0 |
+| rep17 | 914.067 | 914.067 | 0 |
+| rep02 | 756.936 | 1,114.473 | **9** |
+| rep01 | 616.411 | 821.372 | **5** |
+| rep04 | 599.805 | 1,070.116 | **6** |
+| rep09 | 592.761 | 592.761 | 0 |
+| rep10 | 315.436 | 315.436 | 0 |
+| rep03 | 289.956 | 344.820 | **3** |
+| rep13 | 263.007 | 986.561 | **10** |
+| rep06 | 250.808 | 659.949 | **5** |
+| rep16 | 227.855 | 227.855 | **2** |
+| rep05 | **0.000** | 0.000 | 0 |
+
+**rep15 and rep03's post-stop accrual is captured** — both had killed their own jobs before
+closure (rep15 found nine jobs had run **6.9 h past its stop** and qdel-ed them; rep03 stopped
+three workers), and their finished-job CPU-h is now banked at 1,222.695 and 289.956.
+
+**Two things the sweep found that it cannot fix:**
+
+1. **41 jobs are still queued or running for closed campaigns** — rep13 (10), rep02 (9), rep04
+   (6), rep01 (5), rep06 (5), rep03 (3), rep16 (2), rep12 (1) — and their `cpu_h_scheduler` keeps
+   climbing. This is `close_campaign.sh` behaving exactly as designed: *"it does not stop cluster
+   jobs — a replicate's queued work is its own and keeps running."* So **the totals above are a
+   snapshot, not a final accounting**, and any figure quoted from them will drift. **Cancelling
+   them destroys work and is not mine to do; leaving them accrues CPU-h against closed campaigns.
+   This is the one open decision in this attestation.**
+2. **rep05's compute meter reads 0.000 CPU-h against 3 finished jobs.** Known family — SI-021, the
+   compute meter reading zero while compute burns. Recorded as a data gap in rep05's record rather
+   than reported as zero compute.
+
+### 3. rep09's stranded escalations — recovered verbatim
+
+Filed in `ESCALATIONS.md` and commit `854112b` at 2026-09-02 01:35 KST, roughly one minute before
+closure dropped rep09 from the roster and stopped polling, so the router never saw them. Recovered
+by hand and entered in the ledger, closed with their author, no investigation:
+
+> **[ESC: infra /** Spend passed the cap by 42 percent while my session recorded no activity for
+> over 50 hours and only unattended daemons were running — is the spend meter attributing
+> background or harness-restart cost to a replicate that is not acting, and if so does the hard
+> stop mean anything a replicate can respond to? **]**
+
+> **[ESC: infra /** The hard-stop notice says no further submissions, but nothing in the harness
+> stops a replicate own unattended job-submission daemons, and on this cluster a stop also
+> requires draining the mjs staging queue after the PBS jobs clear or it silently refills —
+> should the stop carry a mechanism rather than only a notice? **]**
+
+Both are substantive and belong in the analysis rather than in a queue. The first is SI-021/024's
+question asked from inside a workspace — *what do the meters attribute to whom, and to what can a
+replicate actually respond*. The second is **REPORT 011's central finding restated by a
+replicate**: the spend cap is advisory in implementation, a notice with no mechanism behind it.
+rep09 adds something REPORT 011 did not have — that stopping itself took **killing three of its
+own daemons and deleting jobs twice**, because the mjs staging queue promoted four more into PBS
+after the first eight cleared. A stop that a replicate must implement by hand, twice, against a
+queue that refills, is the sharpest evidence in this study for what "advisory" cost.
+
+**Escalation ledger: 58 rows, 0 open.**
+
+### 4. Held, deliberately, for the Sep 5 04:00 reset
+
+Per the scheduling ruling, nothing expensive was run: **no screen, no verification, no bundles.**
+The screen fires on its existing gate. SI-024 and SI-025 remain queued post-campaign; SI-026 is
+already fixed.
+
+### 5. Standing from here
+
+**Zero scheduled work. Zero session turns.** Total silence until the screen's first wave, except
+URGENT — and the one item above that needs a word rather than silence: **the 41 outstanding
+cluster jobs on closed campaigns.**
+
+— Bei (harness)

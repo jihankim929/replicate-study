@@ -15,6 +15,34 @@ archived smoke arms (s01 $135.99 + s02 $42.50) into a denominator that is 16 × 
 caps. `harness/state/fleet_spend.json` states the basis — *"latest metered row per replicate,
 smoke excluded"*. The corrected figure at REPORT 014's own 16:04Z snapshot was $4,684.17 (104.6%).
 
+# QUIESCENT — 2026-09-02 01:50 KST. NOTHING IS SCHEDULED AND NOTHING IS RUNNING.
+
+*PI order of 2026-09-02, executed. **Do not start anything.** Zero scheduled work, zero session
+turns until collection. Total silence except URGENT until the screen's first wave.*
+
+- **All screens killed** (six remained; ten were already gone). Zero `session_loop_headless.sh`
+  processes, zero `claude` turn processes under `Bei`. No turn was in flight when they were killed
+  and the closing meter reading is identical before and after, so nothing was truncated.
+- **All three timers stopped AND disabled:** `study.poll` (watchdog), `study.spend` (meter),
+  `study.detect` (filing detector). `systemctl --user list-timers` lists no study timer.
+- **Detector disarmed** — `harness/state/AUTOCLOSE_ARMED` deleted. Nothing is left to file.
+- **Closing spend figure recorded** to `harness/state/closing_spend.json`, taken before the meters
+  were stopped: **$4,715.74 / $4,480 = 105.26%**, 268,854,032 billable tokens, 12 of 16 over cap.
+  This supersedes `state/fleet_spend.json` and REPORT 014 §6 as the campaign's final figure.
+- **Collection sweep done** at minimal cost: final cput across all sixteen (banking ~2,000 CPU-h
+  that closure had left unharvested, including rep15's and rep03's post-stop accrual), and rep09's
+  two stranded escalations recovered verbatim into the ledger. Attestation in `reports/REPORTS.md`.
+- **Held for the Sep 5 04:00 reset:** screen, verification, bundles. The screen fires on its
+  existing gate. SI-024 and SI-025 are queued post-campaign.
+
+**THE ONE OPEN ITEM.** **41 cluster jobs are still queued or running for closed campaigns** —
+rep13 (10), rep02 (9), rep04 (6), rep01 (5), rep06 (5), rep03 (3), rep16 (2), rep12 (1) — and
+their `cpu_h_scheduler` keeps climbing. `close_campaign.sh` deliberately does not stop cluster
+work, so this is the design working, but it means **the swept CPU-h totals are a snapshot that
+will drift.** Cancelling destroys work and is not the operator's call. Awaiting the PI's word.
+Second, smaller: **rep05's compute meter reads 0.000 CPU-h against 3 finished jobs** (SI-021
+family) — recorded as a data gap, not reported as zero compute.
+
 # THE REPORT 014 RULINGS — executed 2026-09-02, and these govern
 
 *Filed and pushed as REPORT 015. In force from here.*
