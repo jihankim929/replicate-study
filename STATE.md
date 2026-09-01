@@ -42,6 +42,46 @@ first thing a cold reader of this file should apply.**
 watchdog, the restart watcher, and the escalation queue. Those are the scripted protocol and they
 run. The order constrains discretionary work, not the instruments.
 
+## FINAL RULING OF THE 2026-09-01 SESSION — IN FORCE UNTIL THE PI RETURNS
+
+**This is the governing order. It supersedes the money-related status lines everywhere below it in
+this file, and a cold reader should apply it before acting on anything else here.**
+
+- **The six that remain run to their own caps or bells as chartered.** rep03, rep04, rep05, rep08,
+  rep09, rep15. No cap raised, no deadline moved, nothing cycled or closed on spend.
+- **The $4,480 is not a wall.** It is the sum of sixteen $280 caps and nothing reads it. **No
+  fleet-level stop exists** and none is to be built. Landing at or above it is a PI-acknowledged
+  consequence of the advisory-cap finding (REPORT 012 ruling 7).
+- **No further money questions will be entertained.** Do not raise runway, burn rate or fleet
+  spend with the PI. Meter it, ledger it, and report it at collection.
+- **The session is closed to further inquiries, questions and requests.** Execute on standing
+  orders and pre-rulings. **Hold only for answer-key matters.** Everything else waits.
+- **Deliver the next report at collection.** REPORT 013 is the last entry until then.
+
+### Standing authorities that remain live and must still be executed
+
+- **Closure is automatic on any committed §5 filing.** Run `harness/close_campaign.sh <rep>
+  "<reason>"` without a per-case word from the PI. Granted on REPORT 012 ruling 1.
+  **Recognising a filing stays a supervision judgement** made against the *workspace's committed
+  record*, never against the harness's own ledgers and never against a `REPORT.md` title —
+  thirteen of sixteen workspaces carry a file headed "FINAL REPORT" and the header is worth
+  nothing as evidence. `harness/find_filings.sh` reports candidates; it does not close anything.
+- **The §4/§5 notice goes to any replicate that crosses its cap.** Text is in
+  `harness/escalation_answers/2026-09-01/rep03.md`. There is **no mechanism** for this — ruling 6
+  forbids touching `act_on_stop()`, the only place a crossing is detected — so it is sent by hand
+  at the next look. **rep15 is next at ~91% of cap.**
+- **Under-cap replicates are not to be contacted** about spend. Ruling 4.
+- `act_on_stop()` **is not to be edited.** Ruling 6.
+
+### Superseded by this session, recorded so the lines below are not read as current
+
+- **`level: "stop"` has occurred.** The REPORT 011 note below saying the path has never run was
+  true when written and is now false: it fired 183 times across eight replicates from
+  2026-08-31 13:31 KST. The path still does not *stop* anyone — that part stands.
+- **Ten of sixteen campaigns are closed**, not one: rep17, rep06, rep11, rep16, rep01, rep07,
+  rep12, rep13, rep02, rep10. `harness/state/closed_replicates` is authoritative.
+- **The active roster is six.** Any line below implying sixteen live replicates is stale.
+
 ## The REPORT 010 ruling — 2026-08-31 12:4x KST, RATIFIED, executed as a no-op
 
 **REPORT 010 is accepted into the record as authoritative. §0(a) answered: caps stand.** No cap
