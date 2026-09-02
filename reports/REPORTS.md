@@ -6007,3 +6007,85 @@ Read-only apart from the authorised copies. Manifest now **19 rows, 0 hash misma
 both ends. Nothing written to `bnode0`. Reference-screen submission still waits for the Sep 5 reset.
 
 — Bei (harness)
+
+---
+
+## 2026-09-03T08:00:00Z (17:00:00 KST) — REPORT 039, reconciliation. **THE BEHAVIOUR RULE WAS RIGHT AND MY FILE INVENTORY IS WRONG.** Corrects REPORT 036 §4.
+
+> **In one line:** the two runs are **rep09 and rep12**, and the gap is **not** a difference between
+> stated and built — **both runs have their modified structure files on disk, 209 and 7, exactly as
+> their reports state.** `agent_modified_structures.csv` misses **216 files across those two runs**
+> through two filter defects of my own. **The correct count is 8 runs, not 6.** Neither file changed.
+
+### 1. The two runs, and the loci that triggered the rule
+
+**rep09**, §3:
+
+> *"**The modification arm** (§3 permits structural modification; charge balance holds by
+> construction because every substitution is monovalent-for-monovalent, substituent → H).
+> **209 products were built** from the 1,054 structures above N65 = 200 that carry a removable
+> terminal group; **208 completed at both pressures.** Defunctionalisation raises screening working
+> capacity by **+11.18 ± 11.31 cm³/cm³, 185 of 208 improving, best single gain +54.12**…"*
+
+**rep12**, §3:
+
+> *"**The modification route, tested and closed for these scaffolds.** Charter §3 permits structural
+> modification. **Seven** charge-balanced variants of the two best structures **were built**
+> (`bin/modify.py`: aromatic C–H → C–CH₃ and C–H → C–F, both charge-neutral by construction…)"*
+
+### 2. What the rule counts
+
+`d3` in `harness/behavioral_extract.py` matches **report text only** — a statement-level rule. It
+checks neither files nor measurements, so on its face it counts **stated** modification.
+
+**That distinction does not explain this gap.** Both statements assert building *and* measuring, and
+both are corroborated on disk:
+
+| run | reported | files found in the workspace |
+|---|---|---|
+| rep09 | *"209 products were built… 208 completed at both pressures"* | **`rep09/mods/` — exactly 209 `.cif`**, plus its own `manifests/mods.csv` describing them |
+| rep12 | *"**Seven** charge-balanced variants… were built"* | **`rep12/mods/` — exactly 7**: `2021_Cu__sql_2_ASR_6__{methyl25,methyl50,methyl100,fluoro100}` and three for `2016_Cu__pts_3_ASR_1` |
+
+### 3. Why the inventory missed them — two defects, both mine
+
+**rep09 — 209 files dropped.** They are named `m100080.cif`. My filter treated any
+`^[A-Za-z]{1,2}[0-9a-f]{4,9}\.cif$` as a *"sid-renamed staged copy"*. **rep09 uses `m`-prefixed ids
+for both staged copies and modified products, and my rule collapsed the two.** The separation is
+clean and was checkable: `mods/` spans **100080–112474**, while the staged ids in its run
+directories are `m00479`, `m04191`, `m06773` — **all below 100000**.
+
+**rep12 — 7 files dropped.** They are named `2016_Cu__pts_3_ASR_1__fluoro100.cif`. My underscore
+normaliser matched the stem, produced a valid manifest name, and discarded them as
+*"underscore-renamed staged copies"* — **the regex was unanchored and ignored the `__fluoro100`
+suffix entirely.**
+
+**Ninth defect of this class in the series**, and the same shape as all of them: a match true as
+written and false as meant. It is worth naming what is distinctive here — the previous eight were
+caught by reading my own hits; **this one was caught only because you set two independent counts
+side by side.** A cross-check against a differently-derived number found what re-reading the
+matcher's output did not.
+
+### 4. What the numbers should be
+
+| | filed | correct |
+|---|---:|---:|
+| runs that built modified structures | 6 | **8** |
+| files in `agent_modified_structures.csv` | 2,037 | **2,253** |
+
+**rep09's 209 makes it the fleet's second-largest modification arm by file count** — behind rep02's
+1,713, ahead of rep15's 251 — not an absentee. REPORT 036 §4's statement *"ten runs created none"*
+should read **eight**.
+
+### 5. Not changed
+
+**Neither `agent_modified_structures.csv` nor `behavioral_counts.csv` was touched**, as instructed.
+`behavioral_counts.csv` needs no change — its `d3 = y` for rep09 and rep12 is correct. The inventory
+does need a rebuild to 2,253 rows, and that is a separate authorisation, not something to take
+inside a read-only reconciliation.
+
+### 6. Standing
+
+Read-only throughout; nothing written to `bnode0`. Nothing scored. Reference-screen submission still
+waits for the Sep 5 reset.
+
+— Bei (harness)
