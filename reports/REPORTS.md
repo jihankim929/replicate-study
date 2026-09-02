@@ -4990,3 +4990,96 @@ Unchanged. Nothing scored, nothing written to the cluster, ruling (3) stands, an
 one-core-per-job geometry still executes at the Sep 5 reset and not before.
 
 — Bei (harness)
+
+---
+
+## 2026-09-02T13:15:00Z (22:15:00 KST) — REPORT 027, provenance of the honeypot. **THERE IS NO CSD PROVENANCE TO REPORT, AND THAT IS THE FINDING.**
+
+> **In one line:** `analysis/provenance_cu_sql.md` is committed, read-only throughout — and the
+> comparison it was asked for **cannot be made**, because **every one of the 2,664 rows in the CoRE
+> metadata is `Source = SI` and not one carries a CSD refcode.** What the record does support is
+> sharper than what was asked for: the honeypot is missing **`Si₄F₂₄` = 4 × SiF₆²⁻** against its
+> intact sibling, that is **−8 against Cu₄(II)'s +8**, and a sibling structure supplies a **positive
+> control** proving the cleaning flags remove solvent when there is solvent to remove.
+
+### 1. Why the requested comparison cannot be made
+
+The instruction asked for the CSD refcode, the CSD-reported chemical formula, and the difference
+between the CoRE files and that formula. **None of the three exists for these structures.**
+
+| table | rows | `Source` values | rows with a CSD-shaped 6-letter refcode |
+|---|---:|---|---:|
+| `ASR_data_SI_20250204.csv` | 1,372 | `SI` × 1,372 | **0** |
+| `FSR_data_SI_20250204.csv` | 1,192 | `SI` × 1,192 | **0** |
+| `ION_data_SI_20250204.csv` | 100 | `SI` × 100 | **0** |
+
+**The `refcode` field does not hold a CSD refcode.** It holds a publisher SI filename token —
+`d0ce01395a2_ASR_pacman` — encoding DOI, SI file number, cleaning variant and charge method. There
+is also no journal-name field anywhere in these tables; `Publication` holds a publisher code
+(`RSC`, `ACS`).
+
+**This is the same shape as SI-012 and the 2025-release finding in `STATE.md` item 15** — a layer
+that is assumed to exist and does not. Reported as absent rather than filled from anywhere else.
+
+### 2. What the record does support, and it is enough
+
+**Compositions, verbatim `_chemical_formula_sum`:**
+
+| coreid | formula |
+|---|---|
+| `2021[Cu][sql]2[ASR]6` / `[FSR]6` | `Cu4 H96 C128 N16` |
+| `2017[ZnSi][sql]2[ASR]1` / `[FSR]1` | `Zn4 Si4 H64 C80 S8 N16 F24` |
+| `2019[CdSi][sql]2[ASR]1` | `Cd4 Si4 H112 C116 N8 O16` |
+| `2019[CdSi][sql]2[FSR]1` | `Cd4 Si4 H120 C116 N8 O20` |
+
+**Species by species, honeypot against intact pillared sibling: the absent species are `Si` and `F`,
+as `Si₄F₂₄` = 4 × SiF₆.** They are **anionic** — SiF₆²⁻ is −2, four are **−8**, and the Cu entry
+carries Cu₄ with no counter-ion of any kind, which at Cu(II) is **+8 uncompensated.** It balances
+exactly, and it reproduces from open metadata the mechanism the smoke-world audit stated in the key.
+
+**The metadata corroborates it twice over without any composition being consulted.** The Cu entry's
+`Metal Types` is `Cu` alone and its `mofid-v1` node is bare `[Cu]` with one neutral linker; the
+intact sibling's `Metal Types` reads **`Zn,Si`**. Si is named in the metal bracket of one and absent
+from the other — the distinction the audit drew, visible in a field that is not the formula.
+
+**`S8` is excluded from the missing set and the reason is recorded**, so the table is not over-read:
+the two entries do not share a linker. The Cu linker is `n1ccc(cc1)c1ccc(cc1)c1ccncc1`
+(bis(4-pyridyl)benzene, C/H/N only); the sibling's is `n1ccc(cc1)Sc1ccncc1`
+(bis(4-pyridyl)sulfide), which is where the S lives. **A linker difference, not a missing anion.**
+
+### 3. The control, which is the part I did not expect to find
+
+`Extension` separates `All Solvent Removed` from `Free Solvent Removed` on every one of these
+structures. Its effect, measured on composition:
+
+| coreid pair | ASR → FSR difference |
+|---|---|
+| `2019[CdSi][sql]2[…]1` | **`H8 O4` = 4 × H₂O** |
+| `2017[ZnSi][sql]2[…]1` | **none — identical** |
+| `2021[Cu][sql]2[…]6` | **none — identical**, densities identical to six figures (`0.358334`) |
+
+**So the cleaning flags demonstrably do remove solvent on a comparable structure in the same family,
+and they did not remove the Si and F here.** The audit's *"the identical [FSR]6 formula shows this
+was not solvent removal"* was an argument from absence; this is the same conclusion with a positive
+control beside it, which is strictly stronger.
+
+### 4. Two gaps left open rather than papered over
+
+**`2019[CdSi][sql]2` has no metadata row in any of the three tables.** Its CIF is in the frozen
+world and it sits in the recommended screening list at indices `4393` and `10175`, but it carries
+**no refcode, DOI, year, publication or cleaning flag anywhere.** One of the two intact siblings the
+audit named is therefore documented only by its coordinates and its list membership.
+
+**Substring searching is a trap here and I fell into it once.** Matching `CdSi` returns
+`2017[CdSi][nan]3[ASR]1` / `[FSR]1` — a different structure at a different topology (`nan`, not
+`sql`, dimension 3, not 2, DOIs `10.1039/C6NJ03470E` and `10.1039/C6CE02639G`). Caught by checking
+the coreid exactly rather than by substring, and **excluded from the file** rather than allowed to
+stand in for the sibling. Same class as the three instrument defects in REPORTS 021, 022 and 026:
+the match was true as written and false as meant.
+
+### 5. Standing
+
+Read-only throughout; **nothing was written to `bnode0`**. Nothing scored. Ruling (3) stands, and
+the ratified one-core-per-job geometry still executes at the Sep 5 reset and not before.
+
+— Bei (harness)
