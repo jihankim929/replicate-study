@@ -5437,3 +5437,82 @@ Read-only throughout; nothing written to `bnode0`. Nothing scored. Ruling (3) st
 ratified one-core-per-job geometry still executes at the Sep 5 reset and not before.
 
 — Bei (harness)
+
+---
+
+## 2026-09-03T01:40:00Z (10:40:00 KST) — REPORT 032, the four rulings applied and the reconstruction delivered. **COMMIT `649a8d5`.**
+
+> **In one line:** all five items are done at **`649a8d5c16544f2b23020fc2e09ce8523ecfacb6`** —
+> rubric open item 1 closed, `strategy` filled and labelled investigator-supplied, the analyses
+> relabelled **screen-independent**, the end-reason standing figure recorded, and `fig2_jobs.csv`
+> reconstructed from **55,406 RASPA output files with zero headers unparseable and 18 rows (0.03 %)
+> genuinely unassociated** — after five different replicate-internal id schemes had to be found by
+> reading the paths that failed.
+
+### 1. Rubric open item 1 — closed, and the sealed artifact not touched
+
+The manuscript's timing ranges were taken from the REPORT 030 extraction, so the definitions are the
+README rules and there is nothing to reconcile. **Item 1 is closed on that basis.**
+
+**`prereg/rubric_v1.0.md` is deliberately not edited.** It is ratified and sealed, and this study
+records closures as new entries rather than edits — the same rule that made REPORT 022 a correction
+entry instead of a fix to REPORT 021. The closure lives in `analysis/README.md` and here. **The
+"first announcement matching a pattern" limitation stays in the README**, as instructed.
+
+### 2. `strategy` — filled, and labelled for what it is
+
+**D 10 · B 3 · S 2 · M 1.** Recorded in both the README and `harness/fig2_build.py` as
+**investigator-supplied and not derived from the record**: the taxonomy exists only in the
+manuscript, the per-run assignment came from you, and **nothing in this repository corroborates or
+contradicts it.** It must not be read as an extraction.
+
+### 3. Screen-independent, not key-independent
+
+Relabelled throughout. The property that holds is independence from the **reference screen** (Q6,
+still 50 of 25,598 runs) — no Figure-2 column depends on it. `structure_class` still depends on the
+sealed exclusion set, and the column stands.
+
+### 4. Standing figure recorded
+
+**12 spend cap · 4 filing · 0 deadline.** Not one replicate was stopped by the 168-hour deadline;
+three quarters were stopped by the $280 spend cap. In the README as a standing figure with
+`spend_fraction` carried per run.
+
+### 5. The reconstruction
+
+**55,406 output files, all parsed, 0 unparseable.**
+
+| | files |
+|---|---:|
+| resolved to a structure name | 43,953 |
+| resolved to a replicate-internal id, not to a name | 11,356 |
+| non-structure runs (test frames, benchmarks, bulk fluid) | 79 |
+| **genuinely unassociated** | **18 (0.03 %)** |
+
+Tiers **55,168 low / 238 high** under the stated rule (`high` iff init ≥ 10,000 **and** production ≥
+50,000). Classes 43,667 `retained`, **286 `excluded`**, 11,453 empty.
+
+**Five replicate-internal id schemes, each found by reading the failures.** The first pass resolved
+9 % of rows. rep03 and rep08 name directories `s08559`, rep04 uppercase `S10985`, rep09 `m02778`,
+rep05 hex-like `f141371e1` — the same class of blind spot that hid rep04's leaderboard in REPORT
+026, now hit five times in one file. Generalising took unassociation from **91 % to 0.03 %.**
+
+**Internal ids are recorded as given and not resolved to structure names.** Only rep04 states a
+mapping, for one id; borrowing rep08's table would be cross-replicate inference. **And every
+unresolved id carries an EMPTY `structure_class`** — a first draft classed 9,768 of them as
+`retained`, which is a claim against the sealed exclusion set that an unresolved identifier cannot
+support. Caught before filing; that is the eighth defect of this shape in the series.
+
+**The coverage caveat, which matters more than the totals.** The per-run table counts **surviving
+output files, not everything each run simulated.** Several runs delete scratch output after
+harvesting, so a low count is evidence about disk today and not about work done: **rep02 leaves 51
+distinct structures against a report describing thousands, and rep16 leaves none at all** — only
+benchmarks. Where a run's report states a measurement count, that count is the record and this table
+is not a correction to it.
+
+### 6. Standing
+
+Read-only throughout; nothing written to `bnode0`. Nothing scored. Ruling (3) stands, and the
+ratified one-core-per-job geometry still executes at the Sep 5 reset and not before.
+
+— Bei (harness)
