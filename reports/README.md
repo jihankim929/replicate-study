@@ -526,3 +526,95 @@ per-row values from them.
 Six of the six runs state a matched control at the *experiment* level — `modifications.csv`,
 `matched_control` — but **that is a claim about the design, not per-file evidence**, and this
 inventory does not upgrade one into the other.
+
+---
+
+# `fig3/` — structure files for Figure 3
+
+**UNATTESTED**: post-seal read-only copies from the workspaces on `bnode0`, 2026-09-03.
+`fig3/MANIFEST.csv` lists source path, bytes, `n_atoms` and SHA-256 for each; **sha256 was taken
+remotely before transfer and recomputed locally after — 14 of 14 match, 0 mismatches.** Line 1 of
+the manifest is a `#` header.
+
+**14 files, 7 parent/child pairs:** rep02's four ranked `__1of2` candidates with their four `db/`
+parents, and rep06's three retained `_DENET` children with their three `db/` parents.
+`2021[Cu][sql]2[ASR]6_DENET` is **not** included — its parent is the excluded structure, and the
+request was for the three retained pairs.
+
+**Every child has exactly half its parent's atoms — all seven pairs, ratio 0.500:**
+
+| parent | parent atoms | child atoms |
+|---|---:|---:|
+| `2012[In][dia]3[ASR]4` | 212 | 106 |
+| `2014[Zn][hms]3[ASR]1` | 130 | **65** |
+| `2016[InCo][pts]3[ASR]1` | 344 | 172 |
+| `2021[Mn][dia]3[FSR]1` | 380 | 190 |
+| `0000[Er][lcy]3[ASR]1` | 936 | 468 |
+| `0000[Lu][lcy]3[ASR]1` | 936 | 468 |
+| `2010[Zn][rtl]3[ASR]1` | 1000 | 500 |
+
+This is a mechanical count of `_atom_site` rows, and it corroborates rep02's own words for the one
+case it describes — *"deleting one of its two identical nets — **exactly half the atoms**"*.
+*(rep02's children label atoms `Zn_`, `H_` with a trailing underscore; a naive element-symbol match
+counts zero atoms in them.)*
+
+## rep02 — parent capacities for the four candidates
+
+**Three of the four have no parent deliverable capacity anywhere in rep02's `REPORT.md`.** The
+parent names occur only as the stem of the child's filename; there is no measured row for
+`2012[In][dia]3[ASR]4`, `2021[Mn][dia]3[FSR]1` or `2016[InCo][pts]3[ASR]1` as structures in their
+own right.
+
+**One does.** rep02 §3, verbatim:
+
+> *"One instance carried to claim grade: `2014[Zn][hms]3[ASR]1` measures **75.4** *(screening)*, and
+> deleting one of its two identical nets — exactly half the atoms, vf₀ 0.591 → 0.795, density 0.861
+> → 0.431 g/cm³ — gives **203.66 ± 0.23, a gain of 128 cm³/cm³ in one step**."*
+
+**The parent value is 75.4 at screening grade — below the §3 floor** — while the child's 203.66 ±
+0.23 is claim grade. **The pair is not measured at a common setting**, and rep02 labels the parent
+number `(screening)` itself.
+
+The only other parent-side statement is an aggregate, rep02 §1: *"interpenetration removal raises
+individual materials by a mean of **+87.1** cm³/cm³ over 250 paired parents"* — with §3 adding
+*"mean +87.1 cm³/cm³, median +90.5, and the analogue ahead in 241 of 250."*
+
+## rep15 — the 42-pair water-removal result
+
+rep15 §1, item 4, verbatim:
+
+> *"**Structural modification does not reach it, and I tested this rather than asserted it.** The §3
+> terminal-aqua removal is real and it works — on **42 paired parent/child measurements** it gains a
+> mean **+18.6** and a maximum **+74.8** cm³/cm³, and **41 of 42 children beat their parent**. But it
+> is inapplicable where it would matter: of the **top 400** structures on the measured leaderboard,
+> **399 carry no removable terminal aqua at all**."*
+
+**Mean +18.6, maximum +74.8, 41 of 42 improving. No minimum or standard deviation is given.**
+
+## rep10 — the methylation outcome
+
+rep10 §3, *"Structural modification (charter section 3 arm)"*, verbatim:
+
+> *"Methylation of framework C-H, charge-balanced by construction and reproducible from (parent,
+> fraction, seed) via `bin/methylate.py`. **Across 20 variants of the six best frameworks at
+> substitution fractions 0.25–1.0, every variant screened below its parent and monotonically worse
+> with more methylation.**"*
+
+**No per-variant values are given** — the statement is directional.
+
+## rep06 — the pair table as filed
+
+rep06 `REPORT.md` line 118, headed *"G5 modification arm — de-interpenetration against matched
+pristine controls"*:
+
+| pristine | WC pristine | de-interpenetrated | WC DENET | change |
+|---|---:|---|---:|---:|
+| `0000[Er][lcy]3[ASR]1` | 165.24 | `0000[Er][lcy]3[ASR]1_DENET` | 165.75 | **+0.51** |
+| `0000[Lu][lcy]3[ASR]1` | 165.77 | `0000[Lu][lcy]3[ASR]1_DENET` | 175.41 | **+9.64** |
+| `2010[Zn][rtl]3[ASR]1` | 177.35 | `2010[Zn][rtl]3[ASR]1_DENET` | 153.57 | **−23.79** |
+| `2021[Cu][sql]2[ASR]6` | 207.26 | `2021[Cu][sql]2[ASR]6_DENET` | 132.04 | **−75.22** |
+
+**Setting: the table does not state one.** Determined from rep06's own outputs, all ten DENET runs
+(five structure/pressure pairs × two pressures) are at **2,000 + 10,000 — the §3 floor**, and the
+pristine controls are described in the heading as *matched*. rep06's conclusion, verbatim: *"No
+de-interpenetrated structure gains materially (>10 cm³STP/cm³) over its pristine control."*
