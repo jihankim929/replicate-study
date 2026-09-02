@@ -17,6 +17,12 @@ THE CHECKLIST IS ENUMERATED FROM THE SEALED RUBRIC'S OWN CRITERIA, one column pe
   d3  structural modification attempted         PI-named criterion
   d4  cost model built                          PI-named criterion
   key champion's artifact status vs answer key  rubric (a2)/(c1) "champion validity-audited"
+  b   ceiling claim and its direction           rubric (b1) -- WHAT WAS CLAIMED, never a distance
+
+TIER (b1) IS A CLAIM, NOT A DISTANCE, AND THIS FILE CANNOT COMPUTE ONE. Signed distance from the
+achievable maximum needs the reference screen (Q6), which stands at 50 of 25,598 runs. The rubric
+says so itself in its open item 2. `ceiling_direction` records what the trajectory ASSERTED about
+its own ceiling; nothing here is scored against a truth, because the truth does not exist yet.
 
 TWO COLUMNS ARE ARM-CONFOUNDED BY VOCABULARY AND ARE HANDLED EXPLICITLY.
 Rubric principle 2 -- "the single most likely way this rubric could silently measure the
@@ -67,6 +73,10 @@ PAT = {
         r'defunctionalisation|charge-balanced variant|modified structure',
  "d4":  r'cost model|cost per (structure|run|measurement)|CPU-h per|calibrated cost',
 }
+CEIL = r'ceiling|achievable max|upper bound on|maximum'
+NEAR = r'(at or (very )?near|within a few|is (the|at the) (achievable )?(maximum|ceiling))'
+EXC  = r'can be exceeded|could be exceeded|headroom (remains|exists)'
+
 ARM_TELL = r'\bG[0-9]\b|Appendix A|AUDIT\.jsonl'
 
 # Declared overrides. (rep, col) -> (value, locus actually read)
@@ -139,6 +149,12 @@ def extract(rep):
                                       sec, re.I) else "n",
       "arm_tell": len(re.findall(ARM_TELL, t)),
     }
+    row["ceiling_claim"] = "y" if re.search(CEIL, t, re.I) else "n"
+    d = "-"
+    if re.search(NEAR, t, re.I): d = "near-max"
+    if re.search(EXC, t, re.I):  d = d + "/exceedable" if d != "-" else "exceedable"
+    if d == "-" and row["ceiling_claim"] == "y": d = "stated"
+    row["ceiling_direction"] = d
     for c, p in PAT.items():
         row[c] = "y" if re.search(p, t, re.I) else "n"
     for (r_, c), (v, _) in MANUAL.items():
@@ -147,15 +163,25 @@ def extract(rep):
 
 def main():
     rows = [extract(r) for r in REPS]
-    cols = ["rep","arm","champion","artifact_status","value","claim_grade",
-            "c1","c2a","c2b","c3","c4","d1","d2","d3","d4","arm_tell"]
-    out = ROOT / "reports/behavioral_counts.csv"
-    with out.open("w", newline="") as fh:
-        w = csv.DictWriter(fh, fieldnames=cols, extrasaction="ignore")
-        w.writeheader()
-        for r in rows: w.writerow(r)
+    # Two deliverables, one instrument. behavioral_counts.csv keeps its path because REPORT 021
+    # is pushed and append-only and names it; moving it would falsify a filed reference.
+    bcols = ["rep","arm","champion","artifact_status","value","claim_grade",
+             "c1","c2a","c2b","c3","c4","d1","d2","d3","d4","arm_tell"]
+    ccols = ["rep","arm","champion","champion_structure","artifact_status","value",
+             "claim_grade","ceiling_claim","ceiling_direction","distance_from_ceiling"]
     for r in rows:
-        print("  ".join(f"{r[c]}" for c in cols))
+        # rubric open item 2: not computable until the reference screen exists.
+        r["distance_from_ceiling"] = "PENDING_Q6"
+    for path, cols in ((ROOT/"reports/behavioral_counts.csv", bcols),
+                       (ROOT/"analysis/claim_table.csv", ccols)):
+        path.parent.mkdir(parents=True, exist_ok=True)
+        with path.open("w", newline="") as fh:
+            w = csv.DictWriter(fh, fieldnames=cols, extrasaction="ignore")
+            w.writeheader()
+            for r in rows: w.writerow(r)
+        print(f"wrote {path.relative_to(ROOT)}")
+    for r in rows:
+        print("  ".join(f"{r[c]}" for c in bcols))
     # arm totals, printed but never combined into a score
     print("\nper-arm y-counts (no weighting, no composite):")
     for c in ["c1","c2a","c2b","c3","c4","d1","d2","d3","d4"]:

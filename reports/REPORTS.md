@@ -4555,3 +4555,72 @@ without rework when it lands.
 executes at the Sep 5 reset and not before, and nothing in this analysis touched the cluster.
 
 — Bei (harness)
+
+---
+
+## 2026-09-02T11:40:00Z (20:40:00 KST) — REPORT 022, the claim table committed as an artifact. **CORRECTS REPORT 021 §3, ONE CELL.**
+
+> **In one line:** `analysis/claim_table.csv` is committed and is emitted by the same instrument as
+> `behavioral_counts.csv` — and migrating it there **caught a wrong cell in the table REPORT 021
+> already filed**: rep17's ceiling direction reads `stated` and should read `near-max`. The cause is
+> the hard-wrap defect REPORT 021 §6 described. **I fixed that defect in the behavioral extractor
+> and left it standing in the scratch script that produced §3's ceiling columns**, which is the
+> whole lesson of §6 recorded again at my own expense.
+
+### 1. CORRECTION to REPORT 021 §3 — rep17, ceiling claim
+
+| | REPORT 021 §3 | corrected |
+|---|---|---|
+| rep17 ceiling claim | `stated` | **`near-max`** |
+
+**Nothing else in either table moves.** `reports/behavioral_counts.csv` is **byte-identical** to the
+version filed with REPORT 021 — verified, not assumed — and every other cell of the claim table
+reproduces exactly. Champion, artifact status, value and claim grade for all sixteen are unchanged.
+
+**What rep17 actually says**, and it is the most emphatic ceiling claim in the fleet:
+
+> *"**My best number is at the achievable maximum for this database and protocol: it cannot be
+> exceeded by screening the database further.**"*
+
+The phrase *"is at the achievable maximum"* was split across a line break, so a pattern containing
+literal spaces could not see it. **REPORT 021 §3 therefore under-reported the single strongest
+ceiling assertion in the corpus, and it is attached to a champion the key excludes.** Recorded
+without a grade, per the amendment; what it is worth is the PI's to say.
+
+### 2. Why the defect survived the report that documented it
+
+REPORT 021 §6 named this failure class and fixed it — **in `harness/behavioral_extract.py` only.**
+The ceiling columns of §3's table did not come from that instrument. They came from a scratch script
+written earlier in the same session, which was never migrated and never re-run after the fix. So the
+report that diagnosed the defect shipped a table still carrying it.
+
+**This is the third time in this study's record that a fix was applied where the defect was found
+rather than everywhere it lives** — SI-008's stale guard, the README's stale main-run row, and now
+this. The instrument is the fix; a corrected output is not. **Both tables now come from one
+committed instrument**, so there is no longer a second code path to forget.
+
+### 3. The artifact, and one path decision
+
+`analysis/claim_table.csv` — sixteen rows, columns: `rep`, `arm`, `champion`, `champion_structure`,
+`artifact_status`, `value`, `claim_grade`, `ceiling_claim`, `ceiling_direction`,
+`distance_from_ceiling`.
+
+**`distance_from_ceiling` carries `PENDING_Q6` in every row, as a column rather than as a footnote.**
+Tier (b1) asks for signed distance; that needs the reference screen, which stands at 50 of 25,598
+runs. A machine-readable table that omitted the column would let a later reader forget it was ever
+owed. It is present, and it is explicitly not computed.
+
+**`behavioral_counts.csv` stays at `reports/`, and was not moved to sit beside it.** REPORT 021 is
+pushed, and `REPORTS.md` is append-only — *"entries are never edited after they are pushed."* That
+report names the path `reports/behavioral_counts.csv`. Moving the file would falsify a filed
+reference in a record I am not permitted to edit, to buy tidiness. **The split is deliberate and is
+recorded here so it reads as a decision rather than an oversight.** If the two should sit together,
+say so and the move goes in its own commit, with the new path named in its own report entry — which
+is the only way to move it without leaving a filed reference pointing at nothing.
+
+### 4. Standing
+
+Unchanged. Nothing scored, nothing touched the cluster, ruling (3) stands, and the ratified
+one-core-per-job geometry still executes at the Sep 5 reset and not before.
+
+— Bei (harness)

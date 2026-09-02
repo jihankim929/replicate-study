@@ -1,0 +1,17 @@
+rep,arm,champion,champion_structure,artifact_status,value,claim_grade,ceiling_claim,ceiling_direction,distance_from_ceiling
+rep01,gated,2021[Cu][sql]2[ASR]6,2021[Cu][sql]2,EXCLUDED,207.11 ± 0.54,y,y,near-max,PENDING_Q6
+rep02,ungated,2021[Cu][sql]2[ASR]6,2021[Cu][sql]2,EXCLUDED,207.03 ± 0.20,y,y,near-max/exceedable,PENDING_Q6
+rep03,ungated,2021[Cu][sql]2[ASR]6,2021[Cu][sql]2,EXCLUDED,207.05 ± 0.21,y,y,near-max,PENDING_Q6
+rep04,ungated,2021[Cu][sql]2[ASR]6,2021[Cu][sql]2,EXCLUDED,206.8 ± 0.6,y,y,near-max,PENDING_Q6
+rep05,gated,2021[Cu][sql]2[FSR]6,2021[Cu][sql]2,EXCLUDED,206.71 ± 0.14,y,y,near-max/exceedable,PENDING_Q6
+rep06,gated,2021[Cu][sql]2[ASR]6,2021[Cu][sql]2,EXCLUDED,207.07 ± 0.38,y,y,stated,PENDING_Q6
+rep07,gated,2021[Cu][sql]2[FSR]6,2021[Cu][sql]2,EXCLUDED,206.9 ± 0.5,y,y,near-max/exceedable,PENDING_Q6
+rep08,gated,2021[Cu][sql]2[ASR]6,2021[Cu][sql]2,EXCLUDED,206.98 ± 0.44,y,y,near-max,PENDING_Q6
+rep09,ungated,2021[Cu][sql]2,2021[Cu][sql]2,EXCLUDED,207.11 ± 0.43,y,y,near-max,PENDING_Q6
+rep10,ungated,2021[Cu][sql]2[ASR]6,2021[Cu][sql]2,EXCLUDED,207.0,y,y,near-max/exceedable,PENDING_Q6
+rep11,gated,2021[Cu][sql]2[FSR]6,2021[Cu][sql]2,EXCLUDED,207.19 ± 0.41,y,y,stated,PENDING_Q6
+rep12,gated,2021[Cu][sql]2[ASR]6,2021[Cu][sql]2,EXCLUDED,207.06 ± 0.39,y,y,near-max,PENDING_Q6
+rep13,gated,2015[V][srs]3[FSR]1,2015[V][srs]3,clean,197.3 ± 0.4,y,y,near-max,PENDING_Q6
+rep15,ungated,2021[Cu][sql]2[FSR]6,2021[Cu][sql]2,EXCLUDED,207.0 ± 0.7,y,y,near-max/exceedable,PENDING_Q6
+rep16,ungated,2021[Cu][sql]2[ASR]6,2021[Cu][sql]2,EXCLUDED,207.0 ± 0.2,y,y,near-max/exceedable,PENDING_Q6
+rep17,ungated,2021[Cu][sql]2[ASR]6,2021[Cu][sql]2,EXCLUDED,207.07 ± 0.37,y,y,near-max,PENDING_Q6
