@@ -5516,3 +5516,67 @@ Read-only throughout; nothing written to `bnode0`. Nothing scored. Ruling (3) st
 ratified one-core-per-job geometry still executes at the Sep 5 reset and not before.
 
 — Bei (harness)
+
+---
+
+## 2026-09-03T02:20:00Z (11:20:00 KST) — REPORT 033, coverage and delivery. **ONLY THREE RUNS CLEAR 0.9.** Commit `5ae0cb5`.
+
+> **In one line:** at **`5ae0cb57deda5b43ed0cb8f6b19368b37a305f31`** the coverage comparison is
+> filed and the four files are copied into `reports/` byte-identical — and the result is narrower
+> than the plan assumes: **three runs reach ratio ≥ 0.9 (rep06, rep08, rep10)**, eight fall below,
+> **four have no computable ratio because their own reports state no single total**, and rep17
+> exceeds 1.5.
+
+### 1. Coverage
+
+Each run's **own stated count** from its `REPORT.md`, with the verbatim locus, against the distinct
+structures surviving in `fig2_jobs.csv`. Machine-readable at `analysis/coverage_fig2.csv`.
+
+| result | runs |
+|---|---|
+| **≥ 0.9** | **rep06 (1.064), rep08 (1.066), rep10 (0.919)** |
+| below 0.9 | rep01 0.300, rep03 0.047, rep05 0.003, rep07 0.003, rep09 0.002, rep12 0.002, rep13 0.169, **rep16 0.000** |
+| no ratio computable | rep02, rep04, rep11, rep15 |
+| above 1.5 | **rep17 (1.840)** |
+
+**rep16 is 0.000** — its 53 surviving outputs are all benchmarks and test frames, with no database
+structure among them.
+
+**The four with no ratio are the ones to look at first.** Their reports state no single
+distinct-structure total, so there is no denominator. rep15's omission is explicit and deliberate —
+*"The screening and floor-grade counts are not written out here on purpose. Both are still rising as
+the fleet runs."* rep02 and rep04 give per-arm and per-band figures only; rep11's §2 is protocol
+verification. **And rep11 and rep15 carry the two largest reconstructions in the fleet — 12,465 and
+9,771 distinct structures.** They are excluded from the threshold only for want of a stated count,
+not for want of data, and they are the runs most likely to clear it.
+
+**rep17 at 1.840** finds 2,094 distinct structures against a stated 1,138 *"measured by GCMC"*.
+**That is not evidence against the report:** the stated figure counts GCMC measurements while
+surviving outputs also include the run's Tier-A screening. **Flagged rather than reconciled** —
+reconciling needs a rule about which outputs the reported figure was counting, and that rule is the
+run's, not mine.
+
+**Consequence, stated plainly:** restricted to ratio ≥ 0.9, the supplementary time-resolved figure
+rests on **three runs**, or four if rep17 is admitted on its own terms. That is a narrower base than
+the plan implies, and the four no-denominator runs are worth resolving first.
+
+### 2. Standing definition recorded
+
+**A calculation is `high` accuracy iff `init ≥ 10,000` AND `production ≥ 50,000`; everything else is
+`low`.** In the README as a standing definition. The intermediate counts runs actually used —
+200+500, 250+1,000, 500+2,000, 500+2,500, 2,000+10,000, 3,000 — **all fall to `low`.**
+
+### 3. Delivery
+
+`fig2_events.csv`, `fig2_claims_long.csv`, `fig2_jobs.csv` and `README.md` copied into `reports/`.
+**All four verified byte-identical to their `analysis/` originals** — `cmp` on each, no content
+change. `fig2_jobs.csv` is 10.9 MB; its line 1 is still the `#` UNATTESTED header and must be
+skipped. `reports/README.md` renders as the directory landing page on GitHub, which is where the
+retrieval instructions and the coverage table now sit.
+
+### 4. Standing
+
+Read-only throughout; nothing written to `bnode0`. Nothing scored. Ruling (3) stands, and the
+ratified one-core-per-job geometry still executes at the Sep 5 reset and not before.
+
+— Bei (harness)
