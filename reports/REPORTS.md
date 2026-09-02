@@ -5837,3 +5837,93 @@ Read-only throughout; nothing written to `bnode0`. Nothing scored. Reference-scr
 waits for the Sep 5 reset; analysis and reporting continue.
 
 — Bei (harness)
+
+---
+
+## 2026-09-03T06:00:00Z (15:00:00 KST) — REPORT 037, Figure 3 files and loci. **EVERY CHILD IS EXACTLY HALF ITS PARENT.** Commit `3eaae8b`.
+
+> **In one line:** at **`3eaae8b10df91fe46348b82523cbb06a34f242a7`** — 14 files copied with hashes
+> verified at both ends, **all seven parent/child pairs at exactly 0.500 atom ratio**; **three of
+> rep02's four candidates have no parent capacity in its report at all**, and the fourth's parent is
+> at **screening grade against a claim-grade child**, so that pair is not measured at a common
+> setting.
+
+### 1. `analysis/fig3/` — 14 files, 7 pairs
+
+sha256 taken remotely **before** transfer and recomputed locally **after**: **14 of 14 match, 0
+mismatches.** `fig3/MANIFEST.csv` carries source path, bytes, `n_atoms` and hash per file.
+
+`2021[Cu][sql]2[ASR]6_DENET` is **excluded** — you asked for the three *retained* pairs and its
+parent is the excluded structure.
+
+**Every child has exactly half its parent's atoms:**
+
+| parent | parent | child |
+|---|---:|---:|
+| `2012[In][dia]3[ASR]4` | 212 | 106 |
+| `2014[Zn][hms]3[ASR]1` | 130 | **65** |
+| `2016[InCo][pts]3[ASR]1` | 344 | 172 |
+| `2021[Mn][dia]3[FSR]1` | 380 | 190 |
+| `0000[Er][lcy]3[ASR]1` | 936 | 468 |
+| `0000[Lu][lcy]3[ASR]1` | 936 | 468 |
+| `2010[Zn][rtl]3[ASR]1` | 1000 | 500 |
+
+A mechanical `_atom_site` count, and it corroborates rep02's own *"exactly half the atoms"* for the
+one case it describes. *(rep02 labels atoms `Zn_`, `H_` with a trailing underscore — a naive
+element match counts zero.)*
+
+### 2. rep02's parent capacities — **three of four do not exist**
+
+`2012[In][dia]3[ASR]4`, `2021[Mn][dia]3[FSR]1` and `2016[InCo][pts]3[ASR]1` appear in rep02's
+`REPORT.md` **only as the stem of the child's filename.** No measured row exists for them as
+structures.
+
+**`2014[Zn][hms]3[ASR]1` does**, rep02 §3, verbatim:
+
+> *"One instance carried to claim grade: `2014[Zn][hms]3[ASR]1` measures **75.4** *(screening)*, and
+> deleting one of its two identical nets — exactly half the atoms, vf₀ 0.591 → 0.795, density 0.861
+> → 0.431 g/cm³ — gives **203.66 ± 0.23, a gain of 128 cm³/cm³ in one step**."*
+
+**Parent 75.4 at screening; child 203.66 ± 0.23 at claim grade.** The 128 cm³/cm³ gain is measured
+**across two different fidelities**, and rep02 marks the parent `(screening)` itself. Worth carrying
+into the caption if that gain is plotted.
+
+Only other parent-side figure is the aggregate: *"a mean of +87.1 cm³/cm³ over 250 paired parents"*,
+with §3 adding *"median +90.5, and the analogue ahead in 241 of 250."*
+
+### 3. rep15 — 42 pairs, verbatim (§1 item 4)
+
+> *"The §3 terminal-aqua removal is real and it works — on **42 paired parent/child measurements** it
+> gains a mean **+18.6** and a maximum **+74.8** cm³/cm³, and **41 of 42 children beat their
+> parent**. But it is inapplicable where it would matter: of the **top 400** structures on the
+> measured leaderboard, **399 carry no removable terminal aqua at all**."*
+
+**No minimum and no standard deviation are given.**
+
+### 4. rep10 — methylation, verbatim (§3)
+
+> *"**Across 20 variants of the six best frameworks at substitution fractions 0.25–1.0, every variant
+> screened below its parent and monotonically worse with more methylation.**"*
+
+**No per-variant values** — the statement is directional.
+
+### 5. rep06's pair table, as filed (line 118)
+
+| pristine | WC pristine | de-interpenetrated | WC DENET | change |
+|---|---:|---|---:|---:|
+| `0000[Er][lcy]3[ASR]1` | 165.24 | `…_DENET` | 165.75 | **+0.51** |
+| `0000[Lu][lcy]3[ASR]1` | 165.77 | `…_DENET` | 175.41 | **+9.64** |
+| `2010[Zn][rtl]3[ASR]1` | 177.35 | `…_DENET` | 153.57 | **−23.79** |
+| `2021[Cu][sql]2[ASR]6` | 207.26 | `…_DENET` | 132.04 | **−75.22** |
+
+**The table states no setting.** From rep06's own outputs, all ten DENET runs are at **2,000 +
+10,000 — the §3 floor** — and the heading calls the controls *matched*. **This is the one
+modification arm in the fleet where parent and child are measured at the same setting**, which is
+what makes its four changes directly comparable and rep02's 128 not.
+
+### 6. Standing
+
+Read-only apart from the authorised copies into `analysis/fig3/`. Nothing written to `bnode0`.
+Nothing scored. Reference-screen submission still waits for the Sep 5 reset.
+
+— Bei (harness)
