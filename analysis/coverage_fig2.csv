@@ -1,0 +1,17 @@
+run,stated_distinct_structures,stated_high_accuracy,reconstruction_distinct,ratio,threshold_flag,verbatim_locus
+rep01,360,3,108,0.300,BELOW 0.9,"""360 structures measured of 7,766 eligible (4.6%)""; ""three finalists promoted to §3 Claim grade"""
+rep02,,,54,,,No single total stated. §2 gives per-arm figures only (T1 uniform sample 597; 429 measured in the analogue band; 0 of the 145 analogues measured).
+rep03,106,,5,0.047,BELOW 0.9,"""Refitted on all 106 structures now measured (the 38 of the original fit plus 64 from 06_vfneg and the screen)"""
+rep04,,,30,,,"No single total stated. §4 gives band figures only (""445 of 669 structures in the candidate band remain unmeasured"")."
+rep05,1190,8,3,0.003,BELOW 0.9,"""structures screened at >= floor fidelity | 1,376 files / ~1,190 distinct""; ""Eight structures"" at claim fidelity"
+rep06,233,10,248,1.064,OK,"""structures screened at floor fidelity (2,000+10,000) | 233""; ""structures at claim fidelity (10,000+50,000) | 10"""
+rep07,989,,3,0.003,BELOW 0.9,"""distinct geometries measured at both pressures | 989 (10.82% of 9143)""; ""GCMC runs executed (structure x pressure) | 2143, of which 2132 completed"""
+rep08,5006,6,5334,1.066,OK,"""structures measured by GCMC | 5,006 (40% of the database)""; ""- at claim grade (10,000+50,000) | 6"""
+rep09,3303,,6,0.002,BELOW 0.9,"""3,303 structures including modification products have a measured working capacity"""
+rep10,431,9,396,0.919,OK,"""screening 500+2,500 | 390"", ""charter floor 2,000+10,000 | 32"", ""claim-grade 10,000+50,000 | 9 structures, 26 runs"" (390+32+9)"
+rep11,,,12465,,,"No single total stated. §2 is protocol verification; §4 gives ""the 187 structures with both a screened N(65) and a measured floor-grade working capacity""."
+rep12,1132,,2,0.002,BELOW 0.9,"""structure pairs completed | 1,132 - 1,132 OK, 0 failed""; ""structures screened | 1,075 of 9,161 (11.7%)"""
+rep13,255,,43,0.169,BELOW 0.9,"""Completed GCMC pairs | 289""; ""- distinct structures with a pair | 255"""
+rep15,,,9771,,,"DELIBERATELY NOT STATED: ""The screening and floor-grade counts are not written out here on purpose. Both are still rising as the fleet runs"" - §2's stage table gives the count as a pointer to §6, not a number."
+rep16,1532,15,0,0.000,BELOW 0.9,"""250+1000 | 1026"", ""500+2000 | 420"", ""2000+10000 | 71"", ""10000+50000 | 15"" (summed; grades may overlap)"
+rep17,1138,,2094,1.840,ABOVE 1.5 - see note,"""1,138 distinct structures measured by GCMC (12.4% of the 9,124 distinct structures in the database); 76 at the §3 floor"""
