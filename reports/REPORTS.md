@@ -5927,3 +5927,83 @@ Read-only apart from the authorised copies into `analysis/fig3/`. Nothing writte
 Nothing scored. Reference-screen submission still waits for the Sep 5 reset.
 
 — Bei (harness)
+
+---
+
+## 2026-09-03T07:00:00Z (16:00:00 KST) — REPORT 038, Figure 3 second batch. **414 MODIFIED RUNS ARE FILED UNDER THEIR PARENTS' IDS.** Commit `a86ed8e`.
+
+> **In one line:** at **`a86ed8e13c843c8bf8bce6e55bfe1b7cb033d507`** — rep15's +74.8 pair is
+> identified (`2011[FeHo][nan]3[FSR]1`, 23.32 → 98.13), rep10 **does** record an f25 value but only
+> outside its report and **f100 was never simulated**, and `fig2_jobs.csv` files **414 rep15 DEAQ
+> runs and 8 rep10 variant runs under their pristine parents' identifiers**.
+
+### 1. rep15's +74.8 pair — named from its own table
+
+**`REPORT.md` does not name it**, giving only *"the best case is 23.3 → 98.1"* and *"max +74.8"*.
+**`rep15/data/s1/results.csv` does:**
+
+| | |
+|---|---|
+| parent `2011[FeHo][nan]3[FSR]1` | **23.32** |
+| child `2011[FeHo][nan]3[FSR]1+DEAQ` | **98.13** |
+| gain | **+74.82** |
+
+Matches the stated best case and maximum exactly. Both legs at **200 + 1,000 — below the §3 floor**.
+
+**One figure does not reproduce, and I am not smoothing it.** Over *all* **158** `+DEAQ` pairs with
+both legs in `s1`: mean **+14.65**, median **+10.19**, **134 of 158** improving. rep15 reports *"42
+paired… mean +18.6, median +13.7, max +74.8, 41 of 42"*. **Max and best case match; mean, median and
+count do not** — rep15's 42 is a subset selected by its own `bin/mod_gain.py`. **The 42-pair figures
+are the report's and remain the record.**
+
+**Atom count corroborates:** 226 → 190, **−36 = 12 × H₂O**, and rep15's `mods.csv` independently
+records `n_h2o_removed = 12`, `parent_natoms 226`, `natoms 190`.
+
+### 2. rep10 — a value exists, outside the report; f100 does not exist at all
+
+**`REPORT.md` records no per-variant value.** **`rep10/data/wc.csv` does:**
+
+| row | init+prod | seed | wc | err |
+|---|---|---|---:|---:|
+| `MOD:M2013_Yb__nia_3_ASR_1_f25` | 500+2500 | 1 | **187.0779** | 2.0871 |
+| `2013[Yb][nia]3[ASR]1` parent | 500+2500 | 1 | **198.3266** | 3.1718 |
+
+**Same setting, seed and mode — a genuinely matched pair**, child **11.25 below** parent, consistent
+with rep10's directional claim. Both below the §3 floor.
+
+**`f100` has no value anywhere.** `wc.csv` holds **4 `MOD:` rows in total, all `f25`**. The f100 file
+was **built and never simulated** — copied into `fig3/` as requested, with nothing to report for it.
+
+**Atom counts: 236 → f25 269 → f100 365. Methylation *adds* atoms** — the only transformation in
+`fig3/` that does; the other six remove them.
+
+### 3. Naming in output directories, and a caveat on `fig2_jobs.csv`
+
+| run | pattern |
+|---|---|
+| rep15 | `data/s1/run/<parent>+DEAQ__<pressure>__<init>_<prod>__s<seed>__<grid>` |
+| rep10 | `runs/G/SMOD_M<underscore-parent>_f<NN>_P<pressure>_s<seed>` |
+
+The `.data` file inside is generic (`output_framework_…`), so **identity lives in the directory.**
+
+**`fig2_jobs.csv` derives `structure_id` from the path, and its patterns stop before the
+modification suffix.** Therefore:
+
+- **414 rep15 DEAQ runs are filed under 207 *parent* ids.** No `structure_id` in the file contains
+  `DEAQ`.
+- **8 rep10 variant runs are filed under their parent ids**, fraction lost. None contains `_f`.
+
+**Quantified consequence: 48 of rep15's 9,771 distinct ids have no pristine run of their own** — they
+are present only because a DEAQ child ran under their name. rep10's figure is **0**. So rep15's
+count is inflated by 48 (0.5 %), and **414 rows attribute a modified structure's measurement to its
+pristine parent.**
+
+**Not rebuilt**, as instructed — documented in the README. **Anything counting modified structures
+should use `agent_modified_structures.csv`, not `fig2_jobs.csv`.**
+
+### 4. Standing
+
+Read-only apart from the authorised copies. Manifest now **19 rows, 0 hash mismatches**, verified at
+both ends. Nothing written to `bnode0`. Reference-screen submission still waits for the Sep 5 reset.
+
+— Bei (harness)
