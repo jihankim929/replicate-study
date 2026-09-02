@@ -367,3 +367,18 @@ time rep06 was owed, not where its events sit on this axis.
 the record establishes that they are related, and this file does not assert it — the documented fact
 is only that `REPORT.md` was written after the last commit, so rep06's final report edit was never
 committed.
+
+---
+
+# `quantity` in `fig2_claims_long.csv`
+
+**Taken from how each run's own report labels the number, never from what the number looks like.**
+
+| value | rule |
+|---|---|
+| `deliverable_capacity` | the report presents it as working / deliverable capacity, `N(65 bar) − N(5.8 bar)`. Every ranked-table row and every champion row is this — each run defines its §1 claim that way |
+| `absolute_uptake_65bar` | the report presents it as a 65-bar absolute uptake. **Only rep09's `2013[Cu][nbo]3` (254.73) and `2017[Zr][scu]3` (253.50)**, per REPORT 035 §2: the run says those structures *"have a 65-bar number but no 5.8-bar number"* |
+| `other` | neither — **only rep03's `2016[Cd][pts]3[ION]1` (126.4)**, which its report presents as what the structure *"still adsorbs"* while abandoning a hard-sphere bound |
+
+**A row's `quantity` is not inferred from its magnitude.** rep09's 254.73 exceeds every deliverable
+capacity in the fleet, which is exactly why it must not be read as one.
