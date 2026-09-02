@@ -3766,3 +3766,128 @@ collected, escalation queue 0 open.**
 Going silent except URGENT until the Sep 5 04:00 KST reset.
 
 — Bei (harness)
+
+---
+
+## 2026-09-02T03:37:32Z (12:37:32 KST) — REPORT 016, on the operator's status check. **WAVE 1 AT HOUR 7.8: 47 OF 98 RUNS DONE, ZERO FAILED, ONE JOB COMPLETE.** Nothing executed, nothing submitted. Two findings: a Stage 1 run that will likely not fit its walltime, and the "third party" of the 04:55 report is four parties.
+
+> **In one line:** wave 1 is healthy and roughly half done on runs — **47 of 98 complete, 47 ok,
+> 0 failed** — with **scr1_0_0003 finished clean (13/13, exit 0)**, three jobs running and two still
+> queued after 7.8 h for want of a free `ac` node. **82.4 CPU-h burned.** Two things the PI should
+> see: **scr1_1_0005 is unlikely to finish inside its 26:11 walltime** on current pace, and the
+> 04:55 report's *"a third party holds 92 % of the cluster"* is **wrong in its attribution** —
+> the cluster is 92 % occupied by **four** users, and the one holding the most cores is not the one
+> blocking us. **Nothing was executed, killed, resubmitted or changed.** This is a read-only status
+> report against a live queue.
+
+### 1. Wave 1 standing
+
+| Job | Name | State | Elapsed / walltime | Runs | cput |
+|---|---|---|---|---|---|
+| 3474520 | scr1_0_0000 | **Q** since 04:50 | — / 10:59 | 0 of 23 | — |
+| 3474521 | scr1_0_0001 | R on bnode19 | 4:52 / 11:23 | **22 of 23** | 28:41:26 |
+| 3474522 | scr1_0_0002 | **Q** since 04:50 | — / 11:54 | 0 of 23 | — |
+| 3474523 | scr1_0_0003 | **COMPLETE** | 4:17:56 / 13:38 | **13 of 13** | 19:01:17 |
+| 3474524 | scr1_0_0004 | R on bnode8 | 3:19 / 13:50 | 12 of 14 | 19:09:50 |
+| 3474525 | scr1_1_0005 | R on bnode4 | 7:47 / 26:11 | **0 of 2** | 15:33:54 |
+
+**Runs: 47 complete (47 ok, 0 failed), 5 in flight, 46 not started.** Sums to the 98 in the ledger.
+**Burn to date 82.4 CPU-h.**
+
+**3474523 is the first wave-1 job to close and it closed cleanly** — `Exit_status=0`,
+`resources_used.cput=19:01:17`, `walltime=04:17:56` against 13:38 requested, and all thirteen runs
+recorded `ok` by the §8 output-presence rule. It ran 04:50:18 → 09:08:12 on bnode17. It is absent
+from `qstat` because it is **done**, not because it was lost; `tracejob` carries the exit record.
+
+**Zero failures anywhere.** The corpus staging fixed at 04:49 is holding: every run since has found
+its CIF.
+
+### 2. Finding — scr1_1_0005 will likely hit its walltime, and it would take its partner down with it
+
+The job is alive and working: both `simulate` processes on bnode4 are at **99.9 % CPU** after 7:47
+elapsed. The problem is pace, not health. `PrintEvery` is **2000**, so progress is visible only in
+2,000-cycle steps, and the two runs have diverged sharply:
+
+```
+p05  (0.5 bar)  production "Current cycle: 2000 out of 10000"   last write 10:18
+p65  (65  bar)  initialization "[Init] Current cycle: 0 out of 2000"   last write 04:51
+```
+
+**p05** cleared its 2,000 initialization cycles and 2,000 of 10,000 production cycles in ~5.5 h. At
+that rate it lands near 21 h — inside the 26:11 request, with little margin.
+
+**p65 has not yet completed its 2,000 initialization cycles in 7.8 h.** At 65 bar the loading is far
+higher, so each cycle costs far more; the structure is `2023[Eu][nan]3[FSR]2`, **23,166 framework
+atoms** in a 3×3×3 cell, the quartile-4 tail the walltime formula was scaled for.
+
+**This is an estimate, not a measurement, and I want the uncertainty on the record.** With
+`PrintEvery 2000` and only cycle 0 printed, p65 could be anywhere from cycle 1 to cycle 1,999 —
+I cannot see inside the interval. What is certain is that it has not reached cycle 2,000. If
+initialization alone is costing ~8 h, the 10,000 production cycles that follow do not fit in the
+remaining 18 h, and I would expect a walltime kill.
+
+**The consequence if it happens is two lost runs, not one.** The job waits on both members, so a
+walltime kill truncates p05 as well — and a killed run writes no `Average loading absolute` line,
+so §8 records **failed**, correctly, for work that was really only unfinished. The ledger would then
+show 2 failures against a wave that is otherwise clean.
+
+**No action taken.** Resizing, splitting p05 from p65, or letting it ride to the kill and re-queueing
+p65 alone at a longer walltime are all live options and all of them are yours. I have not touched it.
+
+### 3. Correction — the 04:55 report's "third party" is four parties, and I named the wrong obstacle
+
+REPORT of 2026-09-01T19:55:00Z §4(c) states *"a third party holds 92 % of the cluster."* **The 92 %
+is right and the attribution is wrong.** Measured now:
+
+| user | running jobs | cores | queued |
+|---|---:|---:|---|
+| dhoonkim97 | 13 | **201** | 1 job / 16 cores |
+| hoon8590 | 87 | 87 | — |
+| dayeon | 73 | 73 | — |
+| **Bei** | 3 | **39** | 2 jobs / 46 cores |
+| khohj | 28 | 28 | 25 jobs / 25 cores |
+| hykum | 5 | 5 | — |
+| | **209** | **433** | |
+
+The 433 reconciles exactly against per-node occupancy, so the two instruments agree.
+
+**And 108 cores are not busy — they are offline.** `bnode10` (32, amd), `bnode12` (64, xeonphi),
+`bnode13` and `bnode14` (6 each, ab) are all `state = down`. The honest denominator is **472 usable,
+433 running, 92 % occupied, 39 free.**
+
+**The user holding the most cores is not the one blocking us.** dhoonkim97's 201 cores are large
+multi-core jobs on the amd/ax nodes. Our two queued jobs ask for `nodes=1:ppn=23:ac`, and the `ac`
+group is **bnode15–19, 204 cores, currently full** — packed overwhelmingly by hoon8590's 87 and
+dayeon's 73 **single-core** jobs, with khohj queueing 25 more behind them. All 39 free cores are on
+amd/aa nodes and are unreachable to a `:ac` request. **We hold 23 of the ac cores ourselves, on
+bnode19.**
+
+This does not change any decision made at 04:55 — sizing wave 1 to measured free capacity was right,
+and §6's purpose of not displacing others is unaffected. It changes what a reader would conclude
+about *why* the queue is stuck, and the earlier sentence would have sent that reader after the wrong
+user.
+
+### 4. What I could not verify
+
+**The union doctrine could not be re-run.** §8's rule is PBS ∪ mjs, and `qas` is not resolvable on a
+non-interactive login shell — not on `PATH`, not in `~/bin` or `~/.local/bin`. **The counts above are
+PBS alone.** Given the 04:55 correction — that a job is briefly in *neither* listing during ZMQ
+dispatch — a PBS-only count is the weaker instrument, and I am flagging it rather than presenting
+five jobs as a union result. Nothing was submitted since 04:49, so there is no dispatch window open
+and I expect the union to agree; I have not proved it.
+
+### 5. Standing — quiescent except the screen, as ordered
+
+**Nothing was executed.** No submission, no kill, no requeue, no file changed outside this report.
+
+Verified this cycle: **PBS 5 (all `scr1_*` wave 1, intended), zero replicate-campaign leftovers,
+zero `session_loop_headless.sh`, zero `claude` turn processes, zero daemons or wait-loops under
+`Bei` on the login node.** The Sep-2 sweeps hold; nothing has refilled.
+
+**Wave 2 has still not been submitted and nothing will submit it.** The deferred 1,699 batches wait
+for a hand. Wave 1 finishing will not trigger it.
+
+Going quiet again except URGENT. The one item that may become URGENT on its own is §2, and it will
+declare itself at 3474525's walltime — **2026-09-03 07:01 KST** — if not before.
+
+— Bei (harness)
