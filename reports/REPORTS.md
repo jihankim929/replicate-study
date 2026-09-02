@@ -6089,3 +6089,74 @@ Read-only throughout; nothing written to `bnode0`. Nothing scored. Reference-scr
 waits for the Sep 5 reset.
 
 — Bei (harness)
+
+---
+
+## 2026-09-03T09:00:00Z (18:00:00 KST) — REPORT 040, the rebuild. **8 RUNS, 2,253 ROWS.** Commit `42c106d`. Corrects REPORT 036 §4.
+
+> **In one line:** at **`42c106de15d858e98481d07546c9a0ef22e3baea`** the inventory is rebuilt to
+> **8 runs and 2,253 rows** with both filter defects fixed — and the rebuild settled two things the
+> first build had not: **every row now has a parent** (`no stated parent` = 0, `unknown` class = 0),
+> and **rep12 turns out to report a value for all seven of its variants**, taking reported values
+> from 12 rows to 19.
+
+### 1. The corrected inventory
+
+| run | files | | run | files |
+|---|---:|---|---|---:|
+| rep02 | 1,713 | | rep10 | 24 |
+| rep15 | 251 | | rep17 | 10 |
+| **rep09** | **209** | | **rep12** | **7** |
+| rep05 | 35 | | rep06 | 4 |
+
+**2,217 `retained` parents, 36 `excluded`, 0 `unknown`.** `rep09` is the fleet's **second-largest
+modification arm by file count** — behind rep02, ahead of rep15. **REPORT 036 §4's "ten runs created
+none" should read eight.**
+
+### 2. The fixes
+
+**rep09 — 209 recovered.** A file in a run's `mod/` or `mods/` directory is now a **product by
+construction** and never classed as a staged copy. I chose the directory rule over the id-range
+split (products 100080–112474, staged copies below 100000) **because the directory does not depend
+on a run's numbering habits** — the range would have worked here and failed on the next run that
+numbers differently.
+
+**rep12 — 7 recovered.** The underscore normaliser is now **anchored**: the normalised name must
+consume the whole basename, so a `__fluoro100` suffix can no longer be silently absorbed.
+
+### 3. What the rebuild settled
+
+**Every row has a parent now.** `no stated parent` = **0**, `unknown` class = **0**. rep09's parents
+come **from rep09's own records** — `manifests/mods.csv` gives `src`, `manifests/density.csv` maps
+`id → cif`, and **all 209 resolve**; none is inferred by any other route, consistent with the sid
+policy. rep05's compact names (`scale0p960_2021Cusql2FSR6`) are expanded back to bracket form, which
+the first build had also lost.
+
+**One row per distinct product, not per path.** rep12 stages each of its seven products into two run
+directories as well as `mods/`, so a raw path count reports **21** where the run built **7**. Rows
+are deduped on `(run, basename)`. A further **60 files** carry a *different* basename for an
+already-counted product — rep17 writes `…@f025.cif` into `mods/` and `…_at_f025.cif` into the run
+directory (38), with rep05 (13), rep10 (8) and rep15 (1) doing the same. **All 60 are duplicates of
+rows already present; no product is missed by excluding them.**
+
+**Reported values now cover 19 rows, up from 12.** **rep12 reports a value for all seven of its
+variants** — champion `methyl25` **206.59 ± 1.02** against parent 207.15 ± 0.76, then `methyl50`
+203.41, `methyl100` 197.07, `fluoro100` 180.23, and for the pts parent 186.35 / 179.15 / 175.33 —
+and states they were run *"each against its pristine parent at identical settings, which is what G5
+requires"*, so `pristine_parent_measured_same_setting` is **`yes` for all seven.` rep09 reports no
+per-file value**; its arm is summarised only in aggregate (+11.18 ± 11.31 over 208 completed).
+
+**So rep12 joins rep06 as a modification arm measured at matched settings** — and with values for
+every variant it built, which no other run in the fleet provides.
+
+### 4. Not changed
+
+`behavioral_counts.csv` is untouched and needs no change — its `d3 = y` for rep09 and rep12 was
+correct throughout. This report corrects **REPORT 036 §4** and nothing else.
+
+### 5. Standing
+
+Read-only apart from the authorised rebuild. Nothing written to `bnode0`. Nothing scored.
+Reference-screen submission still waits for the Sep 5 reset.
+
+— Bei (harness)
