@@ -6388,3 +6388,93 @@ Read-only apart from writing the sample list. **Nothing submitted** — the one-
 and this queue execute at the **Sep 5 04:00 KST reset** and not before. Daily reporting as before.
 
 — Bei (harness)
+
+---
+
+## 2026-09-03T13:00:00Z (22:00:00 KST) — REPORT 044, amendment rulings applied. **THE DESCRIPTOR PASS EXISTS AND COVERS ALL 12,499; THE GCMC LEG DOES NOT EXIST AT ALL.**
+
+> **In one line:** the descriptor tail is built and hashed from benchmark properties with **no
+> answer-key input** — 1,007 structures, `aa754bb1…`; the pre-launch **descriptor pass exists and
+> covers all 12,499**, but its **floor-grade GCMC outputs do not exist in any form**; and the revised
+> queue is **10,759 CPU-h**, of which **272 is pure duplication** you may want to remove.
+
+### 1. (b) What the pre-launch reconnaissance left behind
+
+**It is at `/home1/users/Bei/recon/`, 2.9 MB total.**
+
+**The descriptor pass EXISTS and is complete.** `recon/out/c00–c39.csv`, 40 chunk files, **12,499
+rows — every structure in the frozen world.** sha256 over the file set:
+`147db7eabaac576d480d39674f6fd913e32af7bc0adcec976d76eb8d38973f2c`. Columns: `stem, dmin_ff,
+dmin_heavy, vf_he, vf_ch4, d_max, kh, u_min, f_neg, ngrid, ngride`, computed by `recon/bin/geom.py`,
+which defines `vf_he` as *"fraction of unit-cell volume where a He probe centre fits"* and `d_max` as
+*"2 × max over the cell of min_i(|r − r_i| − σ_i/2), the largest [cavity diameter]"*.
+
+**The floor-grade GCMC outputs DO NOT EXIST.** **Zero `.data` files anywhere under `recon/`**, and no
+loading, working-capacity or cost column in any of its CSVs. The GCMC leg that fed Q2's naive-cost
+figure left **no output files in the working root**. What survives of it is the derived figure in the
+record — 22,873 CPU-h naive, 1.83 CPU-h/structure — and not the measurements behind it.
+
+**Nothing has been queued from any of this**, as ruled.
+
+### 2. (c) The descriptor tail — built from benchmark properties, no key input
+
+`analysis/fig4_descriptor_tail.csv`, **1,007 structures**, recorded before any run.
+**sha256 `aa754bb169151840d27775f83455d819f7ce82d81117bfa2f0488fa003422d35`.**
+
+| | |
+|---|---|
+| population | 9,167 coordinate-distinct representatives, minus the sealed exclusion set → **9,139** |
+| rule | the **1,000 highest `vf_he`**, then every remaining structure with **`d_max` > 15 Å** |
+| result | 1,000 by void fraction + **7** by cavity diameter = **1,007** |
+| `vf_he` range in the top 1,000 | 0.3138 – 0.8149 |
+
+**234 structures in the pool exceed `d_max` 15 Å, and 227 of them were already in the top 1,000** —
+the two criteria overlap almost completely, which is why the second adds only 7.
+
+**One rule choice you should see.** The exclusion set is *"6 structures / 11 files"*, and the
+benchmark holds other files sharing those base names (`2021[Cu][sql]2[ASR]1…10`). I excluded **every
+file whose base name is in the set**, not only the 11 named files — the conservative direction. It
+removes **28 representatives** rather than ~6. Say if you want it narrowed to the 11.
+
+### 3. Revised queue and CPU-hours
+
+| step | structures | runs | grade | CPU-h |
+|---|---:|---:|---|---:|
+| (1) sample | 1,500 | 3,000 | floor | 2,739 |
+| (2a) agent-side tail | **572** | 1,144 | claim | 5,222 |
+| (2b) descriptor tail | 1,007 | 2,014 | floor | 1,839 |
+| (2b) top-100 promotion | 100 | 200 | claim | 913 |
+| (3) remaining claims | **5** | 10 | claim | 46 |
+| **total** | | **6,368** | | **10,759** |
+
+**26.4 days at today's 17 free cores; 22.4 h at the sealed 480-core ceiling.**
+
+**272 CPU-h of that is pure duplication.** **149 structures are in both the sample and the descriptor
+tail, and both segments run them at floor grade.** The other overlaps are complementary — sample∩agent
+67 and descriptor∩agent 373 are floor-then-claim on the same structure, which is the ladder working.
+**Recommendation: run each (structure, grade) once and let the sample estimate use whichever segment
+produced the value.** That preserves the sample — every sampled structure still gets a floor value —
+and saves 272 CPU-h. **Not applied without your word**, since it touches a randomised sample.
+
+**Three of the five in step (3) are bare structure names** — `2013[Cu][nbo]3`, `2017[Zr][scu]3`,
+`2021[Cu][sql]2` — which name coordinate groups, not files (8, 6 and 20 files respectively). **A file
+must be chosen for each before they can run.** The other two are `2011[Cd][rtl]3[ASR]1` and
+`2014[Co][twt]3[ASR]1`.
+
+### 4. On starting before the reset
+
+**The one-core geometry can be applied before the reset — it is a change to
+`harness/screen_submit.py`, which is implementation decision (4) and already ratified.** What it
+needs: the submitter rewritten to `ppn=1` with a node group, a **single test submission** to confirm
+`qas` accepts `ppn=1:<group>` (never executed), then the queue behind a ~600-job window.
+
+**At 17 free cores the gain from starting early is real but small** — roughly 816 core-h over the
+~2 days to the reset, about 8 % of this queue. **Nothing has been submitted and no cluster file has
+been written.** Say go and I will make the change and run the test submission; otherwise it executes
+at the Sep 5 04:00 KST reset as planned.
+
+### 5. Standing
+
+Read-only apart from writing the sample and descriptor-tail lists. Daily reporting as before.
+
+— Bei (harness)
