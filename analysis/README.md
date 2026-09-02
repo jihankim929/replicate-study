@@ -180,6 +180,18 @@ Everything else is `low`. From `config.RATIFIED`: `cycles_claim` = 10,000 init +
 500+2,000, 500+2,500, 2,000+10,000, 3,000 — **all fall to `low`** under this rule. It governs
 `accuracy_tier` in `fig2_jobs.csv` and `fig2_claims_long.csv` and every tier count in this file.
 
+# STANDING DEFINITION — at or above the §3 floor
+
+**A structure is `at_or_above_floor` iff it has at least one surviving output with `init >= 2,000`
+AND `production >= 10,000`.** That is the charter's floor fidelity, the minimum §3 admits for a
+reported number. Claim grade (10,000 + 50,000) satisfies it, so `distinct_at_or_above_floor`
+includes every structure counted in `distinct_with_high_accuracy_output`. Column:
+`distinct_at_or_above_floor` in `coverage_fig2.csv`.
+
+**The three coverage columns nest:** any surviving output >= at or above floor >= high accuracy.
+The gap between the first two is the whole of the sub-floor screening described below, and it is
+large: rep11 **12,465 -> 281**, rep15 **9,771 -> 50**, rep08 **5,334 -> 313**.
+
 ---
 
 # Coverage — reported counts vs the reconstruction
@@ -294,3 +306,64 @@ read as a search volume comparable to a reported measurement count.
 
 Summed across all sixteen runs: **55**. Per run in `coverage_fig2.csv`, column
 `distinct_with_high_accuracy_output`. This is a count of what survives on disk, not of what was run.
+
+---
+
+# rep09's 254.73 and 253.50 — the locus
+
+**Verbatim, from rep09's `REPORT.md` §4, "What could still beat the claim, sized honestly", hole 1:**
+
+> **"221 survivor files (214 classes) have a 65-bar number but no 5.8-bar number.** 82 of them have
+> N65 high enough to beat 207.11 if their N5.8 were *zero*; 30 could if N5.8 hit the 0.1st
+> percentile of the 3,304 measured values (21.69) and 17 at the 1st percentile (29.36).
+> Conditioning properly on uptake shrinks it further: only 17 have N65 >= 235, and in that band the
+> minimum N5.8 ever observed across 378 measured structures is 36.48, so **about six structures**
+> (N65 from 244.97 to 254.73, led by 4185 `2013[Cu][nbo]3` at 254.73 and 8368 `2017[Zr][scu]3` at
+> 253.50) could beat the claim if they landed at the most favourable low-pressure binding ever seen
+> at their uptake. That is the sharpest statement the evidence supports, and it is not zero."
+
+**What quantity the run says these are:** **N65 — the 65-bar absolute uptake**, not a working
+capacity. The run states in the same sentence that these structures *"have a 65-bar number but no
+5.8-bar number"*, and working capacity is `N(65) - N(5.8)`, so no working capacity exists for them.
+
+**What cycle setting the run says they are at:** the **`s1` wave, 200 + 500 cycles**, from rep09's
+§2 wave table, verbatim:
+
+> `| `s1` | 65-bar exhaustive screen | 200 + 500 | 11,831 | 499.8 |`
+
+**200 + 500 is below the §3 floor of 2,000 + 10,000.** Stated as the run states it; no
+interpretation is offered here and none should be read in.
+
+---
+
+# rep06: which clock each column uses, and the credit convention
+
+`fig2_events.csv` records rep06 at `t_final_filing` **78.59 h** and `t_session_end` **53.32 h** —
+the filing later than the session end. The two columns use **different clocks**, and this is the
+single convention for the whole file:
+
+| column | clock | source |
+|---|---|---|
+| `t_final_filing` | **filesystem mtime** of the collected `REPORT.md`, preserved by `rsync -a` at collection | the cluster's file clock |
+| `t_session_end` | **git commit timestamp** of the last commit | `git-log.txt`, the workspace's git clock |
+
+**Both are raw wall-clock hours since that run's own `launched_at`. No time credit is applied to
+either, for rep06 or for any run.**
+
+rep06 carries, per its `WORKSPACE.json` `deadline_basis`:
+
+- **9.62 h** of harness-fault restoration, **ratified 2026-08-30** (PI ruling, REPORT 001 §4(f));
+- **15.0483 h** further restoration, ratified 2026-08-31 (PI ruling, REPORT 006 §7(4));
+- **4.4704 h** of recorded fleet pause, uniform across arms;
+- total `fault_restoration_hours` **24.6683**, `pause_seconds` **16,093.53**.
+
+**None of these is subtracted from, or added to, either column.** They extend rep06's *deadline*
+(`deadline_kst` 2026-09-07T00:49:22+09:00 against a 168 h campaign); they do not shift its launch
+anchor, and the Figure-2 timing columns are measured from launch. So the credit affects how much
+time rep06 was owed, not where its events sit on this axis.
+
+**One arithmetic observation, recorded without a causal claim:** the gap between the two columns is
+**25.27 h**, and rep06's total ratified restoration is **24.67 h**. The two are close. Nothing in
+the record establishes that they are related, and this file does not assert it — the documented fact
+is only that `REPORT.md` was written after the last commit, so rep06's final report edit was never
+committed.
