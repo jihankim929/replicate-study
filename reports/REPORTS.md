@@ -6214,3 +6214,80 @@ Read-only throughout; nothing written to `bnode0`. Nothing scored. Reference-scr
 still waits for the Sep 5 reset.
 
 — Bei (harness)
+
+---
+
+## 2026-09-03T11:15:00Z (20:15:00 KST) — REPORT 042, reference-screen status. **STAGE 1 IS 1 RUN OF 24,998, AND THE TOP 500 CANNOT BE IDENTIFIED.**
+
+> **In one line:** **114.7 CPU-h consumed, 51 runs of 25,598 complete (0.2 %)**; the full-census
+> floor screen has **one** completed run, so **its output cannot identify the top 500** — which makes
+> the tail-only option circular, since the tail is defined by the pass that has not run. At today's
+> **17 free cores**, Stage 1 alone is **56 days**. No change to the submission plan.
+
+### 1. The fidelity ladder, as it stands
+
+| stage | what | runs total | completed | remaining | CPU-h consumed |
+|---|---|---:|---:|---:|---:|
+| **Stage 0** — floor→claim calibration | 300 structures × 2 pressures, claim grade | 600 | **50** | 550 | **73.57** |
+| **Stage 1** — full-census floor screen | 12,499 × 2 pressures, floor grade | 24,998 | **1** | 24,997 | **41.13** |
+| **Stage 2** — claim-grade promotion | *"promotion count is unknown until Stage 1 finishes"* | undetermined | 0 | undetermined | 0 |
+| **Stage 3** — random audit of the non-promoted set | depends on Stage 2 | undetermined | 0 | undetermined | 0 |
+| **total** | | 25,598 | **51** | 25,547 | **114.70** |
+
+CPU-h is **PBS `cput`**, the harness metering basis: 31:58:31 + 19:01:17 + 22:34:28 on the three
+completed jobs, plus 41:07:39 on `3474525`, still running at 24:18 of a 26:11 walltime.
+
+**46 Stage-0 runs are queued and have consumed nothing** — jobs `3474520` and `3474522`, still
+unplaceable as REPORT 019 described. **Stage 1's single completed run took 16.90 CPU-h**: it is the
+quartile-4 structure (23,166 atoms) and **is not usable as a mean**.
+
+**Reserved ≫ used.** Per REPORT 019 the `ppn=batch` geometry ran at **22.2 % core utilisation**, so
+the cluster time these 114.7 CPU-h occupied is roughly 4.5× larger. That is what the ratified
+one-core-per-job geometry fixes at the reset.
+
+### 2. Wall-clock estimates
+
+**Current availability: 17 free cores** in the eligible groups — 452 nominal, 44 down, 408 usable,
+**391 in use by other work**.
+
+Rates: Stage 0 **1.472 CPU-h/run**, measured over its 50 completed runs. Stage 1 **0.913
+CPU-h/run**, the plan's pre-registered floor-grade basis — *not* the one measured point, for the
+reason above.
+
+| remaining | CPU-h | at **17 cores** (today) | at 480 cores (sealed ceiling) |
+|---|---:|---|---|
+| Stage 0 | 809 | **2.0 days** | 1.7 h |
+| Stage 1 | 22,822 | **55.9 days** | 2.0 days |
+| both | 23,632 | **57.9 days** | 2.1 days |
+
+**The 480-core figure is not currently attainable**: only 408 cores are usable in the eligible
+groups and 391 are in use. It is shown because it is the sealed ceiling, not because it is available.
+
+**Tail only — the top 500 at floor and claim grade** (1,000 runs per grade):
+
+| | CPU-h | at 17 cores | at 480 cores |
+|---|---:|---|---|
+| floor + claim | 5,478 | **13.4 days** | 11.4 h |
+| claim only, if the floor leg comes from Stage 1 | 4,565 | 11.2 days | 9.5 h |
+
+### 3. The screening pass is not complete, and cannot yet name the top 500
+
+**Stage 1 has 1 completed run of 24,998 — 0.004 %.** One structure has a floor value.
+
+**Its partial output cannot identify the top 500.** The selection requires floor values across the
+census; one measurement supports no ranking at all.
+
+**This makes the tail-only option circular as stated.** The tail is *defined* as "the top 500
+structures from the screening pass", and the screening pass is what has not run. **The 13.4-day
+tail estimate above is therefore conditional on a ranking that does not yet exist** — it is the cost
+of the tail once identified, not a route that skips Stage 1. The cheapest honest path to a top-500
+list is Stage 1a alone, the 5.8-bar leg over all 12,499 at floor cycles, which the plan already
+separates: **12,499 runs × 0.913 = 11,411 CPU-h**, 28.0 days at 17 cores and 23.8 h at 480.
+
+### 4. Standing
+
+Read-only; nothing written to `bnode0`. **No change to the submission plan** — the ratified
+one-core-per-job geometry executes at the Sep 5 04:00 KST reset and not before, and the two queued
+jobs stay as they are until then.
+
+— Bei (harness)
