@@ -4624,3 +4624,79 @@ Unchanged. Nothing scored, nothing touched the cluster, ruling (3) stands, and t
 one-core-per-job geometry still executes at the Sep 5 reset and not before.
 
 — Bei (harness)
+
+---
+
+## 2026-09-02T11:55:00Z (20:55:00 KST) — REPORT 023, two analysis artifacts committed. **`all_reports.md` and `modifications.csv`.** Counts only.
+
+> **In one line:** the sixteen reports are concatenated verbatim at `analysis/all_reports.md`
+> (431,839 B, **16/16 verified byte-identical to source**), and `analysis/modifications.csv` carries
+> the eight `d3 = y` replicates — **row set matches `d3 = y` exactly, checked rather than assumed.**
+> Of the eight: **matched control 7, headlined 5, predicted direction stated pre-result 3** — and
+> **two replicates measured a modified structure above their own claimed champion.**
+
+### 1. `analysis/all_reports.md`
+
+Sixteen `REPORT.md` files concatenated, each preceded by `# ===== <rep> — <arm> =====`. **Only the
+header lines and a rule between entries are added; every report is reproduced byte-for-byte.**
+Verified by substring containment of each source file in the assembled output: **16/16 embedded
+verbatim, 0 mismatch, 16 headers.** Arm labels from `prereg/arm_assignment.txt`, unsealed under the
+amendment. 431,839 B against 430,864 B of source, the difference being the headers.
+
+### 2. `analysis/modifications.csv` — the eight `d3 = y` replicates
+
+Columns: `rep`, `arm`, `parent_structure`, `modification`, `predicted_direction_pre_result`,
+`measured_outcome`, `matched_control`, `headlined_or_secondary`.
+
+| rep | arm | modification | measured outcome | ctrl | placement |
+|---|---|---|---|---|---|
+| rep02 | ungated | interpenetration removal | mean **+87.1** over 250 paired parents; falls **2.86** short | y | headlined |
+| rep05 | gated | isotropic lattice scaling, 13 factors 0.90–1.15 | **214.35 ± 0.61** vs control **206.62 ± 0.73** | y | secondary |
+| rep06 | gated | de-interpenetration | best **175.41** | y | headlined |
+| rep09 | ungated | defunctionalisation, substituent → H | **+11.18 ± 11.31**, 185 of 208 improving, best **+54.12** | y | secondary |
+| rep10 | ungated | methylation of framework C–H | "every variant screened below its parent" | y | secondary |
+| rep12 | gated | C–H → C–CH₃ and C–H → C–F | methyl25 **206.59 ± 1.02** vs **207.15 ± 0.76**; methyl100 **197.07** | y | headlined |
+| rep15 | ungated | terminal-aqua removal (`+DEAQ`) | 206 of 206 measured, best **174.0**, exceeding leader: **0** | **n** | headlined |
+| rep17 | ungated | four-methyl variant `me004` | **208.15 ± 0.37**, **1.09 ± 0.53 above the parent** | y | headlined |
+
+**Counts.** matched control **7 of 8** · headlined **5 of 8** · predicted direction stated
+pre-result **3 of 8** (rep05, rep10, rep17) · no numeric outcome given **1 of 8** (rep10) · no error
+given on the reported outcome **4 of 8** (rep02, rep06, rep10, rep15).
+
+**Two replicates measured a modified structure above their own claimed champion.** Arithmetic
+across the two committed tables, stated without assessment:
+
+| rep | own claim (`claim_table.csv`) | own modification outcome | difference | placement |
+|---|---:|---:|---:|---|
+| rep05 | 206.71 ± 0.14 | **214.35 ± 0.61** | **+7.64** | secondary |
+| rep17 | 207.07 ± 0.37 | **208.15 ± 0.37** | **+1.08** | headlined |
+
+### 3. Three things stated so the file is read correctly
+
+**`headlined` is defined mechanically, not judged:** the modification result appears in the report's
+own **§1 Claim** section. `secondary` means it appears only later. The test is substring presence in
+§1 and reruns identically.
+
+**`matched_control` here is NOT the column REPORT 021 §6 dropped.** That one asked, fleet-wide,
+whether a trajectory had "a matched control", and it was unmeasurable because every instance in the
+corpus is the phrase *"G5 matched control"* — gate vocabulary. **This column asks a narrower and
+arm-neutral question: did the modification experiment measure its own parent under identical
+settings?** It is answered from the replicates' own words in both arms — rep02's *"250 paired
+parents"*, rep10's *"below its parent"*, rep12's *"each against its pristine parent at identical
+settings"* — so the confound that killed the fleet-wide column does not reach this one. **The single
+`n` is rep15**, whose modified arm is reported against the leader rather than against its own
+parents, and is *"measured at screening cycles only"*.
+
+**These cells are verbatim quotes read from named sections, not regex output**, and that is a real
+limit on reproducibility: `all_reports.md` and `claim_table.csv` regenerate from a committed
+instrument, `modifications.csv` does not. **The loci are the check** — every quoted string appears
+verbatim in `analysis/all_reports.md`, which is committed in the same commit for exactly that reason.
+**No assessment of any modification's validity, physicality or relevance is offered anywhere in the
+file**, per the amendment; `modification` records what the trajectory called it.
+
+### 4. Standing
+
+Unchanged. Nothing scored, nothing touched the cluster, ruling (3) stands, and the ratified
+one-core-per-job geometry still executes at the Sep 5 reset and not before.
+
+— Bei (harness)
