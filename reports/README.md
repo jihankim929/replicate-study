@@ -618,3 +618,86 @@ pristine controls"*:
 (five structure/pressure pairs × two pressures) are at **2,000 + 10,000 — the §3 floor**, and the
 pristine controls are described in the heading as *matched*. rep06's conclusion, verbatim: *"No
 de-interpenetrated structure gains materially (>10 cm³STP/cm³) over its pristine control."*
+
+---
+
+# `fig3/` — second batch (5 files, manifest now 19 rows, 0 hash mismatches)
+
+## rep15 — the +74.8 pair **is** identifiable, from rep15's own table
+
+**rep15's `REPORT.md` does not name it.** It gives the pair only by value: *"the gains are large
+*because* they unblock a pore that was blocked (**the best case is 23.3 → 98.1**)"* (§3), alongside
+*"max **+74.8**"* (§1 item 4 and §3).
+
+**Its own results table does name it.** From `rep15/data/s1/results.csv`, computing
+`N(65) − N(5.8)` per structure and pairing each `+DEAQ` child with its parent:
+
+| | value |
+|---|---|
+| parent `2011[FeHo][nan]3[FSR]1` | **23.32** |
+| child `2011[FeHo][nan]3[FSR]1+DEAQ` | **98.13** |
+| gain | **+74.82** |
+
+This reproduces rep15's stated best case (23.3 → 98.1) and its stated maximum (+74.8) exactly, which
+is what identifies the pair. Both legs are at **200 + 1,000 cycles — below the §3 floor**, the
+setting the whole `s1` arm used.
+
+**One thing that does not reproduce, stated rather than smoothed.** Over *all* 158 `+DEAQ` pairs with
+both legs measured in `s1`, the mean gain is **+14.65**, median **+10.19**, with **134 of 158**
+improving. rep15 reports *"42 paired parent/child measurements… mean +18.6, median +13.7, max +74.8,
+41 of 42"*. **The maximum and the best case match exactly; the mean, median and count do not**,
+because rep15's 42 is a defined subset selected by its own `bin/mod_gain.py`, not all pairs on disk.
+The 42-pair figures are the report's and are the record; the 158-pair figures are what the surviving
+table yields.
+
+**Atom count corroborates the transformation:** parent 226 → child 190, **−36 atoms = 12 × H₂O**, and
+rep15's own `manifests/mods.csv` records `n_h2o_removed = 12`, `parent_natoms 226`, `natoms 190`. My
+independent count matches its recorded values exactly.
+
+## rep10 — a per-variant value **does** exist, but not in the report
+
+**`REPORT.md` records no per-variant value** — it says only *"every variant screened below its parent
+and monotonically worse with more methylation"*, and mentions `f25` once.
+
+**`rep10/data/wc.csv` does record one**, and at the parent's own setting:
+
+| row | init+prod | seed | wc | wc_err |
+|---|---|---|---:|---:|
+| `MOD:M2013_Yb__nia_3_ASR_1_f25` | 500+2500 | 1 | **187.0779** | 2.0871 |
+| `2013[Yb][nia]3[ASR]1` (parent) | 500+2500 | 1 | **198.3266** | 3.1718 |
+
+**Same setting, same seed, same mode (`nogrid`) — a matched pair.** The child is **11.25 below** its
+parent, consistent with rep10's directional statement. Both are at 500+2,500, **below the §3 floor**.
+
+**`f100` has no recorded value at all.** `data/wc.csv` holds **4 `MOD:` rows in total**, all `f25`
+(Ni-nia, Zn-ith, Yb-nia, In-nuc). The `f100` file was **built and never simulated** — it is in
+`rep10/mod/` and has no output anywhere.
+
+**Atom counts:** parent 236 → f25 **269** → f100 **365**. Methylation **adds** atoms, unlike every
+other transformation in `fig3/`, which remove them.
+
+## How modified structures are named in RASPA output directories — and a caveat on `fig2_jobs.csv`
+
+| run | output directory pattern | example |
+|---|---|---|
+| rep15 | `data/s1/run/<parent>+DEAQ__<pressure>__<init>_<prod>__s<seed>__<grid>` | `2011[FeHo][nan]3[FSR]1+DEAQ__580000__200_1000__s0__no` |
+| rep10 | `runs/G/SMOD_M<underscore-parent>_f<NN>_P<pressure>_s<seed>` | `SMOD_M2013_Yb__nia_3_ASR_1_f25_P580000_s1` |
+
+The `.data` file inside is generically named (`output_framework_…`, `output_S…`), so **the identity
+lives in the directory, not the filename.**
+
+**The caveat, and it matters for Figure 2.** `fig2_jobs.csv` derives `structure_id` from the path,
+and its bracket/underscore patterns **stop before the modification suffix**. So:
+
+- **414 rep15 DEAQ runs are recorded under 207 *parent* ids** — `2011[FeHo][nan]3[FSR]1`, not
+  `…+DEAQ`. **No `structure_id` in the file contains `DEAQ`.**
+- **8 rep10 SMOD runs are recorded under their parent ids** — the `_f25` fraction is lost. **No
+  `structure_id` contains `_f`.**
+
+**Consequence, quantified:** **48 of rep15's 9,771 distinct ids have *no pristine run of their own*
+and are present only because a DEAQ child ran under their name.** For rep10 the figure is **0**.
+So rep15's distinct-structure count is inflated by 48 (0.5 %), and, more importantly, **414 rows
+attribute a modified structure's measurement to its pristine parent.**
+
+**`fig2_jobs.csv` is not rebuilt** — this is documented here as instructed. Anything counting
+modified structures separately should use `agent_modified_structures.csv`, not `fig2_jobs.csv`.
