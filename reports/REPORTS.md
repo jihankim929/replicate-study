@@ -5083,3 +5083,92 @@ Read-only throughout; **nothing was written to `bnode0`**. Nothing scored. Rulin
 the ratified one-core-per-job geometry still executes at the Sep 5 reset and not before.
 
 — Bei (harness)
+
+---
+
+## 2026-09-02T13:45:00Z (22:45:00 KST) — REPORT 028, the widened prose pass. **9 ROWS → 33. AND rep15 NEARLY COST ME EVERY VALUE IN ONE BLOCK.**
+
+> **In one line:** `analysis/leaderboards_prose.csv` now carries **every** structure named with a
+> value in the seven replicates that filed no ranked table — **33 rows, 23 of them genuine
+> runner-ups** — each with answer-key status; **rep03 and rep09 name no runner-up at all**; and the
+> rebuild caught a fourth instrument defect of the now-familiar shape — **rep15's floor block puts
+> the value BEFORE the name**, so a "number after the name" reader mis-assigns every row in it by one.
+
+### 1. Scope changed under REPORT 026, and rep04 leaves the file
+
+The instruction scopes this to *"each run without a ranked table"*. **REPORT 026 reclassified rep04
+as having filed one** (by replicate-internal sid), so rep04 drops out of the prose pass. Its two
+first-pass rows — `S06782` at 199.68 and `S02622` at 177.1 — are **removed from this file, not
+lost**: rep04's ranked entries are in `leaderboards.csv`, and the removal is recorded here so the
+row-count change reads as a scope change and not as data going missing.
+
+**Seven replicates in scope: rep03, rep05, rep09, rep12, rep13, rep15, rep17.**
+
+### 2. The defect, because it would have corrupted six values silently
+
+rep15 carries two monospace results blocks **in opposite layouts**:
+
+```
+claim-grade block   NAME first:   2016[Cu][pts]3[ASR]1  0  243.69  43.82  199.87
+floor-grade block   VALUE first:  197.20 2015[V][srs]3[FSR]1
+                                  197.19 2015[V][srs]3[ASR]1
+                                  195.51 2021[Al][nan]3[ASR]24
+```
+
+A scan that takes *the first number after the name* reads the floor block **one row out of
+register** — it would have filed `2015[V][srs]3[FSR]1` at 197.19 (the next row's value) instead of
+197.20, and shifted every entry below it. **Six values, all plausible, all wrong.** Caught by
+reading the context rather than trusting the match, and both layouts are now handled explicitly with
+the layout named in each row's locus.
+
+**Fourth defect of this class in the analysis series** — after the hard-wrap false negatives (021),
+their survival into a filed table (022), and the sid blind spot (026). Every one was a match that
+was true as written and false as meant. **These cells were therefore entered by verified reading,
+not by regex**, exactly as `modifications.csv` was, and `analysis/all_reports.md` remains the check.
+
+### 3. The file
+
+**33 rows across 7 replicates: 23 `is_runner_up = yes`, 10 `no`.** The ten are kept rather than
+dropped, each with `value_kind` saying what the number actually is, so the candidate set is complete
+and auditable instead of quietly filtered.
+
+| rep | runner-ups | non-runner-up mentions retained |
+|---|---:|---|
+| rep03 | **0** | 2 — a counter-example (WC 119.1 against N(65) 263.9) and a bound-failure case |
+| rep05 | **7** | 1 — the champion's own ASR twin |
+| rep09 | **0** | 2 — both are **N(65) uptakes of unmeasured candidates**, not capacities |
+| rep12 | 1 | 1 — a surrogate residual outlier |
+| rep13 | **8** | 0 |
+| rep15 | 6 | 2 — the champion's ASR twin, and a counter-example |
+| rep17 | 1 | 2 — a calibration survivor and the largest-void-fraction structure |
+
+**rep03 and rep09 name no runner-up structure anywhere in their reports.** Every structure they name
+with a number is a counter-example or a candidate quoted at N(65). rep09's two are the sharpest
+case: `2013[Cu][nbo]3` at 254.73 and `2017[Zr][scu]3` at 253.50 are **65-bar uptakes of structures
+it never measured**, quoted to bound what could still beat the claim — filing them as capacities
+would have invented two runner-ups above every real one in the fleet.
+
+### 4. Answer-key status: the artifact is still never a runner-up
+
+**31 of 33 rows are `database-clean`. The 2 `database-excluded` rows are both
+`2021[Cu][sql]2[ASR]6`, in rep05 and rep15 — and in both it is the ASR twin of that replicate's own
+champion**, which claims `[FSR]6`. Both are tagged `is_runner_up = no`, because each report says so
+itself: rep05's *"the database also contains [it] under the second name… byte-different files with
+identical cell and identical sorted coordinates"*, rep15's *"same framework, separate input,
+separate job"*.
+
+**So across both passes and all sixteen replicates, no runner-up is in the exclusion set.** The
+excluded artifact appears as **rank 1, as a champion, or as its own twin — and never once as a
+competitor.** REPORT 026 stated this on 9 rows; it now holds on 23 runner-ups from a second,
+independent extraction.
+
+**The fleet's consistent second place is `2016[Cu][pts]3[ASR]1`** — runner-up in rep12 (199.98 ±
+0.42), rep15 (199.87, no interval) and rep17 (199.90 ± 0.38), and the top control entry in rep05's
+scaling table (198.85). Four independent claim-grade measurements spanning **1.13 cm³/cm³**.
+
+### 5. Standing
+
+Read-only throughout; nothing written to `bnode0`. Nothing scored. Ruling (3) stands, and the
+ratified one-core-per-job geometry still executes at the Sep 5 reset and not before.
+
+— Bei (harness)
