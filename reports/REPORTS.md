@@ -6291,3 +6291,100 @@ one-core-per-job geometry executes at the Sep 5 04:00 KST reset and not before, 
 jobs stay as they are until then.
 
 — Bei (harness)
+
+---
+
+## 2026-09-03T12:00:00Z (21:00:00 KST) — REPORT 043, **PRE-ANALYSIS AMENDMENT — Figure 4 interim plan.** Filed. Sample drawn and recorded. **Three inputs need your correction before (2) can run.**
+
+> **In one line:** the amendment is filed and **the 1,500-structure sample is drawn, seeded and
+> recorded before any run** — sha256 `562a567a…`. **Three of the plan's inputs do not survive
+> checking:** the tail's **1,260** is a sum across runs, not a union (the union is **925**, of which
+> only **572** are resolvable); **"pre-launch reconnaissance candidates" is not a named artifact in
+> the answer key**; and selecting the screen's tail *from* the key makes the reference measurement
+> **no longer key-blind for those structures**. Nothing submits before the Sep 5 reset.
+
+### 1. The amendment as ruled
+
+**Queue order changes; the exhaustive census remains the pre-registered specification and continues
+after these steps.** New order: **(1) sample → (2) tail → (3) agents' claims → Stage 1 at backfill
+priority**, under the ratified one-core-per-job geometry.
+
+### 2. (1) Sample — drawn, seeded, recorded. **Done and immutable.**
+
+`analysis/fig4_sample_20260903.csv`, **1,500 structures**, recorded **before any run starts** as
+required.
+
+| | |
+|---|---|
+| population | **9,167 coordinate-distinct groups** — **verified exactly** against `benchmark/frozen/coord_keys.json`, which maps all 12,499 entries to 9,167 distinct keys |
+| representative | lexicographically first coreid in each group |
+| draw | `random.Random(20260903).sample(sorted(reps), 1500)` |
+| sha256 of the sorted list | `562a567ad71f67a1a2b909933b7881d4687b10252850475073f5830491c7fcf2` |
+
+**Your 9,167 is right.** Cost: 3,000 runs at floor grade = **2,739 CPU-h**.
+
+### 3. Three corrections needed
+
+**(a) The tail's 1,260 is a sum, not a union.** `coverage_fig2.csv`'s
+`distinct_at_or_above_floor` is per run, and structures measured by several runs are counted once
+each time. Deduplicated:
+
+| | structures |
+|---|---:|
+| sum of per-run counts (the figure in the plan) | 1,260 |
+| **deduplicated union** | **925** |
+| — of which resolvable structure names | **572** |
+| — **unresolved replicate-internal ids** | **353** |
+
+**The 353 cannot be promoted.** They are rep03/rep04/rep08/rep09 sids, and resolving them needs the
+cross-replicate inference refused throughout (REPORTS 026, 036, 040). **So the agent side of the
+tail is 572 structures, not 1,260** — 1,144 runs at claim grade, **5,222 CPU-h**.
+
+**(b) "Pre-launch reconnaissance candidates" is not a named artifact in the answer key.** I opened
+the key and enumerated its candidate lists by count only, reading no content out:
+
+| list | count | dated |
+|---|---:|---|
+| flagged files, `[sql]` slice census | 7 | 2026-08-26 |
+| unbalanced structures, 1,731-entry sweep | 30 | 2026-08-26 |
+| unbalanced over the frozen 12,499 (Q3) | 406 | 2026-08-29 |
+| auto-dispositioned mechanical | 262 | 2026-08-29 |
+| record-registering candidates | 144 | 2026-08-29 |
+| **FINAL EXCLUSION SET — sealed** | **6 structures / 11 files** | 2026-08-29 |
+
+**None is called "reconnaissance".** If *pre-launch* is meant literally — before the 2026-08-29
+launch — the candidates are the two 2026-08-26 lists (7 and 30). **I have not guessed. (2) cannot
+be built until you name the list**, and I have not written any key-derived structure into a queue.
+
+**(c) Selecting the tail from the key costs the screen its independence, for those structures.**
+The reference screen exists as the **independent** yardstick for rubric tier (a1). If its tail is
+chosen from the answer key, then for those structures the reference measurement is **no longer
+key-blind** — the measurement stays honest, but "the screen found it" and "the key pointed at it and
+the screen confirmed it" are different claims, and only the second will be true. **For Figure 4 that
+may be exactly what you want.** It is flagged so it is a decision on the record rather than a
+property discovered later. The sample (1) and the agents' claims (3) are unaffected — neither uses
+the key for selection.
+
+### 4. Queue as it now stands
+
+| step | structures | runs | grade | CPU-h |
+|---|---:|---:|---|---:|
+| (1) sample | 1,500 | 3,000 | floor | 2,739 |
+| (2) tail — agent side only | 572 | 1,144 | claim | 5,222 |
+| (2) tail — key candidates | **pending §3(b)** | — | claim | — |
+| (3) agents' claims not already covered | **5** | 10 | claim | 46 |
+| **total, excluding key candidates** | | **4,154** | | **8,007** |
+
+**19.6 days at today's 17 free cores; 16.7 h at the sealed 480-core ceiling.** Overlaps already
+removed: sample ∩ tail 67, sample ∩ claims 3, tail ∩ claims 20 — which is why (3) is only 5
+structures.
+
+**`agent_value` / `agent_run` will be recorded beside the reference value, never substituted**, as
+ruled.
+
+### 5. Standing
+
+Read-only apart from writing the sample list. **Nothing submitted** — the one-core-per-job geometry
+and this queue execute at the **Sep 5 04:00 KST reset** and not before. Daily reporting as before.
+
+— Bei (harness)
