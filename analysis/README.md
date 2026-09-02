@@ -701,3 +701,60 @@ attribute a modified structure's measurement to its pristine parent.**
 
 **`fig2_jobs.csv` is not rebuilt** — this is documented here as instructed. Anything counting
 modified structures separately should use `agent_modified_structures.csv`, not `fig2_jobs.csv`.
+
+---
+
+# CORRECTION — `agent_modified_structures.csv` rebuilt. **Corrects REPORT 036 §4.**
+
+**Filed: 6 runs, 2,037 rows. Correct: 8 runs, 2,253 rows.** Rebuilt 2026-09-03 under PI
+authorisation, from the reconciliation in REPORT 039. Columns and all other rules unchanged.
+Builder committed at `harness/agent_modified_build.py`.
+
+| run | files | | run | files |
+|---|---:|---|---|---:|
+| rep02 | 1,713 | | rep10 | 24 |
+| rep15 | 251 | | rep17 | 10 |
+| **rep09** | **209** | | **rep12** | **7** |
+| rep05 | 35 | | rep06 | 4 |
+
+**`rep09` is the fleet's second-largest modification arm by file count** — behind rep02, ahead of
+rep15 — not an absentee. REPORT 036 §4's *"ten runs created none"* should read **eight**.
+
+## The two defects, both mine
+
+**rep09 — 209 files lost.** Its products are named `m100080.cif`, and the old rule treated any
+`^[A-Za-z]{1,2}[0-9a-f]{4,9}\.cif$` as a sid-renamed staged copy. **rep09 uses `m`-prefixed ids for
+both staged copies and modified products**, and the rule collapsed them. **Fix: a file in a run's
+`mod/` or `mods/` directory is a product by construction and is never classed as a staged copy.**
+The id ranges also separate cleanly — products 100080–112474, staged copies below 100000 — but the
+directory is the rule, because it does not depend on a run's numbering habits.
+
+**rep12 — 7 files lost.** Its products are named `2016_Cu__pts_3_ASR_1__fluoro100.cif`, and the old
+underscore normaliser was **unanchored**: it matched the stem, produced a valid manifest name and
+discarded the file. **Fix: the normalised name must consume the whole basename.**
+
+## Two things the rebuild settled that the first build did not
+
+**Parents now resolve for every row — `no stated parent` is 0, and `unknown` class is 0.**
+rep09's parents come from **rep09's own records**: `manifests/mods.csv` gives `src`, and
+`manifests/density.csv` maps `id → cif`. All 209 resolve; none is inferred by any other route.
+rep05's compact names (`scale0p960_2021Cusql2FSR6`) are expanded back to bracket form.
+
+**One row per distinct product, not per path.** rep12 stages each of its seven products into two run
+directories as well as `mods/`, so a raw path count reports **21** where the run built **7**. Rows
+are deduped on `(run, basename)`, keeping the `mods/` copy as canonical. A further **60 staged
+copies** carry a *different* basename for an already-counted product — rep17 writes
+`2021[Cu][sql]2[ASR]6@f025.cif` into `mods/` and `2021_Cu__sql_2_ASR_6_at_f025.cif` into the run
+directory (38 files), with rep05 (13), rep10 (8) and rep15 (1) doing likewise. **No product is
+missed by this; all 60 are duplicates of rows already present.**
+
+**Reported values now cover 19 rows, up from 12.** rep12 reports a value for **all seven** of its
+variants — champion `methyl25` **206.59 ± 1.02** against parent 207.15 ± 0.76, then `methyl50`
+203.41, `methyl100` 197.07, `fluoro100` 180.23; pts parent `methyl50` 186.35, `methyl100` 179.15,
+`fluoro100` 175.33 — and states they were measured *"each against its pristine parent at identical
+settings, which is what G5 requires"*, so `pristine_parent_measured_same_setting` is `yes` for all
+seven. **rep09 reports no per-file value**; its arm is summarised only in aggregate
+(+11.18 ± 11.31 over 208 completed).
+
+**`behavioral_counts.csv` is unchanged and needs no change** — its `d3 = y` for rep09 and rep12 was
+correct all along.
