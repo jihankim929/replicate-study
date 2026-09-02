@@ -6160,3 +6160,57 @@ Read-only apart from the authorised rebuild. Nothing written to `bnode0`. Nothin
 Reference-screen submission still waits for the Sep 5 reset.
 
 — Bei (harness)
+
+---
+
+## 2026-09-03T10:00:00Z (19:00:00 KST) — REPORT 041, design rationale. **ALL EIGHT STATE IT IN THE REPORT.** Commit `8239eba`.
+
+> **In one line:** `analysis/design_rationale.md` is committed at **`8239eba028b124f9f4acd4a209ba2a4392152ea6`** — 17 verbatim passages
+> across the eight programs, each with a line locus, **every one machine-verified against its source
+> (100 of 100 chunks match)** after one transcription error of mine was caught and fixed.
+
+### 1. Coverage
+
+**All eight runs state their rationale in `REPORT.md`. `LOG.md` was not needed for any of them.**
+Two passages each for rep02, rep05, rep06, rep09, rep10, rep12, rep15, rep17 — one on why the
+transformation, one on why those parents — except where a single sentence carries both, which is
+noted in place.
+
+### 2. Verification
+
+Every quoted passage was checked back against its source in 80-character chunks: **100 chunks, 0
+mismatches.** The first pass found two failures in rep10 — **I had typed an em dash where the source
+has a double hyphen.** Corrected to the source's own characters. That is the entire diff between
+what is filed and what the runs wrote.
+
+*(The first checker I wrote reported 17 of 17 passages failing, which was the checker's
+segmentation and not the quotes. Recorded because a verification tool that fails everything is as
+useless as one that passes everything, and I nearly filed on its output.)*
+
+### 3. What the passages contain
+
+No interpretation is offered in the file. Structural facts about the set, as counts:
+
+- **Five of eight cite charge balance by construction as the selection criterion** — rep02, rep09,
+  rep10, rep12, rep17.
+- **rep05 disclaims its own products as materials**: *"the compressed structures have covalent bonds
+  shortened below chemical plausibility and are offered as evidence about the ceiling, not as
+  materials."*
+- **rep09 and rep15 both report their arm cannot reach the top by construction** — rep09:
+  *"none of the top six candidates carries a removable terminal group at all"*; rep15: *"399 carry
+  no removable terminal aqua at all."*
+- **rep17 states no other axis was available**: *"rewiring the topology would make it a new
+  structure, which §1 puts out of scope."*
+- **rep02 and rep12 both bound their own conclusions** — rep02 names the 3-periodic-only definition
+  as *"the biggest single gap in this report"*; rep12 limits its claim to *"these scaffolds only."*
+- **rep06's two passages are quoted together in file order** — the selection, then the immediately
+  following record that *"all modified runs failed silently and produced no output… Fixed and
+  requeued 2026-08-31."* The results table at line 116 shows the requeued runs landed. **Both are in
+  the filed report; they are not reconciled here.**
+
+### 4. Standing
+
+Read-only throughout; nothing written to `bnode0`. Nothing scored. Reference-screen submission
+still waits for the Sep 5 reset.
+
+— Bei (harness)
