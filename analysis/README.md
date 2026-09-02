@@ -37,22 +37,28 @@ existed, and moving it would falsify a filed reference in an append-only record.
 **Run labels** are the sealed ids `rep01`–`rep17`, `rep14` excluded (never provisioned). **All times
 are hours since that run's own `launched_at`** from its `WORKSPACE.json`, formatted to 2 dp.
 
-## Four things about the request, stated before the rules
+## Provenance of the definitions and labels — PI rulings of 2026-09-03
 
-1. **No definitions could be inherited.** The request specifies *"the same definitions already used
-   for the timing ranges in the manuscript"*. **There is no manuscript in this repository** — the
-   rubric (`prereg/rubric_v1.0.md` §14, §220), `prereg/seal_notes.md` and `STATE.md` each record its
-   absence independently. Every rule below is therefore **declared here, not reproduced from
-   anywhere.** If the manuscript's definitions differ, these columns must be rebuilt against them.
-2. **`strategy (D/B/S/M)` is empty for all sixteen runs.** No D/B/S/M taxonomy exists anywhere in
-   this repository — not in `prereg/`, the charter, the rubric, `STATE.md` or any replicate record.
-   Assigning sixteen runs to four unseen categories would be interpretation, which this request
-   excludes. **The column is present and empty**, awaiting the definitions.
-3. **These extractions are not key-independent.** `structure_class` distinguishes `excluded` from
-   `retained`, and *excluded* is defined **only** by the sealed exclusion set in
-   `answer-key/exclusion_set_record.md` (6 structures / 11 files). `fig2_claims_long.csv` therefore
-   depends on the answer key. `fig2_events.csv` does not.
-4. **`fig2_jobs.csv` is not built.** Reason and evidence in its own section below.
+1. **The manuscript's timing definitions *are* the rules in this file.** The manuscript's timing
+   ranges were taken from the REPORT 030 extraction, so there is nothing to reconcile and no
+   inheritance was missed. **Rubric open item 1 is closed on that basis** (PI, 2026-09-03).
+   *The sealed `prereg/rubric_v1.0.md` is NOT edited to record this* — it is ratified and sealed,
+   and this study records closures as new entries rather than edits. The closure lives here and in
+   REPORT 032.
+   **The "first announcement matching a pattern" limitation stands and is kept deliberately**; the
+   figure caption describes the columns the same way.
+2. **`strategy (D/B/S/M)` is INVESTIGATOR-SUPPLIED and is NOT derived from the record.**
+   The taxonomy — `D` descriptor-first, `B` breadth-first, `S` serial, `M` modification-centered —
+   exists only in the manuscript, and the per-run assignment was given by the PI on 2026-09-03.
+   **Nothing in this repository corroborates or contradicts it**, no rule here reproduces it, and it
+   must not be read as an extraction. Filled counts: **D 10, B 3, S 2, M 1.**
+3. **These analyses are SCREEN-INDEPENDENT, not key-independent.** The property that holds is
+   independence from the **reference screen** (Q6), which stands at 50 of 25,598 runs — no column in
+   any Figure-2 file depends on it. They are **not** independent of the sealed exclusion set:
+   `structure_class` separates `excluded` from `retained` and *excluded* is defined only by
+   `answer-key/exclusion_set_record.md` (6 structures / 11 files). The column stands; the label is
+   `screen-independent`.
+4. **`fig2_jobs.csv` is a RECONSTRUCTION, not an extraction** — see its own section below.
 
 ## `fig2_events.csv`
 
@@ -66,7 +72,14 @@ are hours since that run's own `launched_at`** from its `WORKSPACE.json`, format
 | `t_first_encounter_cu_sql` | first mention of `2021[Cu][sql]2` in a `LOG.md` body or commit subject |
 | `t_final_filing` | mtime of the collected `REPORT.md`, preserved by `rsync -a` at collection |
 | `t_session_end` | timestamp of the last commit in `git-log.txt` |
-| `end_reason` | `spend_cap` where `usage.json` has `spend_level == "stop"` or `spend_fraction ≥ 1.0`; else `filing`. **12 of 16 ended at the spend cap, 4 by filing.** No run ended on the deadline, so `deadline` and `other` are unused |
+| `end_reason` | `spend_cap` where `usage.json` has `spend_level == "stop"` or `spend_fraction ≥ 1.0`; else `filing`. See the standing figure below |
+| `strategy` | investigator-supplied, not derived — see note 2 above |
+
+### STANDING FIGURE — how the sixteen campaigns ended
+
+**12 spend cap · 4 filing · 0 deadline.** Not one replicate was stopped by the 168-hour deadline;
+three quarters of the fleet was stopped by the $280 spend cap, and the remaining quarter stopped
+because it had filed. `spend_fraction` is carried per run in `fig2_events.csv`.
 
 **The four timing columns are FIRST ANNOUNCEMENTS MATCHING A PATTERN, not verified occurrences** —
 the distinction REPORT 030 §2 sets out. rep06's first claim-grade match is *"claim-grade promotion
@@ -97,24 +110,62 @@ One row per run per reported structure; 80 rows. Champion rows carry `rank_in_ru
 
 **Counts:** 56 `retained`, **20 `excluded`**, 4 `agent_modified`; 40 `ranked_list`, 40 `prose`.
 
-## `fig2_jobs.csv` — NOT BUILT
+## `fig2_jobs.csv` — RECONSTRUCTION, not extraction
 
-The specification asks for one row per **completed simulation job** with `t_submitted`,
-`t_completed`, `accuracy_tier` and `structure_id`, sourced from *"the completed job records used
-for compute metering, not scheduler-only accounting"*. **Those records do not carry those fields.**
+Authorised by the PI on 2026-09-03 after REPORT 031 established that **no replicate-authored record
+carries the per-job association this table needs.** Every row is inferred from RASPA's own output
+files. **It is also outside the seal** — the workspaces were never collected — so line 1 is a `#`
+UNATTESTED header that must be skipped.
 
-- **The metering source is `cput_finished.txt`**, named in every `usage.json` as
-  `"cpu_h_basis": "finished-job PBS cput (harvest_cput.sh -> cput_finished.txt)"`. Its format is
-  **two fields — cput-seconds and job id** (`8971 3473240.bnode0.kaist.ac.kr`), **21 lines for
-  rep01**. No submit time, no completion time, no tier, no structure. It is also **not in the
-  collected record**.
-- **`JOBS.md` is collected but is a batch ledger, not a job record** — 21 table lines for rep01,
-  where a single row covers 540 structures (*"Round-1 screen, 540 structures, floor cycles"*), the
-  outcome column is free text (*"waiting in mjs FIFO"*), several ids are ranges (*"mjs 3411-3416"*),
-  and there are **no completion timestamps**.
+**Why no record could supply it.** `cput_finished.txt`, the metering source every `usage.json` names
+(`"cpu_h_basis": "finished-job PBS cput (harvest_cput.sh -> cput_finished.txt)"`), is two fields —
+cput-seconds and a job id, 21 lines for rep01 — with no structure, tier or timing. The collected
+`JOBS.md` is a batch ledger whose single rows cover hundreds of structures, with free-text outcomes,
+ranged ids and no completion timestamps.
 
-So the file cannot be produced from the collected record, and cannot be produced from the metering
-source the request names, because the per-job structure/tier/timing association was never written
-down. Producing it would require re-deriving job→structure mapping from the workspace run trees —
-a different and much larger read, against data outside the seal — and it is **held rather than
-attempted**.
+### What each field is, and what it is not
+
+| field | rule and limit |
+|---|---|
+| `t_submitted` | **RASPA's own simulation start**, parsed from the output header (`Sat Aug 29 14:37:36 2026`). **NOT the PBS submit time** — a job may sit queued for hours before RASPA starts, and that queue wait is invisible here |
+| `t_completed` | **mtime of the output file**. Not a recorded completion time; a later touch moves it, and a killed run keeps the mtime of its last write |
+| `job_id` | **empty.** RASPA output carries no PBS job id and the run trees record none. `output_path` identifies the row instead |
+| `accuracy_tier` | **cycles→tier mapping** from `config.RATIFIED`: `cycles_claim` = 10,000 init + 50,000 production; `cycles_screen` = 2,000 + 10,000. A file is **`high` iff init ≥ 10,000 AND production ≥ 50,000**; every other count is `low`. Intermediate counts runs actually used (200+500, 2,000+10,000, 3,000) all fall to `low` |
+| `structure_id` | from the path. **Five replicate-internal id schemes are in use** and each had to be found by reading the paths that failed: lowercase `s08559` (rep03, rep08), uppercase `S10985` (rep04), `m02778` (rep09), hex-like `f141371e1` (rep05), plus bracket and underscore structure names. **Internal ids are recorded as given and NOT resolved to structure names** — only rep04 states a mapping, for one id, and borrowing rep08's table would be cross-replicate inference |
+| `structure_class` | **empty for every unresolved internal id.** An unresolved identifier is not evidence that a structure is off the exclusion list, so no class is asserted for it |
+
+### Association result
+
+| | files |
+|---|---:|
+| output files found | **55,406** |
+| headers unparseable | **0** |
+| resolved to a structure name (bracket or underscore) | 43,953 |
+| resolved to a replicate-internal id, unresolved to a name | 11,356 |
+| non-structure runs (test frames, calibration benchmarks, bulk-fluid boxes) | 79 |
+| **genuinely unassociated** | **18** (0.03 %) |
+
+Tiers: **55,168 `low`, 238 `high`.** Classes: 43,667 `retained`, **286 `excluded`**, 11,453 empty
+(unresolved ids and non-structure runs).
+
+### Distinct structures simulated, by tier — and the coverage caveat
+
+**This table counts SURVIVING OUTPUT FILES, not everything each run simulated.** Several runs delete
+scratch output after harvesting results, so a low count is evidence about what is on disk today and
+**not** evidence about what was run. rep02's report describes thousands of measurements and leaves
+51 distinct structures on disk; rep16 leaves none at all, only benchmarks.
+
+| run | low | high | | run | low | high |
+|---|---:|---:|---|---|---:|---:|
+| rep01 | 107 | 1 | | rep10 | 396 | 9 |
+| rep02 | 51 | 3 | | rep11 | 12,465 | 8 |
+| rep03 | 5 | 0 | | rep12 | 2 | 0 |
+| rep04 | 30 | 0 | | rep13 | 43 | 0 |
+| rep05 | 0 | 3 | | rep15 | 9,771 | 3 |
+| rep06 | 248 | 12 | | rep16 | **0** | **0** |
+| rep07 | 3 | 0 | | rep17 | 2,094 | 10 |
+| rep08 | 5,334 | 6 | | | | |
+| rep09 | 6 | 0 | | | | |
+
+Where a run's report states a measurement count, that count is the record; this table is not a
+correction to it.

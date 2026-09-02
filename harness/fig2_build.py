@@ -20,6 +20,13 @@ EXCLUDED = {"2020[Fe][hcb]2","2021[Cu][sql]2","2010[Co][tbo]3","2017[Fe][nan]3",
 AGENT = re.compile(r'__\d+of\d+|_DENET|\+DEAQ|@(f|me)\d+')
 BASE  = re.compile(r'^(\d{4}\[[A-Za-z]{1,6}\]\[[a-z]{3}\]\d)')
 GROUP = {"gated":"C","ungated":"U"}
+# (3) INVESTIGATOR-SUPPLIED, 2026-09-03. D=descriptor-first, B=breadth-first, S=serial,
+# M=modification-centered. NOT DERIVED FROM THE RECORD: the taxonomy exists only in the
+# manuscript and the per-run assignment was given by the PI. Nothing in this repository
+# corroborates or contradicts it, and no rule here reproduces it.
+STRATEGY = {"rep01":"D","rep02":"M","rep03":"S","rep04":"D","rep05":"D","rep06":"D","rep07":"S",
+            "rep08":"B","rep09":"B","rep10":"D","rep11":"D","rep12":"D","rep13":"D","rep15":"D",
+            "rep16":"B","rep17":"D"}
 
 def klass(name):
     if AGENT.search(name): return "agent_modified"
@@ -45,7 +52,7 @@ def events():
         sf = u.get("spend_fraction", 0.0)
         end = "spend_cap" if u.get("spend_level") == "stop" or sf >= 1.0 else "filing"
         out.append(dict(run=r, group=GROUP[B.ARM[r]],
-            strategy="",                                   # see README: no D/B/S/M taxonomy exists
+            strategy=STRATEGY[r],                          # investigator-supplied; see README
             t_first_job_submitted=ms.get((r,"first_job_submitted"),""),
             t_first_declared_strategy=ms.get((r,"first_stated_strategy"),""),
             t_first_high_accuracy_calc=ms.get((r,"first_claim_grade"),""),
