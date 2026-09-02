@@ -475,3 +475,54 @@ settled here** — a title is not the paper, and the CoRE entry is SI file 2 of 
 contain several structures, so whether this specific deposited file is the dodecaborate one cannot
 be determined from the title alone. **Recorded as a discrepancy to check against the paper, not as a
 correction to the key.**
+
+---
+
+# `agent_modified_structures.csv` — structure files not in the frozen manifest
+
+**UNATTESTED**: a post-seal read-only inventory of the workspaces; line 1 is a `#` header.
+
+**2,037 files across 6 runs.** Ten runs created none.
+
+| run | group | files | transformation, verbatim from the run |
+|---|---|---:|---|
+| rep02 | U | **1,713** | *"interpenetration removal"* |
+| rep15 | U | 251 | *"+DEAQ"; "the §3 terminal-aqua removal"* |
+| rep05 | C | 35 | *"Isotropic lattice scaling of the winner"* |
+| rep10 | U | 24 | *"Methylation of framework C-H, charge-balanced by construction"* |
+| rep17 | U | 10 | *"the four-methyl variant of the same framework"* |
+| rep06 | C | 4 | *"de-interpenetration against matched pristine controls"* |
+
+**Every row has a stated parent — 0 rows with none** — because in all six runs the parent is named
+inside the filename the run itself chose (`…__1of2`, `…_DENET`, `…+DEAQ`, `…@me004`, `M…_f100`,
+`scale0p960_…`). **1,948 distinct parents. 32 rows have an `excluded` parent**; 2,005 `retained`.
+
+## How the file list was narrowed, and what was excluded as not-a-new-structure
+
+174,471 `.cif` files sit outside `db/` in the sixteen workspaces; **only 2,037 are new structures.**
+The rest are staged copies and simulator artifacts, excluded by these rules:
+
+| excluded | files | why |
+|---|---:|---|
+| `Framework_0_{initial,final}_*_{P1,VASP}.cif` | 37,106 | **RASPA's own restart/output dumps**, written by the simulator, not by the run |
+| generic staged names — `framework.cif`, `S.cif`, `G.cif` | 26,199 | a staged copy of a database structure; **the identity is in the directory name**, not the file |
+| sid-renamed staged copies — `s07848.cif`, `S0000_Cd__dia_3_ASR_1.cif` | 29,433 | the run's internal id for a manifest structure |
+| underscore-renamed staged copies | 8,071 | `2013_Ni__nia_3_ASR_1.cif` normalises to a manifest name |
+| test frames — `struct.cif`, `sT.cif`, `bench0.cif`, `gt1.cif`, `elemprobe.cif` | 3,766 | probes and benchmarks, not database structures |
+
+**A basename absent from the manifest is not evidence of a new structure** — that was the naive test,
+and it returned 161,972 files, eighty times the true count.
+
+## Fields that are largely empty, and why
+
+`reported_value`, `reported_uncertainty` and `accuracy_tier` are filled for **12 rows only** —
+rep06's four `_DENET` structures, from its own filed pair table, and rep17's eight variants, from its
+own outputs. **For the other 2,025 the run reported no per-file number**: rep02 reports a mean over
+250 paired parents, rep15 a mean over 42 pairs, rep10 a direction ("every variant screened below its
+parent") with no per-variant values. Those are aggregate findings and the file does not invent
+per-row values from them.
+
+`pristine_parent_measured_same_setting` is `yes` for those same 12 and **`unknown` for the rest.**
+Six of the six runs state a matched control at the *experiment* level — `modifications.csv`,
+`matched_control` — but **that is a claim about the design, not per-file evidence**, and this
+inventory does not upgrade one into the other.
