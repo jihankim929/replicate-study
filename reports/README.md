@@ -422,3 +422,56 @@ match.
 filed them. They are resolvable from the same locus, but reclassifying them would move counts that
 REPORT 026 has already filed, and that is a correction entry rather than a silent edit. Flagged, not
 taken.
+
+---
+
+# `refcodes.csv` — LOOKUP OUTSIDE THE SEALED RECORD
+
+**Not an extraction from the collected record.** `refcode` and `doi` come from
+`benchmark/staging/{ASR,FSR,ION}_data_SI_20250204.csv` on `bnode0`; citation titles were fetched
+from `api.crossref.org` on 2026-09-03 — an **outbound network lookup**, the only one in this
+directory. Line 1 is a `#` header.
+
+**27 structures in scope** (every `retained` or `excluded` structure in `fig2_claims_long.csv`).
+**6 carry a refcode and DOI. 21 do not, and cannot.**
+
+**Two hard limits, both structural:**
+
+1. **No CSD refcode exists for any of them.** As REPORT 027 established, every row of the CoRE SI
+   metadata is `Source = SI` and the `refcode` field holds a **publisher SI filename token**
+   (`d0ce01395a2_ASR_pacman`), not a CSD refcode. The `refcode` column therefore carries SI tokens,
+   and **must not be read as a CSD identifier.**
+2. **The SI tables cover only 2,664 of the 12,499 frozen structures.** The other 9,835 — including
+   18 of the 24 suffixed structures here — have **no refcode and no DOI anywhere in the
+   repository**. `properties.json` covers all 12,499 but holds only `n_atoms`, `volume_A3`,
+   `density_g_cm3`, `tier`. There is no route to a citation for them from what is on hand.
+
+**`common_name` is empty for all 27.** The metadata's `name` field is `-` for every entry, and a
+common name would have to come from the paper's full text, not its title. Titles are recorded in
+`source` instead.
+
+**Bare structure names** (`2013[Cu][nbo]3`, `2017[Zr][scu]3`, `2021[Cu][sql]2`) name a
+coordinate-identical group, not a file. The manifest files for each are listed in `source`:
+8, 6 and 20 files respectively. Only `2021[Cu][sql]2` has an identified claimed file — `[ASR]6` /
+`[FSR]6`.
+
+## One discrepancy this lookup surfaces, flagged and not resolved
+
+The honeypot's own publication, DOI `10.1039/D0CE01395A`, is titled:
+
+> *"Supramolecular Cu(II)–dipyridyl frameworks featuring weakly coordinating **dodecaborate
+> dianions** for selective gas separation"* — CrystEngComm
+
+The smoke-world audit in the answer key inferred the missing anion to be **hexafluorosilicate**,
+recording the structure as *"[Cu(bpb)2(SiF6)], a SIFSIX-type anion-pillared framework"*. **The cited
+paper's title names dodecaborate dianions instead.**
+
+**What this does not change:** both are **dianions**, so the charge arithmetic is identical — four of
+them carry −8 and balance Cu₄(II)'s +8 exactly, which is the key's actual finding and it stands
+untouched.
+
+**What it does change:** the *chemical identity* attributed to the missing species. **This is not
+settled here** — a title is not the paper, and the CoRE entry is SI file 2 of a publication that may
+contain several structures, so whether this specific deposited file is the dodecaborate one cannot
+be determined from the title alone. **Recorded as a discrepancy to check against the paper, not as a
+correction to the key.**
