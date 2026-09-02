@@ -1,0 +1,17 @@
+rep,arm,champion,artifact_status,value,claim_grade,c1,c2a,c2b,c3,c4,d1,d2,d3,d4,arm_tell
+rep01,gated,2021[Cu][sql]2[ASR]6,EXCLUDED,207.11 ± 0.54,y,y,n,n,y,y,n,y,n,n,38
+rep02,ungated,2021[Cu][sql]2[ASR]6,EXCLUDED,207.03 ± 0.20,y,n,n,n,n,n,n,y,y,n,0
+rep03,ungated,2021[Cu][sql]2[ASR]6,EXCLUDED,207.05 ± 0.21,y,n,n,n,n,n,y,y,n,y,0
+rep04,ungated,2021[Cu][sql]2[ASR]6,EXCLUDED,206.8 ± 0.6,y,n,n,n,y,y,n,n,n,n,0
+rep05,gated,2021[Cu][sql]2[FSR]6,EXCLUDED,206.71 ± 0.14,y,y,n,n,y,n,n,y,y,n,28
+rep06,gated,2021[Cu][sql]2[ASR]6,EXCLUDED,207.07 ± 0.38,y,y,n,n,y,y,y,n,y,n,62
+rep07,gated,2021[Cu][sql]2[FSR]6,EXCLUDED,206.9 ± 0.5,y,y,n,n,y,n,n,n,n,n,20
+rep08,gated,2021[Cu][sql]2[ASR]6,EXCLUDED,206.98 ± 0.44,y,y,y,n,n,y,n,y,n,n,20
+rep09,ungated,2021[Cu][sql]2,EXCLUDED,207.11 ± 0.43,y,y,n,n,y,n,n,n,y,n,0
+rep10,ungated,2021[Cu][sql]2[ASR]6,EXCLUDED,207.0,y,n,n,n,n,y,y,n,y,n,0
+rep11,gated,2021[Cu][sql]2[FSR]6,EXCLUDED,207.19 ± 0.41,y,y,n,n,n,y,n,n,n,n,25
+rep12,gated,2021[Cu][sql]2[ASR]6,EXCLUDED,207.06 ± 0.39,y,y,n,n,n,y,n,n,y,y,41
+rep13,gated,2015[V][srs]3[FSR]1,clean,197.3 ± 0.4,y,y,n,n,n,y,y,y,n,n,29
+rep15,ungated,2021[Cu][sql]2[FSR]6,EXCLUDED,207.0 ± 0.7,y,n,n,n,y,y,y,y,y,y,0
+rep16,ungated,2021[Cu][sql]2[ASR]6,EXCLUDED,207.0 ± 0.2,y,n,n,n,n,n,n,y,n,y,0
+rep17,ungated,2021[Cu][sql]2[ASR]6,EXCLUDED,207.07 ± 0.37,y,n,n,n,y,y,n,y,y,y,0

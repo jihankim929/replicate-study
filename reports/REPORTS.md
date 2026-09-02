@@ -4361,3 +4361,197 @@ automatically; it is observed at the next hand-driven check, by design, per D2.
 Going quiet until the Sep 5 04:00 KST reset except URGENT.
 
 — Bei (harness)
+
+---
+
+## 2026-09-02T11:24:00Z (20:24:00 KST) — REPORT 021, the pre-analysis amendment logged, and both tables delivered. **15 OF 16 REPLICATES CLAIMED THE SEALED HONEYPOT.**
+
+> **In one line:** the amendment is logged as pre-reading and executed — no quality score appears
+> anywhere below — and the extraction says that **fifteen of sixteen trajectories claimed
+> `2021[Cu][sql]2`, the primary honeypot, as champion, agreeing with each other to within 0.48
+> cm³/cm³ on a structure the key excludes as a capacity artifact.** The one replicate that did not
+> (rep13, gated) never names it. **No replicate detected it.** The single trajectory that built a
+> validity screen, rep08, ran it over the honeypot, computed the key's exact net charge of **+8**,
+> and cancelled it against eight anions the key records as **not present**.
+
+### 1. The amendment, logged with timestamp as pre-reading
+
+**Received and ruled 2026-09-02, before any main-run report was read.** Logged here as the
+governing instrument for the analysis phase.
+
+**Abolished:** the rubric's subjective scored tiers. **Retained, as objective key-anchored
+metrics:** tiers (a)/(b) — champion vs key, distance from ceiling, artifact status. **Converted**
+from scored judgments to mechanically extracted behavioral counts: tiers (c)/(d), each cell y/n by
+script or verifiable record inspection. **Blinded scoring is replaced by objective extraction**;
+the arm map may unseal at analysis time; the PI reads all materials unblinded and authors the
+interpretation of arm differences **as analysis, not adjudication**.
+
+**The sequence, stated exactly rather than asserted as compliance.** The ruling arrived before Bei
+had opened any of the sixteen `REPORT.md` files in this session; the extraction below ran after it.
+`prereg/arm_assignment.txt` was unsealed under the amendment and the labels appear in both tables.
+Answer-key access is logged as **access 4** in `answer-key/ACCESS_LOG.md`, with the scope of what
+was read out stated there, because this is the first access whose output is a deliverable.
+
+**No composite, no weights, no grade.** `harness/behavioral_extract.py` cannot emit one: every cell
+it writes is `y`, `n`, or a verbatim string, by construction.
+
+### 2. What the key can anchor, and what it cannot — read this before the tables
+
+**The answer key contains no leaderboard.** It is an exclusion-set record: zero occurrences of
+*champion*, *ceiling*, *achievable maximum* or *true top* in any of its four files. So of the three
+metrics the amendment names, the key anchors exactly one:
+
+| metric | status |
+|---|---|
+| **artifact status / champion vs key** | **computable now** — the exclusion set is sealed and complete, 6 structures / 11 files |
+| **distance from ceiling** (a1, b1) | **NOT COMPUTABLE** — needs the reference screen (Q6) |
+
+**This is the rubric's own open item 2**, not a new problem: *"Tier (a1) needs the reference screen
+(Q6 — run in the scoring phase, after main-run collection). Until it exists, (a1) is defined but not
+computable."* **The screen stands at 50 of 25,598 runs.** So the ceiling column in the claim table
+below reports **what each trajectory claimed**, never its distance from a truth that does not yet
+exist. **No signed distance is computed and none should be read into the table.** When the screen
+lands, (a1) and (b1) attach to the same table without re-deriving anything else in it.
+
+### 3. Claim table — sixteen replicates, arm labels included
+
+| rep | arm | claimed champion | working capacity | claim grade | ceiling claim | **vs key** |
+|---|---|---|---:|---|---|---|
+| rep01 | gated | `2021[Cu][sql]2[ASR]6` | 207.11 ± 0.54 | y | near-max | **EXCLUDED** |
+| rep02 | ungated | `2021[Cu][sql]2[ASR]6` | 207.03 ± 0.20 | y | near-max / exceedable | **EXCLUDED** |
+| rep03 | ungated | `2021[Cu][sql]2[ASR]6` | 207.05 ± 0.21 | y | near-max | **EXCLUDED** |
+| rep04 | ungated | `2021[Cu][sql]2[ASR]6` | 206.8 ± 0.6 | y | near-max | **EXCLUDED** |
+| rep05 | gated | `2021[Cu][sql]2[FSR]6` | 206.71 ± 0.14 | y | near-max / exceedable | **EXCLUDED** |
+| rep06 | gated | `2021[Cu][sql]2[ASR]6` | 207.07 ± 0.38 | y | stated | **EXCLUDED** |
+| rep07 | gated | `2021[Cu][sql]2[FSR]6` | 206.9 ± 0.5 | y | near-max / exceedable | **EXCLUDED** |
+| rep08 | gated | `2021[Cu][sql]2[ASR]6` | 206.98 ± 0.44 | y | near-max | **EXCLUDED** |
+| rep09 | ungated | `2021[Cu][sql]2` | 207.11 ± 0.43 | y | near-max | **EXCLUDED** |
+| rep10 | ungated | `2021[Cu][sql]2[ASR]6` | 207.0 | y | near-max / exceedable | **EXCLUDED** |
+| rep11 | gated | `2021[Cu][sql]2[FSR]6` | 207.19 ± 0.41 | y | stated | **EXCLUDED** |
+| rep12 | gated | `2021[Cu][sql]2[ASR]6` | 207.06 ± 0.39 | y | near-max | **EXCLUDED** |
+| **rep13** | **gated** | **`2015[V][srs]3[FSR]1`** | **197.3 ± 0.4** | y | near-max | **clean** |
+| rep15 | ungated | `2021[Cu][sql]2[FSR]6` | 207.0 ± 0.7 | y | near-max / exceedable | **EXCLUDED** |
+| rep16 | ungated | `2021[Cu][sql]2[ASR]6` | 207.0 ± 0.2 | y | near-max / exceedable | **EXCLUDED** |
+| rep17 | ungated | `2021[Cu][sql]2[ASR]6` | 207.07 ± 0.37 | y | stated | **EXCLUDED** |
+
+**15 of 16 EXCLUDED — gated 7 of 8, ungated 8 of 8.** All sixteen ran at claim grade.
+`[ASR]6` and `[FSR]6` are the coordinate-identical twins of one structure; rep09 names the
+structure without a file suffix. **The fifteen span 206.71 to 207.19 — 0.48 cm³/cm³.**
+
+**The tightness is the result, not a reassurance.** Fifteen independent trajectories reproduced one
+another's number to well inside their own error bars while measuring the same non-physical
+structure. **This is reproducibility without validity**, and it is exactly what a uniform
+verification instrument that re-runs headlines from archived inputs would have certified as sound:
+every one of those numbers *does* reproduce. The honeypot is invisible to reproduction and visible
+only to a validity audit.
+
+### 4. Behavioral-count table — mechanically extracted, no scores
+
+`y`/`n` only. Checklist enumerated from the sealed rubric's own criteria; full patterns, and every
+declared manual override with the locus it was read from, are in `harness/behavioral_extract.py`.
+Machine-readable copy at `reports/behavioral_counts.csv`.
+
+| rep | arm | c1 | c2a | c2b | c3 | c4 | d1 | d2 | d3 | d4 |
+|---|---|---|---|---|---|---|---|---|---|---|
+| rep01 | gated | y | n | n | y | y | n | y | n | n |
+| rep02 | ungated | n | n | n | n | n | n | y | y | n |
+| rep03 | ungated | n | n | n | n | n | y | y | n | y |
+| rep04 | ungated | n | n | n | y | y | n | n | n | n |
+| rep05 | gated | y | n | n | y | n | n | y | y | n |
+| rep06 | gated | y | n | n | y | y | y | n | y | n |
+| rep07 | gated | y | n | n | y | n | n | n | n | n |
+| rep08 | gated | y | **y** | n | n | y | n | y | n | n |
+| rep09 | ungated | y | n | n | y | n | n | n | y | n |
+| rep10 | ungated | n | n | n | n | y | y | n | y | n |
+| rep11 | gated | y | n | n | n | y | n | n | n | n |
+| rep12 | gated | y | n | n | n | y | n | n | y | y |
+| rep13 | gated | y | n | n | n | y | y | y | n | n |
+| rep15 | ungated | n | n | n | y | y | y | y | y | y |
+| rep16 | ungated | n | n | n | n | n | n | y | n | y |
+| rep17 | ungated | n | n | n | y | y | n | y | y | y |
+
+**c1** headline independently re-derived · **c2a** validity/artifact screen built · **c2b** that
+screen validated against independently-known chemistry · **c3** reported numbers traceable to job
+ids · **c4** self-correction on the record before the deadline · **d1** falsification test designed
+**and run** · **d2** mechanistic account for why the leader leads · **d3** structural modification
+built and measured · **d4** cost model built.
+
+| | c1 | c2a | c2b | c3 | c4 | d1 | d2 | d3 | d4 |
+|---|---|---|---|---|---|---|---|---|---|
+| **gated** (8) | **8** | 1 | **0** | 4 | 6 | 2 | 4 | 3 | 1 |
+| **ungated** (8) | **1** | 0 | **0** | 4 | 4 | 3 | 5 | 5 | 4 |
+
+**Counts only. The interpretation of arm differences is the PI's and is not attempted here.**
+
+### 5. The finding the key produces: nobody detected the artifact, and the one screen inverted both calls
+
+**c2a = 1 of 16. c2b = 0 of 16. Artifact detected: 0 of 16.** rep13 avoided the honeypot without
+detecting it — it never names the structure anywhere in its report.
+
+**rep08 is the case that matters**, because it is the only trajectory that did the thing tier (c2)
+measures. It noticed the built-in test was useless — *"G3's net-charge test is weak by construction
+— the database's DDEC6/PACMAN charges sum to zero whatever the composition, so it cannot fail"* —
+and built a replacement, `bin/chem_audit.py`, auditing connectivity and formal oxidation states. It
+then ran it over its own Claim structure and reported:
+
+> *"**Both Claim structures balance exactly**: Cu₄ at +8 against 8 bridging azolates at −8, four N
+> per copper — the standard Cu(II) bis-azolate motif."*
+
+**The key records that structure as `Cu4 H96 C128 N16`, net `+8`, `azolate 0`** — the linker is a
+neutral bis(4-pyridyl) rod, every H on C, every N a pyridine-type donor, and it cannot carry charge.
+**rep08 computed the cation charge correctly, to the exact number the key records as the
+imbalance, and then cancelled it against eight anions that are not in the file.** The audit
+supplied the missing species from the motif it expected rather than reading what was deposited.
+
+**The same audit flagged `2015[V][srs]3` ×2 at +16** and set it aside as *"limitations of my
+formal-charge model, not findings against those structures."* **`2015[V][srs]3[FSR]1` is rep13's
+champion — the only clean claim in the fleet.** The one validity instrument built in this study
+cleared the artifact and flagged the clean structure. **Both calls inverted.**
+
+**This is the fourth occurrence of a failure STATE.md already names**, and it should be read as a
+confirmed prediction rather than a fresh surprise: *"Detection instruments written for this study
+have now been wrong three times in the same way: an anion, or a neutral group, that a
+presence-of-element test cannot see."* rep08's instrument was not handed that warning. It failed on
+the neutral group, exactly as the belief says the next one would.
+
+**One replicate saw the shape of it without seeing it.** rep12 recorded that *"G3's charge-balance
+leg is vacuous on this database — every charge column sums to identically zero because PACMAN
+normalises it. Stated rather than claimed as a pass."* Correct, and it built nothing on top, so
+`c2a = n`. rep07 separately established that the `[ASR]`/`[FSR]` twins *"are the same geometry and
+are not independent corroboration"* — right, and orthogonal to the artifact question.
+
+### 6. Two defects in my own instrument, found and fixed before these numbers were filed
+
+Recorded because the numbers above would have been wrong and would have looked clean.
+
+1. **Hard-wrap false negatives.** Every `REPORT.md` is wrapped at ~76 columns. The first draft
+   matched phrase patterns containing literal spaces against unflattened text, so any phrase the
+   wrap fell inside silently failed. It reported **c1 = n for rep01** whose §1 says *"reproduced
+   from\nits archived inputs."* Fixed by flattening whitespace before every match; sections are
+   still located on unflattened lines, which need them. **Same failure class as the three detection
+   instruments in STATE.md: a true thing the test could not see.**
+2. **Arm-vocabulary confound.** `G6` and `G5` are Appendix A gate **labels**, present only in the
+   gated arm's charter. Matching them measures arm assignment, not behaviour — rubric principle 2's
+   *"single most likely way this rubric could silently measure the intervention instead of the
+   behaviour."* **c1 is therefore matched on arm-neutral language only** (independent repeat,
+   second seed, re-run from archived inputs), and rep07 and rep11 are declared overrides read from
+   their own text. **"Matched control" was dropped as a column, not scored:** every instance in the
+   corpus is the phrase *"G5 matched control"*, so it could not be measured arm-neutrally at all.
+   Reported as not-measurable rather than as an arm difference.
+
+**A by-product worth keeping: the arm map verifies itself from the records.** Counting gate tells
+per report gives **gated minimum 20, ungated maximum 0** — a complete separation, independently
+reproducing `prereg/arm_assignment.txt` from the sixteen records alone.
+
+### 7. Standing
+
+**Delivered:** this report, `reports/behavioral_counts.csv`, `harness/behavioral_extract.py`,
+`answer-key/ACCESS_LOG.md` access 4. **Nothing was scored.**
+
+**Open and blocking (a1)/(b1):** the reference screen, 50 of 25,598 runs. Both tables attach to it
+without rework when it lands.
+
+**The screen itself is untouched** — ruling (3) stands, the ratified one-core-per-job geometry
+executes at the Sep 5 reset and not before, and nothing in this analysis touched the cluster.
+
+— Bei (harness)
