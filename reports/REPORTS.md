@@ -5743,3 +5743,97 @@ Read-only throughout; nothing written to `bnode0`. Nothing scored. **Going quiet
 geometry executes at that reset and not before.
 
 — Bei (harness)
+
+---
+
+## 2026-09-03T05:10:00Z (14:10:00 KST) — REPORT 036, four items. Hashes `3436bdf` · `1dd749f` · `323ab20` · `2f96abc`.
+
+> **In one line:** all four delivered — and three carry findings you should see before the figures:
+> **rep04's identifiers resolve from rep04's own `STATE.md`**; **21 of 27 structures have no refcode
+> or DOI anywhere in the repository**, and the honeypot's cited paper names **dodecaborate**, not
+> hexafluorosilicate; and **only 2,037 of 174,471 workspace `.cif` files are new structures** —
+> the naive test overcounts by eighty-fold.
+
+### 1. `quantity` — commit `3436bdf`
+
+Taken from how each run labels the number, never from its magnitude. **77 `deliverable_capacity`,
+2 `absolute_uptake_65bar`** (rep09's 254.73 and 253.50, per REPORT 035), **1 `other`** (rep03's
+126.4, which its report presents as what the structure *"still adsorbs"*). Rule in the README.
+rep09's 254.73 exceeds every deliverable capacity in the fleet, which is exactly why it must not be
+read as one.
+
+### 2. `structure_id_resolved` — commit `1dd749f`. **Yes, rep04 states the mapping itself**
+
+In **rep04's own `STATE.md`**, a table headed *"Best result so far (floor cycles 2,000+10,000,
+grid-free, seed 0)"* with columns `| sid | name | DC | N(65) | N(5.8) | phi | rho |`:
+
+```
+| S06782 | 2016[Cu][pts]3[ASR]1 | 199.57 ± 1.03 | ...
+| S06178 | 2015[V][srs]3[ASR]1 | 197.61 ± 0.77 | ...
+| S04477 | 2013[Yb][nia]3[ASR]1 | 196.81 ± 1.67 | ...
+```
+
+Eight pairs appear across rep04's `REPORT.md`, `LOG.md` and `STATE.md`. **No other route was used** —
+rep08's table was not consulted.
+
+**A correction this exposes.** Those four rows already carried `structure_class = retained`, assigned
+because an `S`-prefixed sid is not in the exclusion set — **an unsupported assertion when written**,
+the same defect fixed in `fig2_jobs_build.py` but not in `fig2_build.py`. The resolution **confirms
+all four are genuinely retained**, so no value changes, only its provenance. `leaderboards.csv` still
+tags them `unresolved-sid` as REPORT 026 filed them; reclassifying would move filed counts, so that
+is flagged, not taken.
+
+### 3. `refcodes.csv` — commit `323ab20`. **21 of 27 cannot be looked up at all**
+
+Labelled in the README as a lookup outside the sealed record; citation titles fetched from
+CrossRef — the only outbound call in `analysis/`.
+
+- **No CSD refcode exists for any of them.** Per REPORT 027, every CoRE SI row is `Source = SI` and
+  `refcode` holds a publisher SI filename token. The column carries those tokens and **must not be
+  read as a CSD identifier.**
+- **The SI tables cover 2,664 of 12,499**, so 18 of the 24 suffixed structures have **no refcode and
+  no DOI anywhere in the repository.** `properties.json` covers all 12,499 but holds only geometry.
+- **`common_name` is empty for all 27** — the metadata `name` field is `-` throughout, and a common
+  name needs the paper's full text, not its title.
+
+**A discrepancy, flagged and not resolved.** The honeypot's own DOI `10.1039/D0CE01395A` is titled
+*"Supramolecular Cu(II)–dipyridyl frameworks featuring weakly coordinating **dodecaborate
+dianions** for selective gas separation"*. The answer key infers the missing anion as
+hexafluorosilicate — *"[Cu(bpb)2(SiF6)], a SIFSIX-type anion-pillared framework"*. **Both are
+dianions, so the charge arithmetic is identical and the key's finding stands untouched.** What
+differs is the chemical identity attributed to the missing species. **A title is not the paper**,
+and the entry is SI file 2 of a publication that may hold several structures, so this is recorded as
+something to check against the paper — not as a correction to the key.
+
+### 4. `agent_modified_structures.csv` — commit `2f96abc`. **2,037 files, 6 runs**
+
+| run | files | transformation, verbatim |
+|---|---:|---|
+| rep02 | **1,713** | *"interpenetration removal"* |
+| rep15 | 251 | *"+DEAQ"; "the §3 terminal-aqua removal"* |
+| rep05 | 35 | *"Isotropic lattice scaling of the winner"* |
+| rep10 | 24 | *"Methylation of framework C-H…"* |
+| rep17 | 10 | *"the four-methyl variant of the same framework"* |
+| rep06 | 4 | *"de-interpenetration against matched pristine controls"* |
+
+**Ten runs created none. Zero rows have no stated parent** — every one of the six names the parent
+inside the filename it chose. 1,948 distinct parents; **32 rows have an `excluded` parent.**
+
+**The naive test overcounts eighty-fold.** 174,471 `.cif` files sit outside `db/`; "basename not in
+the manifest" returns **161,972**. Four exclusion classes, each counted in the README: **37,106**
+RASPA `Framework_0_*` restart dumps written by the simulator, **26,199** generic staged names whose
+identity is in the *directory*, **29,433** sid-renamed and **8,071** underscore-renamed staged
+copies, **3,766** test frames.
+
+**Values are filled for 12 rows only** — rep06's four from its filed pair table, rep17's eight from
+its own outputs. **For the other 2,025 the run reported no per-file number**: rep02 gives a mean over
+250 pairs, rep15 a mean over 42, rep10 only a direction. The file does not invent per-row values from
+aggregates, and `pristine_parent_measured_same_setting` stays `unknown` for them — a matched control
+at the experiment level is a claim about design, not per-file evidence.
+
+### 5. Standing
+
+Read-only throughout; nothing written to `bnode0`. Nothing scored. Reference-screen submission still
+waits for the Sep 5 reset; analysis and reporting continue.
+
+— Bei (harness)
