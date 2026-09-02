@@ -23,6 +23,12 @@
 #      absence is the positive evidence of a kill, not a gap in the record)
 #   4. close the row here: state=closed, lower_bound_s = resources_used.walltime at kill
 #
+# 2026-09-03, closing both rows of scr1_1_0005 after the ruling (1) walltime kill.
+# bound_type observed_not_censored = the run COMPLETED; lower_bound_s is the EXACT cost, not a
+#             floor, and it may be averaged and scaled normally. Added because the p05 member
+#             finished 16.9 h before the kill and its row would otherwise stay typed as a floor.
+# The kill: Exit_status=-11 at 09/03/2026 07:02:13 KST, resources_used.walltime=26:11:54,
+#             cput=43:01:28 across the job's two members. Predicted 07:01:21; observed 52 s later.
 run_rel,stem,quartile,nsim,stage,grade,job,jobid,pressure,bound_type,lower_bound_s,lower_bound_h,last_observed_cycle,cycle_phase,state,observed_at,note
-stage1/2023[Eu][nan]3[FSR]2/p65,2023[Eu][nan]3[FSR]2,4,23166,stage1,floor,scr1_1_0005,3474525,p65,right_censored,29043,8.07,0,init_0_of_2000,open,2026-09-02T04:00:00Z,ONLY quartile-4 observation in wave 1; had not cleared 2000 init cycles at hour 8.07; expected walltime kill 2026-09-03T07:01:21+09:00
-stage1/2023[Eu][nan]3[FSR]2/p05,2023[Eu][nan]3[FSR]2,4,23166,stage1,floor,scr1_1_0005,3474525,p05,right_censored,29043,8.07,2000,prod_2000_of_10000,open,2026-09-02T04:00:00Z,cleared init plus 2000 production cycles by hour 5.5; would be truncated as collateral if the job is killed for its p65 member
+stage1/2023[Eu][nan]3[FSR]2/p65,2023[Eu][nan]3[FSR]2,4,23166,stage1,floor,scr1_1_0005,3474525,p65,right_censored,94314,26.20,2000,prod_2000_of_10000,closed,2026-09-02T22:03:25Z,KILLED at walltime as ruling (1) predicted. Bound is the job's resources_used.walltime 26:11:54 = 94314 s per step 4 of the recovery procedure. Evidence per step 3: NO row in logs/scr1_1_0005.runs, and no completion marker in the .data file. It had cleared its 2000 init cycles and reached 2000 of 10000 production cycles. A FLOOR, never a mean: the true cost exceeds 26.20 h by an unknown amount, and this is the ONLY quartile-4 tail cost observation there is.
+stage1/2023[Eu][nan]3[FSR]2/p05,2023[Eu][nan]3[FSR]2,4,23166,stage1,floor,scr1_1_0005,3474525,p05,observed_not_censored,60830,16.90,8000,completed_marker_present_last_print_8000_of_10000,closed,2026-09-02T22:03:25Z,COMPLETED 16.9 h BEFORE the kill and was NOT truncated - the collateral loss this row anticipated did not happen. Exact cost, usable as a measurement: status ok in logs/scr1_1_0005.runs, elapsed 60830 s, completion marker present in the .data file. This is the only quartile-4 COMPLETED observation in wave 1.

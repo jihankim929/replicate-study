@@ -1,0 +1,85 @@
+# CANCELLED RUNS - screen layer. Created 2026-09-03 on the PI's order to kill the
+# two unplaceable ppn=23 jobs and requeue their runs under ppn=1.
+# WHY THIS FILE AND NOT A LEDGER EDIT: ruling (1) is that no ledger entry is ever
+# edited, and section 8 writes a run's status from OUTPUT PRESENCE at harvest. These
+# runs produced no output because they never started, so the harvest will write
+# `failed` by its own rule - which is ruling (1)'s stated principle that an
+# unfinished-not-faulty run still reads `failed` and the correction lives in the
+# retry record. This IS that retry record. The attempt-1 rows are untouched.
+# WHY NO censored_observations.csv ROW: `tracejob` returns no Exit_status and no
+# resources_used for either job. They consumed nothing. A right-censored row needs a
+# lower bound from observed consumption; there is none, so there is no cost
+# observation to record - not a zero one, an absent one.
+run_rel,stem,stage,grade,orig_job,orig_jobid,cancelled_at,reason,cput_consumed,retry_attempt,retry_job,retry_jobid
+stage0/2019[V][nan]3[FSR]3/p05,2019[V][nan]3[FSR]3,stage0,claim,scr1_0_0000,3474520,2026-09-03T06:08:19Z,unplaceable_ppn23_qdel_for_ppn1_requeue,none_never_started,2,s0rq_000_p05,s0rq_000_p05.pbs
+stage0/2019[V][nan]3[FSR]3/p65,2019[V][nan]3[FSR]3,stage0,claim,scr1_0_0000,3474520,2026-09-03T06:08:19Z,unplaceable_ppn23_qdel_for_ppn1_requeue,none_never_started,2,s0rq_001_p65,s0rq_001_p65.pbs
+stage0/2021[Cu][pcu]3[FSR]1/p05,2021[Cu][pcu]3[FSR]1,stage0,claim,scr1_0_0000,3474520,2026-09-03T06:08:19Z,unplaceable_ppn23_qdel_for_ppn1_requeue,none_never_started,2,s0rq_002_p05,s0rq_002_p05.pbs
+stage0/2021[Cu][pcu]3[FSR]1/p65,2021[Cu][pcu]3[FSR]1,stage0,claim,scr1_0_0000,3474520,2026-09-03T06:08:19Z,unplaceable_ppn23_qdel_for_ppn1_requeue,none_never_started,2,s0rq_003_p65,s0rq_003_p65.pbs
+stage0/2003[Co][nan]3[FSR]3/p05,2003[Co][nan]3[FSR]3,stage0,claim,scr1_0_0000,3474520,2026-09-03T06:08:19Z,unplaceable_ppn23_qdel_for_ppn1_requeue,none_never_started,2,s0rq_004_p05,s0rq_004_p05.pbs
+stage0/2003[Co][nan]3[FSR]3/p65,2003[Co][nan]3[FSR]3,stage0,claim,scr1_0_0000,3474520,2026-09-03T06:08:19Z,unplaceable_ppn23_qdel_for_ppn1_requeue,none_never_started,2,s0rq_005_p65,s0rq_005_p65.pbs
+stage0/2024[Cd][nan]3[FSR]5/p05,2024[Cd][nan]3[FSR]5,stage0,claim,scr1_0_0000,3474520,2026-09-03T06:08:19Z,unplaceable_ppn23_qdel_for_ppn1_requeue,none_never_started,2,s0rq_006_p05,s0rq_006_p05.pbs
+stage0/2024[Cd][nan]3[FSR]5/p65,2024[Cd][nan]3[FSR]5,stage0,claim,scr1_0_0000,3474520,2026-09-03T06:08:19Z,unplaceable_ppn23_qdel_for_ppn1_requeue,none_never_started,2,s0rq_007_p65,s0rq_007_p65.pbs
+stage0/2022[Sc][qtz]3[ASR]1/p05,2022[Sc][qtz]3[ASR]1,stage0,claim,scr1_0_0000,3474520,2026-09-03T06:08:19Z,unplaceable_ppn23_qdel_for_ppn1_requeue,none_never_started,2,s0rq_008_p05,s0rq_008_p05.pbs
+stage0/2022[Sc][qtz]3[ASR]1/p65,2022[Sc][qtz]3[ASR]1,stage0,claim,scr1_0_0000,3474520,2026-09-03T06:08:19Z,unplaceable_ppn23_qdel_for_ppn1_requeue,none_never_started,2,s0rq_009_p65,s0rq_009_p65.pbs
+stage0/2023[Cd][hcb]2[ASR]1/p05,2023[Cd][hcb]2[ASR]1,stage0,claim,scr1_0_0000,3474520,2026-09-03T06:08:19Z,unplaceable_ppn23_qdel_for_ppn1_requeue,none_never_started,2,s0rq_010_p05,s0rq_010_p05.pbs
+stage0/2023[Cd][hcb]2[ASR]1/p65,2023[Cd][hcb]2[ASR]1,stage0,claim,scr1_0_0000,3474520,2026-09-03T06:08:19Z,unplaceable_ppn23_qdel_for_ppn1_requeue,none_never_started,2,s0rq_011_p65,s0rq_011_p65.pbs
+stage0/2018[Zn][sql]2[FSR]24/p05,2018[Zn][sql]2[FSR]24,stage0,claim,scr1_0_0000,3474520,2026-09-03T06:08:19Z,unplaceable_ppn23_qdel_for_ppn1_requeue,none_never_started,2,s0rq_012_p05,s0rq_012_p05.pbs
+stage0/2018[Zn][sql]2[FSR]24/p65,2018[Zn][sql]2[FSR]24,stage0,claim,scr1_0_0000,3474520,2026-09-03T06:08:19Z,unplaceable_ppn23_qdel_for_ppn1_requeue,none_never_started,2,s0rq_013_p65,s0rq_013_p65.pbs
+stage0/2012[Cd][ant]3[ASR]1/p05,2012[Cd][ant]3[ASR]1,stage0,claim,scr1_0_0000,3474520,2026-09-03T06:08:19Z,unplaceable_ppn23_qdel_for_ppn1_requeue,none_never_started,2,s0rq_014_p05,s0rq_014_p05.pbs
+stage0/2012[Cd][ant]3[ASR]1/p65,2012[Cd][ant]3[ASR]1,stage0,claim,scr1_0_0000,3474520,2026-09-03T06:08:19Z,unplaceable_ppn23_qdel_for_ppn1_requeue,none_never_started,2,s0rq_015_p65,s0rq_015_p65.pbs
+stage0/2021[Mn][sql]2[FSR]1/p05,2021[Mn][sql]2[FSR]1,stage0,claim,scr1_0_0000,3474520,2026-09-03T06:08:19Z,unplaceable_ppn23_qdel_for_ppn1_requeue,none_never_started,2,s0rq_016_p05,s0rq_016_p05.pbs
+stage0/2021[Mn][sql]2[FSR]1/p65,2021[Mn][sql]2[FSR]1,stage0,claim,scr1_0_0000,3474520,2026-09-03T06:08:19Z,unplaceable_ppn23_qdel_for_ppn1_requeue,none_never_started,2,s0rq_017_p65,s0rq_017_p65.pbs
+stage0/2004[Cu][sra]3[ASR]1/p05,2004[Cu][sra]3[ASR]1,stage0,claim,scr1_0_0000,3474520,2026-09-03T06:08:19Z,unplaceable_ppn23_qdel_for_ppn1_requeue,none_never_started,2,s0rq_018_p05,s0rq_018_p05.pbs
+stage0/2004[Cu][sra]3[ASR]1/p65,2004[Cu][sra]3[ASR]1,stage0,claim,scr1_0_0000,3474520,2026-09-03T06:08:19Z,unplaceable_ppn23_qdel_for_ppn1_requeue,none_never_started,2,s0rq_019_p65,s0rq_019_p65.pbs
+stage0/2001[Co][nan]3[ASR]1/p05,2001[Co][nan]3[ASR]1,stage0,claim,scr1_0_0000,3474520,2026-09-03T06:08:19Z,unplaceable_ppn23_qdel_for_ppn1_requeue,none_never_started,2,s0rq_020_p05,s0rq_020_p05.pbs
+stage0/2001[Co][nan]3[ASR]1/p65,2001[Co][nan]3[ASR]1,stage0,claim,scr1_0_0000,3474520,2026-09-03T06:08:19Z,unplaceable_ppn23_qdel_for_ppn1_requeue,none_never_started,2,s0rq_021_p65,s0rq_021_p65.pbs
+stage0/2006[Mg][dia]3[FSR]3/p05,2006[Mg][dia]3[FSR]3,stage0,claim,scr1_0_0000,3474520,2026-09-03T06:08:19Z,unplaceable_ppn23_qdel_for_ppn1_requeue,none_never_started,2,s0rq_022_p05,s0rq_022_p05.pbs
+stage0/2014[Ni][gfy]3[ION]1/p05,2014[Ni][gfy]3[ION]1,stage0,claim,scr1_0_0002,3474522,2026-09-03T06:08:19Z,unplaceable_ppn23_qdel_for_ppn1_requeue,none_never_started,2,s0rq_023_p05,s0rq_023_p05.pbs
+stage0/2014[Ni][gfy]3[ION]1/p65,2014[Ni][gfy]3[ION]1,stage0,claim,scr1_0_0002,3474522,2026-09-03T06:08:19Z,unplaceable_ppn23_qdel_for_ppn1_requeue,none_never_started,2,s0rq_024_p65,s0rq_024_p65.pbs
+stage0/2016[VCu][pcu]3[FSR]1/p05,2016[VCu][pcu]3[FSR]1,stage0,claim,scr1_0_0002,3474522,2026-09-03T06:08:19Z,unplaceable_ppn23_qdel_for_ppn1_requeue,none_never_started,2,s0rq_025_p05,s0rq_025_p05.pbs
+stage0/2016[VCu][pcu]3[FSR]1/p65,2016[VCu][pcu]3[FSR]1,stage0,claim,scr1_0_0002,3474522,2026-09-03T06:08:19Z,unplaceable_ppn23_qdel_for_ppn1_requeue,none_never_started,2,s0rq_026_p65,s0rq_026_p65.pbs
+stage0/2020[Cu][she]3[ASR]1/p05,2020[Cu][she]3[ASR]1,stage0,claim,scr1_0_0002,3474522,2026-09-03T06:08:19Z,unplaceable_ppn23_qdel_for_ppn1_requeue,none_never_started,2,s0rq_027_p05,s0rq_027_p05.pbs
+stage0/2020[Cu][she]3[ASR]1/p65,2020[Cu][she]3[ASR]1,stage0,claim,scr1_0_0002,3474522,2026-09-03T06:08:19Z,unplaceable_ppn23_qdel_for_ppn1_requeue,none_never_started,2,s0rq_028_p65,s0rq_028_p65.pbs
+stage0/2022[Cu][nan]3[ION]1/p05,2022[Cu][nan]3[ION]1,stage0,claim,scr1_0_0002,3474522,2026-09-03T06:08:19Z,unplaceable_ppn23_qdel_for_ppn1_requeue,none_never_started,2,s0rq_029_p05,s0rq_029_p05.pbs
+stage0/2022[Cu][nan]3[ION]1/p65,2022[Cu][nan]3[ION]1,stage0,claim,scr1_0_0002,3474522,2026-09-03T06:08:19Z,unplaceable_ppn23_qdel_for_ppn1_requeue,none_never_started,2,s0rq_030_p65,s0rq_030_p65.pbs
+stage0/2015[Zn][sql]2[ASR]4/p05,2015[Zn][sql]2[ASR]4,stage0,claim,scr1_0_0002,3474522,2026-09-03T06:08:19Z,unplaceable_ppn23_qdel_for_ppn1_requeue,none_never_started,2,s0rq_031_p05,s0rq_031_p05.pbs
+stage0/2015[Zn][sql]2[ASR]4/p65,2015[Zn][sql]2[ASR]4,stage0,claim,scr1_0_0002,3474522,2026-09-03T06:08:19Z,unplaceable_ppn23_qdel_for_ppn1_requeue,none_never_started,2,s0rq_032_p65,s0rq_032_p65.pbs
+stage0/2021[Pr][kgd]2[ASR]1/p05,2021[Pr][kgd]2[ASR]1,stage0,claim,scr1_0_0002,3474522,2026-09-03T06:08:19Z,unplaceable_ppn23_qdel_for_ppn1_requeue,none_never_started,2,s0rq_033_p05,s0rq_033_p05.pbs
+stage0/2021[Pr][kgd]2[ASR]1/p65,2021[Pr][kgd]2[ASR]1,stage0,claim,scr1_0_0002,3474522,2026-09-03T06:08:19Z,unplaceable_ppn23_qdel_for_ppn1_requeue,none_never_started,2,s0rq_034_p65,s0rq_034_p65.pbs
+stage0/2022[Cd][sql]2[FSR]1/p05,2022[Cd][sql]2[FSR]1,stage0,claim,scr1_0_0002,3474522,2026-09-03T06:08:19Z,unplaceable_ppn23_qdel_for_ppn1_requeue,none_never_started,2,s0rq_035_p05,s0rq_035_p05.pbs
+stage0/2022[Cd][sql]2[FSR]1/p65,2022[Cd][sql]2[FSR]1,stage0,claim,scr1_0_0002,3474522,2026-09-03T06:08:19Z,unplaceable_ppn23_qdel_for_ppn1_requeue,none_never_started,2,s0rq_036_p65,s0rq_036_p65.pbs
+stage0/2016[Cu][nbo]3[ASR]23/p05,2016[Cu][nbo]3[ASR]23,stage0,claim,scr1_0_0002,3474522,2026-09-03T06:08:19Z,unplaceable_ppn23_qdel_for_ppn1_requeue,none_never_started,2,s0rq_037_p05,s0rq_037_p05.pbs
+stage0/2016[Cu][nbo]3[ASR]23/p65,2016[Cu][nbo]3[ASR]23,stage0,claim,scr1_0_0002,3474522,2026-09-03T06:08:19Z,unplaceable_ppn23_qdel_for_ppn1_requeue,none_never_started,2,s0rq_038_p65,s0rq_038_p65.pbs
+stage0/2014[Cd][nan]3[ASR]3/p05,2014[Cd][nan]3[ASR]3,stage0,claim,scr1_0_0002,3474522,2026-09-03T06:08:19Z,unplaceable_ppn23_qdel_for_ppn1_requeue,none_never_started,2,s0rq_039_p05,s0rq_039_p05.pbs
+stage0/2014[Cd][nan]3[ASR]3/p65,2014[Cd][nan]3[ASR]3,stage0,claim,scr1_0_0002,3474522,2026-09-03T06:08:19Z,unplaceable_ppn23_qdel_for_ppn1_requeue,none_never_started,2,s0rq_040_p65,s0rq_040_p65.pbs
+stage0/2019[Co][nan]2[ASR]1/p05,2019[Co][nan]2[ASR]1,stage0,claim,scr1_0_0002,3474522,2026-09-03T06:08:19Z,unplaceable_ppn23_qdel_for_ppn1_requeue,none_never_started,2,s0rq_041_p05,s0rq_041_p05.pbs
+stage0/2019[Co][nan]2[ASR]1/p65,2019[Co][nan]2[ASR]1,stage0,claim,scr1_0_0002,3474522,2026-09-03T06:08:19Z,unplaceable_ppn23_qdel_for_ppn1_requeue,none_never_started,2,s0rq_042_p65,s0rq_042_p65.pbs
+stage0/2015[Yb][rob]3[ASR]1/p05,2015[Yb][rob]3[ASR]1,stage0,claim,scr1_0_0002,3474522,2026-09-03T06:08:19Z,unplaceable_ppn23_qdel_for_ppn1_requeue,none_never_started,2,s0rq_043_p05,s0rq_043_p05.pbs
+stage0/2015[Yb][rob]3[ASR]1/p65,2015[Yb][rob]3[ASR]1,stage0,claim,scr1_0_0002,3474522,2026-09-03T06:08:19Z,unplaceable_ppn23_qdel_for_ppn1_requeue,none_never_started,2,s0rq_044_p65,s0rq_044_p65.pbs
+stage0/2014[Co][nan]3[FSR]27/p05,2014[Co][nan]3[FSR]27,stage0,claim,scr1_0_0002,3474522,2026-09-03T06:08:19Z,unplaceable_ppn23_qdel_for_ppn1_requeue,none_never_started,2,s0rq_045_p05,s0rq_045_p05.pbs
+stage0/2019[V][nan]3[FSR]3/p65,2019[V][nan]3[FSR]3,stage0,claim,s0rq_001_p65,mjs_requeued,2026-09-02T21:18:59Z,ab_nodes_down_retargeted_to_ac,none_never_started,2,s0rq_001_p65,resubmitted
+stage0/2003[Co][nan]3[FSR]3/p65,2003[Co][nan]3[FSR]3,stage0,claim,s0rq_005_p65,mjs_requeued,2026-09-02T21:18:59Z,ab_nodes_down_retargeted_to_aa,none_never_started,2,s0rq_005_p65,resubmitted
+stage0/2022[Sc][qtz]3[ASR]1/p65,2022[Sc][qtz]3[ASR]1,stage0,claim,s0rq_009_p65,mjs_requeued,2026-09-02T21:18:59Z,ab_nodes_down_retargeted_to_amd,none_never_started,2,s0rq_009_p65,resubmitted
+stage0/2018[Zn][sql]2[FSR]24/p65,2018[Zn][sql]2[FSR]24,stage0,claim,s0rq_013_p65,mjs_requeued,2026-09-02T21:18:59Z,ab_nodes_down_retargeted_to_ac,none_never_started,2,s0rq_013_p65,resubmitted
+stage0/2021[Mn][sql]2[FSR]1/p65,2021[Mn][sql]2[FSR]1,stage0,claim,s0rq_017_p65,mjs_requeued,2026-09-02T21:18:59Z,ab_nodes_down_retargeted_to_aa,none_never_started,2,s0rq_017_p65,resubmitted
+stage0/2001[Co][nan]3[ASR]1/p65,2001[Co][nan]3[ASR]1,stage0,claim,s0rq_021_p65,mjs_requeued,2026-09-02T21:18:59Z,ab_nodes_down_retargeted_to_amd,none_never_started,2,s0rq_021_p65,resubmitted
+stage0/2016[VCu][pcu]3[FSR]1/p05,2016[VCu][pcu]3[FSR]1,stage0,claim,s0rq_025_p05,mjs_requeued,2026-09-02T21:18:59Z,ab_nodes_down_retargeted_to_ac,none_never_started,2,s0rq_025_p05,resubmitted
+stage0/2022[Cu][nan]3[ION]1/p05,2022[Cu][nan]3[ION]1,stage0,claim,s0rq_029_p05,mjs_requeued,2026-09-02T21:18:59Z,ab_nodes_down_retargeted_to_aa,none_never_started,2,s0rq_029_p05,resubmitted
+stage0/2021[Pr][kgd]2[ASR]1/p05,2021[Pr][kgd]2[ASR]1,stage0,claim,s0rq_033_p05,mjs_requeued,2026-09-02T21:18:59Z,ab_nodes_down_retargeted_to_amd,none_never_started,2,s0rq_033_p05,resubmitted
+stage0/2016[Cu][nbo]3[ASR]23/p05,2016[Cu][nbo]3[ASR]23,stage0,claim,s0rq_037_p05,mjs_requeued,2026-09-02T21:18:59Z,ab_nodes_down_retargeted_to_ac,none_never_started,2,s0rq_037_p05,resubmitted
+stage0/2019[Co][nan]2[ASR]1/p05,2019[Co][nan]2[ASR]1,stage0,claim,s0rq_041_p05,mjs_requeued,2026-09-02T21:18:59Z,ab_nodes_down_retargeted_to_aa,none_never_started,2,s0rq_041_p05,resubmitted
+stage0/2014[Co][nan]3[FSR]27/p05,2014[Co][nan]3[FSR]27,stage0,claim,s0rq_045_p05,mjs_requeued,2026-09-02T21:18:59Z,ab_nodes_down_retargeted_to_amd,none_never_started,2,s0rq_045_p05,resubmitted
+stage1/0000[Cd][fsc]3[ASR]1/p05,0000[Cd][fsc]3[ASR]1,stage1,floor,f4_1_p05,mjs:6634,2026-09-02T21:38:46Z,duplicate_submission_second_copy_removed_before_dispatch,none_never_started,1,f4_1_p05,kept_first_copy
+stage1/0000[Cd][nan]2[ASR]2/p65,0000[Cd][nan]2[ASR]2,stage1,floor,f4_2_p65,mjs:6637,2026-09-02T21:38:46Z,duplicate_submission_second_copy_removed_before_dispatch,none_never_started,1,f4_2_p65,kept_first_copy
+stage1/0000[Cd][nan]3[ASR]13/p05,0000[Cd][nan]3[ASR]13,stage1,floor,f4_4_p05,mjs:6640,2026-09-02T21:38:46Z,duplicate_submission_second_copy_removed_before_dispatch,none_never_started,1,f4_4_p05,kept_first_copy
+stage1/0000[Cd][nan]3[ASR]8/p65,0000[Cd][nan]3[ASR]8,stage1,floor,f4_5_p65,mjs:6643,2026-09-02T21:38:46Z,duplicate_submission_second_copy_removed_before_dispatch,none_never_started,1,f4_5_p65,kept_first_copy
+stage1/0000[Cd][sql]2[ASR]4/p05,0000[Cd][sql]2[ASR]4,stage1,floor,f4_7_p05,mjs:6646,2026-09-02T21:38:46Z,duplicate_submission_second_copy_removed_before_dispatch,none_never_started,1,f4_7_p05,kept_first_copy
+stage1/0000[AsCd][cds]3[ASR]1/p65,0000[AsCd][cds]3[ASR]1,stage1,floor,f4_0_p65,mjs:6633,2026-09-02T21:38:46Z,duplicate_submission_second_copy_removed_before_dispatch,none_never_started,1,f4_0_p65,kept_first_copy
+stage1/0000[Cd][nan]2[ASR]2/p05,0000[Cd][nan]2[ASR]2,stage1,floor,f4_2_p05,mjs:6636,2026-09-02T21:38:46Z,duplicate_submission_second_copy_removed_before_dispatch,none_never_started,1,f4_2_p05,kept_first_copy
+stage1/0000[Cd][nan]3[ASR]10/p65,0000[Cd][nan]3[ASR]10,stage1,floor,f4_3_p65,mjs:6639,2026-09-02T21:38:46Z,duplicate_submission_second_copy_removed_before_dispatch,none_never_started,1,f4_3_p65,kept_first_copy
+stage1/0000[Cd][nan]3[ASR]8/p05,0000[Cd][nan]3[ASR]8,stage1,floor,f4_5_p05,mjs:6642,2026-09-02T21:38:46Z,duplicate_submission_second_copy_removed_before_dispatch,none_never_started,1,f4_5_p05,kept_first_copy
+stage1/0000[Cd][nbo]3[ASR]1/p65,0000[Cd][nbo]3[ASR]1,stage1,floor,f4_6_p65,mjs:6645,2026-09-02T21:38:46Z,duplicate_submission_second_copy_removed_before_dispatch,none_never_started,1,f4_6_p65,kept_first_copy
+stage1/0000[Cd][fsc]3[ASR]1/p65,0000[Cd][fsc]3[ASR]1,stage1,floor,f4_1_p65,mjs:6635,2026-09-02T21:38:46Z,duplicate_submission_second_copy_removed_before_dispatch,none_never_started,1,f4_1_p65,kept_first_copy
+stage1/0000[Cd][nan]3[ASR]10/p05,0000[Cd][nan]3[ASR]10,stage1,floor,f4_3_p05,mjs:6638,2026-09-02T21:38:46Z,duplicate_submission_second_copy_removed_before_dispatch,none_never_started,1,f4_3_p05,kept_first_copy
+stage1/0000[Cd][nan]3[ASR]13/p65,0000[Cd][nan]3[ASR]13,stage1,floor,f4_4_p65,mjs:6641,2026-09-02T21:38:46Z,duplicate_submission_second_copy_removed_before_dispatch,none_never_started,1,f4_4_p65,kept_first_copy
+stage1/0000[Cd][nbo]3[ASR]1/p05,0000[Cd][nbo]3[ASR]1,stage1,floor,f4_6_p05,mjs:6644,2026-09-02T21:38:46Z,duplicate_submission_second_copy_removed_before_dispatch,none_never_started,1,f4_6_p05,kept_first_copy

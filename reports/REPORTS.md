@@ -6563,3 +6563,150 @@ construction so the hashes stay comparable.
 `3474525` are untouched.
 
 — Bei (harness)
+
+---
+
+## 2026-09-02T22:05:00Z (2026-09-03 07:05:00 KST) — REPORT 046, **ORDERS EXECUTED. (1) AND (2b) RUNNING, (2a) QUEUED, THE TWO JOBS KILLED AND REQUEUED.** Three faults found, one of them mine.
+
+> **In one line:** everything you ordered is done and running — **600 jobs in flight behind the
+> window**, the two unplaceable jobs killed and their **46 runs requeued at `ppn=1`**, and the
+> **1,126 claim-grade decks built with the hash rule verified against stage0 rather than asserted**,
+> which let me put **(2a) back in your original ruled order** instead of after (2b). Three faults
+> surfaced on the way, described below because two of them would have silently corrupted the run
+> record and the third was mine.
+
+*A note on this entry's clock: it is taken from the cluster, which agrees with UTC. It therefore
+reads EARLIER than REPORTS 043–045, whose headers run about sixteen hours ahead of the real clock.
+I have not touched those entries; this one is appended after them and is dated when it happened.*
+
+### 1. The two jobs: killed, and they had consumed nothing
+
+`3474520` (`scr1_0_0000`) and `3474522` (`scr1_0_0002`), both `Q` for 35 hours with
+`comment = Not Running: Not enough of the right type of nodes are available`. Deleted 07:08:19 KST.
+
+**`tracejob` returns the deletion line and NO `Exit_status` and NO `resources_used` for either.**
+That matters: the control job `3474481` was killed while *running* and still reports `cput`. These
+two consumed **nothing**, so **no row was written to `censored_observations.csv`** — a right-censored
+row needs a lower bound from observed consumption, and there is none. Not a zero observation, an
+absent one.
+
+**The 46 attempt-1 ledger rows were NOT edited** and still read `submitted`. Ruling (1) is that no
+entry is ever edited, and section 8 writes a run's status from output presence at harvest — these
+wrote no output, so the harvest will write `failed` by its own rule, which is ruling (1)'s stated
+principle for unfinished-not-faulty runs. What I know that the ledger does not yet say is in a new
+**`screen/cancelled_runs.csv`**, the same separation `censored_observations.csv` already uses.
+
+**46 attempt-2 rows appended, all 46 accepted.** The deck is byte-identical to attempt 1's, so
+section 8's *"attempt 2 resubmits unchanged"* holds; only the reservation geometry differs.
+
+### 2. Ruling (1): `3474525` died on schedule, and one of its two legs finished
+
+Killed at **09/03/2026 07:02:13 KST**, `Exit_status=-11`, `walltime=26:11:54`, `cput=43:01:28`.
+Ruling (1) predicted 07:01:21 — **52 seconds out.** Untouched throughout, as ordered.
+
+The pre-registered four-step recovery ran, and **the two legs closed differently:**
+
+| leg | evidence | disposition |
+|---|---|---|
+| **p05** | completion marker present; row `ok` in `logs/scr1_1_0005.runs`; elapsed **60,830 s** | **`observed_not_censored` — 16.90 h EXACT.** It finished 16.9 h *before* the kill. The collateral truncation its row anticipated never happened. **This is wave 1's only completed quartile-4 measurement.** |
+| **p65** | no marker, **no row** in the `.runs` log (step 3's positive evidence of a kill); reached 2,000 of 10,000 production cycles | **`right_censored`, floor 94,314 s = 26.20 h.** The only q4 tail cost observation there is. **A floor, never a mean.** |
+
+**I added a bound type to that file.** It defined only `right_censored`, and leaving p05 typed that
+way would tell a later reader to treat an exact cost as a floor — the precise error the file exists
+to prevent. `observed_not_censored` is defined in its header alongside the kill evidence.
+
+### 3. The decks: 1,126, not 1,122 — and the hash rule is measured, not claimed
+
+| | |
+|---|---|
+| built | **1,126 decks / 563 structures** → `screen/decks/stage2/`, manifest `screen/fig4_deck_manifest.sha256`, aggregate `df0b2cd0…` |
+| your 1,122 | **561 agent-tail structures — exactly right.** |
+| the extra 4 | **step (3)'s two structures had no claim deck either** (`2011[Cd][rtl]3[ASR]1`, `2014[Co][twt]3[ASR]1`). Same construction, built in the same pass. |
+
+**The construction is imported, not transcribed.** `harness/fig4_gen_claim_decks.py` calls
+`screen_gen_decks`'s own `TEMPLATE`, `PRESSURES`, `CLAIM` tier and `write()`. A second copy could
+drift silently; an import cannot.
+
+**The hash rule is verified against stage0 rather than asserted.** 11 of the 572 agent-tail
+structures already have sealed stage0 decks. Those 11 were rebuilt **through the new code path** and
+their **22 hashes compared to `deck_manifest.sha256`: ALL MATCH**, byte for byte. The build refuses
+to write anything if they do not. If this file's construction differed from stage0's in one
+character, those 22 would disagree.
+
+**They went to a NEW stage, not into stage0.** `stage0` is a sealed tree — it is what
+`deck_manifest.sha256` covers and what section 7.1 counts as 25,598/25,598. Writing 1,126 decks into
+it would have broken that count and changed what the seal describes. **Verified after the build, on
+both machines: sealed manifest 25,598 `sha256sum -c` clean, stage0 still 300, stage1 still 12,499.**
+
+### 4. Three faults
+
+**(a) `ab`'s nodes are DOWN, and the round-robin was feeding them.** The geometry ruling re-admitted
+`ab` because its 6-core nodes no longer failed a batch-size test — a **shape** argument, and correct.
+`bnode13` and `bnode14` are also **`down`**, a **state** fact the shape argument does not touch.
+The static round-robin sent **12 of the 46 requeued runs to dead hardware**, recreating the exact
+unplaceable failure this geometry change exists to fix. Node-group eligibility is now **measured
+from `pbsnodes` at every submit**, so a group going down excludes itself. `ax` and `xeonphi` stay
+excluded by policy and are unaffected. The 12 were removed and resubmitted to live groups, **verified
+by re-listing** — `qrm` exits 0 on an uncaught assertion, so its exit code proves nothing.
+
+**(b) `qas`'s exit code is unreliable in BOTH directions, and it cost me nothing only because I
+checked.** `qas.py` prints the qsub *filename* and hands the job to the mjs daemon over zmq — it
+never emits a PBS job id, and it returns **before the daemon has registered the job**. On the first
+540-job tranche **68 reported failure and 44 of those were in fact queued and running.** Trusting the
+exit code would have resubmitted all 44 as duplicates into the same run directories. Submission is
+now decided by **listing the queue after a settle delay**, never by exit code, and the 44 unrecorded
+in-flight jobs were reconciled into the ledger — **a run with no ledger row is worse than a duplicate
+row, because it spends cluster time no accounting ever sees.** Tranches are now 120 jobs, not 540,
+which keeps registration lag inside the settle window.
+
+**(c) Mine: 14 duplicate submissions.** I validated the submit path on a 14-job window, then launched
+the long loop from code that did not yet have the in-flight guard — the patch landed a minute after
+the launch — so it resubmitted those 14. Both copies were queued; neither had dispatched. **Removed
+before either could start, verified by re-listing (516 in flight, 516 distinct, 0 duplicated), and
+recorded in `cancelled_runs.csv`.** The guard now skips any run whose job is currently in flight, so
+a restart is safe. A run that *was* submitted, is no longer in flight and never wrote an `ok` is
+deliberately **not** skipped — that one died and belongs back in the queue.
+
+### 5. What is running
+
+**600 jobs in flight, the window exactly full** — 556 Figure-4, 43 Stage 0 requeue, at
+07:05 KST. Order restored to yours: **(1) → (2a) → (2b) → (3)**, since the decks existed before (1)
+finished. The back-off fired correctly and is holding: **ceiling 480 → 240 on three consecutive polls
+with third-party jobs queued-and-not-running**, logged to `excursions.jsonl`.
+
+| segment | pairs | jobs | grade | plan CPU-h |
+|---|---:|---:|---|---:|
+| (1) sample | 1,500 | 3,000 | floor | 2,739 |
+| (2a) agent tail | 571 | 1,142 | claim | 5,213 |
+| (2b) descriptor tail | 858 | 1,716 | floor | 1,567 |
+| (3) remaining claims | 2 | 4 | claim | 18 |
+| **total queued** | **2,931** | **5,862** | | **9,537** |
+
+**Two corrections to REPORT 045's table.** (i) **(2a) is 571 structures, not 572** —
+`2016[Cu][nbo]3[ASR]23` is one of the 46 runs the killed jobs orphaned, so its claim-grade pair is
+produced by the Stage 0 requeue and running it here too would be the duplication your dedupe ruling
+removed. Its *floor* pair is a different grade and still runs. (ii) **REPORT 045's 6,064 jobs and
+10,459 CPU-h included the 200-job top-100 promotion, which cannot be queued yet** — the top 100 are
+ranked *by* (2b)'s floor results, so that segment becomes available when (2b) finishes, not now.
+
+### 6. Two measurements, and I am not acting on either
+
+**Throughput is core-limited, not window-limited.** 600 of our jobs are in flight and **13 are
+running**, because 13 cores are free cluster-wide. The window is not the binding control; free cores
+are. **We are not displacing anyone:** we hold **13 of 286 running jobs (4.5%)** and 581 of 2,201
+queued in mjs, against `hykum`'s 1,278 queued and 134 running. Section 6's contention concern is not
+triggered on these numbers.
+
+**Runs may be far cheaper at `ppn=1` than the plan or wave 1 suggests — but four completions is not
+a finding.** Claim-grade completions so far: **296 s, 321 s, 2,318 s**; floor: **93 s**. Wave 1's
+`ppn=23` claim runs averaged **~5,000–5,800 s** (REPORT 042's 1.472 CPU-h), and the plan budgets
+**4.565 CPU-h**. The obvious hypothesis is that 23 RASPA processes on one node were contending,
+which the one-core geometry removes — but the three claim runs already span **8×**, so the spread is
+wide and the fast pair was not representative. **I have not re-derived any walltime or cost figure
+from this**, and the ratified `SAFETY=12` per-run factor stands. A day of completions will settle it
+and I will bring you numbers, not an impression.
+
+Nothing else was touched. `screen_ledger.csv` has no edited entry; the sealed deck tree and its
+manifest are unchanged and verify.
+
+— Bei (harness)
