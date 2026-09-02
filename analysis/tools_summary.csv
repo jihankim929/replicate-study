@@ -1,0 +1,18 @@
+# UNATTESTED. Post-seal read-only read of replicate workspaces on bnode0 2026-09-02T13:5xZ. The sealed collection contains NO script inventory (git-log.txt records no filenames), so nothing attests these bytes are unchanged since the campaign. Skip this line when parsing.
+rep,arm,script_count,total_loc,external_packages,external_binaries,vendored_packages,generated_job_scripts,pulled_at,attestation
+rep01,gated,51,2837,numpy (evidence: scripts/blind.py +15 more),git (evidence: scripts/audit.py:6 +7 more),none,0,2026-09-02T13:5xZ,none - post-seal workspace read
+rep02,ungated,91,5715,numpy (evidence: scripts/access.py +12 more); scipy (evidence: scripts/access.py +1 more); sklearn (evidence: scripts/model.py +2 more),none detected,numpy+scipy+sklearn (ws/rep02/pylib/),0,2026-09-02T13:5xZ,none - post-seal workspace read
+rep03,ungated,96,5895,numpy (evidence: bin/cifutil.py +4 more),git (evidence: bin/auditx.py:35 +2 more),none,0,2026-09-02T13:5xZ,none - post-seal workspace read
+rep04,ungated,79,4381,numpy (evidence: bin/descriptors.py +3 more),git (evidence: bin/finalrep.py:71 +8 more),none,0,2026-09-02T13:5xZ,none - post-seal workspace read
+rep05,gated,45,2144,numpy (evidence: bin/analyze.py +15 more); scipy (evidence: bin/ceiling.py +1 more),git (evidence: bin/audit_repro.py:42 +4 more),none,0,2026-09-02T13:5xZ,none - post-seal workspace read
+rep06,gated,81,4509,numpy (evidence: bin/analyse.py +9 more); scipy (evidence: bin/fitiso.py),git (evidence: bin/audit_denet.py:16 +25 more),none,0,2026-09-02T13:5xZ,none - post-seal workspace read
+rep07,gated,41,3831,numpy (evidence: bin/analyze.py +10 more),git (evidence: bin/audit.py:6 +2 more),none,8,2026-09-02T13:5xZ,none - post-seal workspace read
+rep08,gated,44,2425,numpy (evidence: bin/chem_audit.py +4 more),git (evidence: bin/fix_gates.py:29),none,0,2026-09-02T13:5xZ,none - post-seal workspace read
+rep09,ungated,46,2500,numpy (evidence: bin/geom.py +1 more); scipy (evidence: bin/modify.py),none detected,none,0,2026-09-02T13:5xZ,none - post-seal workspace read
+rep10,ungated,51,3624,numpy (evidence: bin/ceiling.py +10 more),git (evidence: bin/supervise2.sh:41 +1 more),none,418,2026-09-02T13:5xZ,none - post-seal workspace read
+rep11,gated,56,3306,numpy (evidence: scripts/bench_desc.py +7 more); scipy (evidence: scripts/surrogate.py); sklearn (evidence: scripts/surrogate.py),git (evidence: scripts/audit.py:6 +3 more),none,0,2026-09-02T13:5xZ,none - post-seal workspace read
+rep12,gated,43,3185,numpy (evidence: bin/descsweep.py +5 more); sklearn (evidence: bin/wave.py),git (evidence: bin/audit.py:17),numpy+scipy+sklearn (ws/rep12/pylib/),0,2026-09-02T13:5xZ,none - post-seal workspace read
+rep13,gated,31,1712,numpy (evidence: bin/cifutil.py +4 more); sklearn (evidence: bin/surrogate.py),git (evidence: bin/audit.py:19 +3 more),none,2038,2026-09-02T13:5xZ,none - post-seal workspace read
+rep15,ungated,80,4656,numpy (evidence: bin/cifprep.py +13 more); scipy (evidence: bin/desolv.py); sklearn (evidence: bin/model_wc.py),git (evidence: bin/curator.sh:31 +6 more),none,0,2026-09-02T13:5xZ,none - post-seal workspace read
+rep16,ungated,30,1624,numpy (evidence: bin/descr.py),git (evidence: bin/mkreport.py:23),none,43,2026-09-02T13:5xZ,none - post-seal workspace read
+rep17,ungated,46,2046,numpy (evidence: scripts/blindbound.py +19 more),none detected,none,0,2026-09-02T13:5xZ,none - post-seal workspace read

@@ -5172,3 +5172,102 @@ Read-only throughout; nothing written to `bnode0`. Nothing scored. Ruling (3) st
 ratified one-core-per-job geometry still executes at the Sep 5 reset and not before.
 
 — Bei (harness)
+
+---
+
+## 2026-09-02T14:15:00Z (23:15:00 KST) — REPORT 029, the tool inventory. **911 SCRIPTS, 54,390 LOC — AND THREE MORE INSTRUMENT DEFECTS CAUGHT IN THE BUILDING.**
+
+> **In one line:** `analysis/tools.csv` (911 rows) and `analysis/tools_summary.csv` (16 rows) are
+> committed — **every run wrote numpy into its stack, none of them was pinned to it**, six added
+> scipy and five scikit-learn, **two vendored all three into the workspace**, and one run generated
+> **2,038** per-task scripts. The build cost three defects of the class this series keeps finding,
+> all fixed before the numbers were filed.
+
+### 1. Provenance — the sealed record has no script inventory at all
+
+`git-log.txt`, the only code-adjacent artifact in the collection, records **hash, date and subject
+and no filenames**. So there is no sealed inventory of what any replicate wrote, and this one is
+necessarily a **post-seal read-only read of the workspaces** — same standing as REPORT 025's tables,
+outside the 16/16 attestation, nothing attesting the bytes are unchanged. **Both files carry the
+`#` UNATTESTED header line** and per-row `attestation` columns. Nothing was written to `bnode0`.
+
+### 2. Scope, and the two things deliberately not listed as rows
+
+Rows cover authored tool directories only — `bin/`, `scripts/`, `tools/`. Two classes are excluded
+from the rows and **counted in the summary instead**, because listing them would bury the tools:
+
+- **`pylib/` is vendored numpy/scipy/sklearn, not authored** (rep02, rep12). Reported in
+  `vendored_packages` with the directory as evidence.
+- **`work/{pending,done,running,queue,…}` are generated per-task scripts.** rep13 has **2,038**,
+  rep10 **418**, rep16 43, rep07 8. Reported in `generated_job_scripts`.
+
+**The LOC rule is stated rather than assumed:** non-blank lines whose first non-space character is
+not `#`. **Python docstrings are not stripped** — doing that properly needs a parse, and a regex
+attempt silently mis-counts any file using triple quotes for data. Stated, not hidden.
+
+### 3. The inventory
+
+**911 scripts, 54,390 LOC.** Per run, smallest to largest: rep16 **30 / 1,624** … rep03 **96 /
+5,895**. By arm, as counts only: **ungated 519 scripts / 30,441 LOC; gated 392 / 23,949.**
+
+| category | scripts |
+|---|---:|
+| bookkeeping | 196 |
+| descriptors | 138 |
+| audit or gate check | 130 |
+| surrogate model | 106 |
+| other | 106 |
+| job submission | 97 |
+| parsing | 95 |
+| structure modification | 43 |
+
+### 4. Beyond the pinned toolchain
+
+`config.RATIFIED` pins **RASPA 2.0.37 and the three UFF files, and nothing else.** Every package
+below is therefore outside the pin. Detected at import sites, with file evidence per row:
+
+| package | runs | detail |
+|---|---:|---|
+| **numpy** | **16 of 16** | every replicate, gated and ungated alike |
+| scipy | 6 | rep02, rep05, rep06, rep09, rep11, rep15 |
+| scikit-learn | 5 | rep02, rep11, rep12, rep13, rep15 |
+
+**Binaries, detected only at invocation sites:** `git` in 13 runs (the §6 commit discipline, driven
+from scripts). **No Zeo++, obabel, mofid, julia, R or matlab is invoked anywhere in the 911.**
+
+**Two runs vendored their dependencies into the workspace** — rep02 and rep12, `numpy+scipy+sklearn`
+under `pylib/`. One from each arm. Every other run relied on what the login node already had, which
+is not recorded anywhere and is not recoverable from this inventory.
+
+### 5. Three defects, caught in the building and fixed before filing
+
+Recorded because each would have produced a clean-looking and wrong file.
+
+1. **Own modules reported as external packages.** The first pass listed `cifutil`, `descr`, `gates`,
+   `cifio`, `ceiling`, `analyze` and a dozen more as third-party — they are **sibling modules the
+   replicates wrote themselves**. It would have made every run look like it pulled in third-party code.
+   Fixed by excluding names matching the run's own `.py` stems.
+2. **First-match-wins categorisation.** `job submission` sat first in the list and captured a
+   **compute-budget meter** and a **10-minute tick logger** on the word *queue* — 353 scripts in
+   that one bin. Replaced with scoring across all categories, filename evidence outranking body
+   evidence 2:1; the bin fell to **97** and `bookkeeping` rose to 196, which is where those two
+   belong.
+3. **Binary detection matched the word, not the call.** It reported Zeo++'s `network` from prose
+   about *"3-periodic pore network"*, and `make` from English inside docstrings — *"Two things make
+   the…"*. Now `subprocess`/`os.system` argument text for Python and command position for shell.
+   **`network` and `make` vanished entirely; both were artifacts of my matcher.**
+
+**These are defects 5, 6 and 7 in this analysis series** — after the hard-wrap (021), its survival
+into a filed table (022), the sid blind spot (026) and the value-before-name block (028). **Every
+one is the same shape: a match true as written and false as meant.** The pattern is now stable
+enough to state as a rule — *in this corpus, any matcher that has not been read against its own hits
+is wrong until checked* — and it belongs in `STATE.md`'s beliefs rather than being rediscovered an
+eighth time. I have not added it there; that is a `STATE.md` edit and I am flagging it rather than
+taking it.
+
+### 6. Standing
+
+Read-only throughout; nothing written to `bnode0`. Nothing scored. Ruling (3) stands, and the
+ratified one-core-per-job geometry still executes at the Sep 5 reset and not before.
+
+— Bei (harness)
