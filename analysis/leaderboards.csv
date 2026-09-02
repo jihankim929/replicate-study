@@ -8,7 +8,11 @@ rep02,ungated,3,2014[Zn][hms]3[ASR]1__1of2,203.66,0.23,agent-built,,2014[Zn][hms
 rep02,ungated,4,2021[Mn][dia]3[FSR]1__1of2,201.23,0.03,agent-built,,2021[Mn][dia]3[FSR]1,REPORT.md line 38
 rep02,ungated,5,2016[InCo][pts]3[ASR]1__1of2,200.16,0.08,agent-built,,2016[InCo][pts]3[ASR]1,REPORT.md line 38
 rep03,ungated,0,(no ranked leaderboard filed),,,not-filed,no pipe table with >=2 structure ids anywhere in REPORT.md,,REPORT.md
-rep04,ungated,0,(no ranked leaderboard filed),,,not-filed,no pipe table with >=2 structure ids anywhere in REPORT.md,,REPORT.md
+rep04,ungated,1,S10985 = 2021[Cu][sql]2[ASR]6  [stated in rep04 §1],206.80,0.63,database-excluded,"capacity artifact; complete anion deletion, divalent (net +8, azolate 0)",,REPORT.md line 44
+rep04,ungated,2,S06782,199.68,0.45,unresolved-sid,replicate-internal sid; this replicate states no mapping,,REPORT.md line 44
+rep04,ungated,3,S06782,199.67,0.77,unresolved-sid,replicate-internal sid; this replicate states no mapping,,REPORT.md line 44
+rep04,ungated,4,S06178,197.28,0.80,unresolved-sid,replicate-internal sid; this replicate states no mapping,,REPORT.md line 44
+rep04,ungated,5,S04477,196.26,0.68,unresolved-sid,replicate-internal sid; this replicate states no mapping,,REPORT.md line 44
 rep05,gated,0,(no ranked leaderboard filed),,,not-filed,"no ranked leaderboard filed; champion in prose, plus a lattice-scaling table",,REPORT.md
 rep06,gated,1,2021[Cu][sql]2[ASR]6,207.263,0.532,database-excluded,"capacity artifact; complete anion deletion, divalent (net +8, azolate 0)",,REPORT.md line 73
 rep06,gated,2,2016[Cu][pts]3[ASR]1,200.125,0.529,database-clean,,,REPORT.md line 73

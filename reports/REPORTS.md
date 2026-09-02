@@ -4905,3 +4905,88 @@ Unchanged. Nothing scored, nothing written to the cluster, ruling (3) stands, an
 one-core-per-job geometry still executes at the Sep 5 reset and not before.
 
 — Bei (harness)
+
+---
+
+## 2026-09-02T12:50:00Z (21:50:00 KST) — REPORT 026, the prose pass. **CORRECTS REPORT 024 §1: rep04 DID file a ranked table.**
+
+> **In one line:** the second pass found that **rep04 filed a claim-grade ranked table all along** —
+> my first-pass regex could not see it because rep04 names structures by replicate-internal sid
+> (`S10985`), not by structure name, so `leaderboards.csv` goes from 8 filed tables to **9**, and
+> **all nine now carry an excluded entry at rank 1.** The prose pass itself yields 9 rows over 8
+> replicates, of which **only 4 name a structure that can be resolved at all** — and 3 of those 4
+> name the same one.
+
+### 1. CORRECTION to REPORT 024 §1 — rep04
+
+| | REPORT 024 | corrected |
+|---|---|---|
+| replicates filing a ranked leaderboard | 8 of 16 | **9 of 16** |
+| rep04 | `not-filed` | **filed**, `REPORT.md` line 44 |
+| leaderboards.csv rows | 43 | **47** |
+
+rep04's table is headed `| structure | seed | DC | ± | N(65) | N(5.8) | screening DC |` and its
+entries are `S10985`, `S06782`, `S06178`, `S04477`, `S10394`, `S08808`. **My extractor looked for
+`2021[Cu][sql]2[ASR]6`-shaped names and found none, so it recorded "no pipe table with ≥2 structure
+ids" — which was true as written and false as meant.** The table was always there; the instrument
+could not see that kind of name.
+
+**Consequence for the count that matters.** rep04's rank 1 is `S10985`, which **rep04's own §1
+resolves**: *"**S10985** (`2021[Cu][sql]2[ASR]6`) delivers a methane working capacity of 206.8 ±
+0.6."* So **every one of the nine filed ranked tables has an excluded entry at rank 1** — up from
+eight of eight.
+
+**What I did not do: resolve the other four sids.** rep08's table carries `sid | structure` pairs
+that appear to use the same scheme (`s06782 | 2016[Cu][pts]3[ASR]1`), and applying it would fill all
+four rows. **That is a cross-replicate inference and it is not a fact about rep04**, so those rows
+are tagged `unresolved-sid` with the reason *"replicate-internal sid; this replicate states no
+mapping"*. Only `S10985` is resolved, because rep04 resolves it itself. If you want the rep08 map
+applied, that is a ruling, not an extraction.
+
+**The fix broke something else first, and that is worth recording.** Adding sid matching made sids
+win over structure names — and **rep08's table has both columns**, so its five resolved rows silently
+became `unresolved-sid` and `database-excluded` fell from 11 to 10. Caught by watching the totals
+move in the wrong direction. A structure name now always wins over a sid. **Third instrument defect
+in this analysis series, all the same shape: the instrument sees only what it was written to see.**
+
+### 2. `analysis/leaderboards_prose.csv` — 9 rows across 8 replicates
+
+Every runner-up named in prose, with its stated value, tagged `prose-derived`, each carrying the
+verbatim sentence it came from.
+
+| rep | named as | value | rank language |
+|---|---|---|---|
+| rep03 | **(none)** | — | no second-place language anywhere in its prose |
+| rep04 | `S06782` | 199.68 ± 0.45 | *"the next claim-grade structure"* |
+| rep04 | `S02622` | 177.1 | *"The best of them"* (bound-eligible set, not overall #2) |
+| rep05 | **(unnamed)** | 209.97 | *"The best compressed runner-up"* — a **modified** structure |
+| rep09 | **(unnamed)** | 199.86 | *"the runner-up"* |
+| rep12 | `2016[Cu][pts]3[ASR]1` | **199.98 ± 0.42** | *"Runner-up, also claim-grade and G6-reproduced"* |
+| rep13 | `2013[Yb][nia]3[ASR]1` | **196.265** (SD 0.080) | *"Its closest rival"* |
+| rep15 | `2016[Cu][pts]3[ASR]1` | **199.87**, no interval | *"The runner-up"* |
+| rep17 | `2016[Cu][pts]3[ASR]1` | **199.90 ± 0.38** | *"The runner-up"* |
+
+**Only 4 of 9 rows name a structure that can be resolved.** Two name nothing at all — rep05's and
+rep09's runner-ups are given as bare numbers — two are replicate-internal sids, and rep03 names no
+runner-up in any form.
+
+**Three of the four resolvable names are the same structure**, `2016[Cu][pts]3[ASR]1` (rep12, rep15,
+rep17), at 199.98 / 199.87 / 199.90. The fourth is rep13's `2013[Yb][nia]3[ASR]1`, which is the
+runner-up to a different champion.
+
+**No prose runner-up is in the exclusion set.** Across both passes the excluded artifact appears at
+**rank 1 and nowhere else** — never as a second-place structure in a table or in prose. Stated as a
+count; no assessment.
+
+**One row is not a database entry at all.** rep05's *"best compressed runner-up… 209.97"* is a
+lattice-scaled variant. Its own scaling table attributes that peak to `2015[V][srs]3[FSR]1` at
+factor 0.94, but **the prose sentence names nothing**, so the row records the value with
+`(unnamed in prose)` and the attribution in the locus rather than promoting a table reading into a
+prose extraction.
+
+### 3. Standing
+
+Unchanged. Nothing scored, nothing written to the cluster, ruling (3) stands, and the ratified
+one-core-per-job geometry still executes at the Sep 5 reset and not before.
+
+— Bei (harness)

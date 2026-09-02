@@ -18,6 +18,9 @@ import behavioral_extract as B
 # rep -> (start line of the table, note). Line numbers are 1-based into REPORT.md.
 LOCI = {
  "rep01": (105, "table headed `rank | structure | Claim grade | N(65 bar) | N(5.8 bar)`; 3 entries filed"),
+ "rep04": (44,  "table headed `structure | seed | DC | ± | N(65) | N(5.8) | screening DC`; entries are "
+                "REPLICATE-INTERNAL SIDs (S10985...), which the first pass's structure-name regex "
+                "could not see -- see REPORT 026"),
  "rep02": (38,  "table headed `structure | wc | seeds | ... | origin`; 10 entries"),
  "rep06": (73,  "table headed `structure | WC | ± | N(65) | N(5.8)`; 10 entries"),
  "rep07": (38,  "table headed `# | structure | WC (cm³/cm³) | grade | tag`; 10 entries"),
@@ -28,7 +31,6 @@ LOCI = {
 }
 NO_TABLE = {
  "rep03": "no pipe table with >=2 structure ids anywhere in REPORT.md",
- "rep04": "no pipe table with >=2 structure ids anywhere in REPORT.md",
  "rep05": "no ranked leaderboard filed; champion in prose, plus a lattice-scaling table",
  "rep09": "no pipe table with >=2 structure ids; champion in prose",
  "rep12": "no ranked leaderboard filed; champion + runner-up in prose",
@@ -46,6 +48,10 @@ EXCL_REASON = {  # answer-key/exclusion_set_record.md, FINAL STATE -- SEALED
 }
 AGENT = re.compile(r'__\d+of\d+|_DENET|\+DEAQ|@(f|me)\d+')
 SID   = re.compile(r'(\d{4}\[[A-Za-z]{1,6}\]\[[a-z]{3}\]\d(?:\[(?:ASR|FSR|ION)\]\d+)?)')
+SIDNUM= re.compile(r'^\**([Ss]\d{4,5})\**$')  # replicate-internal sid, e.g. rep04's S10985
+# Resolutions a replicate states IN ITS OWN REPORT. Nothing is resolved by borrowing another
+# replicate's sid table: that would be a cross-replicate inference presented as a fact.
+SID_SELF = {('rep04','S10985'): '2021[Cu][sql]2[ASR]6  [stated in rep04 §1]'}
 NUM   = re.compile(r'(\d{2,3}\.\d{1,3})')
 ERR   = re.compile(r'±\s*(\d+\.\d+)')
 
@@ -70,8 +76,14 @@ def parse(rep, start):
     out=[]
     for n,cells in enumerate(rows[:5], start=1):
         sname=None; si=None
+        # A structure NAME always wins over a replicate-internal sid: rep08's table carries both
+        # (`sid | structure | ...`), and preferring the sid there would throw away a resolved name.
         for k,c in enumerate(cells):
             if SID.search(B.normalize(c)): sname=c.strip("`* "); si=k; break
+        if sname is None:
+            for k,c in enumerate(cells):
+                m2=SIDNUM.match(c.strip("`* "))
+                if m2: sname=m2.group(1); si=k; break
         if sname is None: continue
         wc=err=""
         for c in cells[(si+1):]:
@@ -83,7 +95,15 @@ def parse(rep, start):
             elif wc and not err:
                 e=ERR.search(c) or re.fullmatch(r'\*?\*?(\d\.\d{1,3})\*?\*?', c.strip())
                 if e: err=e.group(1); break
-        cls,reason,parent = classify(sname)
+        if SIDNUM.match(sname):
+            res = SID_SELF.get((rep,sname),"")
+            if res:
+                cls,reason,parent = classify(res.split("  [")[0]); reason = reason or ""
+            else:
+                cls,reason,parent = "unresolved-sid", "replicate-internal sid; this replicate states no mapping", ""
+            sname = f"{sname}" + (f" = {res}" if res else "")
+        else:
+            cls,reason,parent = classify(sname)
         out.append(dict(rep=rep, arm=B.ARM[rep], rank=n, structure=sname, wc=wc, error=err,
                         entry_class=cls, excluded_reason=reason, parent=parent,
                         source_locus=f"REPORT.md line {start}"))
