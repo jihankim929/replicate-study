@@ -4700,3 +4700,110 @@ Unchanged. Nothing scored, nothing touched the cluster, ruling (3) stands, and t
 one-core-per-job geometry still executes at the Sep 5 reset and not before.
 
 — Bei (harness)
+
+---
+
+## 2026-09-02T12:10:00Z (21:10:00 KST) — REPORT 024, extraction (1) and (2) delivered in full. **(3) IS NOT IN THE SEALED RECORD.**
+
+> **In one line:** `leaderboards.csv` and `search_completeness.csv` are committed and complete —
+> and they carry two counts worth reading before anything else: **only 8 of 16 replicates filed a
+> ranked leaderboard at all**, and **search status splits identically by arm, 4 converged / 3 not /
+> 1 unstated on each side.** The three figure tables **cannot be built from the collected record**:
+> the per-pair data was never pulled off the cluster, by COLLECTION.md §4's deliberate decision. I
+> have delivered the part that is in the record and staged the rest rather than inventing it.
+
+### 1. `analysis/leaderboards.csv` — 43 rows
+
+Top five as filed, per replicate, each entry tagged. Built by `harness/leaderboard_extract.py`,
+which **declares every table locus rather than guessing one** — reports carry between 0 and 6 pipe
+tables containing structure ids, and "the final claim-grade leaderboard" is not machine-identifiable.
+
+| tag | rows |
+|---|---:|
+| database-clean | 20 |
+| **database-excluded** | **11** |
+| agent-built | 4 |
+| not-filed | 8 |
+
+**Only 8 of 16 filed a ranked leaderboard.** The other eight get one row each recording that, with
+what they filed instead — champion in prose, or champion plus runner-up — because dropping them
+would have made the file silently under-report half the fleet.
+
+**Two counts from the filed tables, no assessment.** Every one of the eight ranked tables carries an
+excluded entry at **rank 1**; rep11's carries it at rank 1 *and* rank 2 (`[FSR]6` and `[ASR]6`, the
+coordinate-identical twins, filed as two rows). And **rep02's top five is four-fifths
+agent-built** — ranks 2–5 are structures it constructed itself (`__1of2` de-interpenetration
+children), tagged `built here` in its own `origin` column, with the parent named in the CSV.
+
+`excluded_reason` carries the key's mechanism per structure. Six distinct excluded structures are
+possible; only `2021[Cu][sql]2` appears in any filed top five.
+
+### 2. `analysis/search_completeness.csv` — 16 rows, verbatim
+
+| status | n | gated | ungated |
+|---|---:|---:|---:|
+| converged | 8 | 4 | 4 |
+| did-not-converge | 6 | 3 | 3 |
+| unstated | 2 | 1 | 1 |
+
+**The split is identical on both arms.** Stated as a count; the interpretation is the PI's.
+
+The two `unstated` are cases where the only convergence language in the report is about **Monte
+Carlo chains, not about the search** — rep03's *"cycle-count convergence… claim-grade at two seeds
+agrees to 0.012"* and rep01's framing that *"the problem as posed is a coverage problem, not a
+search problem."* Recorded as unstated rather than forced into either bin.
+
+**The sharpest self-assessment in the fleet is rep11's**, and it is a `did-not-converge`:
+
+> *"the unscreened remainder is **not** excluded and my number **cannot be shown to be near the
+> achievable maximum**. Worse, that bound **rose** during the campaign"*
+
+rep13's is the other: *"The search is incomplete and demonstrably still productive… the leader rose
+7.5 cm³/cm³."* Against those, rep07 files *"the search has converged, not merely that it was pointed
+the right way."*
+
+### 3. The figure tables are not in the sealed record — what exists, and what a pull would take
+
+**This is the deliverable I cannot complete, and the reason is structural rather than an oversight.**
+COLLECTION.md §4: *"The workspaces themselves were not pulled… The results are still only on the
+cluster. They are outside the seal, outside this collection, and outside §7.1's scope. If they are
+wanted off `bnode0`, that is a separate pull against a separate authority, and it should be asked
+for as one."*
+
+So the record holds summaries, not pairs. What **is** filed is in
+**`analysis/figure_tables_in_record.csv`, 12 rows:**
+
+| requested | in the sealed record | missing |
+|---|---|---|
+| rep02, 250 de-interpenetration pairs | 4 children in the leaderboard with child WC; **parent WC not filed** | 246 pairs, all parent WCs |
+| rep15, 42 aqua-removal pairs | summary only — *"41 of 42 children beat their parent"*, mean **+18.6**, max **+74.8**, screening cycles | all 42 rows, ligands-removed per pair |
+| rep17, methylation + fluorination series | `me004` at **208.15 ± 0.37**, 10,000+50,000, job 3473668; saturation at **32 of 96** aromatic sites methylated, **44** fluorinated | per-variant WC/error/cycles for me002, me006, me008, me012, f025, f050 |
+
+**One complete pair table does exist in the record, and it is rep06's, not rep02's** — pristine vs
+`_DENET` with the change, four pairs, filed in full. Its largest entry is
+`2021[Cu][sql]2[ASR]6` → `_DENET`, **207.26 → 132.04, −75.22**. Included in the CSV.
+
+**What a pull would need, verified remotely tonight by read-only listing, no files transferred:**
+
+| rep | file | lines |
+|---|---|---:|
+| rep02 | `ws/rep02/tables/mod_rank.csv` (name, parent, parent_wc) + `tables/t1_wc.csv` (wc, sd_wc) | 665 + 3,225 |
+| rep15 | `ws/rep15/manifests/mods.csv` (name, parent, **n_h2o_removed**, density…) | 207 |
+| rep17 | `ws/rep17/analysis/*.csv` | ~20 files |
+
+**Two things to decide before that happens, and they are yours.** First, the authority:
+COLLECTION.md says this pull *"should be asked for as one"*, and I have not treated your extraction
+instruction as silently granting it. Second, and more important — **this data is outside the seal.**
+It carries no sealed hash, it has sat on `bnode0` since the campaign closed, and nothing attests it
+is unchanged. Everything committed tonight traces to the sealed 16/16 attestation; these tables
+would be the first analysis artifacts that do not, and they should be labelled that way in the file
+rather than in a footnote. Say go and it is one commit, with provenance columns and the row counts
+cross-checked against each report's own filed totals — 250, 42 — which is the only corroboration
+available for unattested data.
+
+### 4. Standing
+
+Unchanged. Nothing scored, nothing written to the cluster, ruling (3) stands, and the ratified
+one-core-per-job geometry still executes at the Sep 5 reset and not before.
+
+— Bei (harness)

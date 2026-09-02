@@ -1,0 +1,13 @@
+rep,arm,series,parent,parent_wc,child,child_wc,delta,fidelity,extra,source_locus
+rep06,gated,de-interpenetration,0000[Er][lcy]3[ASR]1,165.24,0000[Er][lcy]3[ASR]1_DENET,165.75,+0.51,not stated in the filed table,,REPORT.md line 118
+rep06,gated,de-interpenetration,0000[Lu][lcy]3[ASR]1,165.77,0000[Lu][lcy]3[ASR]1_DENET,175.41,+9.64,not stated in the filed table,,REPORT.md line 118
+rep06,gated,de-interpenetration,2010[Zn][rtl]3[ASR]1,177.35,2010[Zn][rtl]3[ASR]1_DENET,153.57,-23.79,not stated in the filed table,,REPORT.md line 118
+rep06,gated,de-interpenetration,2021[Cu][sql]2[ASR]6,207.26,2021[Cu][sql]2[ASR]6_DENET,132.04,-75.22,not stated in the filed table,,REPORT.md line 118
+rep17,ungated,methylation,2021[Cu][sql]2[ASR]6,207.07,me004 (four-methyl),208.15,+1.09 ± 0.53,"10,000+50,000",error ±0.37; job 3473668,REPORT.md §1
+rep17,ungated,methylation,2021[Cu][sql]2[ASR]6,,scan saturation,,,,methylation saturates at 32 of 96 aromatic sites,REPORT.md §3
+rep17,ungated,fluorination,2021[Cu][sql]2[ASR]6,,scan saturation,,,,fluorination saturates at 44 of 96 aromatic sites,REPORT.md §3
+rep15,ungated,aqua-removal,"(42 pairs, not itemised)",,,,"mean +18.6, max +74.8, 41 of 42 children beat their parent",screening cycles only,per-pair rows NOT in the sealed record,REPORT.md §1
+rep02,ungated,de-interpenetration,2012[In][dia]3[ASR]4,NOT IN RECORD,2012[In][dia]3[ASR]4__1of2,204.17,,"3 seeds, claim grade",4 of 250 pairs; parent WC not filed,REPORT.md line 38
+rep02,ungated,de-interpenetration,2014[Zn][hms]3[ASR]1,NOT IN RECORD,2014[Zn][hms]3[ASR]1__1of2,203.66,,"3 seeds, claim grade",4 of 250 pairs; parent WC not filed,REPORT.md line 38
+rep02,ungated,de-interpenetration,2021[Mn][dia]3[FSR]1,NOT IN RECORD,2021[Mn][dia]3[FSR]1__1of2,201.23,,"3 seeds, claim grade",4 of 250 pairs; parent WC not filed,REPORT.md line 38
+rep02,ungated,de-interpenetration,2016[InCo][pts]3[ASR]1,NOT IN RECORD,2016[InCo][pts]3[ASR]1__1of2,200.16,,"3 seeds, claim grade",4 of 250 pairs; parent WC not filed,REPORT.md line 38

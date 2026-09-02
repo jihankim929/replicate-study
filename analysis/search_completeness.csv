@@ -1,0 +1,17 @@
+rep,arm,search_status,verbatim_excerpt
+rep01,gated,unstated,"The problem as posed is a coverage problem, not a search problem."
+rep02,ungated,did-not-converge,"What would change my mind, in order of how likely I think each is. 1. A GCMC measurement of any of the 145 unmeasured 2-periodic analogues coming in above 207.03."
+rep03,ungated,unstated,"Cycle-count convergence. `02_cyc` crossed grade against seed ... claim-grade at two seeds agrees to 0.012 [convergence of the Monte Carlo chain, not of the search]."
+rep04,ungated,did-not-converge,The doubt is that 445 of 669 structures in the candidate band remain unmeasured.
+rep05,gated,converged,an exhaustive census of the 319 distinct materials occupying the high-capacity region of descriptor space found nothing above it
+rep06,gated,converged,"on this database, under this protocol, the landscape is flat near the top and the search is into diminishing returns"
+rep07,gated,converged,"it then stopped rising: the top-100 predicted geometries are now all measured, with the top-300 at 100%. The claim is that the search has converged, not merely that it was pointed the right way"
+rep08,gated,converged,"The search ran in descending void fraction, so it is *complete* above a threshold rather than sampled"
+rep09,ungated,converged,the exhaustive 65-bar pass therefore does not merely prioritise -- it *excludes*. ... that is the only route to a defended ceiling rather than a leaderboard
+rep10,ungated,converged,"The exceedance count is zero against either value, so the hypergeometric bound is identical for both. This is the second reason the model-free bound is reported first: it is the one that does not move when the leaderboard does."
+rep11,gated,did-not-converge,"the unscreened remainder is *not* excluded and my number cannot be shown to be near the achievable maximum. Worse, that bound rose during the campaign"
+rep12,gated,did-not-converge,"A measurement above 207.15 anywhere would falsify the ceiling claim outright rather than weaken it, and 84 unmeasured structures remain"
+rep13,gated,did-not-converge,"The search is incomplete and demonstrably still productive. 233 of the 400 planned w1 structures and all 871 of wP are unmeasured, and the leader rose 7.5 cm3/cm3"
+rep15,ungated,converged,"Uniform random arm: 1,684 draws ..., max 195.3, 0 above the leader. This is the instrument the ceiling claim rests on. ... The rule of three puts a 95% upper bound ... at most 5 of the 12,120"
+rep16,ungated,did-not-converge,the campaign was on a trajectory to make it roughly fifty times tighter before its compute was withdrawn
+rep17,ungated,converged,"Coverage is complete above the highest-predicted structure still *unmeasured* -- not above the lowest one with a result, and not above what was selected, since a queued task screens nothing. Every unscreened structure with pred2 > 134.97 has been measured"
