@@ -382,3 +382,43 @@ committed.
 
 **A row's `quantity` is not inferred from its magnitude.** rep09's 254.73 exceeds every deliverable
 capacity in the fleet, which is exactly why it must not be read as one.
+
+---
+
+# `structure_id_resolved` — rep04's identifiers, from rep04's own record
+
+**Yes: rep04's own records state the mapping.** It is a table in **rep04's `STATE.md`**, headed
+*"Best result so far (floor cycles 2,000+10,000, grid-free, seed 0)"*, with columns
+`| sid | name | DC | N(65) | N(5.8) | phi | rho |`:
+
+```
+| S10985 | 2021[Cu][sql]2[ASR]6 | 207.45 ± 1.35 | 244.22 | 36.76 | 0.409 | 0.358 |
+| S06782 | 2016[Cu][pts]3[ASR]1 | 199.57 ± 1.03 | 243.19 | 43.63 | 0.398 | 0.438 |
+| S06178 | 2015[V][srs]3[ASR]1 | 197.61 ± 0.77 | 232.58 | 34.97 | 0.475 | 0.437 |
+| S04477 | 2013[Yb][nia]3[ASR]1 | 196.81 ± 1.67 | 242.65 | 45.84 | 0.412 | 0.544 |
+| S10394 | 2020[In][nuc]3[ASR]1 | 196.41 ± 0.71 | 238.06 | 41.65 | 0.449 | 0.471 |
+| S08808 | 2018[Y][bcu]3[ASR]1  | 191.86 ± 1.80 | 251.58 | 59.72 | 0.336 | 0.515 |
+```
+
+Eight pairs appear across rep04's own `REPORT.md`, `LOG.md` and `STATE.md` in total (the six above
+plus `S03977` → `2012[Zn][srs]3[ASR]2` and `S02394` → `2010[Cu][nbo]3[ASR]2`). **No other route was
+used** — rep08's sid table was not consulted, and nothing was inferred across replicates.
+
+**Filled for the 4 rep04 rows in `fig2_claims_long.csv`; empty for every other row**, since no other
+row carries an unresolved identifier. `structure_id_resolved_locus` cites the table on every filled
+row.
+
+**A correction this exposes, recorded rather than quietly fixed.** Those four rows already carried
+`structure_class = retained`, assigned by the class rule before the identifiers were resolved — an
+`S`-prefixed sid is not in the exclusion set, so the rule returned `retained`. **That was an
+unsupported assertion at the time it was written**, exactly the defect corrected in
+`fig2_jobs_build.py` (where unresolved ids are given no class) but not in `fig2_build.py`. The
+resolution now **confirms all four are genuinely `retained`** — `2016[Cu][pts]3`, `2015[V][srs]3`
+and `2013[Yb][nia]3` are none of them in the sealed exclusion set — so **no value changes, only its
+provenance.** The class is now supported by rep04's own record rather than by the absence of a
+match.
+
+**Not changed here:** `leaderboards.csv` still tags those four entries `unresolved-sid` as REPORT 026
+filed them. They are resolvable from the same locus, but reclassifying them would move counts that
+REPORT 026 has already filed, and that is a correction entry rather than a silent edit. Flagged, not
+taken.
