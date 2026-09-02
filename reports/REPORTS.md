@@ -5340,3 +5340,100 @@ Read-only throughout; nothing written to `bnode0`. Nothing scored. Ruling (3) st
 ratified one-core-per-job geometry still executes at the Sep 5 reset and not before.
 
 — Bei (harness)
+
+---
+
+## 2026-09-03T00:10:00Z (09:10:00 KST) — REPORT 031, Figure 2 extractions. **TWO OF THREE DELIVERED. COMMIT `51de0c2`.**
+
+> **In one line:** `fig2_events.csv` (16 runs) and `fig2_claims_long.csv` (80 rows) are committed at
+> **`51de0c28c60d2450e98390975ac7e2550e70cfb3`** with the rules in `analysis/README.md` — and four
+> things in the request could not be taken at face value: **there is no manuscript in this
+> repository** to inherit definitions from, **no D/B/S/M taxonomy exists** anywhere in the record,
+> **the extractions are not key-independent**, and **`fig2_jobs.csv` cannot be built** because the
+> per-job association it needs was never written down.
+
+### 1. Delivered
+
+| file | rows | key-dependent? |
+|---|---:|---|
+| `analysis/fig2_events.csv` | 16 | no |
+| `analysis/fig2_claims_long.csv` | 80 | **yes** — see §4 |
+| `analysis/README.md` | — | rules, index, attestation status for every artifact |
+
+Both are **inside the seal**: `LOG.md`, `git-log.txt`, `WORKSPACE.json`, `usage.json` and `REPORT.md`
+are all collected. Builder committed at `harness/fig2_build.py`.
+
+**`end_reason` resolves cleanly: 12 of 16 ended at the spend cap, 4 by filing.** No run ended on the
+deadline, so `deadline` and `other` are unused categories rather than empty ones.
+
+### 2. There is no manuscript, so no definitions could be inherited
+
+The request specifies *"the same definitions already used for the timing ranges in the manuscript"*.
+**I have never had access to a manuscript.** Its absence is recorded independently in three places —
+`prereg/rubric_v1.0.md` (*"There is no manuscript in this repository — the word appears nowhere in
+`prereg/`, `LOG.md`, `STATE.md`, `harness/` or the answer key"*), `prereg/seal_notes.md`, and
+`STATE.md`. It was logged as the rubric's **open item 1** at seal and has never been closed.
+
+**So every rule is declared in the README rather than reproduced**, and the four timing columns
+carry REPORT 030's limitation with them: they are **first announcements matching a pattern, not
+verified occurrences.** rep06's first claim-grade match is *"claim-grade promotion and G6
+reproduction drivers **written**"* — a driver being authored, not a run completing. **If the
+manuscript's definitions differ from mine, these columns are wrong and must be rebuilt against
+them.** I cannot check that from here.
+
+### 3. `strategy (D/B/S/M)` is present and empty for all sixteen
+
+**No D/B/S/M taxonomy exists anywhere in this repository** — not in `prereg/`, the charter, the
+rubric, `STATE.md`, or any replicate record. I searched for the literal token, for `strategy_class`,
+and for any four-way strategy scheme.
+
+Assigning sixteen runs to four categories I have never seen is interpretation, which this request
+explicitly excludes — and it is the kind of judgement the pre-analysis amendment moved *away* from
+scored classification. **The column is in the file and empty**, so the shape is right and the
+content waits on you. Send the four definitions and it is a one-line change.
+
+### 4. The extractions are not key-independent, and that may matter to you
+
+The request describes all three as *"key-independent extractions"*. **`fig2_claims_long.csv` is
+not.** Its `structure_class` column separates `excluded` from `retained`, and *excluded* is defined
+**only** by the sealed exclusion set in `answer-key/exclusion_set_record.md` — 6 structures, 11
+files. There is no key-independent way to produce that column.
+
+`fig2_events.csv` **is** key-independent. **20 of the 80 claim rows are `excluded`.**
+
+Flagging it because if the figure's argument depends on being key-independent, that property does
+not hold for the second file, and it is better said now than discovered at review.
+
+### 5. `fig2_jobs.csv` cannot be built, with the evidence
+
+The specification asks for one row per completed simulation job with `t_submitted`, `t_completed`,
+`accuracy_tier` and `structure_id`, from *"the completed job records used for compute metering"*.
+
+**The metering source carries none of those fields.** Every `usage.json` names it:
+`"cpu_h_basis": "finished-job PBS cput (harvest_cput.sh -> cput_finished.txt)"`. Its actual format:
+
+```
+8971 3473240.bnode0.kaist.ac.kr
+245230 3473259.bnode0.kaist.ac.kr        <- 21 lines for rep01, two fields
+```
+
+**cput-seconds and a job id. No submit time, no completion time, no tier, no structure.** It is also
+not in the collected record.
+
+**The collected `JOBS.md` is a batch ledger, not a job record** — 21 table lines for rep01, where one
+row covers 540 structures (*"Round-1 screen, 540 structures, floor cycles"*), outcomes are free text
+(*"waiting in mjs FIFO"*), ids include ranges (*"mjs 3411-3416"*), and **there are no completion
+timestamps at all.**
+
+So the per-job → structure → tier → timing association the column set requires **was never written
+down by any replicate**. It could only be re-derived from the workspace run trees — a much larger
+read, against data outside the seal, and one whose result would be a reconstruction rather than a
+record. **Held rather than attempted.** If you want it, it needs its own authorisation and it should
+be understood as derived, not extracted.
+
+### 6. Standing
+
+Read-only throughout; nothing written to `bnode0`. Nothing scored. Ruling (3) stands, and the
+ratified one-core-per-job geometry still executes at the Sep 5 reset and not before.
+
+— Bei (harness)
