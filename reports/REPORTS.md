@@ -3891,3 +3891,112 @@ Going quiet again except URGENT. The one item that may become URGENT on its own 
 declare itself at 3474525's walltime — **2026-09-03 07:01 KST** — if not before.
 
 — Bei (harness)
+
+---
+
+## 2026-09-02T03:52:00Z (12:52:00 KST) — REPORT 017, on the REPORT 016 rulings. **ALL THREE RECORDED; RULING (1) EXECUTED BY DOING NOTHING.** And a finding that bears on ruling (1) itself: **the quartile-4 measurement you ordered is the one run that may not survive to be measured.**
+
+> **In one line:** rulings (1), (2) and (3) are on the record and **nothing operational was
+> executed** — 3474525 rides, untouched, to **2026-09-03 07:01 KST**. Tonight's measured pace is
+> captured to `screen/pace_wave1_20260902T0344Z.csv` **before** the evidence can age out, and
+> reading it produces two things you do not yet have: **(a) no quartile-4 run has completed, so the
+> measured q4 multiplier ruling (1) asks for does not exist and will be *censored* if 3474525 is
+> killed**; and **(b) the plan's assumed p65/p05 cost ratio of 5.00 measures at 1.56** at claim
+> grade, which is most of why stage-0 jobs are using only **14–32 %** of their requested walltime.
+
+### 1. The rulings as recorded
+
+**(1) 3474525 rides to its walltime — no intervention.** Executed by taking no action. Nothing was
+resized, split, requeued or killed; the job is untouched and will die or finish on its own at
+**2026-09-03 07:01:21 KST** (start 04:50:21 + 26:11:00). On a kill, both members are to be recorded
+**unfinished-not-faulty** and re-enter the retry path at the next wave with walltimes re-derived
+from measured pace, q4 tail structures taking the **measured** multiplier. **The §8 `failed` entries
+stand as written** — *the ledger's honesty outranks its cosmetics*, recorded verbatim as the
+governing principle, because it decides a class of future case and not just this one.
+
+**(2) The four-party attribution correction is accepted into the record.**
+
+**(3) At the Sep 5 resume:** waves shaped to measured free node-groups; the sealed smaller batch
+sizes (14, 8) **may** target amd/aa cores when `ac` is packed; batch composition per the sealed plan;
+**ceiling 480 and the displacement rules unchanged.** Nothing else until the reset.
+
+**Nothing else was done.** No submission, no kill, no requeue, no code written, no wave-2 preparation.
+
+### 2. The pace snapshot — and why it was taken now rather than at the reset
+
+`screen/pace_wave1_20260902T0344Z.csv`, 47 completed runs, one row per run, duration in wall
+seconds. Members run concurrently, so a member's duration is **true per-run cost**, not a share of a
+serial batch. Quartile and `nsim` are joined from the ledger; **job is joined from the exec node**,
+which is exact — joining by stem alone misattributes stems that appear in more than one job, and it
+did so on my first pass.
+
+It was taken mid-flight deliberately. Ruling (1) and ruling (3) both consume "tonight's measured
+pace", and the live instrument that carries it — `qstat -f resources_used` — **empties when a job
+leaves the queue.** Capturing it now costs nothing and removes a dependency on `tracejob`, whose
+server accounting file returned **`Permission denied`** to me tonight.
+
+### 3. Finding — the quartile-4 multiplier does not exist yet, and may arrive censored
+
+**Completed runs by quartile: q2 = 35, q3 = 12, q4 = 0.**
+
+Wave 1's *only* quartile-4 work is `2023[Eu][nan]3[FSR]2`, and that is **scr1_1_0005 — the job under
+ruling (1)**. So the measurement ruling (1) directs future waves to use is the one measurement that
+may not complete.
+
+**This is not an objection to the ruling and it changes nothing about riding to the walltime.** It
+is a statement of what the record will contain afterwards, so that the re-derivation at the reset is
+not built on a number that looks measured and is not:
+
+- **If p65 finishes**, we get a true q4 claim-grade... **floor**-grade measurement, and the
+  multiplier is real.
+- **If it is killed**, what tonight yields is a **censored lower bound** — *p65 exceeded X hours* —
+  where X is its elapsed time at the kill, not a completed cost. A lower bound is still usable and
+  is arguably the safer input for provisioning, but it must be **labelled censored in the ledger**,
+  or a later reader will scale from it as though it were a measured mean and under-provision the
+  entire q4 tail.
+
+I have not decided how to label it. Flagging it now because the decision is cheap before the kill
+and expensive after.
+
+### 4. Finding — the walltime formula is over-provisioned on the pressure axis, and that helps ruling (3)
+
+| measure | plan assumed | measured tonight |
+|---|---|---|
+| p65 / p05 cost ratio | **5.00** (4.565 / 0.913 CPU-h) | **1.56** median, 0.99–2.69 across 21 pairs |
+
+Consequence, per job:
+
+| job | runs done | slowest member | requested | peak headroom used |
+|---|---:|---:|---:|---:|
+| scr1_0_0001 | 22 | 3.20 h | 11.38 h | **28.1 %** |
+| scr1_0_0003 | 13 (complete) | 4.30 h | 13.63 h | **31.5 %** |
+| scr1_0_0004 | 12 | 1.98 h | 13.83 h | **14.3 %** |
+
+A 5× pressure assumption on top of the stated **×3.0** safety factor is compounding into stage-0
+walltime requests roughly **3–7× the observed need.** That is not a fault — over-requesting is the
+safe direction and the runs are landing — but it **directly serves ruling (3)**: shorter, honestly
+sized walltimes are easier to place, and placement is exactly what is scarce. It is also the cheapest
+lever on the queue we are actually stuck in.
+
+**Two limits on that number, stated so it is not over-read.** The 1.56 ratio is measured on **q2 and
+q3 claim-grade** runs only. The one q4 structure is visibly *not* obeying it — its p05 member is
+2,000 cycles into production while its p65 member has not cleared initialization, which is a ratio
+far above 1.56. **The pressure ratio is not a constant; it grows with loading, and the tail is where
+it grows.** Any re-derivation should apply the measured ratio to q2/q3 and hold the tail separate,
+which is what ruling (1) already says in different words. And per-run spread remains enormous —
+median 0.72–1.38 h against a 4.30 h max — so batch walltime must continue to be sized on the **max**
+member, never the median.
+
+### 5. Standing
+
+**Wave 1: 47 of 98 runs complete, 47 ok, 0 failed. 55.4 CPU-h in completed runs; 82.9 CPU-h charged
+including work in flight.** One job complete (scr1_0_0003), three running, two queued since 04:50
+behind a full `ac` group.
+
+**Nothing is scheduled and nothing supervises.** The walltime event in §3 will **not** be detected
+automatically — there is no timer, daemon or watchdog left to see it. It will be observed at the next
+hand-driven check, by design, and I will not be the one to notice it unprompted.
+
+Going quiet until the Sep 5 04:00 KST reset except URGENT.
+
+— Bei (harness)

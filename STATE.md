@@ -15,6 +15,54 @@ archived smoke arms (s01 $135.99 + s02 $42.50) into a denominator that is 16 × 
 caps. `harness/state/fleet_spend.json` states the basis — *"latest metered row per replicate,
 smoke excluded"*. The corrected figure at REPORT 014's own 16:04Z snapshot was $4,684.17 (104.6%).
 
+# RULINGS STANDING — 2026-09-02 12:52 KST (REPORT 017). **NOTHING UNTIL THE SEP 5 04:00 RESET.**
+# *Wave 1 rides. No intervention on anything, including a job that is expected to die.*
+
+**(1) `3474525` / `scr1_1_0005` rides to its walltime — NO INTERVENTION.** It is untouched and will
+end on its own at **2026-09-03 07:01:21 KST**. Expected outcome is a walltime kill: its p65 member
+(`2023[Eu][nan]3[FSR]2`, 23,166 framework atoms, quartile 4) had not cleared even its 2,000
+initialization cycles at hour 7.8, while its p05 member was already 2,000 cycles into production.
+**Do not resize, split, requeue or kill it.** On the kill, both members are **unfinished-not-faulty**
+and re-enter the retry path at the next wave, walltimes re-derived from measured pace, **q4 tail
+structures taking the MEASURED multiplier and not the estimated one.**
+**The §8 `failed` entries stand as written — the ledger's honesty outranks its cosmetics.** That is
+the governing principle for this whole class of case, not a one-off disposition: a run that was
+merely unfinished still reads `failed` in the ledger, and the correction lives in the retry record,
+never in an edit to the entry.
+
+**Nothing supervises this.** No timer, daemon or watchdog will see the walltime event. It is observed
+at the next hand-driven check, by design.
+
+**(2) The four-party cluster attribution is accepted into the record.** The 04:55 sentence *"a third
+party holds 92 % of the cluster"* is right in its number and **wrong in its attribution**. Measured:
+**433 of 472 usable cores, 92 % occupied by four users**, plus **108 cores DOWN** (bnode10, bnode12,
+bnode13, bnode14) that are offline rather than busy. The heaviest core-holder (dhoonkim97, 201 cores)
+sits on amd/ax and **is not our obstacle**; our `ppn=23:ac` jobs are blocked by ~160 **single-core**
+jobs packing bnode15–19. All 39 free cores are amd/aa and unreachable to a `:ac` request.
+
+**(3) AT THE SEP 5 RESUME — not before:** shape waves to **measured free node-groups**; the sealed
+smaller batch sizes (**14, 8**) **may target amd/aa cores when `ac` is packed**; batch composition per
+the sealed plan; **ceiling 480 and the displacement rules UNCHANGED.** Nothing else until the reset.
+
+**The measured pace this re-derivation consumes is captured at
+`screen/pace_wave1_20260902T0344Z.csv`** (47 completed runs, taken mid-flight because
+`qstat -f resources_used` empties when a job leaves the queue). Two things a cold reader must carry
+out of it:
+
+- **NO quartile-4 run has completed** — q2 = 35, q3 = 12, **q4 = 0**. The only q4 work in wave 1 is
+  the job under ruling (1). **If it is killed, tonight yields a CENSORED LOWER BOUND, not a measured
+  cost**, and it must be labelled censored in the ledger or a later reader will scale from it as a
+  mean and under-provision the entire tail.
+- **The plan's assumed p65/p05 ratio of 5.00 measures at 1.56** (0.99–2.69, 21 pairs), which is why
+  stage-0 jobs use only **14–32 %** of requested walltime. **But the ratio is not a constant — it
+  grows with loading and the tail is where it grows**, so apply it to q2/q3 and hold the tail
+  separate. Size batch walltime on the **max** member, never the median: median 0.72–1.38 h against
+  a 4.30 h max.
+
+**Wave 1 at 12:52 KST: 47 of 98 runs complete, 47 ok, 0 failed.** `scr1_0_0003` complete (13/13,
+exit 0); `scr1_0_0001`, `scr1_0_0004`, `scr1_1_0005` running; `scr1_0_0000` and `scr1_0_0002` queued
+since 04:50. **Wave 2 is unsubmitted and nothing will submit it.**
+
 # QUIESCENT EXCEPT THE SCREEN — 2026-09-02 04:55 KST.
 # *Nothing is scheduled and nothing supervises. **Wave 1 of the reference screen IS running** — 6
 # jobs, 98 runs — and NOTHING WILL SUBMIT WAVE 2. The deferred 1,699 batches wait for a hand. That

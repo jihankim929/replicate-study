@@ -1,0 +1,53 @@
+# wave-1 measured pace snapshot, taken 2026-09-02T03:44:54Z (12:44:54 KST), wave 1 mid-flight.
+# Basis for the walltime re-derivation ordered in the REPORT 016 rulings (1) and (3).
+# One row per COMPLETED run. Duration is wall seconds; members run concurrently so it is
+# true per-run cost, not a share of a serial batch. quartile/nsim joined from screen_ledger.csv;
+# job joined from exec node, which is exact. NO quartile-4 run has completed - see the report.
+rel,stem,stage,pressure,quartile,nsim,status,rc,start_epoch,end_epoch,duration_s,duration_h,node,job
+stage0/2010[Co][bcg]3[ASR]1/p65,2010[Co][bcg]3[ASR]1,stage0,p65,2,2412,ok,0,1788292218,1788307692,15474,4.2983,bnode17,scr1_0_0003
+stage0/2012[Co][sit]3[ASR]1/p65,2012[Co][sit]3[ASR]1,stage0,p65,2,1984,ok,0,1788302546,1788314066,11520,3.2000,bnode19,scr1_0_0001
+stage0/2016[Cu][sqc]3[ASR]1/p65,2016[Cu][sqc]3[ASR]1,stage0,p65,2,2376,ok,0,1788292218,1788302853,10635,2.9542,bnode17,scr1_0_0003
+stage0/2018[Al][nan]3[FSR]4/p65,2018[Al][nan]3[FSR]4,stage0,p65,2,1944,ok,0,1788302546,1788312223,9677,2.6881,bnode19,scr1_0_0001
+stage0/2018[Al][nan]3[FSR]4/p05,2018[Al][nan]3[FSR]4,stage0,p05,2,1944,ok,0,1788302546,1788310947,8401,2.3336,bnode19,scr1_0_0001
+stage0/2015[Tb][sra]3[ASR]3/p65,2015[Tb][sra]3[ASR]3,stage0,p65,2,2400,ok,0,1788292218,1788299476,7258,2.0161,bnode17,scr1_0_0003
+stage0/2017[Ce][sql]2[ASR]1/p05,2017[Ce][sql]2[ASR]1,stage0,p05,3,2448,ok,0,1788308220,1788315331,7111,1.9753,bnode8,scr1_0_0004
+stage0/2009[Ni][xbe]3[ASR]1/p65,2009[Ni][xbe]3[ASR]1,stage0,p65,3,2448,ok,0,1788308220,1788315091,6871,1.9086,bnode8,scr1_0_0004
+stage0/2007[CdFe][pcu]3[FSR]1/p65,2007[CdFe][pcu]3[FSR]1,stage0,p65,3,2448,ok,0,1788308220,1788314946,6726,1.8683,bnode8,scr1_0_0004
+stage0/2010[Co][bcg]3[ASR]1/p05,2010[Co][bcg]3[ASR]1,stage0,p05,2,2412,ok,0,1788292218,1788298474,6256,1.7378,bnode17,scr1_0_0003
+stage0/2016[Cu][sqc]3[ASR]1/p05,2016[Cu][sqc]3[ASR]1,stage0,p05,2,2376,ok,0,1788292218,1788298063,5845,1.6236,bnode17,scr1_0_0003
+stage0/2007[ZnV][nan]3[ASR]1/p65,2007[ZnV][nan]3[ASR]1,stage0,p65,2,2016,ok,0,1788302546,1788308028,5482,1.5228,bnode19,scr1_0_0001
+stage0/2016[Co][nan]3[ASR]6/p65,2016[Co][nan]3[ASR]6,stage0,p65,2,1998,ok,0,1788302546,1788307900,5354,1.4872,bnode19,scr1_0_0001
+stage0/2007[CdFe][pcu]3[FSR]1/p05,2007[CdFe][pcu]3[FSR]1,stage0,p05,3,2448,ok,0,1788308220,1788313230,5010,1.3917,bnode8,scr1_0_0004
+stage0/2008[La][nan]3[FSR]2/p65,2008[La][nan]3[FSR]2,stage0,p65,3,2432,ok,0,1788308220,1788313198,4978,1.3828,bnode8,scr1_0_0004
+stage0/2012[Co][sit]3[ASR]1/p05,2012[Co][sit]3[ASR]1,stage0,p05,2,1984,ok,0,1788302546,1788306836,4290,1.1917,bnode19,scr1_0_0001
+stage0/2019[Th][bcu]3[FSR]1/p05,2019[Th][bcu]3[FSR]1,stage0,p05,3,2432,ok,0,1788308220,1788312388,4168,1.1578,bnode8,scr1_0_0004
+stage0/2009[Ag][nbo]3[ION]4/p65,2009[Ag][nbo]3[ION]4,stage0,p65,2,2376,ok,0,1788292218,1788296139,3921,1.0892,bnode17,scr1_0_0003
+stage0/2015[Tb][sra]3[ASR]3/p05,2015[Tb][sra]3[ASR]3,stage0,p05,2,2400,ok,0,1788292218,1788296120,3902,1.0839,bnode17,scr1_0_0003
+stage0/2009[Ni][xbe]3[ASR]1/p05,2009[Ni][xbe]3[ASR]1,stage0,p05,3,2448,ok,0,1788308220,1788311902,3682,1.0228,bnode8,scr1_0_0004
+stage0/2016[Co][nan]3[ASR]6/p05,2016[Co][nan]3[ASR]6,stage0,p05,2,1998,ok,0,1788302546,1788306207,3661,1.0169,bnode19,scr1_0_0001
+stage0/2019[Cd][sql]2[ASR]12/p65,2019[Cd][sql]2[ASR]12,stage0,p65,2,2376,ok,0,1788292218,1788295721,3503,0.9731,bnode17,scr1_0_0003
+stage0/2015[Tb][nan]3[FSR]5/p65,2015[Tb][nan]3[FSR]5,stage0,p65,2,1968,ok,0,1788302546,1788305975,3429,0.9525,bnode19,scr1_0_0001
+stage0/2005[Cd][nan]3[ASR]1/p65,2005[Cd][nan]3[ASR]1,stage0,p65,2,2412,ok,0,1788292218,1788295475,3257,0.9047,bnode17,scr1_0_0003
+stage0/2021[Cu][sql]2[FSR]6/p05,2021[Cu][sql]2[FSR]6,stage0,p05,2,1952,ok,0,1788302546,1788305488,2942,0.8172,bnode19,scr1_0_0001
+stage0/2007[Mn][dia]3[FSR]1/p65,2007[Mn][dia]3[FSR]1,stage0,p65,2,1944,ok,0,1788302546,1788305434,2888,0.8022,bnode19,scr1_0_0001
+stage0/2006[Mg][dia]3[FSR]8/p65,2006[Mg][dia]3[FSR]8,stage0,p65,2,1944,ok,0,1788302546,1788305342,2796,0.7767,bnode19,scr1_0_0001
+stage0/2006[Mg][dia]3[FSR]3/p65,2006[Mg][dia]3[FSR]3,stage0,p65,2,1944,ok,0,1788302546,1788305340,2794,0.7761,bnode19,scr1_0_0001
+stage0/2017[Ag][hcb]2[FSR]17/p65,2017[Ag][hcb]2[FSR]17,stage0,p65,2,2376,ok,0,1788292218,1788294969,2751,0.7642,bnode17,scr1_0_0003
+stage0/2008[La][nan]3[FSR]2/p05,2008[La][nan]3[FSR]2,stage0,p05,3,2432,ok,0,1788308220,1788310963,2743,0.7619,bnode8,scr1_0_0004
+stage0/2007[Fe][dia]3[FSR]2/p65,2007[Fe][dia]3[FSR]2,stage0,p65,2,1944,ok,0,1788302546,1788305234,2688,0.7467,bnode19,scr1_0_0001
+stage0/2020[Co][rob]3[FSR]1/p65,2020[Co][rob]3[FSR]1,stage0,p65,2,1980,ok,0,1788302546,1788305202,2656,0.7378,bnode19,scr1_0_0001
+stage0/2015[Tb][nan]3[FSR]5/p05,2015[Tb][nan]3[FSR]5,stage0,p05,2,1968,ok,0,1788302546,1788305189,2643,0.7342,bnode19,scr1_0_0001
+stage0/2007[ZnV][nan]3[ASR]1/p05,2007[ZnV][nan]3[ASR]1,stage0,p05,2,2016,ok,0,1788302546,1788305149,2603,0.7231,bnode19,scr1_0_0001
+stage0/2019[Cd][sql]2[ASR]12/p05,2019[Cd][sql]2[ASR]12,stage0,p05,2,2376,ok,0,1788292218,1788294710,2492,0.6922,bnode17,scr1_0_0003
+stage0/2010[La][flu]3[FSR]1/p65,2010[La][flu]3[FSR]1,stage0,p65,2,1944,ok,0,1788302546,1788304860,2314,0.6428,bnode19,scr1_0_0001
+stage0/2006[Mg][dia]3[FSR]8/p05,2006[Mg][dia]3[FSR]8,stage0,p05,2,1944,ok,0,1788302546,1788304844,2298,0.6383,bnode19,scr1_0_0001
+stage0/2007[Fe][dia]3[FSR]2/p05,2007[Fe][dia]3[FSR]2,stage0,p05,2,1944,ok,0,1788302546,1788304576,2030,0.5639,bnode19,scr1_0_0001
+stage0/2010[La][flu]3[FSR]1/p05,2010[La][flu]3[FSR]1,stage0,p05,2,1944,ok,0,1788302546,1788304418,1872,0.5200,bnode19,scr1_0_0001
+stage0/2007[Mn][dia]3[FSR]1/p05,2007[Mn][dia]3[FSR]1,stage0,p05,2,1944,ok,0,1788302546,1788304361,1815,0.5042,bnode19,scr1_0_0001
+stage0/2015[Ni][mog]3[FSR]1/p65,2015[Ni][mog]3[FSR]1,stage0,p65,3,2448,ok,0,1788308220,1788310031,1811,0.5031,bnode8,scr1_0_0004
+stage0/2017[Ag][hcb]2[FSR]17/p05,2017[Ag][hcb]2[FSR]17,stage0,p05,2,2376,ok,0,1788292218,1788293981,1763,0.4897,bnode17,scr1_0_0003
+stage0/2020[Co][rob]3[FSR]1/p05,2020[Co][rob]3[FSR]1,stage0,p05,2,1980,ok,0,1788302546,1788304157,1611,0.4475,bnode19,scr1_0_0001
+stage0/2005[Cd][nan]3[ASR]1/p05,2005[Cd][nan]3[ASR]1,stage0,p05,2,2412,ok,0,1788292218,1788293643,1425,0.3958,bnode17,scr1_0_0003
+stage0/2015[Ni][mog]3[FSR]1/p05,2015[Ni][mog]3[FSR]1,stage0,p05,3,2448,ok,0,1788308220,1788309476,1256,0.3489,bnode8,scr1_0_0004
+stage0/2014[Al][bpq]3[ASR]5/p05,2014[Al][bpq]3[ASR]5,stage0,p05,3,2432,ok,0,1788308220,1788308562,342,0.0950,bnode8,scr1_0_0004
+stage0/2014[Al][bpq]3[ASR]5/p65,2014[Al][bpq]3[ASR]5,stage0,p65,3,2432,ok,0,1788308220,1788308559,339,0.0942,bnode8,scr1_0_0004
