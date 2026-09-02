@@ -4000,3 +4000,96 @@ hand-driven check, by design, and I will not be the one to notice it unprompted.
 Going quiet until the Sep 5 04:00 KST reset except URGENT.
 
 — Bei (harness)
+
+---
+
+## 2026-09-02T04:05:00Z (13:05:00 KST) — REPORT 018, on the standing pre-ruling. **RECORDED, AND EXERCISED ONCE ALREADY.** The censoring decision I flagged as *"cheap before the kill, expensive after"* is now mine, so I have made it. **Three decisions logged; nothing held.**
+
+> **In one line:** the standing pre-ruling is in `STATE.md` where a cold reader inherits it, and I
+> have exercised it on the one decision that was actually time-sensitive — **the killed-run cost
+> label — plus two that follow from it.** All three are tagged **`[Bei, per standing pre-ruling]`**.
+> The load-bearing one is a *verification*, not a judgement: **the evidence survives the kill**, so
+> the honest answer to "should something watch for it" is **no**, and nothing will.
+
+### 1. The pre-ruling as recorded
+
+**Effective through study completion.** For any operational judgment where my report already argues
+the correct answer — labels, derivations, scheduling within sealed rules — **adopt my own
+recommendation, log it `[Bei, per standing pre-ruling]`, do not hold.**
+
+**Hold only for:** answer-key content · charter or analysis-plan changes · money beyond what is
+ruled · genuine URGENT.
+
+**What this does not do, stated so I cannot quietly widen it later:** it does not touch ruling (3)'s
+*nothing until the Sep 5 reset*. Delegated judgement is not licence to restart work early. Wave 2
+remains unsubmitted and I will not prepare it. It does not make me the judge of my own scope — the
+four holds are unchanged, and a decision that *touches* one of them is held even if my report argues
+it well.
+
+### 2. `[Bei, per standing pre-ruling]` — DECISION 1: killed runs keep `failed`; the cost goes in a separate, correctly-typed record
+
+**`screen/censored_observations.csv`, created.** A run terminated by walltime kill keeps status
+**`failed`** in `screen_ledger.csv` exactly as §8 writes it — ruling (1) untouched, no entry edited —
+and its **cost** observation is carried in the new file as **`right_censored`** with an explicit
+lower bound and the last observed cycle.
+
+**The reasoning, because the principle outlives this run.** The ledger records *what happened to the
+run*; the censored file records *what is known about its cost*. Merging them forces a choice between
+lying about the run (calling a killed run `ok` so the cost looks clean) and lying about the cost
+(scaling a floor as though it were a mean). **Both are unacceptable, so they are two records of two
+different things.** The schema says it in the file: *never average, fit or scale a `right_censored`
+row as if it were a completed measurement — it is a floor.*
+
+Both members of 3474525 are pre-entered `state=open` with the bound at **8.07 h and growing**, so
+the schema is fixed *before* the event rather than improvised after it. That was the whole point of
+the flag.
+
+### 3. `[Bei, per standing pre-ruling]` — DECISION 2: no watcher, and this one is verified rather than argued
+
+**Nothing will watch for the walltime kill. No timer, no daemon, no one-shot, nothing.**
+
+I did not decide this on principle, I checked it. **The evidence survives the kill**, so a watcher
+buys nothing:
+
+```
+control: job 3474481, qdel-killed 2026-09-02 02:24:43
+tracejob ->  Exit_status=271  cput=00:23:20  walltime=00:11:44     [retained]
+run directories persist: 26 stage0 dirs still on disk from earlier work
+```
+
+So `tracejob` yields the exact terminal cost after the fact, the `.data` files yield the last
+observed cycle, and **the absence of a row in `<job>.runs` is itself the positive evidence of a
+kill** — a killed run never reaches the `printf`. Three independent traces, all durable.
+
+Had the check gone the other way I would have had a genuine conflict to bring you — evidence needed
+before a deadline, against *nothing until the reset*. It did not, so there is no conflict, and I am
+recording the negative result rather than the relief. **The recovery procedure is pre-registered in
+the file's header** as four numbered steps, so the next hand-driven check executes it without
+judgement at the keyboard.
+
+### 4. `[Bei, per standing pre-ruling]` — DECISION 3: the Sep 5 re-derivation rule, adopted as argued
+
+Adopted exactly as REPORT 017 §4 argued it, and **not one step further**:
+
+- Measured **p65/p05 = 1.56** applies to **q2 and q3 claim-grade only**.
+- **The q4 tail is held separate** and takes its own measured multiplier — or, if 3474525 is killed,
+  its **censored lower bound, used as a floor**.
+- **Batch walltime is sized on the max member, never the median** (median 0.72–1.38 h against a
+  4.30 h max).
+
+**The numeric factors are left to be computed at the reset from the data**, not fixed now. My report
+argued the *rule*; it did not argue a number, and the pre-ruling authorises me to adopt what I argued
+rather than to invent beyond it.
+
+### 5. Standing — unchanged, and nothing was executed
+
+**Wave 1 at 13:05 KST: 47 of 98 runs complete, 47 ok, 0 failed.** 3474525 at **8:04** elapsed,
+untouched, p65 still short of its 2,000 init cycles. 3474520 and 3474522 still queued since 04:50.
+
+**No submission, no kill, no requeue, no wave-2 preparation.** Two files written, both records:
+`screen/censored_observations.csv` and this report.
+
+Going quiet until the Sep 5 04:00 KST reset except URGENT — and under the pre-ruling, "quiet" now
+means decisions get made and logged rather than queued for you.
+
+— Bei (harness)

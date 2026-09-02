@@ -1,0 +1,28 @@
+# CENSORED COST OBSERVATIONS — screen layer.
+# Created 2026-09-02T04:00Z under the PI's standing pre-ruling of 2026-09-02.
+# Decision [Bei, per standing pre-ruling]: a run terminated by walltime kill keeps status `failed`
+# in screen_ledger.csv EXACTLY as section 8 writes it - ruling (1) is untouched and no ledger entry
+# is ever edited - and its COST observation is carried here instead, correctly typed as right-
+# censored. Rationale: the ledger records what happened to the run; this file records what is known
+# about its cost. Merging the two would force a choice between lying about the run (calling a
+# killed run `ok`) and lying about the cost (scaling a lower bound as though it were a mean).
+# Neither is acceptable, so they are kept as two records of two different things.
+#
+# bound_type: right_censored = true cost EXCEEDS lower_bound_s, by an unknown amount. NEVER average,
+#             fit or scale a right_censored row as if it were a completed measurement. It is a floor.
+# state:      open = run still in flight, bound still growing. closed = terminated, bound is final.
+#
+# RECOVERY PROCEDURE, pre-registered so the next hand-driven check is deterministic and needs no
+# judgement at the keyboard. Verified 2026-09-02: evidence SURVIVES a kill, so no watcher, daemon or
+# timer is needed or will be created (control: job 3474481, qdel-killed 02:24:43, tracejob still
+# returns Exit_status=271 with cput 00:23:20 and walltime 00:11:44; run directories persist - 26
+# stage0 directories still on disk from earlier work).
+#   1. tracejob <jobid>            -> Exit_status, resources_used.cput, resources_used.walltime
+#   2. grep -a "Current cycle" runs/<rel>/Output/System_0/*.data | tail -1   -> last observed cycle
+#   3. confirm NO row for the run in logs/<job>.runs (a killed run never reaches the printf, so its
+#      absence is the positive evidence of a kill, not a gap in the record)
+#   4. close the row here: state=closed, lower_bound_s = resources_used.walltime at kill
+#
+run_rel,stem,quartile,nsim,stage,grade,job,jobid,pressure,bound_type,lower_bound_s,lower_bound_h,last_observed_cycle,cycle_phase,state,observed_at,note
+stage1/2023[Eu][nan]3[FSR]2/p65,2023[Eu][nan]3[FSR]2,4,23166,stage1,floor,scr1_1_0005,3474525,p65,right_censored,29043,8.07,0,init_0_of_2000,open,2026-09-02T04:00:00Z,ONLY quartile-4 observation in wave 1; had not cleared 2000 init cycles at hour 8.07; expected walltime kill 2026-09-03T07:01:21+09:00
+stage1/2023[Eu][nan]3[FSR]2/p05,2023[Eu][nan]3[FSR]2,4,23166,stage1,floor,scr1_1_0005,3474525,p05,right_censored,29043,8.07,2000,prod_2000_of_10000,open,2026-09-02T04:00:00Z,cleared init plus 2000 production cycles by hour 5.5; would be truncated as collateral if the job is killed for its p65 member

@@ -15,6 +15,46 @@ archived smoke arms (s01 $135.99 + s02 $42.50) into a denominator that is 16 × 
 caps. `harness/state/fleet_spend.json` states the basis — *"latest metered row per replicate,
 smoke excluded"*. The corrected figure at REPORT 014's own 16:04Z snapshot was $4,684.17 (104.6%).
 
+# STANDING PRE-RULING — 2026-09-02, effective THROUGH STUDY COMPLETION. **DECIDE, LOG, PROCEED.**
+
+**For any operational judgment where Bei's report already argues the correct answer — labels,
+derivations, scheduling within sealed rules — adopt the recommendation, log it
+`[Bei, per standing pre-ruling]`, and DO NOT HOLD for the PI.**
+
+**HOLD ONLY FOR — these four and nothing else:**
+1. **answer-key content**
+2. **charter or analysis-plan changes**
+3. **money beyond what is ruled**
+4. **genuine URGENT**
+
+**Everything else: decide, log, proceed.**
+
+**Scope limits, written down so they are not quietly widened later:**
+- **It does not touch ruling (3)'s *nothing until the Sep 5 reset*.** Delegated judgement is not
+  licence to restart work early. **Wave 2 stays unsubmitted and unprepared.**
+- **It does not make Bei the judge of Bei's own scope.** A decision that *touches* one of the four
+  holds is held even if the report argues it well.
+- It authorises adopting **what was argued**, not inventing beyond it. Where a report argued a
+  *rule* and not a *number*, the number is still derived from data at the time it is needed.
+
+**Decisions taken under it so far — all in REPORT 018, 2026-09-02 13:05 KST:**
+- **D1 — killed runs keep `failed`; cost goes elsewhere.** A run terminated by walltime kill keeps
+  status `failed` in `screen_ledger.csv` exactly as §8 writes it (ruling (1) untouched, no entry
+  ever edited) and its cost is recorded in **`screen/censored_observations.csv`** as
+  **`right_censored`** with a lower bound and last observed cycle. *The ledger records what happened
+  to the run; that file records what is known about its cost.* Merging them would force a choice
+  between lying about the run and lying about the cost. **Never average, fit or scale a
+  `right_censored` row as a completed measurement — it is a floor.**
+- **D2 — NOTHING WATCHES for the walltime kill.** No timer, daemon or one-shot, and this is
+  *verified, not assumed*: control job 3474481 was qdel-killed and `tracejob` still returns
+  `Exit_status=271`, `cput=00:23:20`, `walltime=00:11:44`; run directories persist; and the absence
+  of a row in `<job>.runs` is itself positive evidence of a kill. **Three durable traces, so a
+  watcher buys nothing.** Recovery procedure pre-registered in the CSV header as four numbered steps.
+- **D3 — Sep 5 re-derivation rule.** Measured **p65/p05 = 1.56 applies to q2/q3 claim-grade only**;
+  the **q4 tail is held separate** and takes its own measured multiplier, or the censored lower bound
+  **used as a floor**; **batch walltime sized on the MAX member, never the median.** Numeric factors
+  computed at the reset from data, not fixed now.
+
 # RULINGS STANDING — 2026-09-02 12:52 KST (REPORT 017). **NOTHING UNTIL THE SEP 5 04:00 RESET.**
 # *Wave 1 rides. No intervention on anything, including a job that is expected to die.*
 
