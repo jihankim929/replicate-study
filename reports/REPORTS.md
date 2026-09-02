@@ -4093,3 +4093,179 @@ Going quiet until the Sep 5 04:00 KST reset except URGENT — and under the pre-
 means decisions get made and logged rather than queued for you.
 
 — Bei (harness)
+
+---
+
+## 2026-09-02T11:05:00Z (20:05:00 KST) — REPORT 019, on job geometry. **THE OPERATOR IS RIGHT, AND WAVE 1 MEASURED THE COST.** Held for the Sep 5 reset; nothing executed.
+
+> **In one line:** the two jobs queued since 04:50 are not slow, they are **unplaceable** — no node
+> in either eligible group has 23 free cores, and none will until one drains — and wave 1's own
+> completed runs put the batch geometry at **22.2 % core utilization**, because a `ppn=23` job holds
+> all 23 cores until its slowest member finishes. **The operator's proposal — one core per job, many
+> jobs — is sound, is not foreclosed by anything sealed, and I have not acted on it**, because it
+> touches §6's batch sizes and ruling (3) still says nothing until Sep 5.
+
+### 0. What prompted this
+
+The operator's status check at 19:51 KST, and one question with it: *these are embarrassingly
+parallel simulation jobs — wouldn't single-core jobs with large N be better than asking for 23 cores?*
+
+Everything below is measured tonight against the live cluster and wave 1's own `.runs` files. No
+job was submitted, killed, requeued or held, and no harness file was changed.
+
+### 1. Correction to REPORT 017 §5 — the queued jobs are behind `amd`, not `ac`
+
+REPORT 017 §5 recorded the two queued jobs as *"queued since 04:50 behind a full `ac` group."*
+**That is wrong, and it pointed at the wrong group.** Both request `amd`:
+
+```
+scr1_0_0000  (3474520)   nodes=1:ppn=23:amd    Q since 04:50
+scr1_0_0002  (3474522)   nodes=1:ppn=23:amd    Q since 04:50
+scr1_0_0001  (complete)  nodes=1:ppn=23:ac     <- the ac job, and it finished
+```
+
+`GROUPS_FOR_PPN[23] = ["amd","ac"]` assigns round-robin, so the q2 batches split across both groups.
+The `ac` one ran to completion. The two still waiting are the `amd` pair. The report named the group
+that worked and not the one that is stuck.
+
+### 2. Finding — they are unplaceable, not merely slow
+
+PBS says so directly: `comment = Not Running: Not enough of the right type of nodes are available`.
+Per-node free cores in both eligible groups, measured 20:00 KST:
+
+| node | group | np | used | free | state |
+|---|---|---:|---:|---:|---|
+| bnode1 | amd | 32 | 32 | 0 | job-exclusive |
+| bnode2 | amd | 32 | 32 | 0 | job-exclusive |
+| bnode3 | amd | 32 | 18 | **14** | free |
+| bnode9 | amd | 32 | 32 | 0 | job-exclusive |
+| bnode10 | amd | 32 | — | — | **down** |
+| bnode15–17 | ac | 40 each | 40 | 0 | job-exclusive |
+| bnode18 | ac | 40 | 37 | 3 | free |
+| bnode19 | ac | 44 | 31 | 13 | free |
+
+**The largest free block on any single eligible node is 14.** A `ppn=23` request therefore has **zero
+placements available** — not a queue position, no placement at all. There are **30 genuinely free
+cores** across the two groups (14 + 3 + 13), enough for all 46 waiting runs to have started in
+fragments, but a 23-core contiguous reservation cannot use one of them.
+
+`amd` is the worse of the two draws: of five nodes, three are full, **one is `down`**, and the
+survivor has 14. The group's nominal 160 cores overstate what a `ppn=23` job can reach by a lot.
+
+### 3. Finding — measured core utilization is 22.2 %
+
+From the completed `.runs` files. `used` is the sum of member durations; `reserved` is
+`n_members × slowest member`, which is what the job's `wait` actually holds:
+
+| job | members | used | reserved | utilization | slowest |
+|---|---:|---:|---:|---:|---:|
+| scr1_0_0001 | 23 | 32.0 core-h | 187.6 core-h | **17.0 %** | 8.2 h |
+| scr1_0_0003 | 13 | 19.0 core-h | 55.9 core-h | **34.0 %** | 4.3 h |
+| scr1_0_0004 | 14 | 22.6 core-h | 87.4 core-h | **25.8 %** | 6.2 h |
+| **total** | **50** | **73.6** | **330.9** | **22.2 %** | — |
+
+**73.6 core-hours of science held 330.9 core-hours of cluster.** The binning is doing its job and it
+is not enough: these batches are cost-homogeneous by construction — quartile-binned on `nsim`,
+ordered by cost proxy — and per-run duration across the 50 still spans **339 s to 29,368 s, 87×**.
+Decision (4) sized walltime on the max member precisely because the batch finishes with its slowest.
+The same sentence means the other 22 cores idle until that member lands.
+
+**This is a second waste, and it multiplies with the first.** REPORT 017 §4 measured *requested
+walltime* against slowest member and found 14–31 % headroom used. That is over-request at the
+**scheduler**. This is idle cores **inside** a job that is running normally. They compound: 017's
+number is about a reservation held past the work, this one is about cores held during it.
+
+**Note also that scr1_0_0001's slowest member grew from 3.20 h at REPORT 017 to 8.2 h at completion.**
+The straggler was still ahead of us when 017 was written. Reading a batch's cost before its slowest
+member lands understates it, and this is the second time that has bitten.
+
+Extrapolating, with its limit stated: the plan's central figure is **32,471 CPU-h / 480 = 67.6 h at
+perfect packing.** At the measured 22.2 % that is **~300 h, roughly 12.7 days.** The limit: wave 1 is
+98 runs weighted to q2/q3, so 22.2 % is a wave-1 number and not a whole-screen constant. The
+direction is not in doubt; the exact figure is.
+
+### 4. Nothing sealed forecloses one core per job — and the two prior rejections are not this
+
+Two lines in `screen_submit.py` read like this question was already settled. Neither is.
+
+**(a) *"a bare `nodes=1:ppn=1` is REJECTED — a node group is required."*** This is a `qas` property,
+not a verdict on job size: what it rejects is `ppn=1` **without a node group**. `ppn=1:aa` is a
+well-formed request. The line belongs to the `dirac.py` transcription block, and it is about syntax.
+
+**(b) Decision (2)'s rejected draft — *"ppn=1: one core per run, batch members run serially"*** — was
+**one job running 40 members back to back**, rejected on its own output at 82–107 h walltimes. That
+is a third geometry. The operator is proposing **one member per job, N jobs, all independent**: no
+serial concatenation and no shared reservation. It has never been evaluated.
+
+The cluster supports it, and this is the part decision (4) did not check:
+
+- **`node_pack = True`**, and nodes demonstrably carry many jobs from many users — bnode18 currently
+  hosts ~14 distinct job IDs. A `ppn=1` job takes **one core, not a node.** Nothing is wasted.
+- **`max_user_run = 580`; queue `long max_running = 580`**; 252 running cluster-wide right now.
+  480 single-core jobs is inside the cap with room.
+- **480 single-core jobs is exactly the sealed ceiling.** Decision (4) already established that
+  concurrency 480 means concurrent **cores** — *"32,471 CPU-h / 480 = 67.6 h, its stated central
+  figure at perfect packing."* One core per job makes jobs and cores the same number. The ceiling is
+  honoured identically, and the perfect packing that 67.6 h assumes becomes reachable instead of
+  aspirational.
+
+### 5. What is sealed, what is mine, and why I am holding anyway
+
+**Sealed (§6):** cost proxy, quartile bins, batch sizes 40/23/14/8, the 480 ceiling, the back-off.
+**Mine (implementation decision 4):** batch → job mapping.
+
+The change can be made **without touching anything sealed**. Batch membership, the quartile bins and
+the 480-core ceiling all stand; only the *reservation geometry* changes, each member becoming its own
+one-core job. *"A batch finishes when its slowest member finishes"* stays true — the batch simply
+stops **holding cores** while it waits. Decision (4) read that sentence as requiring co-scheduled
+members under one reservation; it describes when a batch is **complete**, which is a statement about
+accounting, not about how cores are reserved. Separating the two is what recovers the 78 %.
+
+**I am nonetheless not doing it, for two reasons, and I want the second one on the record.**
+
+1. **Ruling (3) stands: nothing until the Sep 5 04:00 KST reset.** REPORT 018 §1 says in terms that
+   the pre-ruling does not touch it — *"delegated judgement is not licence to restart work early."*
+   A requeue is work.
+2. **The pre-ruling does not make me the judge of my own scope.** My reading above is that this is
+   implementation and mine. But the sealed text fixes batch **sizes**, and a batch that no longer
+   shares a reservation arguably makes those sizes decorative. If that reading is right, this is an
+   **analysis-plan change** and one of the four holds. REPORT 018 §1 anticipated exactly this case:
+   *"a decision that touches one of them is held even if my report argues it well."* **It is held.**
+
+### 6. What I would do at the reset, if you rule it implementation
+
+Stated now so the reset is arithmetic and not deliberation:
+
+1. **One job per run, `ppn=1`, node group named**, round-robin across `aa`/`ab`/`ac`/`amd` — and `ab`
+   becomes eligible again, since its 6-core nodes were excluded only because no sealed batch size fit.
+   That is 12 more cores and two more nodes than the current geometry can reach.
+2. **Walltime per run, not per batch.** REPORT 018 §4's rule still governs, but the arithmetic gets
+   easier in one direction and harder in another. Harder: `SAFETY = 3.0` was justified on a batch
+   sum, whose relative variance is small; per-run you need something nearer the 18.3× p99/median.
+   Easier, and it dominates: **over-requesting one core is nearly free.** The asymmetry decision (1)
+   called *"deliberate and errs long"* becomes far cheaper when the reservation is 1 core instead of
+   23, so a generous per-run walltime costs little and places well.
+3. **A submit window, not a 25,598-job dump.** Hold ~600 queued-plus-running and top up as jobs
+   land. `screen_submit.py` already has the polling and back-off machinery; it needs re-pointing,
+   not writing.
+4. **One test submission first**, to confirm `qas` accepts `ppn=1:<group>` — (a) above is read from
+   the source comment, and it has not been executed.
+5. **`scr1_1_0005` is not touched** either way. It is at 15:09 of 26:11, and killing it would censor
+   two runs — including the only quartile-4 observation in wave 1 — to save nothing.
+
+**A side benefit worth naming:** blast radius. A walltime kill on a `ppn=23` job censors up to 23
+runs at once. At `ppn=1` it censors exactly one. The bookkeeping that produced
+`censored_observations.csv` gets smaller, not larger.
+
+### 7. Standing
+
+**Wave 1: 50 of 98 runs complete, 50 ok, 0 failed.** 73.6 CPU-h in completed runs. `3474525` running
+at **15:09** of 26:11, both its censored rows still `open` and their bound still growing. `3474520`
+and `3474522` still queued since 04:50, still unplaceable, and on tonight's node state they will stay
+that way until an `amd` node drains.
+
+**Nothing was executed.** One file written: this report.
+
+Going quiet until the Sep 5 04:00 KST reset except URGENT.
+
+— Bei (harness)
