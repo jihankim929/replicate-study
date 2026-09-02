@@ -55,6 +55,61 @@ derivations, scheduling within sealed rules — adopt the recommendation, log it
   **used as a floor**; **batch walltime sized on the MAX member, never the median.** Numeric factors
   computed at the reset from data, not fixed now.
 
+# GEOMETRY RULED — 2026-09-02 20:07 KST (REPORT 019, PI-ruled). **ONE CORE PER JOB.**
+# *Ratified as implementation. EXECUTE AT THE SEP 5 04:00 RESET — nothing before it.*
+
+**`[Bei, implementation decision 4 revised, PI-ruled implementation]`**
+
+**The PI's enumeration of what is sealed, which supersedes any inference from batch sizes:**
+**structures · fidelity tiers · cost bins · ordering · the 480-core ceiling.** Batch sizes were
+**reservation arithmetic**, and reservation geometry is **implementation decision (4), already mine.**
+So the ruling is: *one core per job.* **Batches persist as accounting and ledger groupings exactly as
+sealed** — *"a batch is complete when its slowest member finishes"* is an accounting statement, and
+a batch no longer holds cores while it waits. **The ceiling binds as 480 concurrent cores = 480 jobs.**
+
+**Basis, measured and accepted into the record (REPORT 019):** the `ppn=batch` geometry ran at
+**22.2 % core utilization** — 73.6 core-h of science holding 330.9 core-h of cluster — and a `ppn=23`
+request was **unplaceable**, not slow, the largest free block on any eligible node being 14 cores.
+
+### The reset is arithmetic. Execute in this order; no judgement is required at the keyboard.
+
+1. **One PBS job per run, `ppn=1`, node group NAMED** (`qas` rejects a bare `nodes=1:ppn=1`; the
+   group is required syntax, which is all that line ever meant).
+2. **Groups: `aa`, `ab`, `ac`, `amd`, round-robin.** **`ab` is eligible again** — its 6-core nodes
+   were excluded only because no sealed batch size fit them, and at `ppn=1` that reason is gone.
+   **`ax` STAYS EXCLUDED** — it is the mjs staging group, a policy reason that does *not* expire with
+   the shape reason. **`xeonphi` STAYS EXCLUDED** — CPU-only per ruling. Do not re-add either.
+3. **Per-run walltime, generous factor.** `SAFETY = 3.0` was justified on a *batch sum*, whose
+   relative variance is small; per-run needs nearer the **18.3× p99/median**. **Over-requesting ONE
+   core is nearly free**, so err long — the asymmetry decision (1) called *"deliberate and errs long"*
+   gets cheaper by the batch size. **D3 still governs the factor**: p65/p05 = 1.56 for q2/q3 only,
+   q4 tail separate on its own measured multiplier or its censored floor, numbers computed at the
+   reset from data and **not fixed now**.
+4. **A ~600-job submit window with top-up.** Not a 25,598-job dump. `screen_submit.py` already has
+   the polling and back-off machinery; it needs re-pointing, not writing.
+5. **One test submission FIRST**, before the wave, to confirm `qas` accepts `ppn=1:<group>`. That
+   line is read from source comment and **has never been executed.**
+6. **`scr1_1_0005` / `3474525` is NOT touched** — ruling (1) is unchanged and still governs it.
+
+### The ceiling will not bind, and a cold reader must not wait for it to
+
+**Eligible capacity is 452 cores nominal and 408 usable** (`ac` 204, `amd` 160 less 32 down, `aa` 76,
+`ab` 12 all down). **The sealed ceiling of 480 is ABOVE the whole eligible cluster**, so it can never
+be the binding constraint — and the nodes are shared, with ~250 third-party jobs resident. **The
+operative control is the free-core sizing rule already in `screen_submit.py`** — *size to what is
+ACTUALLY FREE and never to the ceiling alone* — together with the sealed back-off to 240 and its
+excursion logging, both **UNCHANGED**. The second half of that same comment (*"a batch needs its ppn
+free within ONE group, so a ppn=40 batch is unplaceable unless an ac node is empty"*) **becomes
+obsolete**: at `ppn=1` nothing is ever unplaceable.
+
+### What this supersedes
+
+**REPORT 017 ruling (3)'s reservation clause only** — *"the sealed smaller batch sizes (14, 8) may
+target amd/aa cores when `ac` is packed"* — which is now moot, since every job is one core and every
+group is reachable. **The rest of ruling (3) stands entire, including NOTHING UNTIL THE RESET.**
+Ruling (1) stands. Ruling (2)'s attribution stands, with REPORT 019's correction: **the two queued
+jobs are blocked on `amd`, not `ac`.**
+
 # RULINGS STANDING — 2026-09-02 12:52 KST (REPORT 017). **NOTHING UNTIL THE SEP 5 04:00 RESET.**
 # *Wave 1 rides. No intervention on anything, including a job that is expected to die.*
 

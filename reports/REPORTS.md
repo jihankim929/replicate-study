@@ -4269,3 +4269,95 @@ that way until an `amd` node drains.
 Going quiet until the Sep 5 04:00 KST reset except URGENT.
 
 — Bei (harness)
+
+---
+
+## 2026-09-02T11:10:00Z (20:10:00 KST) — REPORT 020, filing the REPORT 019 ruling. **ONE CORE PER JOB, RATIFIED.** Executed by doing nothing, per ruling (3).
+
+> **In one line:** the geometry change is ratified as implementation and is now in `STATE.md` where a
+> cold reader inherits it, tagged **`[Bei, implementation decision 4 revised, PI-ruled implementation]`**
+> — and **nothing has been executed, prepared or staged**, because ruling (3) says nothing before the
+> Sep 5 reset and writing the submitter is preparation. **One new finding fell out of the ratified
+> geometry: the sealed 480-core ceiling is larger than the whole eligible cluster and can never bind.**
+
+### 1. What was ruled, recorded in your terms and not mine
+
+Sealed: **structures · fidelity tiers · cost bins · ordering · the 480-core ceiling.** Batch sizes
+were **reservation arithmetic**, so reservation geometry is decision (4) and mine. **Batches persist
+as accounting and ledger groupings exactly as sealed**; *"complete when the slowest member finishes"*
+is an accounting statement; the ceiling binds as **480 concurrent cores = 480 jobs**.
+
+That enumeration is the part worth having in the record, and it is better than my §5 reading. I had
+argued the change *touched nothing sealed* and then held anyway on the possibility that batch sizes
+were themselves sealed content. **Your enumeration dissolves the question rather than deciding it
+narrowly** — batch sizes were never sealed *content*, they were a consequence of a reservation choice
+that was always mine. The §6 reset plan is adopted as written.
+
+### 2. Nothing was executed, and I want the boundary stated
+
+**`screen_submit.py` is untouched.** No wave staged, no job submitted, killed or requeued, no test
+submission. REPORT 018 §1 recorded that the pre-ruling *"does not touch ruling (3)'s nothing until the
+Sep 5 reset"* and that **wave 2 stays unsubmitted and unprepared** — and rewriting the submitter is
+preparation, not filing. A ratified plan is not a licence to start early, so the ruling is **recorded
+and left cocked**, not run.
+
+Two files written, both records: `STATE.md` (the banner) and this report.
+
+### 3. New finding — the ceiling is above the cluster, so it will never be the binding constraint
+
+Measured tonight across the four now-eligible groups:
+
+| group | nominal | down | usable |
+|---|---:|---:|---:|
+| `ac` | 204 | 0 | 204 |
+| `amd` | 160 | 32 (bnode10) | 128 |
+| `aa` | 76 | 0 | 76 |
+| `ab` | 12 | 12 (bnode13/14) | **0** |
+| **total** | **452** | **44** | **408** |
+
+**The sealed ceiling is 480. Eligible capacity is 452 nominal and 408 usable.** The ceiling therefore
+**cannot bind** — and that is before the ~250 third-party jobs resident on these shared nodes. It was
+never wrong; under the old geometry it was a cores-in-flight cap that a packed batch could approach.
+At `ppn=1` it becomes a job count that the cluster's own size forecloses first.
+
+**Consequence for the reset, and it is a good one:** the operative control is the free-core sizing
+rule **already written into `screen_submit.py`** — *size to what is ACTUALLY FREE and never to the
+ceiling alone* — plus the sealed back-off to 240 and its excursion logging, both unchanged. Nothing
+new is needed. **The second half of that same comment expires**: *"a batch needs its ppn free within
+ONE group, so a `ppn=40` batch is unplaceable unless an `ac` node is empty"* is exactly the failure
+REPORT 019 measured, and at `ppn=1` nothing is ever unplaceable.
+
+**`ab` is eligible again but is currently worth 0 cores** — both its nodes are `down`. It should stay
+in the round-robin regardless, because the exclusion reason was shape and the shape reason is gone;
+it costs nothing to include a group that contributes nothing today.
+
+### 4. One boundary I have drawn myself, flagged rather than assumed
+
+Your ruling named **`ab`** for re-inclusion and did not mention **`ax`**. I have kept `ax` excluded.
+Decision (2) gave it two reasons — *"it is the mjs staging group"* **and** *"holds a single node"* —
+and only the second expires at `ppn=1`. A staging group is a policy exclusion, so it survives. Same
+for `xeonphi`, excluded CPU-only by ruling. **Both are written into the banner as `DO NOT RE-ADD`**,
+so a cold reader at the reset does not reason from the shape argument alone and quietly gain 128
+cores it was never supposed to have. Correct me if `ax` was meant to come back.
+
+### 5. What supersedes what
+
+**Superseded: REPORT 017 ruling (3)'s reservation clause only** — *"the sealed smaller batch sizes
+(14, 8) may target amd/aa cores when `ac` is packed"* — moot, since every job is one core and every
+group is reachable. **The rest of ruling (3) stands entire, including NOTHING UNTIL THE RESET.**
+Ruling (1) stands: `3474525` rides untouched. Ruling (2) stands with REPORT 019's correction folded
+in — the two queued jobs are blocked on `amd`, not `ac`.
+
+### 6. Standing
+
+**Wave 1: 50 of 98 runs complete, 50 ok, 0 failed.** `3474525` running, both censored rows still
+`open`, bound still growing, walltime end **2026-09-03 07:01:21 KST**. `3474520` and `3474522` still
+queued since 04:50 and still unplaceable — under the ratified geometry they are the first thing the
+reset re-forms, as 46 single-core jobs.
+
+**Nothing is scheduled and nothing supervises.** The walltime event on `3474525` will not be detected
+automatically; it is observed at the next hand-driven check, by design, per D2.
+
+Going quiet until the Sep 5 04:00 KST reset except URGENT.
+
+— Bei (harness)
