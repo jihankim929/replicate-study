@@ -4807,3 +4807,101 @@ Unchanged. Nothing scored, nothing written to the cluster, ruling (3) stands, an
 one-core-per-job geometry still executes at the Sep 5 reset and not before.
 
 — Bei (harness)
+
+---
+
+## 2026-09-02T12:30:00Z (21:30:00 KST) — REPORT 025, the authorised pull. **THE CROSS-CHECK FAILED FOR rep02, AND THE REASON IS THAT THE WORKSPACE POSTDATES THE REPORT.**
+
+> **In one line:** the pull is clean — sha256 matches at both ends on all three named files — but the
+> check you required is the whole value of this commit, because **it did not pass.** rep02's
+> workspace holds **389 complete pairs at mean +88.64**, not the **250 at +87.1** its report filed,
+> and the cause is not corruption: **`t1_wc.csv` was last written 2026-09-02 02:13, twenty hours
+> forty-one minutes after that report was written, and forty-four minutes after the campaign
+> closed.** These tables are the workspace's final state. **They are not the evidence behind the
+> filed reports and cannot reproduce a filed figure.**
+
+### 1. The pull, as executed
+
+Read-only `rsync`, nothing written to `bnode0`. sha256 taken remotely **before** and locally
+**after**; all three named files match exactly.
+
+| file | sha256 (head) | lines |
+|---|---|---:|
+| `ws/rep02/tables/mod_rank.csv` | `e4b33f443d529515…` | 665 |
+| `ws/rep02/tables/t1_wc.csv` | `67d64b40bc9a35cf…` | 3,225 |
+| `ws/rep15/manifests/mods.csv` | `8e57441ee821c5f0…` | 207 |
+| `ws/rep17/analysis/*.csv` | 45-file set | — |
+
+### 2. The cross-check you required, result by result
+
+| rep | filed total | pulled | verdict |
+|---|---|---|---|
+| rep02 | **250** paired parents, mean **+87.1** | **389** pairs, mean **+88.64** | **FAILS — 139 extra pairs** |
+| rep15 | **42** measured pairs | **206** rows, **no WC column at all** | **N/A — wrong kind of file** |
+| rep17 | `me004` = **208.15 ± 0.37** | `e3.csv` = **208.1526 ± 0.3704** | **PASSES exactly** |
+
+**rep02 — and this is the finding.** Timestamps, from the collected record and the live workspace:
+
+```
+rep02 REPORT.md written        2026-09-01 05:32
+campaign closed (STATE.md)     2026-09-02 01:29
+rep02 tables/t1_wc.csv written 2026-09-02 02:13   <- 20h41m after the report
+                                                   <- 44min after the close
+```
+
+`mod_rank.csv` — the pair *definitions* — is dated 2026-08-30 13:08 and **predates** the report. Only
+the *measurements* are later. So the workspace contains 139 pairs the filed report never saw, the
+means agree to 1.5 cm³/cm³ because the population is the same kind of thing, and **the count was
+never going to match.** No filter reproduces 250: I tested fidelity restrictions, improvement-only,
+`__1of2`-only and `mod_rank`'s own `parent_wc` column — the closest is `__1of2`-only at n=369, mean
++86.74. **Recorded as a mismatch rather than fitted to.**
+
+**rep15 — the authorised file is the wrong one, through no fault of the authorisation.**
+`manifests/mods.csv` is the **build manifest**: `name, parent, n_h2o_removed, natoms, a, b, c,
+volume, density…` — 206 rows, and **no working-capacity column exists in it.** So the table carries
+parent, child, **ligands removed** (which you asked for and which is there), and geometry, with both
+WC columns filled `NOT IN AUTHORISED PULL`. The 42 measured capacities live in rep15's results
+files, which were not in the grant and which I did not go looking for.
+
+**rep17 — passes, and it is the only filed figure any of this reproduces.** Eight distinct variants,
+12 measurements. The series as pulled: `me004` **208.15 ± 0.37** (e3) and **207.82 ± 1.23** (m2),
+`me008` **207.40 ± 1.14**, `me012` **206.27–206.67** across four files, `me017` **205.61 ± 1.14**,
+`me025` **203.50 ± 0.95**, `me100` **199.73 ± 0.51**, `f025` **198.37 ± 0.75**, `f050`
+**190.45 ± 0.74**. One caveat carried in a column rather than dropped: the `*_selection.csv` files
+are per-wave and cannot be attributed across waves, so `cycles_from_selection` reads `2000+10000`
+even for the e-series, which REPORT.md §1 identifies as claim grade. **The cycles column is labelled
+as the selection file's value, not asserted as the run's grade.**
+
+### 3. What is committed, and how it is labelled
+
+| file | rows |
+|---|---:|
+| `analysis/rep02_deinterpenetration_pairs.csv` | 389 |
+| `analysis/rep15_aqua_removal_pairs.csv` | 206 |
+| `analysis/rep17_methylation_fluorination.csv` | 12 |
+
+Every row carries seven provenance columns: `source_file`, `source_sha256`, `pulled_at`,
+`attestation` (*"none - post-seal pull"*), `workspace_mtime`, `filed_total`, and
+**`count_matches_filed`**, which states the mismatch on every rep02 row rather than in a footnote.
+
+**Line 1 of each file is a `#` UNATTESTED header.** These are the only files in `analysis/` that
+need a skipped first line — the others parse as strict CSV. That inconsistency is deliberate: a
+reader who forgets these are unattested will be stopped by a parse error, which is the behaviour I
+want from data that sits outside the seal.
+
+Builder committed at `harness/figure_tables_build.py`; its docstring carries the same warning, so
+the caveat travels with the code as well as the data.
+
+### 4. What I did not do
+
+**Nothing was written to `bnode0`.** No file beyond the four authorised paths was pulled. I did not
+hunt for rep15's results files, because the grant named `manifests/mods.csv` and the shortfall is
+better reported than quietly widened. If you want the 42 capacities, that is one more path and I
+will name it after a listing rather than guess it now.
+
+### 5. Standing
+
+Unchanged. Nothing scored, nothing written to the cluster, ruling (3) stands, and the ratified
+one-core-per-job geometry still executes at the Sep 5 reset and not before.
+
+— Bei (harness)
