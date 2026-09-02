@@ -6478,3 +6478,88 @@ at the Sep 5 04:00 KST reset as planned.
 Read-only apart from writing the sample and descriptor-tail lists. Daily reporting as before.
 
 — Bei (harness)
+
+---
+
+## 2026-09-03T14:00:00Z (23:00:00 KST) — REPORT 045, **TEST SUBMISSION PASSED. `ppn=1` PLACED IN UNDER 30 SECONDS.** Queue held pending your word.
+
+> **In one line:** **`qas` accepts `nodes=1:ppn=1:aa`** — job `3475270` was **queued and running
+> within 30 seconds** and is simulating correctly, against the two 23-core jobs still unplaceable
+> after **more than a day**. The queue is built at **2,932 structure-grade pairs / 6,064 jobs /
+> 10,459 CPU-h**. **Nothing beyond the one test job has been submitted**, as instructed — and there
+> is a blocker on step (2a) you need to see first.
+
+### 1. The test result
+
+| | |
+|---|---|
+| job | **`3475270` `f4_t_p05`** |
+| resource | **`nodes=1:ppn=1:aa`** — accepted, no error |
+| walltime requested | 15:56:00 |
+| queued → running | **under 30 seconds** |
+| output | `Output/System_0/output_0000[AsCd][cds]3[ASR]1_6.3.2_298.000000_580000.data` — correct structure, correct pressure (5.8 bar) |
+| progress | cycles advancing; CIF read clean in `raspa.stdout` |
+
+**The line that was read as forbidding this was syntax all along.** *"a bare `nodes=1:ppn=1` is
+REJECTED"* means the node group is required; `ppn=1:aa` is well-formed and the scheduler took it
+immediately. **Placed in 30 seconds against >24 h unplaced** is the whole argument of REPORT 019,
+now measured rather than predicted.
+
+### 2. Rulings applied
+
+**(1) Dedupe — applied.** Each `(structure, grade)` runs once; the segment that produced each value
+is recorded and will appear in `fig4_interim.csv`. **149 descriptor-tail structures were already in
+the sample; removing the duplicate floor runs saves 272 CPU-h.**
+
+**(2) Exclusion narrowed to the 11 named files — rebuilt and re-hashed.** Pool rises from 9,139 to
+**9,161** (only 6 of the 11 excluded files are coordinate-group representatives). Tail is still 1,007
+structures but its membership changed:
+**new sha256 `65b475ba53309b0b60946275a4605eee78f56764375ff74a8a8b2aec312cbdda`**
+(was `aa754bb1…`).
+
+**(3) The three bare names resolve from the reporting agent's own record — none needed the
+representative rule.** rep09 identifies each by its internal id, and `rep09/manifests/density.csv`
+maps id → cif:
+
+| bare name | rep09's id | file |
+|---|---|---|
+| `2013[Cu][nbo]3` | 4185 | **`2013[Cu][nbo]3[ASR]6`** |
+| `2017[Zr][scu]3` | 8368 | **`2017[Zr][scu]3[ASR]2`** |
+| `2021[Cu][sql]2` | 10985 / 10995 | **`2021[Cu][sql]2[ASR]6`** (and `[FSR]6`, which rep09 calls *"byte-identical inputs under the chargeless protocol"*) |
+
+**This collapsed step (3) from 5 structures to 2** — the resolved files were already in other
+segments. Remaining: `2011[Cd][rtl]3[ASR]1`, `2014[Co][twt]3[ASR]1`.
+
+### 3. The queue, deduplicated
+
+| segment | pairs | jobs | grade | CPU-h |
+|---|---:|---:|---|---:|
+| (1) sample | 1,500 | 3,000 | floor | 2,739 |
+| (2a) agent tail | 572 | 1,144 | claim | 5,222 |
+| (2b) descriptor tail | **858** | 1,716 | floor | 1,567 |
+| (2b) top-100 promotion | 100 | 200 | claim | 913 |
+| (3) remaining claims | 2 | 4 | claim | 18 |
+| **total** | **2,932** | **6,064** | | **10,459** |
+
+**25.6 days at 17 free cores; 21.8 h at the ceiling.**
+
+### 4. The blocker on (2a), and why I stopped here
+
+**561 of the 572 agent-tail claim-grade decks do not exist.** `screen/decks/stage0` holds **300**
+structures — the pre-registered calibration set — and only **11** of the 572 are among them. The
+sample and descriptor tail are fine: **all 2,358 of their structures have floor decks**, because
+`stage1` covers all 12,499.
+
+So **(1) and (2b) can start immediately; (2a) cannot until 561 × 2 = 1,122 claim-grade decks are
+generated** — a deck-build step the plan did not include, and it must reuse the sealed deck
+construction so the hashes stay comparable.
+
+**Two ways forward, and this is your call:**
+- **Start (1) now and build (2a)'s decks in parallel** — keeps the cluster busy immediately, at the
+  cost of running the order as (1) → (2b) → (2a) rather than (1) → (2a) → (2b).
+- **Hold everything until the decks exist**, preserving the ruled order exactly.
+
+**I have released nothing.** The one test job is the only thing submitted; the two 23-core jobs and
+`3474525` are untouched.
+
+— Bei (harness)
