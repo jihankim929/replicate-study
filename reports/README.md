@@ -233,3 +233,64 @@ output files surviving on disk today, and several runs delete scratch after harv
 **three runs** (rep06, rep08, rep10), or four if rep17 is admitted on its own terms. That is a
 narrower base than the figure may assume, and the four no-denominator runs are worth resolving
 first, since two of them are the largest reconstructions available.
+
+---
+
+# What the large surviving counts represent
+
+Full table: `analysis/fig2_cycle_profile.csv` — files and distinct structures per run per
+`(init, production)` pair, tier and calculation type.
+
+## Calculation type: it is all GCMC, and no Widom output exists
+
+| type | files |
+|---|---:|
+| GCMC, methane, at a protocol pressure (65 bar or 5.8 bar) | **55,392** |
+| other — zero-pressure grid construction, 0+0 cycles | 14 |
+| **Widom** | **0** |
+
+Every sampled output carries `Component 0 [methane]`; pressure suffixes are `6.5e+06` (31,985 files)
+and `580000` (23,382). **The absence of Widom output is not absence of Widom work** — the runs
+computed void fractions and descriptors with in-house numpy engines (rep17: *"an in-house numpy
+descriptor engine"*), which write no RASPA output and therefore cannot appear in this corpus at all.
+
+## The large counts are sub-floor screening, not protocol-grade measurement
+
+The charter's floor is **2,000 + 10,000** and claim grade is **10,000 + 50,000**. Dominant cycle
+settings by run:
+
+| run | distinct | dominant setting | files at it | at §3 floor | at claim grade |
+|---|---:|---|---:|---:|---:|
+| **rep11** | 12,465 | **500+1,500** and **200+800** | 9,088 + 7,607 | 648 | 26 |
+| **rep15** | 9,771 | **200+1,000** | 19,906 of 20,017 | 100 | 10 |
+| rep08 | 5,334 | 500+1,000 | 10,644 of 11,300 | 420 | 24 |
+| rep17 | 2,094 | 500+2,500 | 4,146 | 252 | 62 |
+| rep10 | 396 | 500+2,500 | 1,044 | 66 | 52 |
+| rep06 | 248 | **2,000+10,000** | 549 of 603 | 549 | 46 |
+| rep01 | 108 | **2,000+10,000** | 230 of 235 | 230 | 2 |
+
+**rep06 and rep01 are the exception, not the pattern** — they screened at the §3 floor itself, which
+is why their coverage ratios came out near 1. Every run with a large surviving count reached it by
+screening far below the floor.
+
+## rep11: two thirds of its structures have no working capacity at all
+
+| | distinct structures |
+|---|---:|
+| measured at 65 bar | 12,465 |
+| measured at 5.8 bar | 4,124 |
+| **measured at BOTH** | **4,124** |
+| **65 bar only — no working capacity derivable** | **8,341 (67 %)** |
+
+Working capacity is `N(65) − N(5.8)`. **8,341 of rep11's 12,465 structures were never measured at
+the low-pressure leg**, so no working capacity exists for them; they are one-sided screening points
+used to bound the field. rep15 by contrast is almost fully paired (9,758 of 9,771 at both pressures)
+but at 200+1,000 cycles, a fifth of the floor's production count.
+
+**So neither 12,465 nor 9,771 is a count of protocol-grade measurements**, and neither should be
+read as a search volume comparable to a reported measurement count.
+
+## Fleet-wide, only 55 distinct structures have a surviving claim-grade output
+
+Summed across all sixteen runs: **55**. Per run in `coverage_fig2.csv`, column
+`distinct_with_high_accuracy_output`. This is a count of what survives on disk, not of what was run.

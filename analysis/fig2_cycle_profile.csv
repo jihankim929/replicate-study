@@ -1,0 +1,62 @@
+# UNATTESTED. Derived from the same post-seal workspace read as fig2_jobs.csv. Skip this line.
+run,init_cycles,production_cycles,accuracy_tier,calculation_type,files,distinct_structures,distinct_at_65bar,distinct_at_5.8bar
+rep01,2000,10000,low,"GCMC (methane, adsorption)",230,107,105,107
+rep01,200,500,low,"GCMC (methane, adsorption)",2,0,0,0
+rep01,10000,50000,high,"GCMC (methane, adsorption)",2,1,1,1
+rep01,100,200,low,"GCMC (methane, adsorption)",1,0,0,0
+rep02,500,3000,low,"GCMC (methane, adsorption)",71,49,47,24
+rep02,10000,50000,high,"GCMC (methane, adsorption)",10,3,3,0
+rep02,200,1000,low,"GCMC (methane, adsorption)",2,0,0,0
+rep02,2000,10000,low,"GCMC (methane, adsorption)",2,2,2,0
+rep03,2000,10000,low,"GCMC (methane, adsorption)",10,5,5,5
+rep03,0,0,low,other (zero-pressure grid build),5,5,0,0
+rep03,200,500,low,"GCMC (methane, adsorption)",1,0,0,0
+rep04,2000,10000,low,"GCMC (methane, adsorption)",32,30,22,9
+rep04,0,0,low,other (zero-pressure grid build),2,2,0,0
+rep04,200,500,low,"GCMC (methane, adsorption)",1,0,0,0
+rep05,10000,50000,high,"GCMC (methane, adsorption)",3,3,0,3
+rep05,200,500,low,"GCMC (methane, adsorption)",1,0,0,0
+rep06,2000,10000,low,"GCMC (methane, adsorption)",549,247,247,247
+rep06,10000,50000,high,"GCMC (methane, adsorption)",46,12,12,12
+rep06,500,2000,low,"GCMC (methane, adsorption)",2,0,0,0
+rep06,200,600,low,"GCMC (methane, adsorption)",2,1,1,1
+rep06,0,0,low,other (zero-pressure grid build),2,0,0,0
+rep06,200,1000,low,"GCMC (methane, adsorption)",2,0,0,0
+rep07,0,4000,low,"GCMC (methane, adsorption)",3,0,0,0
+rep07,2000,10000,low,"GCMC (methane, adsorption)",3,3,3,0
+rep07,200,500,low,"GCMC (methane, adsorption)",1,0,0,0
+rep08,500,1000,low,"GCMC (methane, adsorption)",10644,5289,5267,5280
+rep08,2000,10000,low,"GCMC (methane, adsorption)",420,313,85,313
+rep08,500,2000,low,"GCMC (methane, adsorption)",210,111,102,107
+rep08,10000,50000,high,"GCMC (methane, adsorption)",24,6,6,6
+rep08,100,200,low,"GCMC (methane, adsorption)",2,0,0,0
+rep09,2000,10000,low,"GCMC (methane, adsorption)",4,4,0,4
+rep09,200,500,low,"GCMC (methane, adsorption)",3,2,0,2
+rep09,200,1000,low,"GCMC (methane, adsorption)",1,0,0,0
+rep10,500,2500,low,"GCMC (methane, adsorption)",1044,394,394,394
+rep10,2000,10000,low,"GCMC (methane, adsorption)",66,33,33,33
+rep10,10000,50000,high,"GCMC (methane, adsorption)",52,9,9,9
+rep10,100,300,low,"GCMC (methane, adsorption)",3,2,2,0
+rep10,0,0,low,other (zero-pressure grid build),1,1,0,0
+rep11,500,1500,low,"GCMC (methane, adsorption)",9088,8972,8972,0
+rep11,200,800,low,"GCMC (methane, adsorption)",7607,3950,3588,3950
+rep11,2000,10000,low,"GCMC (methane, adsorption)",648,281,281,281
+rep11,10000,50000,high,"GCMC (methane, adsorption)",26,8,8,8
+rep11,200,500,low,"GCMC (methane, adsorption)",1,0,0,0
+rep12,200,1000,low,"GCMC (methane, adsorption)",2,1,1,0
+rep12,0,10,low,"GCMC (methane, adsorption)",1,0,0,0
+rep12,2000,10000,low,"GCMC (methane, adsorption)",1,1,1,0
+rep13,2000,10000,low,"GCMC (methane, adsorption)",39,39,31,8
+rep13,0,0,low,other (zero-pressure grid build),4,4,0,0
+rep15,200,1000,low,"GCMC (methane, adsorption)",19906,9771,9771,9758
+rep15,2000,10000,low,"GCMC (methane, adsorption)",100,50,50,50
+rep15,10000,50000,high,"GCMC (methane, adsorption)",10,3,3,3
+rep15,200,500,low,"GCMC (methane, adsorption)",1,0,0,0
+rep16,250,1000,low,"GCMC (methane, adsorption)",25,0,0,0
+rep16,2000,10000,low,"GCMC (methane, adsorption)",20,0,0,0
+rep16,500,2000,low,"GCMC (methane, adsorption)",4,0,0,0
+rep16,10000,50000,high,"GCMC (methane, adsorption)",3,0,0,0
+rep16,200,1000,low,"GCMC (methane, adsorption)",1,0,0,0
+rep17,500,2500,low,"GCMC (methane, adsorption)",4146,2072,2072,2072
+rep17,2000,10000,low,"GCMC (methane, adsorption)",252,138,91,138
+rep17,10000,50000,high,"GCMC (methane, adsorption)",62,10,10,10
