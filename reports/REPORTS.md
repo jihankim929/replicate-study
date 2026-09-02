@@ -5659,3 +5659,87 @@ Read-only throughout; nothing written to `bnode0`. Nothing scored. Ruling (3) st
 ratified one-core-per-job geometry still executes at the Sep 5 reset and not before.
 
 — Bei (harness)
+
+---
+
+## 2026-09-03T03:45:00Z (12:45:00 KST) — REPORT 035, three follow-ups. **THE FLOOR COLUMN COLLAPSES THE LARGE COUNTS: rep11 12,465 → 281.** Commit `b2b5afb`.
+
+> **In one line:** at **`b2b5afb2d302b6daa552554e6baffb28df0baa72`** — the floor column shows how
+> little of the large counts is protocol-grade (**rep11 12,465 → 281, rep15 9,771 → 50**), rep09's
+> two numbers are **N65 at 200+500 cycles, below the floor, on structures with no 5.8-bar leg**, and
+> rep06's two time columns are documented as **two different clocks with no credit applied to
+> either**. Going quiet until the Sep 5 reset.
+
+### 1. `distinct_at_or_above_floor`
+
+**Rule, recorded beside the high-accuracy definition:** a structure counts iff it has at least one
+surviving output with **`init ≥ 2,000` and `production ≥ 10,000`** — the charter's floor fidelity,
+the minimum §3 admits for a reported number.
+
+**The three coverage columns nest:** any output ≥ at-or-above-floor ≥ high-accuracy, since claim
+grade satisfies the floor. The gap between the first two is the sub-floor screening of REPORT 034,
+and it is most of the corpus:
+
+| run | any output | ≥ floor | high accuracy |
+|---|---:|---:|---:|
+| **rep11** | 12,465 | **281** | 8 |
+| **rep15** | 9,771 | **50** | 3 |
+| rep08 | 5,334 | 313 | 6 |
+| rep17 | 2,094 | 138 | 10 |
+| rep10 | 396 | 33 | 9 |
+| rep06 | 248 | 247 | 12 |
+| rep01 | 108 | 108 | 1 |
+
+**rep01 and rep06 lose almost nothing** (108→108, 248→247) because they screened at the floor.
+**rep11 and rep15 lose 98 % and 99 %.** Fleet total at or above floor: **1,260** distinct, summed
+across runs.
+
+### 2. rep09's 254.73 and 253.50 — locus only
+
+Verbatim, §4, *"What could still beat the claim, sized honestly"*, hole 1:
+
+> **"221 survivor files (214 classes) have a 65-bar number but no 5.8-bar number.** … only 17 have
+> N65 ≥ 235, and in that band the minimum N5.8 ever observed across 378 measured structures is
+> 36.48, so **about six structures** (N65 from 244.97 to 254.73, led by 4185 `2013[Cu][nbo]3` at
+> 254.73 and 8368 `2017[Zr][scu]3` at 253.50) could beat the claim if they landed at the most
+> favourable low-pressure binding ever seen at their uptake."
+
+**Quantity, as the run states it:** **N65, the 65-bar absolute uptake — not a working capacity.**
+The same sentence says these structures *"have a 65-bar number but no 5.8-bar number"*, and working
+capacity is `N(65) − N(5.8)`.
+
+**Cycle setting, as the run states it:** the `s1` wave at **200 + 500**, from its own §2 table —
+`| `s1` | 65-bar exhaustive screen | 200 + 500 | 11,831 | 499.8 |` — **below the §3 floor.**
+
+No interpretation offered, and none should be read in.
+
+### 3. rep06's two clocks
+
+| column | clock |
+|---|---|
+| `t_final_filing` (78.59 h) | **filesystem mtime** of the collected `REPORT.md`, preserved by `rsync -a` |
+| `t_session_end` (53.32 h) | **git commit timestamp** of the last commit in `git-log.txt` |
+
+**Both are raw wall-clock hours since that run's `launched_at`, and no time credit is applied to
+either — for rep06 or any run.** rep06 carries **9.62 h** of harness-fault restoration **ratified
+2026-08-30**, plus 15.0483 h ratified 2026-08-31 and 4.4704 h of fleet pause (total
+`fault_restoration_hours` 24.6683). **None of it is applied here:** the credit extends rep06's
+*deadline*, not its launch anchor, and these columns are measured from launch.
+
+**One arithmetic observation, recorded without a causal claim:** the gap is **25.27 h** and the total
+ratified restoration is **24.67 h**. They are close. **Nothing in the record establishes that they
+are related and this report does not assert it.** The documented fact is only that `REPORT.md` was
+written after the last commit — rep06's final report edit was never committed.
+
+### 4. Delivered files untouched
+
+`fig2_events.csv`, `fig2_claims_long.csv`, `fig2_jobs.csv` — **unchanged, verified by `cmp`.** Only
+`README.md` re-synced and `coverage_fig2.csv` extended.
+
+### 5. Standing — going quiet
+
+Read-only throughout; nothing written to `bnode0`. Nothing scored. **Going quiet until the Sep 5
+04:00 KST reset except URGENT**, as instructed. Ruling (3) stands, and the ratified one-core-per-job
+geometry executes at that reset and not before.
+
+— Bei (harness)
