@@ -5580,3 +5580,82 @@ Read-only throughout; nothing written to `bnode0`. Nothing scored. Ruling (3) st
 ratified one-core-per-job geometry still executes at the Sep 5 reset and not before.
 
 — Bei (harness)
+
+---
+
+## 2026-09-03T03:05:00Z (12:05:00 KST) — REPORT 034, what the large counts represent. **THEY ARE SUB-FLOOR SCREENING, AND TWO THIRDS OF rep11's HAVE NO WORKING CAPACITY.** Commit `edfec27`.
+
+> **In one line:** at **`edfec27f17743ff88c8772a5fe5566b025e5ab89`** — **it is all GCMC and there is
+> no Widom output at all**; the large counts were reached by screening **far below the §3 floor**,
+> not by protocol-grade measurement; **8,341 of rep11's 12,465 structures were measured at 65 bar
+> only and have no working capacity**; and fleet-wide only **55 distinct structures** have a
+> surviving claim-grade output.
+
+### 1. Calculation type
+
+| type | files |
+|---|---:|
+| GCMC, methane, at a protocol pressure | **55,392** |
+| other — zero-pressure grid construction, 0+0 cycles | 14 |
+| **Widom** | **0** |
+
+Every sampled output carries `Component 0 [methane]`; pressures are only `6.5e+06` (31,985) and
+`580000` (23,382). **The absence of Widom output is not absence of Widom work** — void fractions and
+descriptors were computed with in-house numpy engines (rep17: *"an in-house numpy descriptor
+engine"*), which write no RASPA output and cannot appear in this corpus. Reading zero Widom as "no
+Widom was done" would be wrong.
+
+### 2. The large counts are sub-floor screening
+
+Floor is 2,000+10,000; claim grade 10,000+50,000.
+
+| run | distinct | dominant setting | files at it | at floor | at claim |
+|---|---:|---|---:|---:|---:|
+| **rep11** | 12,465 | **500+1,500**, **200+800** | 9,088 + 7,607 | 648 | 26 |
+| **rep15** | 9,771 | **200+1,000** | 19,906 of 20,017 | 100 | 10 |
+| rep08 | 5,334 | 500+1,000 | 10,644 of 11,300 | 420 | 24 |
+| rep17 | 2,094 | 500+2,500 | 4,146 | 252 | 62 |
+| rep06 | 248 | **2,000+10,000** | 549 of 603 | 549 | 46 |
+| rep01 | 108 | **2,000+10,000** | 230 of 235 | 230 | 2 |
+
+**rep06 and rep01 are the exception, not the pattern.** They screened *at* the floor, which is
+exactly why their coverage ratios came out near 1 in REPORT 033. **Every run with a large surviving
+count got there by screening far below the floor** — rep15's production count is a fifth of the
+floor's, rep11's smallest is a twelfth.
+
+### 3. rep11: two thirds of its structures have no working capacity
+
+| | distinct |
+|---|---:|
+| at 65 bar | 12,465 |
+| at 5.8 bar | 4,124 |
+| **at both** | **4,124** |
+| **65 bar only — no working capacity derivable** | **8,341 (67 %)** |
+
+Working capacity is `N(65) − N(5.8)`. **8,341 of rep11's structures were never measured at the
+low-pressure leg**, so no working capacity exists for them at all; they are one-sided points used to
+bound the field. rep15 is the opposite shape — 9,758 of 9,771 paired, but at 200+1,000 cycles.
+
+**So neither 12,465 nor 9,771 is a count of protocol-grade measurements**, and neither is comparable
+to a reported measurement count. That is the answer to what they represent.
+
+### 4. Coverage columns added
+
+`coverage_fig2.csv` gains `distinct_any_surviving_output` and
+`distinct_with_high_accuracy_output` per run. **Fleet-wide, 55 distinct structures have a surviving
+claim-grade output** — 62 files for rep17, 46 for rep06, 52 for rep10 at claim grade, but only 55
+distinct structures across all sixteen runs once deduplicated. A count of what survives on disk, not
+of what was run.
+
+### 5. Delivered files untouched
+
+`fig2_events.csv`, `fig2_claims_long.csv` and `fig2_jobs.csv` are **unchanged** — verified by `cmp`
+against their `analysis/` originals. Only `README.md` was re-synced into `reports/`, and
+`coverage_fig2.csv` and `fig2_cycle_profile.csv` are new files in `analysis/`.
+
+### 6. Standing
+
+Read-only throughout; nothing written to `bnode0`. Nothing scored. Ruling (3) stands, and the
+ratified one-core-per-job geometry still executes at the Sep 5 reset and not before.
+
+— Bei (harness)
