@@ -27,6 +27,22 @@ PBS later, so a submitted job is visible in `qinfo` (mjs) FIRST and in `qstat` (
 dispatch. Anything that counts our jobs must count the UNION of both listings or it will
 under-count and over-submit. Ids are resolved after the fact by matching the job NAME.
 
+SUBMISSION ORDER IS NOT CONSTRUCTION ORDER, AND MUST NOT BE. PI ruling 2026-09-03 reorders the
+remaining queue to (1) sample -> (2b) descriptor tail -> its top-100 promotion -> (2a) agent tail ->
+(3) claims. The naive way to apply that -- reordering the list that `load_queue` enumerates -- WOULD
+RENAME EVERY JOB IN FLIGHT, because a job's name is `f4_<seq>_<leg>` and `seq` is that enumeration.
+The in-flight guard, the resume match and `reconcile()` all key on the name, so a shifted seq would
+make ~580 running jobs invisible to the guard and resubmit every one of them as a duplicate: fault
+(c) of REPORT 046, systematically. So SEQ IS ASSIGNED IN CANONICAL CONSTRUCTION ORDER AND NEVER
+MOVES, and only the iteration order changes, by a stable sort on SUBMIT_ORDER after seq is fixed.
+Names are therefore invariant under any future reorder as well.
+
+THE TOP-100 PROMOTION IS DATA-DEPENDENT AND CANNOT BE ENUMERATED YET. Its members are the 100
+highest working capacities from (2b)'s floor pass, which has not run. It is a real segment with a
+real position in the order, whose membership file is written by `harness/fig4_milestone.py` when
+(2b) closes; until that file exists the segment is EMPTY and the queue simply skips it. Its seq
+numbers are appended ABOVE the canonical block, so they cannot collide with a name already issued.
+
 WINDOW. Never more than --window jobs in flight (PBS queued+running UNION mjs), topped up as jobs
 land. The sealed concurrency rules are unchanged and still apply on top: ceiling 480 RUNNING (at
 ppn=1 one job is one core), backed off to 240 when third-party jobs are queued-and-not-running
@@ -57,6 +73,13 @@ SETTLE, CHUNK = 45, 120
 # for the 563 the tail needs that stage0 never had (harness/fig4_gen_claim_decks.py). Floor-grade is
 # always stage1, which covers all 12,499. Resolved per structure, never assumed.
 STAGE_FLOOR = "stage1"
+
+# Construction order fixes seq (and therefore every job name). Never reorder this list.
+CANONICAL_ORDER = ["sample", "agent_tail", "descriptor_tail", "claims"]
+# Submission order, PI ruling 2026-09-03. Reorder THIS freely; names do not move.
+SUBMIT_ORDER = ["sample", "descriptor_tail", "promotion", "agent_tail", "claims"]
+# Written by harness/fig4_milestone.py when (2b)'s floor pass closes. Absent until then.
+PROMOTION_FILE = "analysis/fig4_top100_promotion.json"
 
 # Dedupe against the Stage 0 ppn=1 requeue: this structure's claim-grade pair is produced there, as
 # one of the 46 runs orphaned by the two killed ppn=23 jobs. Running it here too would be the same
@@ -200,13 +223,34 @@ def load_queue(meta):
     add(ids("analysis/fig4_descriptor_tail.csv"), "floor", "descriptor_tail")
     add(json.loads((ROOT / "analysis/fig4_claims_rest.json").read_text()), "claim", "claims")
     # A stable global sequence number assigned over the WHOLE queue, so a job's name does not move
-    # when --segments selects a subset. Resume matches on it.
+    # when --segments selects a subset, NOR when the submission order is changed. Resume matches on
+    # it. This enumeration is the canonical construction order and is not the order we submit in.
     stage0 = {p.name for p in (ROOT / "screen/decks/stage0").iterdir() if p.is_dir()}
-    for i, r in enumerate(q):
-        r["seq"] = i
+
+    def annotate(r, seq):
+        r["seq"] = seq
         r["nsim"] = meta.get(r["structure_id"], {}).get("nsim", MEDIAN_NSIM)
         r["stage"] = (STAGE_FLOOR if r["grade"] == "floor"
                       else ("stage0" if r["structure_id"] in stage0 else "stage2"))
+        return r
+
+    for i, r in enumerate(q):
+        annotate(r, i)
+    base = len(q)          # promotion seqs start above every name ever issued
+
+    # The promotion segment, if (2b) has closed and the list has been written.
+    pf = ROOT / PROMOTION_FILE
+    if pf.exists():
+        promo = json.loads(pf.read_text())
+        members = promo["structures"] if isinstance(promo, dict) else promo
+        for j, s in enumerate(members):
+            if (s, "claim") in seen:      # already produced at claim grade elsewhere in the queue
+                continue
+            seen.add((s, "claim"))
+            q.append(annotate(dict(structure_id=s, grade="claim", segment="promotion"), base + j))
+
+    # SUBMISSION order. Stable sort, so order WITHIN a segment is untouched.
+    q.sort(key=lambda r: SUBMIT_ORDER.index(r["segment"]))
     return q
 
 
@@ -349,8 +393,8 @@ def reconcile(q, di):
 
 def main():
     a = argparse.ArgumentParser()
-    a.add_argument("--segments", default="sample,descriptor_tail",
-                   help="comma list of sample,agent_tail,descriptor_tail,claims")
+    a.add_argument("--segments", default=",".join(SUBMIT_ORDER),
+                   help="comma list of " + ",".join(SUBMIT_ORDER))
     a.add_argument("--window", type=int, default=600)
     a.add_argument("--poll", type=int, default=120)
     a.add_argument("--max-concurrent", type=int, default=CONC_SEALED)

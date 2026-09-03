@@ -7100,3 +7100,94 @@ submitted, and every free core is going to Figure-4 by design. REPORT 042's head
 **Stage 1 is 1 run of 24,998 and the top 500 cannot be identified.**
 
 — Bei (harness)
+
+---
+
+## 2026-09-03T05:20:00Z (14:20:00 KST) — REPORT 051, **QUEUE REORDERED AND RUNNING.** Amendment filed. **THE OBVIOUS IMPLEMENTATION WOULD HAVE DUPLICATED EVERY JOB IN FLIGHT.**
+
+> **In one line:** the order is now (1) → (2b) → (2b)'s top-100 promotion → (2a) → (3), filed as
+> `prereg/fig4_order_amendment_2026-09-03.md` **before any (2b) result exists**; the submitter was
+> restarted onto it and resumed at **4,978 runs left, the exact count the stopped process last
+> reported**, with **600 in flight, 600 distinct, 0 duplicated**; and the two milestone posts you
+> asked for are built and tested but **not yet armed — see §5.**
+
+### 1. What was reordered, and what was not
+
+Your order is applied. **Nothing about membership, selection or measurement changed** — the sample's
+draw and seed, the descriptor tail's 858 and its rule, the agent tail's 571, the grades, the cycle
+counts, the dedupe ruling and the budget are all untouched. The queue is the same **5,862 runs and
+9,537 plan CPU-h**. This changes the sequence in which results arrive and nothing else.
+
+**The top-100 promotion now has a position in the order it did not have before** — immediately after
+the (2b) floor pass that defines it. REPORT 045 established it cannot be enumerated until (2b) ranks
+it; it is now a real segment whose membership file appears when (2b) closes, and until then the queue
+simply steps over it.
+
+### 2. The fault this nearly walked into
+
+A job's name is `f4_<seq>_<leg>`, and `seq` is the position in the queue's enumeration. The in-flight
+guard, the resume match and `reconcile()` all key on that name. **Reordering the enumerated list —
+the obvious way to do this — would have renamed every job in flight**, making ~580 running jobs
+invisible to the guard and resubmitting all of them as duplicates. That is fault (c) of REPORT 046,
+except systematic rather than fourteen times, and against a full window.
+
+**So `seq` is now assigned in canonical construction order and never moves**, and only the iteration
+order changes, by a stable sort applied after `seq` is fixed. Promotion entries take `seq` numbers
+above the canonical block so they cannot collide with a name already issued.
+
+**Verified before the restart:** 2,932 of 2,932 seq assignments unchanged, **0 moved**, and
+within-segment order identical for all four segments. **Verified after:** the submitter resumed at
+**4,978 runs left — the exact count the killed process last logged** — with skips of 315 done, 569
+in flight, 2 produced-elsewhere, summing to the full 5,864; and the cluster listing showed **600 in
+flight, 600 distinct, 0 duplicated.**
+
+The real finding underneath: **`seq` was documented as stable against *subsetting* and was never
+stable against *reordering*.** It is now stable against both, so a future reorder is a one-line
+change to `SUBMIT_ORDER` rather than a hazard.
+
+### 3. Timing — the reorder cost nothing
+
+The restart happened while the queue is still inside segment (1), which both orders run first, so
+**the change is a no-op for everything currently in flight** and only takes effect when the sample
+drains. It was done now rather than later so that the correct order is installed while it is free.
+
+### 4. The promotion rule is pre-registered against data that does not exist
+
+Filed in the amendment note, **while (2b) has zero completions**:
+
+> Rank the descriptor tail by `WC = loading(65 bar) − loading(5.8 bar)`, cm³ STP/cm³, both legs `ok`,
+> floor grade; promote the top 100 to claim grade; ties by `structure_id` ascending; nothing promoted
+> twice.
+
+`harness/fig4_milestone.py` writes that list once and **refuses to overwrite an existing one**, so
+the ranking cannot be quietly re-drawn. A promotion rule written after seeing the results would not
+be a rule but a selection, and the screen's standing as an independent yardstick depends on which of
+those it is.
+
+### 5. The two milestone posts: instrument done, automation NOT armed
+
+`harness/fig4_milestone.py` is written and **tested end to end against the live campaign**. It
+reports segment closure, the top ten by working capacity, and the comparison. Its reference value is
+**recomputed from `analysis/fig2_claims_long.csv` at report time, never hard-coded**, so a corrected
+claims table cannot leave a stale number in a report.
+
+**The comparison value, established now: 200.125 ± 0.529 — rep06, `2016[Cu][pts]3[ASR]1`**, the
+highest **retained** value in the record. **Twelve of sixteen runs reported that same structure,
+spanning 198.85–200.125**, so it is a band about 1.3 units wide, and the instrument claims "exceeds"
+only where the margin clears the combined uncertainty. **The excluded honeypot (`2021[Cu][sql]2`,
+≈207) is not the comparison** — it is excluded, and measuring against it answers a different
+question.
+
+**What is not in place is the automatic posting.** Writing the watcher that would fire at the
+milestone and commit and push the post unattended was **refused by this host's permission layer**,
+and I have not worked around it. It is the right thing to stop on: an unattended process that pushes
+to the shared record is a standing authority, not a step in a task. **The milestone reports are
+therefore on request, not on a timer, until you say otherwise** — one command produces each, and I
+will run them when the segments close if I am in session, but nothing will fire on its own.
+
+**Preview, from the instrument, on the 316 sample runs finished so far** — 15 structures have both
+legs and the best is `2012[Cu][tbo]3[ASR]2` at **159.662 ± 1.951**, which is **40.5 below** the
+reference. On 1% of the segment that is a progress note and not a result, and I am not reading a
+landscape off it.
+
+— Bei (harness)
