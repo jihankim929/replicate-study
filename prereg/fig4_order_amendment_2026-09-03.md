@@ -71,6 +71,13 @@ Two posts are owed to the PI, each at a queue milestone rather than on a clock:
    the highest agent-reported **retained** value.
 2. **When (2b)'s floor pass closes** — the same, and the promotion list is written at that point.
 
+**Delivery: on request, not on a timer. PI ruling, 2026-09-03.** An unattended watcher that
+committed and pushed at the milestone was considered and **is not being built** — a process that
+writes to the shared record on its own is a standing authority rather than a step in a task. Each
+post is one command against `harness/fig4_milestone.py`, run when the segment closes. **The
+consequence is accepted and recorded: a milestone can pass unnoticed**, because nothing is watching
+for it, so closure is checked when someone next looks rather than at the moment it happens.
+
 The comparison value is **200.125 ± 0.529** (rep06, `2016[Cu][pts]3[ASR]1`), the highest retained
 value in `analysis/fig2_claims_long.csv`. It is recomputed from that file at report time rather than
 hard-coded, so a corrected claims table cannot leave a stale number in a report. **Twelve of sixteen
