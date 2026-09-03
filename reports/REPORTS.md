@@ -6710,3 +6710,114 @@ Nothing else was touched. `screen_ledger.csv` has no edited entry; the sealed de
 manifest are unchanged and verify.
 
 — Bei (harness)
+
+---
+
+## 2026-09-03T02:40:21Z (11:40:21 KST) — REPORT 047, first completions. **THE QUEUE IS DRAINING AND BOTH GRADES ARE RUNNING UNDER PLAN — BUT THE COMPLETIONS ARE THE FAST TAIL AND I AM NOT RE-DERIVING ANYTHING FROM THEM.**
+
+> **In one line:** 240 runs have completed in the 5.8 h since the first landed, 239 `ok` and one
+> SIGSEGV, at 99.61 CPU-h; measured cost is 2.5× under plan at floor grade and 3.9× under at claim
+> grade, and **both figures are downward-biased by right-censoring** — 22 of the 36 jobs still
+> running have already exceeded the completed-run median — so `SAFETY=12` and the 9,537 CPU-h
+> budget stand unchanged.
+
+This is the day of completions REPORT 046 §6 said it would take. It settles the direction of the
+cost question and **not** its magnitude, for a reason that is measurable rather than cautious.
+
+### 1. What has completed
+
+First completion landed **05:45:52 KST**, most recent **11:33:13 KST** — a 5.8 h window.
+
+| set | jobs | ok | failed | CPU-h | of its own total |
+|---|---:|---:|---:|---:|---|
+| Figure-4 (5,862-job queue) | 226 | 225 | 1 | 83.40 | **3.9 %** by count, **0.9 %** by plan CPU-h |
+| Stage 0 requeue (46 jobs) | 15 | 15 | 0 | 17.44 | **32.6 %**, 31 still in flight |
+| **total** | **240** | **239** | **1** | **99.61** | |
+
+The two are kept apart on purpose: the requeue is the 46 runs the killed `ppn=23` jobs orphaned,
+not part of the Figure-4 queue, and folding them together would overstate Figure-4's progress by an
+eighth. CPU-h here is **elapsed wall-clock per run at `ppn=1`**, taken from the `.runs` log the job
+script writes, which is a different basis from REPORT 042's PBS `cput` and is not comparable to it
+line for line.
+
+`fig4_ledger.csv` still reads `submitted` on every row and that is correct, not stale — section 8
+writes status from output presence at harvest, and no harvest has run.
+
+### 2. Throughput is still core-limited, and the measurement has moved
+
+**599 jobs in flight against the 600 window** — 568 Figure-4, 31 Stage 0 requeue. The submitter is
+holding the window exactly full, so the window is still not the binding control.
+
+|  | REPORT 046 (07:05 KST) | now (11:40 KST) |
+|---|---:|---:|
+| our jobs running | 13 | **36** |
+| free cores, cluster-wide | 13 | **35** |
+| our share of running cores | 4.5 % | **8.2 %** |
+
+Cluster: **472 usable cores, 437 in use, 35 free, 108 down.** Of our 599 in flight, PBS has
+dispatched 36 R and 15 Q; the remaining ~548 sit registered in mjs awaiting dispatch. **That backlog
+is not an mjs fault and I checked before saying so** — there are 35 free cores and we are already
+running 36 jobs, so there is nothing for the daemon to dispatch into. Section 6's contention concern
+is still not triggered: our share roughly doubled because cores freed up, not because we displaced
+anyone.
+
+### 3. The cost question REPORT 046 deferred — measured, and why the budget does not move
+
+| grade | n | mean CPU-h | median | min | p90 | max | plan | wave 1 (`ppn=23`) |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| floor (stage1) | 225 | **0.371** | 0.241 | 58 s | 2,849 s | 9,090 s | 0.913 | — |
+| claim (stage0) | 15 | **1.163** | 0.964 | 296 s | 9,108 s | 9,741 s | 4.565 | 1.472 |
+
+The direction REPORT 046 suspected is confirmed: **claim-grade runs at one core are cheaper than
+the same work in `ppn=23` batches** (1.163 against 1.472), which is what the contention hypothesis
+predicted, and both grades come in under the pre-registered plan.
+
+**I am not re-deriving `SAFETY`, any walltime, or the 9,537 CPU-h budget from this, because the
+sample is right-censored and the censoring is severe.** 240 runs have completed out of **839
+dispatched** — the completed 28.6 % are, by construction, the ones that finished first. Three
+measurements of the bias, none of them an inference:
+
+- **22 of the 36 jobs currently running have already exceeded 868 s**, the median of every floor run
+  that has completed.
+- The **longest running job stands at 19,273 s (5.35 h)** — **2.1× the longest completed run** of
+  either grade.
+- **28.05 CPU-h is already accrued inside running jobs** and appears in no completion statistic.
+
+So the means above are floors, not estimates. Held literally they would project the queue at
+**3,081 CPU-h against the planned 9,537**, and I am recording that number **only to say plainly that
+it is not a forecast** — it is what you get by averaging the fastest third of a distribution whose
+per-run spread REPORT 046 already measured at 338×. The honest bracket on the remaining Figure-4
+work at today's 36 cores is **3.5 days if the measured means survive censoring and 10.9 days if the
+plan is right**, and the true figure is somewhere between because the censoring only pushes one way.
+
+What would settle it is a **fully drained tranche** — every run of one submitted group completed or
+killed, so nothing is outstanding — or the in-flight runs entered as right-censored observations in
+`censored_observations.csv`, which already carries the bound-type vocabulary for exactly this. I
+would rather bring you the first than a survival estimate over 36 open runs.
+
+### 4. The one failure, and it is not a walltime kill
+
+`stage1/0000[Zn][ith]3[ASR]1/p05` on `bnode8`, **RC 139 = SIGSEGV**, started and dead inside **one
+second** at 08:10:14 KST. `raspa.stdout` ends cleanly at `End reading cif-file` with the space group
+resolved, and `Movies/`, `Restart/` and `VTK/` were created — but **there is no `Output/` directory
+at all**, so nothing was ever written to parse.
+
+Section 8 typed it `failed` on **output absence and not on RC**, which is the rule working as
+designed rather than a lucky catch: RASPA exits 0 on failures too, and this one exited 139 on a
+failure, so neither direction of the exit code was informative. Its `p65` leg has not completed and
+wrote no row, so **this structure currently has no measurement on either leg**. It requeues under
+the existing rule — submitted, no longer in flight, never wrote an `ok` — and I have not
+special-cased it. **One failure in 240 is not a pattern and I am not treating it as one**; if the
+requeue segfaults in the same place, that is a structure-specific fault worth a report of its own.
+
+### 5. The reference screen has not moved
+
+Still **51 runs**, the figure REPORT 042 gave. The `scr1_*` logs are unchanged. This is by
+design, not neglect — every free core is going to the Figure-4 interim queue — but it means REPORT
+042's headline stands untouched: **Stage 1 is 1 run of 24,998 and the top 500 still cannot be
+identified.**
+
+Nothing else was touched. No ledger row was edited, the sealed deck tree and its manifest are
+unchanged, and no cluster file was written outside the run directories the jobs own.
+
+— Bei (harness)
