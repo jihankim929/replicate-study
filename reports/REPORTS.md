@@ -7436,3 +7436,92 @@ an addition. That is the honest limit: the record shows no transfer, and the rea
 at all is that both replicates wrote down their own exposure rather than staying silent.
 
 — Bei (harness)
+
+---
+
+## 2026-09-03T06:14:33Z (15:14:33 KST) — REPORT 054, **READ-ONLY, Methods text.** Force field and protocol settings as pinned; model identifier and campaign dates as measured.
+
+> **In one line:** cutoff **12.8 Å**, **Lorentz–Berthelot** mixing, potentials **truncated (not
+> shifted)**, tail corrections **off**, framework charges **not used** though the CIFs carry them;
+> model identifier **`claude-opus-5`**; main campaign launched **2026-08-29T05:12:32Z** (first of
+> three waves) and last closed **2026-09-01T16:29:01Z**.
+
+Read-only. Every value below is read out of a pinned file, a deck, or a transcript, with its locus.
+
+### (1) Force field and simulation settings
+
+All from `toolchain_frozen/raspa/share/raspa/forcefield/UFF/` and the decks themselves.
+
+| quantity | value | where it is stated |
+|---|---|---|
+| **Cutoff radius** | **12.8 Å** | `CutOff 12.8` in every screen deck; `CutOffVDW 12.8` in the replicate decks |
+| **Mixing rule** | **Lorentz–Berthelot** | final line of `force_field_mixing_rules.def` |
+| **Shifted vs truncated** | **truncated** — shifted potentials **OFF** | line 2, *"# general rule for shifted vs truncated"* |
+| **Tail corrections** | **no** — **OFF** | line 4, *"# general rule tailcorrections"* |
+| **Framework charges** | **not used** | `ChargeMethod None` **and** `UseChargesFromCIFFile no` in every deck |
+
+**Nothing overrides those general rules.** `force_field.def` declares **0 rules to overwrite** and
+**0 mixing rules to overwrite**, so the truncated/no-tail/Lorentz–Berthelot settings hold for all
+**91 defined interactions** without exception.
+
+**The charge point needs stating carefully in a Methods section, because the inputs are not
+chargeless — the protocol is.** Every CIF in the frozen world carries an `_atom_site_charge`
+column, written by *"DDEC6 charges by PACMAN v1.1"* (first line of every file). Those charges are
+**deliberately not read**: `UseChargesFromCIFFile no` discards the column and `ChargeMethod None`
+disables electrostatics entirely, and every framework type in `pseudo_atoms.def` carries charge
+`0.0`. So the interaction model is **Lennard-Jones only**. This is also why the `[ASR]`/`[FSR]`
+twins — coordinate-identical, differing only in that charge column — are one structure under two
+filenames under this protocol.
+
+**Supporting settings, uniform across a 400-deck sample and matching the replicate decks:**
+guest **CH4_sp3**, a TraPPE united atom at charge 0.0; **T = 298.0 K**; **P = 580,000 Pa (5.8 bar)**
+and **6,500,000 Pa (65 bar)**; `HeliumVoidFraction 1.0`, which leaves RASPA's excess conversion
+inert so the reported quantity is **absolute** loading. Engine **RASPA 2.0.37**, commit
+`4467e14c375c2e02f3839ffc63c14edf0bbde0a2`, identical in all sixteen `WORKSPACE.json` files.
+
+**File hashes**, so the Methods text can be pinned rather than described:
+
+```
+0ed430e444a1a5850f2383fc3a8686dda39b4f0445f8deba93eac713147e4fb5  force_field_mixing_rules.def
+7af262e06d52dc8adac53dc530ab2a4d7f228240d2b727da9efe0886f9d9b4a9  force_field.def
+7bc0d1b7eaec4ea4878a8c37f824eae1a8ec2f60f8ea458af70ce5ff7f737676  pseudo_atoms.def
+```
+
+### (2) Model identifier and campaign dates
+
+**Model identifier, exactly as recorded: `claude-opus-5`.** It is the `message.model` field on
+**18,368** assistant records across all sixteen replicate transcripts, and it is the **only** model
+string present. **It is measured, not configured** — no model is pinned in `harness/config.py` or
+`harness/replicate_settings.json`, so the transcript is the only evidence of what ran.
+
+One other string appears and is **not a second model**: `<synthetic>` on **54** records between
+**2026-09-01T15:04:00Z and 15:28:18Z**. That window is the account weekly-usage-limit halt
+(`harness/state/incident_20260902_weekly_limit/`), and these are harness-generated failure messages,
+not model output.
+
+**Campaign dates, UTC**, from `launched_at` in each `WORKSPACE.json` and from
+`harness/closures.jsonl`:
+
+| | UTC |
+|---|---|
+| **Launch — first replicate (rep01)** | **2026-08-29T05:12:32Z** |
+| Launch — wave 2, eight replicates | 2026-08-29T10:40:56Z – 10:41:39Z |
+| Launch — wave 3, seven replicates | 2026-08-29T11:42:09Z – 11:42:48Z |
+| First closure (rep17) | 2026-08-30T19:59:34Z |
+| **Last closure (rep09)** | **2026-09-01T16:29:01Z** |
+
+**The fleet did not launch at one instant**, and a Methods sentence saying it did would be wrong:
+rep01 started **5 h 28 min** before the second wave and **6 h 30 min** before the third. That offset
+is real and visible in the replicates' own clocks — rep01 logs *T+22.3h* at the same wall-clock
+moment rep09 logs *+16.3 h*. Campaign span, first launch to last closure: **3 d 11 h 16 min**.
+
+**One coverage limit on the model identifier, and it matters for a Methods claim.** The replicate
+transcripts on this host **begin at 2026-08-30T02:43:03Z**, twenty-nine seconds after
+`FLEET_RESUME` at 2026-08-30T02:42:33Z. The sessions from launch to the 2026-08-29T22:14:19Z fleet
+pause — the first 11–17 h of each campaign — ran on the **retired macOS host and their transcripts
+are not on this machine.** So `claude-opus-5` is established for the **post-resume** period, which
+is the majority of the record but not all of it. **I have not verified what ran before the pause and
+should not be quoted as having done so**; if the Methods text needs the whole campaign covered, that
+evidence has to come from the retired host or be stated as unavailable.
+
+— Bei (harness)
