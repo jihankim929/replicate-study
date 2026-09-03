@@ -6821,3 +6821,92 @@ Nothing else was touched. No ledger row was edited, the sealed deck tree and its
 unchanged, and no cluster file was written outside the run directories the jobs own.
 
 — Bei (harness)
+
+---
+
+## 2026-09-03T04:10:00Z (13:10:00 KST) — REPORT 048, descriptor export. **12,499 ROWS, ALL HASHES VERIFIED — AND 15 STRUCTURES CARRY A METAL THEIR FILE DOES NOT CONTAIN.**
+
+> **In one line:** `analysis/descriptors.csv` is built and committed at sha256
+> `69a9d834c4549c79bc6a43b938d366870ecc9795328b818b9c667ba3c6cf392e`, 12,499 rows over 9,167
+> coordinate groups with every CIF re-hashed against the manifest and 0 mismatches; **four requested
+> columns do not exist in the two sources and are absent rather than blank**, and the build's own
+> cross-check found **15 identifiers naming a lanthanide the file does not contain, in a closed
+> permutation cycle.**
+
+Read-only, as asked. The instrument is `harness/descriptors_build.py`; it opens four paths under
+`benchmark/frozen/` and writes one CSV. **`answer-key/` was not opened**, nor the SI tables, nor any
+run output. Per-column source fields are recorded in `analysis/README.md`.
+
+### 1. What is in the file
+
+**12,499 rows, 9,167 distinct coordinate groups, 27 columns.** Delivered from your list:
+`structure_id`, `coordinate_group_id`, framework density, metal element(s), number of atoms, the
+per-cell counts of C, H, N, O, F, Cl, S and B, and space group. Cell parameters, `tier`,
+`chemical_formula_sum` and a second atom count are carried alongside so the table can be checked
+without reopening the corpus.
+
+**Every CIF was sha256'd against its manifest line as it was read — 12,499 verified, 0 mismatches.**
+Membership is the manifest and not a directory walk, per your Q1 ruling. Three further checks, all
+clean: `_chemical_formula_sum` agrees with the counted atom loop for **all 12,499**, the atom loop
+agrees with `properties.json`'s `n_atoms` for **all 12,499**, and space group is present for **all
+12,499** with no exceptions.
+
+**Three figures reproduce filed values I did not consult while building.** The tier split comes out
+**9,835 structural / 2,664 byte-match**, which is STATE.md's uniform-validation result exactly;
+density min/median/max comes out **0.164 / 1.255 / 3.963 g/cm³**, which is `seal_notes.md`'s G3 table
+exactly; and the group count is **9,167**, REPORT 043's figure. Element counts come from the
+`_atom_site` loop and never from the formula string — the loop is what a simulation reads.
+
+### 2. Four of the columns you asked for do not exist in the sources
+
+**Helium void fraction, largest cavity diameter, pore-limiting diameter and accessible surface area
+are in neither source.** `properties.json` holds exactly four fields for every entry — `n_atoms`,
+`volume_A3`, `density_g_cm3`, `tier` — and none is a pore descriptor. The CIFs carry exactly nine
+tags: two symmetry, one formula, three cell lengths, three cell angles. **Scanned across all 12,499
+files, no CIF in the corpus holds a `surface_area`, `void_fraction`, `pore` or `_diameter` tag of any
+kind.** These are geometry that must be *computed* by probe insertion; there is no field to copy.
+You hedged two of the four with "if present" — space group is present, accessible surface area is
+not.
+
+**They are omitted rather than emitted as empty columns.** A blank cell reads downstream as
+*measured and null*, which is a stronger and falser claim than an absent column.
+
+**They do exist elsewhere, and I have not merged them.** `/home1/users/Bei/recon/out/c00-c39.csv` —
+the pre-launch reconnaissance pass, 12,499 rows, carrying `vf_he`, `d_max` and `dmin_ff` /
+`dmin_heavy`, established complete in REPORT 044. **It is a third source and you scoped this to
+two**, and merging it silently would put two provenances in one table with nothing in the file to
+separate them. It is one instruction away as a second table or as labelled columns.
+
+### 3. The metal rule, and why it is not the textbook one
+
+A textbook metal/non-metal split puts **As, Si, Ge, Sb, Te and Bi** on the non-metal side. **The
+corpus's own identifiers carry all six in the metal slot**, so a textbook list would have silently
+dropped them from `metal_elements`. The rule used is the complement of the elements the corpus
+itself names as metals — non-metals `H B C N O F P S Cl Se Br I` plus noble gases — and it recovers
+**61 distinct metals, the same 61 the identifiers use**, with **0 rows carrying no metal at all**.
+
+### 4. Two label anomalies. Flagged, not disposed.
+
+Neither affects the table: `metal_elements` is derived from the atoms, so every row describes the
+file that is actually there. Which label is authoritative is **your ruling, not an extraction**.
+
+**Class A — 15 structures whose identifier names a metal the file does not contain**, the file
+holding a *different* lanthanide instead. The internal `data_` block **agrees with the filename**, so
+identifier and internal label agree with each other and both disagree with the atoms. The
+disagreement is **a closed permutation inside each year group, not scatter**: 2019 runs
+Er→Pr→Gd→Ho→La→Er (5 files), 2021 runs Er→Ho→Tb→Tm→Er across the `[ASR]`/`[FSR]` twins (8 files),
+2023 is the swap Eu↔Sm (2 files). All nine elements involved are lanthanides. **A closed cycle is the
+signature of systematic mislabelling, not of independent slips.**
+
+**Class B — 8 structures whose CIF `data_` block disagrees with the filename**, disjoint from class
+A. **For all 8 the filename is corroborated by the atoms** — `[MnZnNaMo]` does contain Mn, Zn, Na, Mo
+and `[CuAsMoV]` does contain Cu, As, Mo, V — so the stale block is a leftover label and not evidence
+the file is wrong. Four are `_pacman` provenance suffixes, one is a raw formula string, three name a
+different structure outright. Lower severity, listed so it is on the record rather than rediscovered.
+
+**This is the fourth time an instrument here has been caught by chemistry rather than by a name**,
+and the standing belief holds: assume the next screen has a similar hole until it is validated
+against chemistry whose answer is known independently. I have not touched the frozen tree, the
+manifest, or any structure file — the corpus is mounted read-only and the export only read it.
+
+— Bei (harness)

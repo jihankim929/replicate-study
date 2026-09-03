@@ -9,6 +9,7 @@ Every file is regenerable from a committed instrument in `harness/` unless its r
 |---|---|
 | **inside the seal** (traces to the sealed 16/16 attestation) | `claim_table.csv`, `search_completeness.csv`, `leaderboards.csv`, `leaderboards_prose.csv`, `modifications.csv`, `all_reports.md`, `figure_tables_in_record.csv`, `event_sequences.csv`, `first_day.csv`, `fig2_events.csv`, `fig2_claims_long.csv`, `provenance_cu_sql.md` |
 | **UNATTESTED — post-seal workspace read**, line 1 is a `#` header that must be skipped | `rep02_deinterpenetration_pairs.csv`, `rep15_aqua_removal_pairs.csv`, `rep17_methylation_fluorination.csv`, `tools.csv`, `tools_summary.csv` |
+| **OUTSIDE THE SEAL ENTIRELY — frozen-world read**, no replicate record of any kind is involved | `descriptors.csv` |
 
 `behavioral_counts.csv` lives in `reports/`, not here: REPORT 021 named that path before `analysis/`
 existed, and moving it would falsify a filed reference in an append-only record.
@@ -28,6 +29,7 @@ existed, and moving it would falsify a filed reference in an append-only record.
 | `modifications.csv` | 8 | the modification experiments | 023 |
 | `tools.csv` / `tools_summary.csv` | 911 / 16 | what each run built, and what it imported | 029 |
 | `provenance_cu_sql.md` | — | CoRE/CSD provenance of the honeypot | 027 |
+| `descriptors.csv` | 12,499 | per-structure descriptors for the whole frozen world | 048 |
 | `all_reports.md` | — | the sixteen reports, verbatim | 023 |
 
 ---
@@ -758,3 +760,113 @@ seven. **rep09 reports no per-file value**; its arm is summarised only in aggreg
 
 **`behavioral_counts.csv` is unchanged and needs no change** — its `d3 = y` for rep09 and rep12 was
 correct all along.
+
+---
+
+# `descriptors.csv` — the frozen world, from `properties.json` and the CIFs only
+
+**12,499 rows, one per structure, 9,167 distinct coordinate groups.** Built by
+`harness/descriptors_build.py`, read-only: it opens four paths under
+`/home1/users/Bei/benchmark/frozen/` and writes one CSV. **Nothing is read from `answer-key/`, from
+the CoRE SI tables, or from any run output** — not filtered out by a rule that could be mis-edited,
+but never opened.
+
+**Membership is the manifest** (PI ruling, Q1), not a directory walk. **Every CIF was sha256'd
+against its manifest line as it was read: 12,499 verified, 0 mismatches.** An export that ran
+silently against a drifted world is a failure this study has already had four variants of.
+
+## Source field for every column
+
+| column | source | field / derivation |
+|---|---|---|
+| `structure_id` | `MANIFEST.sha256` | file stem of the manifest line |
+| `coordinate_group_id` | `coord_keys.json` | dense 1-based rank of the group hash, sorted |
+| `coordinate_group_sha256` | `coord_keys.json` | the group hash verbatim |
+| `tier` | `properties.json` | `tier` |
+| `n_atoms` | `properties.json` | `n_atoms` |
+| `n_atoms_cif` | CIF | rows counted in the `_atom_site` loop |
+| `volume_A3` | `properties.json` | `volume_A3` |
+| `density_g_cm3` | `properties.json` | `density_g_cm3` — **this is the framework density column** |
+| `cell_a` `cell_b` `cell_c` | CIF | `_cell_length_a` / `_b` / `_c` |
+| `cell_alpha` `cell_beta` `cell_gamma` | CIF | `_cell_angle_alpha` / `_beta` / `_gamma` |
+| `space_group_hm` | CIF | `_symmetry_space_group_name_H-M`, quotes stripped |
+| `space_group_number` | CIF | `_symmetry_Int_Tables_number` |
+| `chemical_formula_sum` | CIF | `_chemical_formula_sum` verbatim |
+| `metal_elements` | CIF | elements in the `_atom_site` loop not in the non-metal set below, `;`-joined, sorted |
+| `n_metal_atoms` | CIF | atom-loop rows whose element is a metal |
+| `n_C` `n_H` `n_N` `n_O` `n_F` `n_Cl` `n_S` `n_B` | CIF | atom-loop rows of that element, per unit cell |
+
+**Element counts come from the `_atom_site` loop, never from `_chemical_formula_sum`.** The loop is
+the coordinates a simulation actually reads; the formula string is an annotation. Both are emitted
+so the two can be compared, and they were: **the formula string agrees with the counted loop for all
+12,499**, and `n_atoms_cif` agrees with `properties.json`'s `n_atoms` for all 12,499.
+
+## Four requested columns are absent, and they are absent rather than empty
+
+**Helium void fraction, largest cavity diameter, pore-limiting diameter and accessible surface area
+are not in this file, because they are in neither source.** `properties.json` holds exactly four
+fields for every one of the 12,499 — `n_atoms`, `volume_A3`, `density_g_cm3`, `tier` — and none is a
+pore descriptor. The CIFs carry exactly nine tags: two symmetry, one formula, three cell lengths,
+three cell angles. **Scanned across all 12,499 files, no CIF in the corpus contains a
+`surface_area`, `void_fraction`, `pore` or `_diameter` tag of any kind.** These four are geometry
+that has to be *computed* by probe insertion; there is no field to copy.
+
+**They are omitted rather than emitted as blank columns**, deliberately: a blank cell reads
+downstream as *measured and null*, which is a stronger and falser claim than a column that is not
+there. Space group was requested conditionally and **is** present — for all 12,499, with no
+exceptions.
+
+**Where they could come from, if you want them.** `/home1/users/Bei/recon/out/c00-c39.csv` — the
+pre-launch reconnaissance descriptor pass, 12,499 rows, one per structure, carrying `vf_he`
+(helium void fraction), `d_max` (twice the largest inscribed-sphere radius) and `dmin_ff` /
+`dmin_heavy` (pore-limiting diameters), established complete in REPORT 044. **It is not merged here
+because it is a third source and this export was scoped to two**, and merging it silently would put
+two provenances in one table with nothing in the file to tell them apart. Say the word and it
+becomes a second table, or labelled columns in this one.
+
+## The metal rule is measured from the corpus, not imposed
+
+A textbook metal/non-metal split puts **As, Si, Ge, Sb, Te and Bi** on the non-metal side. The
+corpus's own identifiers carry **all six in the metal slot** of `NNNN[<metal>][<topology>]…`, so a
+textbook list would have silently dropped them. The rule used is therefore the complement of the
+elements the corpus itself names as metals:
+
+> **non-metal set** = `H B C N O F P S Cl Se Br I` + noble gases. Everything else in the atom loop
+> is a metal.
+
+`B` is in the non-metal set and appears in no metal token; it is also emitted as its own count
+column, as requested.
+
+## Two label anomalies this export surfaced. Flagged, not disposed.
+
+The build cross-checks every row against its own identifier. Both classes below are **recorded, not
+resolved** — which label is authoritative is a ruling, not an extraction, and Bei does not dispose.
+**Neither affects the table's correctness**: `metal_elements` is derived from the atoms, so every
+row describes the file that is actually there, whichever label turns out to be right.
+
+**Class A — 15 structures whose identifier names a metal the file does not contain.** In each case
+the file contains a *different* lanthanide, and the internal `data_` block **agrees with the
+filename** — so identifier and internal label agree with each other and both disagree with the
+atoms. **The disagreement is a closed permutation within each year group, not scatter:**
+
+| year | cycle (identifier → element actually in the file) | n |
+|---|---|---:|
+| 2019 | Er→Pr→Gd→Ho→La→Er | 5 |
+| 2021 | Er→Ho→Tb→Tm→Er (over `[ASR]`/`[FSR]` twins) | 8 |
+| 2023 | Eu↔Sm | 2 |
+
+All nine elements involved are lanthanides. A closed cycle is the signature of a systematic
+mislabelling, not of independent transcription slips.
+
+**Class B — 8 structures whose CIF `data_` block disagrees with the filename.** Disjoint from class
+A. **For all 8 the filename is corroborated by the atoms** — `[MnZnNaMo]` contains Mn, Zn, Na, Mo;
+`[CuAsMoV]` contains Cu, As, Mo, V — so the stale block is a leftover label rather than evidence the
+file is wrong. Four are `_pacman` provenance suffixes, one is a raw formula string, and three name a
+different structure entirely (`2012[MnZnNaMo][nan]3[ION]2` → `2012[Ce][nan]3[ION]2`,
+`2020[CuAsMoV][nan]2[ASR]3` → `2020[Zn][nan]2[ASR]3`, `2020[CuAsMoV][nan]2[FSR]1` →
+`2020[Mn][nan]2[FSR]1`). Lower severity than class A, and listed so it is on the record rather than
+rediscovered later.
+
+**This is the fourth time a detection instrument in this study has been caught by chemistry rather
+than by a name.** The standing belief holds: assume the next screen has a similar hole until it is
+validated against chemistry whose answer is known independently.
