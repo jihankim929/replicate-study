@@ -8088,3 +8088,106 @@ Table S3, but on these three agents the column is **substantively correct**: it 
 behaviour that happened, not a phrase that was copied.
 
 — Bei (harness)
+
+---
+
+## 2026-09-03T15:44:14Z (2026-09-04 00:44:14 KST) — REPORT 060, **STATUS ONLY.** Figure-4 queue progress. **SAMPLE 41 % COMPLETE, DESCRIPTOR TAIL NOT STARTED, AND NOTHING IN THE SAMPLE COMES WITHIN 9.97 OF THE AGENT REFERENCE.**
+
+> **In one line:** the sample is **1,231 of 3,000 runs ok** (428 of 1,500 structures with both legs),
+> the descriptor tail is **0 of 1,716**, **32 cores** are running with 567 more staged in mjs, the
+> trailing-24 h rate is **53.2 runs/h** but that window is diluted because the segment is only 18.9 h
+> old — the trailing-6 h rate is **105.7/h** — and the best structure measured so far is
+> **`2013[Zn][pcu]3[ASR]6` at 190.157 ± 0.839, which is 9.97 below the 200.125 reference.**
+
+Read-only. `fig4_milestone.py` was run without `--write-promotion`, so nothing was written; the
+cluster was queried read-only.
+
+### 1. Runs completed, per segment
+
+| segment | total runs | ok | failed | in flight | not yet done | structures complete |
+|---|---:|---:|---:|---:|---:|---|
+| **(1) sample** | 3,000 | **1,231** | 2 | 599 | 1,170 | **428 of 1,500** |
+| **(2b) descriptor tail** | 1,716 | **0** | 0 | 0 | 1,716 | 0 of 858 |
+
+Both segments are **OPEN**. The remaining queue behind them — the (2b) top-100 promotion, the (2a)
+agent tail and (3) the remaining claims — is unchanged from REPORT 051 and has not started.
+
+The cluster's own run log carries **1,281 lines, 1,278 `ok` and 3 `failed`**, of which 46 are
+`stage0` and 1,235 `stage1`; the difference against the 1,231 above is the `PRODUCED_ELSEWHERE`
+filter the queue loader applies, which is correct and not a discrepancy.
+
+### 2. Cores in use — 32, and "599 in flight" is not 599 cores
+
+`qstat -u Bei` lists **32 jobs, every one of them `1` node × `1` core and every one in state `R`**,
+under the ratified one-core-per-job geometry. `mjs qinfo` carries a further **567** entries for this
+account. **The submitter's "in flight 599" is therefore 32 running + 567 staged**, and the figure to
+read as compute is **32 cores**, not 599. Node groups in use: `aa`, `ac`, `amd`.
+
+Worth noting against the ratified numbers: the submitter's own log line reads
+`in flight 599 ... ceiling 240`. The 240 is `config.fleet_max_queued_jobs`, which governed the
+**16-replicate fleet** and not this post-campaign reference screen; every replicate campaign is
+closed. Flagged so the two numbers are not read as an enforcement breach.
+
+### 3. Trailing rate, and why the 24-hour figure understates it
+
+| window | completions | rate |
+|---|---:|---:|
+| trailing 6 h | 634 | **105.7 runs/h** |
+| trailing 12 h | 974 | 81.2 runs/h |
+| **trailing 24 h** | **1,278** | **53.2 runs/h** |
+| trailing 48 h | 1,278 | 26.6 runs/h |
+
+**The 24-hour rate is diluted and should not be projected from without saying so.** The first
+completion in this segment landed at **2026-09-02 20:45:52Z**, i.e. **18.9 h ago**, so a 24-hour
+window contains ~5 h in which no work existed and a 48-hour window contains ~29 h of it. The rate is
+also still climbing as staged jobs dispatch: 53.2 → 81.2 → 105.7 across the three windows.
+
+Run durations over the trailing 24 h: **median 0.32 h, mean 0.56 h, max 16.38 h.**
+
+### 4. Projected completion, on both bases
+
+| | at 53.2/h (trailing 24 h) | at 105.7/h (trailing 6 h) |
+|---|---|---|
+| **sample** — 1,769 runs left | 33.3 h → **2026-09-05 09:55 KST** | 16.7 h → **2026-09-04 17:24 KST** |
+| **descriptor tail** — 1,716 runs, sequential | 65.5 h → **2026-09-06 18:11 KST** | 33.0 h → **2026-09-05 09:38 KST** |
+
+The tail is projected **sequentially**, because the submitter works one global queue in the amended
+order and the tail's runs are not dispatched until the sample's drain. **My reading is that the
+truth sits nearer the faster column** — the slow figure is an artifact of the dilution above — but
+neither is a commitment: the 16.38 h maximum run in the last day shows the tail of the duration
+distribution is long, and a handful of those in the last chunk moves the closing date more than the
+mean rate does.
+
+### 5. Best retained structure in the sample, against 200.125
+
+**Agent reference:** 200.125 ± 0.529, rep06 on `2016[Cu][pts]3[ASR]1` — the highest agent-reported
+**retained** value. Twelve of sixteen runs reported that same structure, spanning **198.85–200.12**,
+so the fleet's own spread on it is ~1.3 units.
+
+| # | structure | WC | ± | vs 200.125 |
+|---|---|---:|---:|---:|
+| 1 | `2013[Zn][pcu]3[ASR]6` | **190.157** | 0.839 | **−9.968** |
+| 2 | `2013[SiCu][pcu]3[ASR]1` | 181.500 | 2.104 | −18.625 |
+| 3 | `2010[Co][lvt]3[ASR]1` | 176.219 | 1.312 | −23.906 |
+| 4 | `2010[Zn][pyr]3[ASR]1` | 174.708 | 1.821 | −25.417 |
+| 5 | `2010[Cu][nts]3[ASR]2` | 170.263 | 2.082 | −29.862 |
+| 6 | `2012[Cu][tbo]3[ASR]2` | 159.662 | 1.951 | −40.463 |
+| 7 | `2009[Cu][tbo]3[ASR]7` | 158.954 | 2.118 | −41.171 |
+| 8 | `2013[U][fcu]3[ASR]1` | 158.877 | 3.595 | −41.248 |
+| 9 | `2009[Cu][tbo]3[ASR]4` | 157.895 | 1.373 | −42.230 |
+| 10 | `2013[Cu][nan]3[ASR]1` | 156.291 | 0.893 | −43.834 |
+
+**NOTHING EXCEEDS THE AGENT REFERENCE.** The best is 9.97 below it, and 9.97 is far outside the
+combined uncertainty, so this is not a near miss. **On 428 of 1,500 structures this is a progress
+note and not a result** — the sample is a random draw over 9,167 coordinate-distinct groups and the
+top of a 29 % subsample is not the top of the sample.
+
+### 6. One cosmetic defect, not fixed
+
+`harness/fig4_milestone.py:165` raises `IndexError: list index out of range` on a segment with **no
+completed structures** — it formats `wc[0]` before checking the list is non-empty, which is what the
+descriptor-tail query does today. **Every count printed above it is correct and prints first**, so
+the report is complete before the traceback. Left alone: this is a status pass, and the file is
+committed and named in REPORT 051.
+
+— Bei (harness)
