@@ -6,6 +6,12 @@ themselves, plus `frozen/coord_keys.json` for the coordinate-group id and `froze
 for membership. NOTHING is read from `answer-key/`, from the SI tables, or from any run output.
 The script opens exactly the paths named in SRC below and no others.
 
+THIRD SOURCE, PI-AUTHORISED 2026-09-03: `recon/out/c00-c39.csv`, the pre-launch reconnaissance
+descriptor pass, merged on `structure_id` for four columns only -- `vf_he`, `d_max`, `dmin_ff`,
+`dmin_heavy`. Every merged column is prefixed `recon_` so the two provenances are separable IN THE
+FILE and not only in the README, which is the whole reason the merge was held back until authorised.
+The join is checked both ways and refuses to write on any unmatched key in either direction.
+
 MEMBERSHIP IS THE MANIFEST, not a directory walk (PI ruling, Q1). A file present on disk but
 absent from the manifest is not in the world and is not exported; a manifest line with no file is
 a hard error rather than a short table.
@@ -39,6 +45,8 @@ SRC = {
     "manifest":    FROZEN / "MANIFEST.sha256",
     "corpus":      FROZEN / "CoRE_MOF_2024_CR_united",
 }
+RECON_OUT = Path("/home1/users/Bei/recon/out")
+RECON_COLS = ["vf_he", "d_max", "dmin_ff", "dmin_heavy"]
 
 # Complement of the elements the corpus names in its own metal slot. B is here and is also emitted
 # as its own count column; it appears in no metal token.
@@ -113,12 +121,31 @@ def main():
 
     group_id = {k: i for i, k in enumerate(sorted(set(ckeys.values())), start=1)}
 
+    # Third source. Hashed as it is read, by a METHOD THAT IS STATED rather than assumed: sha256
+    # over the concatenated bytes of out/c*.csv in sorted filename order. REPORT 044 recorded a
+    # digest for this set that no obvious construction reproduces (SI note in analysis/README.md),
+    # so this build records its own reproducible one instead of carrying that value forward.
+    recon, rh = {}, hashlib.sha256()
+    for f in sorted(RECON_OUT.glob("c*.csv")):
+        blob = f.read_bytes()
+        rh.update(blob)
+        for r in csv.DictReader(blob.decode().splitlines()):
+            recon[r["stem"]] = r
+    recon_hash = rh.hexdigest()
+
+    only_manifest = set(manifest) - set(recon)
+    only_recon = set(recon) - set(manifest)
+    if only_manifest or only_recon:
+        sys.exit(f"recon join is not 1:1 -- {len(only_manifest)} manifest-only, "
+                 f"{len(only_recon)} recon-only; refusing to write")
+
     cols = (["structure_id", "coordinate_group_id", "coordinate_group_sha256", "tier",
              "n_atoms", "n_atoms_cif", "volume_A3", "density_g_cm3",
              "cell_a", "cell_b", "cell_c", "cell_alpha", "cell_beta", "cell_gamma",
              "space_group_hm", "space_group_number", "chemical_formula_sum",
              "metal_elements", "n_metal_atoms"]
-            + [f"n_{e}" for e in COUNTED])
+            + [f"n_{e}" for e in COUNTED]
+            + [f"recon_{c}" for c in RECON_COLS])
 
     rows, bad = [], {"hash": [], "natoms": [], "metal_vs_id": [], "no_spacegroup": [], "formula": []}
 
@@ -166,6 +193,8 @@ def main():
             row[t] = cif.get(t, "")
         for e in COUNTED:
             row[f"n_{e}"] = counts.get(e, 0)
+        for c in RECON_COLS:
+            row[f"recon_{c}"] = recon[sid][c]
         rows.append(row)
 
     out = Path(sys.argv[1])
@@ -175,6 +204,7 @@ def main():
         w.writerows(rows)
 
     print(f"rows={len(rows)} groups={len(set(r['coordinate_group_id'] for r in rows))}")
+    print(f"recon out/ sha256 (concat bytes, sorted names) = {recon_hash}")
     for k, v in bad.items():
         print(f"CHECK {k}: {len(v)}" + (f"  e.g. {v[:3]}" if v else ""))
 

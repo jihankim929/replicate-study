@@ -29,7 +29,7 @@ existed, and moving it would falsify a filed reference in an append-only record.
 | `modifications.csv` | 8 | the modification experiments | 023 |
 | `tools.csv` / `tools_summary.csv` | 911 / 16 | what each run built, and what it imported | 029 |
 | `provenance_cu_sql.md` | — | CoRE/CSD provenance of the honeypot | 027 |
-| `descriptors.csv` | 12,499 | per-structure descriptors for the whole frozen world | 048 |
+| `descriptors.csv` | 12,499 | per-structure descriptors for the whole frozen world | 048, 049 |
 | `all_reports.md` | — | the sixteen reports, verbatim | 023 |
 
 ---
@@ -763,13 +763,18 @@ correct all along.
 
 ---
 
-# `descriptors.csv` — the frozen world, from `properties.json` and the CIFs only
+# `descriptors.csv` — the frozen world, from `properties.json`, the CIFs, and the reconnaissance pass
 
-**12,499 rows, one per structure, 9,167 distinct coordinate groups.** Built by
+**12,499 rows, one per structure, 9,167 distinct coordinate groups, 31 columns.** Built by
 `harness/descriptors_build.py`, read-only: it opens four paths under
-`/home1/users/Bei/benchmark/frozen/` and writes one CSV. **Nothing is read from `answer-key/`, from
-the CoRE SI tables, or from any run output** — not filtered out by a rule that could be mis-edited,
-but never opened.
+`/home1/users/Bei/benchmark/frozen/` plus, under the PI authorisation of 2026-09-03, the
+reconnaissance pass at `/home1/users/Bei/recon/out/`, and writes one CSV. **Nothing is read from
+`answer-key/`, from the CoRE SI tables, or from any run output** — not filtered out by a rule that
+could be mis-edited, but never opened.
+
+**Columns come from three sources and the file says which**: everything from the reconnaissance pass
+carries a `recon_` prefix, so the provenances are separable without consulting this README. The
+recon join is checked in both directions and the build refuses to write on any unmatched key.
 
 **Membership is the manifest** (PI ruling, Q1), not a directory walk. **Every CIF was sha256'd
 against its manifest line as it was read: 12,499 verified, 0 mismatches.** An export that ran
@@ -795,34 +800,105 @@ silently against a drifted world is a failure this study has already had four va
 | `metal_elements` | CIF | elements in the `_atom_site` loop not in the non-metal set below, `;`-joined, sorted |
 | `n_metal_atoms` | CIF | atom-loop rows whose element is a metal |
 | `n_C` `n_H` `n_N` `n_O` `n_F` `n_Cl` `n_S` `n_B` | CIF | atom-loop rows of that element, per unit cell |
+| `recon_vf_he` | **recon pass** | `vf_he` — helium void fraction |
+| `recon_d_max` | **recon pass** | `d_max` — largest included-sphere diameter, **censored at 16 Å** |
+| `recon_dmin_ff` | **recon pass** | `dmin_ff` — smallest framework–framework distance, **not a pore diameter** |
+| `recon_dmin_heavy` | **recon pass** | `dmin_heavy` — same excluding H, **not a pore diameter** |
 
 **Element counts come from the `_atom_site` loop, never from `_chemical_formula_sum`.** The loop is
 the coordinates a simulation actually reads; the formula string is an annotation. Both are emitted
 so the two can be compared, and they were: **the formula string agrees with the counted loop for all
 12,499**, and `n_atoms_cif` agrees with `properties.json`'s `n_atoms` for all 12,499.
 
-## Four requested columns are absent, and they are absent rather than empty
+## Pore descriptors — the third source, PI-authorised 2026-09-03
 
-**Helium void fraction, largest cavity diameter, pore-limiting diameter and accessible surface area
-are not in this file, because they are in neither source.** `properties.json` holds exactly four
-fields for every one of the 12,499 — `n_atoms`, `volume_A3`, `density_g_cm3`, `tier` — and none is a
-pore descriptor. The CIFs carry exactly nine tags: two symmetry, one formula, three cell lengths,
-three cell angles. **Scanned across all 12,499 files, no CIF in the corpus contains a
-`surface_area`, `void_fraction`, `pore` or `_diameter` tag of any kind.** These four are geometry
-that has to be *computed* by probe insertion; there is no field to copy.
+**Two of the four originally-absent columns are now present, one is present under a different
+meaning than its name suggests, and pore-limiting diameter is still not available anywhere.**
 
-**They are omitted rather than emitted as blank columns**, deliberately: a blank cell reads
-downstream as *measured and null*, which is a stronger and falser claim than a column that is not
-there. Space group was requested conditionally and **is** present — for all 12,499, with no
-exceptions.
+Neither `properties.json` (four fields: `n_atoms`, `volume_A3`, `density_g_cm3`, `tier`) nor the
+CIFs (nine tags: two symmetry, one formula, three cell lengths, three cell angles) holds any pore
+descriptor — scanned across all 12,499, no CIF carries a `surface_area`, `void_fraction`, `pore` or
+`_diameter` tag. The merged columns therefore come from a **third source**, and every one is
+prefixed `recon_` so the two provenances are separable **in the file** and not only here.
 
-**Where they could come from, if you want them.** `/home1/users/Bei/recon/out/c00-c39.csv` — the
-pre-launch reconnaissance descriptor pass, 12,499 rows, one per structure, carrying `vf_he`
-(helium void fraction), `d_max` (twice the largest inscribed-sphere radius) and `dmin_ff` /
-`dmin_heavy` (pore-limiting diameters), established complete in REPORT 044. **It is not merged here
-because it is a third source and this export was scoped to two**, and merging it silently would put
-two provenances in one table with nothing in the file to tell them apart. Say the word and it
-becomes a second table, or labelled columns in this one.
+| source | path | hash |
+|---|---|---|
+| reconnaissance descriptor pass | `/home1/users/Bei/recon/out/c00–c39.csv` (40 files, 12,499 rows) | `b85913ba022924467cbd722b8786eedabe5efd35263aa98208bcfe33c8966aea` |
+| its force-field input | pinned UFF `force_field_mixing_rules.def` | `0ed430e444a1a5850f2383fc3a8686dda39b4f0445f8deba93eac713147e4fb5` |
+
+**The source hash is stated with its method**, because a digest without one is not checkable:
+sha256 over the concatenated bytes of `out/c*.csv` in sorted filename order. **REPORT 044 recorded
+`147db7ea…` for this same file set and that value is not reproducible** — fourteen constructions
+were tried (raw concat, `sha256sum | sha256sum`, digest-concat in four orderings, data-rows with and
+without headers, sorted and unsorted, with and without trailing newline) and none returns it. **The
+data is not what drifted:** nothing under `recon/` has been modified since 2026-08-29 12:43:59,
+which is before REPORT 044 was written, so whatever that report hashed, it hashed these exact bytes.
+The recorded digest, not the file set, is the thing that does not check out. Flagged, not resolved.
+
+### What the four columns actually are, from `geom.py`'s own definitions
+
+| column | source definition | read it as |
+|---|---|---|
+| `recon_vf_he` | *"fraction of unit-cell volume where a He probe centre fits, i.e. \|r − r_i\| > (σ_i + 2.58)/2 for every framework atom i"* | **helium void fraction** — as requested |
+| `recon_d_max` | *"2 × max over the cell of min_i(\|r − r_i\| − σ_i/2), the largest included-sphere diameter; a cavity-size proxy"* | **largest cavity diameter** — as requested, but see the ceiling below |
+| `recon_dmin_ff` | *"smallest framework–framework interatomic distance"* | **NOT a pore diameter.** A G3 overlap test |
+| `recon_dmin_heavy` | *"same, excluding hydrogen"* | **NOT a pore diameter.** The clash test that matters — real C–H bonds sit near 0.95 Å, so `dmin_ff` alone cannot separate a bond from a clash |
+
+**`dmin_ff` and `dmin_heavy` are clash metrics, not pore-limiting diameters.** They measure how close
+two framework atoms get, which is the opposite end of the geometry from how narrow a channel is.
+**This corrects REPORT 048**, which described them as pore-limiting diameters on the strength of the
+column names. **Pore-limiting diameter is not present in any source available to this study** — not
+in `properties.json`, not in the CIFs, and not in the reconnaissance pass. It would have to be
+computed.
+
+Their observed ranges are consistent with the corrected reading: `dmin_ff` runs 0.094–1.294 Å with a
+median of 0.929 Å, sitting right on the C–H bond length the docstring names, and **8 structures have
+`dmin_heavy` below 0.9 Å**, which is the heavy-atom clash the G3 screen exists to catch.
+
+### `recon_d_max` is right-censored at 16 Å, and the censoring hits the large-pore tail
+
+The pass computes cavity size on a grid with an **8 Å neighbour cutoff** (`RGEOM = 8.0`), so
+`d_max = 2 × RGEOM` **saturates at exactly 16.0000**. **215 structures sit at exactly 16.0000** and
+the largest value below it is 15.9934 — a hard ceiling, not a distribution.
+
+**Those 215 rows mean "≥ 16 Å", not "= 16 Å".** Anything that ranks, bins or fits on `recon_d_max`
+must treat them as right-censored or it will silently flatten the top of the range — and since the
+censored rows are by construction the **widest-pore structures**, they are exactly the ones a
+working-capacity screen cares about most. 270 structures are at or above 15 Å, so the ceiling
+absorbs about four fifths of that tail.
+
+### Provenance of the reconnaissance pass — audited, not assumed
+
+The PI asked for confirmation that this pass was computed from the frozen CIFs with no answer-key
+input. **Measured:**
+
+- **`recon/db/` is byte-identical to the frozen world.** 12,499 CIFs, the same set as
+  `MANIFEST.sha256` with 0 in the manifest and absent from `db/`, 0 in `db/` and not in the
+  manifest, and **0 byte mismatches** on a full re-hash.
+- **`recon/mods/` does not exist and never did.** `cifutil.find_cif` falls back to it, so this is
+  the check that closes the only other path by which a non-frozen structure could have entered.
+- **The input stem list is the whole world.** `recon/all_stems.txt` is exactly the manifest's 12,499
+  stems, and the output rows are exactly that set — so there was **no selection step at all**, and
+  therefore no key-derived subsetting to worry about.
+- **No answer-key reference exists anywhere under `recon/`**, and **no answer-key material exists
+  anywhere on the cluster.** The key lives only in the repository. (`frozen/coord_keys.json` is the
+  coordinate-group map, not the key.)
+
+**One qualification, and it is a real one: the inputs are the frozen CIFs *plus* a force field.**
+`geom.py` reads the pinned UFF `force_field_mixing_rules.def` for the Lennard-Jones σ of each
+element. So `vf_he` and `d_max` are **force-field-parameterised** descriptors, not pure coordinate
+geometry; `dmin_ff` and `dmin_heavy` are pure geometry. The docstring is explicit that this was
+deliberate — the pinned UFF set contains no helium pseudo-atom, so a Widom-helium insertion would
+have required editing a hash-pinned file, and the void fraction was computed geometrically from the
+same σ the protocol itself uses instead.
+
+**That force field is no longer reachable from `recon/`.** Its `toolchain` symlink points into
+`ws/s01`, which the registry purge removed, so **the pass cannot be re-run in place as it stands** —
+a reproducibility defect worth recording. The file itself survives: **18 copies exist on the cluster,
+including `toolchain_frozen/` and the live screen toolchain, and all 18 are byte-identical** at the
+hash in the table above. Since §3 pins the toolchain by hash and the record states it is never
+rebuilt mid-campaign, that is almost certainly the file `s01` held — but `s01`'s own copy is deleted,
+so **this is an inference from the pin, not a measurement against the bytes recon actually read.**
 
 ## The metal rule is measured from the corpus, not imposed
 

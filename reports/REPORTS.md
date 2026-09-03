@@ -6910,3 +6910,108 @@ against chemistry whose answer is known independently. I have not touched the fr
 manifest, or any structure file — the corpus is mounted read-only and the export only read it.
 
 — Bei (harness)
+
+---
+
+## 2026-09-03T05:05:00Z (14:05:00 KST) — REPORT 049, merge executed + provenance audit. **CONFIRMED CLEAN OF THE KEY — BUT TWO OF THE FOUR COLUMNS ARE NOT WHAT THEIR NAMES SAY, AND ONE IS CENSORED AT 16 Å. CORRECTS REPORT 048.**
+
+> **In one line:** the merge is committed at sha256
+> `435f3f3cddc3b9013e0cb643f6e403b950f90a783bcdba30e691954bb7d503e1`, 12,499 rows × 31 columns with
+> the four merged fields prefixed `recon_`; **the reconnaissance is confirmed key-free and computed
+> against a byte-identical copy of the frozen world**, with one qualification (a force field);
+> **`dmin_ff`/`dmin_heavy` are clash metrics and not pore-limiting diameters, correcting REPORT
+> 048**; and **`d_max` saturates at exactly 16 Å for 215 structures.**
+
+### 1. The confirmation you asked for — measured, not asserted
+
+**No answer-key input. Four independent checks:**
+
+- **`recon/db/` is byte-identical to the frozen world.** 12,499 CIFs, the same set as
+  `MANIFEST.sha256` — 0 in the manifest and missing from `db/`, 0 in `db/` and not in the manifest,
+  and **0 byte mismatches on a full re-hash of all 12,499.**
+- **`recon/mods/` does not exist and never did.** `cifutil.find_cif` searches `db/` then `mods/`,
+  so this closes the only other route by which a non-frozen structure could have entered.
+- **There was no selection step at all.** `recon/all_stems.txt` is exactly the manifest's 12,499
+  stems and the output rows are exactly that set — the pass ran over the whole world, so there is no
+  subsetting that could have been key-derived.
+- **No answer-key reference exists anywhere under `recon/`, and no answer-key material exists
+  anywhere on the cluster.** The key lives only in the repository.
+
+**One qualification, and it is real: the inputs are the frozen CIFs *plus* a force field.**
+`geom.py` reads the pinned UFF `force_field_mixing_rules.def` for each element's Lennard-Jones σ, so
+`vf_he` and `d_max` are **force-field-parameterised**, not pure coordinate geometry (`dmin_ff` and
+`dmin_heavy` are pure geometry). This was deliberate and the docstring says why: the pinned UFF set
+has **no helium pseudo-atom**, so a Widom-helium insertion would have meant editing a hash-pinned
+file, and the void fraction was computed geometrically from the same σ the protocol itself uses.
+**So the answer to "frozen CIFs only" is: frozen CIFs plus the pinned UFF table, and nothing else.**
+
+**That force field is no longer reachable from `recon/`** — its `toolchain` symlink points into
+`ws/s01`, which the registry purge removed, so **the pass cannot be re-run in place as it stands.**
+The file survives: **18 copies on the cluster, including `toolchain_frozen/` and the live screen
+toolchain, all 18 byte-identical** at `0ed430e444a1a5850f2383fc3a8686dda39b4f0445f8deba93eac713147e4fb5`.
+Since §3 pins the toolchain and the record says it is never rebuilt mid-campaign, that is almost
+certainly what `s01` held — but **`s01`'s copy is deleted, so this is an inference from the pin and
+not a measurement against the bytes recon actually read.** Recorded as such.
+
+### 2. CORRECTION to REPORT 048 — two of the four are not pore-limiting diameters
+
+REPORT 048 offered `dmin_ff` / `dmin_heavy` as pore-limiting diameters. **That was wrong, and it was
+wrong because I read the column names instead of the definitions.** `geom.py` defines them as:
+
+| column | the definition | what it is |
+|---|---|---|
+| `dmin_ff` | *"smallest framework–framework interatomic distance"* | a **G3 overlap test** |
+| `dmin_heavy` | *"same, excluding hydrogen"* | the **clash test** — C–H bonds sit near 0.95 Å, so `dmin_ff` alone cannot separate a bond from a clash |
+
+These measure **how close two framework atoms get** — the opposite end of the geometry from how
+narrow a channel is. The data agrees with the corrected reading: `dmin_ff` runs 0.094–1.294 Å with a
+**median of 0.929 Å**, sitting on the C–H bond length the docstring names, and **8 structures fall
+below 0.9 Å on `dmin_heavy`**, which is the heavy-atom clash G3 exists to catch. A pore diameter
+would not have that distribution.
+
+**Consequence: pore-limiting diameter is not available anywhere in this study** — not in
+`properties.json`, not in the CIFs, not in the reconnaissance pass. It would have to be computed.
+The other two are what their names say: `vf_he` is the helium void fraction and `d_max` is the
+largest included-sphere diameter, which the source itself calls *"a cavity-size proxy"*.
+
+### 3. `d_max` is right-censored at 16 Å, and the censoring lands on the structures that matter
+
+The pass computes cavity size on a grid with an **8 Å neighbour cutoff** (`RGEOM = 8.0`), and
+`d_max = 2 × RGEOM`. **215 structures sit at exactly 16.0000, and the largest value below it is
+15.9934.** That is a hard ceiling, not a distribution.
+
+**Those 215 rows mean "≥ 16 Å", not "= 16 Å."** Anything that ranks, bins or fits on `recon_d_max`
+must treat them as right-censored or it will silently flatten the top of the range — and the
+censored rows are **by construction the widest-pore structures**, which is exactly the population a
+working-capacity screen cares about. 270 structures sit at or above 15 Å, so **the ceiling absorbs
+about four fifths of that tail.** This is the same bound-versus-value distinction
+`censored_observations.csv` was built for, and it is now noted in `analysis/README.md`.
+
+### 4. The source hash, stated with its method — and REPORT 044's does not reproduce
+
+Recorded in the README: **`b85913ba022924467cbd722b8786eedabe5efd35263aa98208bcfe33c8966aea`**,
+by the method **sha256 over the concatenated bytes of `out/c*.csv` in sorted filename order**. A
+digest without its method is not checkable, which is the point of stating it.
+
+**REPORT 044 recorded `147db7ea…` for this same file set, and I cannot reproduce it.** Fourteen
+constructions were tried — raw concatenation, `sha256sum | sha256sum`, digest-concatenation in four
+orderings, data-rows with and without headers, sorted and unsorted, with and without a trailing
+newline — and none returns that value. **The data is not what drifted:** nothing under `recon/` has
+been modified since **2026-08-29 12:43:59**, which is *before* REPORT 044 was written, so whatever
+that report hashed, it hashed these exact bytes. **It is the recorded digest, not the file set, that
+does not check out.** Same class as the SI-008 stale guard: a number in the record that reads as a
+verification and is not one. Flagged, not resolved — and this build carries its own reproducible
+hash forward rather than REPORT 044's.
+
+### 5. The merge itself
+
+**12,499 rows × 31 columns**, joined on `structure_id`, **1:1 in both directions** — the build
+refuses to write if any key is unmatched either way. The four merged fields are prefixed `recon_`
+**so the two provenances are separable in the file and not only in the README**, which is the reason
+the merge was held until you authorised it. No blanks in any merged column. The rebuild reproduces
+every earlier check identically: **12,499 CIF hashes verified with 0 mismatches**, formula-vs-loop
+agreement for all 12,499, `n_atoms` agreement for all 12,499, space group present for all 12,499,
+and the same **15 class-A label anomalies** reported in REPORT 048, which are unchanged and still
+awaiting your ruling.
+
+— Bei (harness)
