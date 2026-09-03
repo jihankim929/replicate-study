@@ -7525,3 +7525,115 @@ should not be quoted as having done so**; if the Methods text needs the whole ca
 evidence has to come from the retired host or be stated as unavailable.
 
 — Bei (harness)
+
+---
+
+## 2026-09-03T06:22:05Z (15:22:05 KST) — REPORT 055, **READ-ONLY, Methods ↔ Table S5 reconciliation.** Per-agent deadline credits. **`restorations.jsonl` IS INCOMPLETE BY 9.62 h ON rep06.**
+
+> **In one line:** all sixteen agents carry the same **4.4704 h** fleet-pause credit, eleven carry a
+> fault restoration on top, and the fleet total is **231.3510 h**; but **a Table S5 built from
+> `restorations.jsonl` alone would read 221.7310 h**, because rep06's **first** restoration —
+> **9.6200 h, ruled 2026-08-30** — exists in its `WORKSPACE.json` and **has no row in the ledger.**
+
+Read-only. Every figure recomputed from its own window and independently checked against the filed
+deadlines.
+
+### Per agent, in hours
+
+| agent | fleet pause | fault restoration | **total extension** |
+|---|---:|---:|---:|
+| rep01 | 4.4704 | — | **4.4704** |
+| rep02 | 4.4704 | 13.9786 | **18.4490** |
+| rep03 | 4.4704 | 15.3094 | **19.7798** |
+| rep04 | 4.4704 | 15.6311 | **20.1015** |
+| rep05 | 4.4704 | — | **4.4704** |
+| **rep06** | 4.4704 | **24.6683** = 9.6200 + 15.0483 | **29.1387** |
+| rep07 | 4.4704 | 14.4324 | **18.9028** |
+| rep08 | 4.4704 | — | **4.4704** |
+| rep09 | 4.4704 | — | **4.4704** |
+| rep10 | 4.4704 | 15.1688 | **19.6392** |
+| rep11 | 4.4704 | 14.7466 | **19.2170** |
+| rep12 | 4.4704 | 15.3577 | **19.8281** |
+| rep13 | 4.4704 | 15.5461 | **20.0165** |
+| rep15 | 4.4704 | 14.8027 | **19.2731** |
+| rep16 | 4.4704 | — | **4.4704** |
+| rep17 | 4.4704 | 0.1829 | **4.6533** |
+| **fleet** | **71.5264** | **159.8246** | **231.3510** (9.64 d) |
+
+**Independent check.** For every agent I recomputed the fault hours from `to_ts − from_ts` and
+compared the total against `deadline_kst − (launched_at + 168 h)`. **Fifteen of sixteen agree to
+under a quarter of a second.** The sixteenth was rep06, whose filed deadline implied **29.1387 h**
+against **19.5187 h** of ledger credit — a 9.62 h gap that is the finding below. With rep06's first
+restoration included, **all sixteen reconcile.**
+
+### The defect: `restorations.jsonl` is missing a ruling
+
+**`restorations.jsonl` holds eleven rows, every one stamped 2026-08-31. It contains no 2026-08-30
+entry at all.** rep06 received **two** restorations, and only the second was ever written to it:
+
+| rep06 credit | h | ruling | in ledger? |
+|---|---:|---|---|
+| first | **9.6200** | PI ruling **2026-08-30**, REPORT 001 §4(f) | **NO** |
+| second | 15.0483 | PI ruling 2026-08-31, REPORT 006 §7(4) | yes |
+
+The 9.62 h survives only in rep06's `WORKSPACE.json` `deadline_basis` prose. **The deadlines
+themselves are correct** — rep06's filed deadline already carries both credits — so nothing was
+mis-run. **What is wrong is the ledger a Methods table would be built from**, and it is wrong in the
+direction that under-reports an extension. Cross-checked across all sixteen: **rep06 is the only
+gap**, every other agent's `fault_restoration_hours` matches the ledger sum exactly.
+
+### Causal rule for each credit
+
+**(1) Fleet pause — 4.4704 h, all sixteen, uniform across arms.** `FLEET_PAUSE`
+2026-08-29T22:14:19.952793Z → `FLEET_RESUME` 2026-08-30T02:42:33.483120Z. Reason of record:
+*"supervision host unavailable (planned operator absence, 24–48 h)"*. Not a fault and not
+arm-dependent — every agent gets the same number.
+
+**(2) The ten-agent fault batch — 13.9786 to 15.6311 h.** rep02, rep03, rep04, rep06, rep07, rep10,
+rep11, rep12, rep13, rep15. **PI ruling 2026-08-31 on REPORT 006 §7(4).** Two compounding causes,
+recorded identically on all ten:
+
+> the **hot-loop guard ended the campaign on five consecutive sub-minute turns that were an agent
+> correctly waiting on queued cluster jobs** (§2a), and **all three restarts were killed by systemd
+> within ~20 s because the replacement screen was started inside `study.poll.service`'s control
+> group** (§2b)
+
+**The hours differ only because the windows do**: each runs from that agent's own death
+(2026-08-30T03:26:37Z through 05:05:46Z, staggered) to one **common repair** at
+2026-08-31T04:04:28.798+09:00. Earliest death, largest credit — rep04 at 15.6311, rep02 at 13.9786.
+
+**(3) rep06's additional 9.6200 h — a different fault, and the only credit outside the batch.**
+**PI ruling 2026-08-30, REPORT 001 §4(f).** Cause, in the record's words: `restart_watch.sh` was
+*"relaunched with no argument, so it defaulted to `PHASE=smoke` and the s01/s02 roster; **rep06 died
+once and was never restarted**, while three cap-consuming restarts went to two other replicates."*
+Measured from last recorded activity **2026-08-29T12:37:21.500736Z** — the final `spend.jsonl` row
+whose token totals moved — to the pause stamp **2026-08-29T22:14:19.952793Z** = 9.6162 h, **ratified
+at 9.62**. This is a *supervision* fault, not the guard/systemd fault of (2), and rep06 is the only
+agent that suffered both.
+
+**(4) rep17 — 0.1829 h (10 min 58 s), and its cause line deserves a second look.** It carries the
+**identical cause string** to the ten-agent batch, but its window is
+2026-08-30T19:23:29Z → 19:34:27Z: **15 hours after the batch and eighty times shorter**, stamped at a
+separate repair (04:34:27 rather than 04:04:28 KST). A restart-ledger entry at 2026-08-30T19:03:35Z
+speaks of *"the three restarts charged to each of **these ten**"*, which places rep17 outside that
+set. **The string is plausibly inherited rather than separately determined.** Flagged, not resolved:
+the number is small and the deadline reconciles either way, but a Methods sentence attributing
+rep17's credit to the §2a/§2b mechanism is asserting more than the record establishes.
+
+### One downtime that is deliberately NOT in these numbers
+
+The **2026-09-02 account weekly-usage-limit halt** stopped the whole active fleet for 32–51 minutes
+per agent. **PI ruling 2026-09-02 on REPORT 014: logged as an environment event, no deadline
+restoration, deadlines untouched** (`harness/state/incident_20260902_weekly_limit/`). Restart
+counters were refunded under a separate ruling; **deadlines were not.** A Table S5 that credited it
+would disagree with the filed deadlines, so the omission is correct and should be stated rather than
+left to look like an oversight.
+
+### What Methods should say
+
+**Every agent: +4.4704 h.** **Eleven agents additionally: a fault restoration**, ten from one
+guard/systemd batch and rep06 alone carrying a second, earlier supervision fault. **Five agents —
+rep01, rep05, rep08, rep09, rep16 — received the pause credit only.** Fleet total **231.3510 h**,
+not the 221.7310 h the ledger alone yields.
+
+— Bei (harness)
