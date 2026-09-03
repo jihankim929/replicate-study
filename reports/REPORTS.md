@@ -7015,3 +7015,88 @@ and the same **15 class-A label anomalies** reported in REPORT 048, which are un
 awaiting your ruling.
 
 — Bei (harness)
+
+---
+
+## 2026-09-03T04:54:50Z (13:54:50 KST) — REPORT 050, **STATUS ONLY.** Per-segment counts, cores, rate and projected dates. **THREE OF THE FOUR SEGMENTS HAVE NOT STARTED, AND STAGE 1 IS STOPPED RATHER THAN SLOW.**
+
+> **In one line:** 328 Figure-4 runs are complete, **all of them in segment (1)**; we hold **16 cores**,
+> down from 36 four hours ago; the requested trailing-24-hour rate is **328 — every completion the
+> campaign has ever produced**, because the campaign is **8.1 hours old** and the window is three
+> times longer than its whole history; and **reference Stage 1 has nothing in flight**, so no date
+> can be projected for it at any rate.
+
+State as of **2026-09-03T04:52:05Z**. Nothing was submitted, killed or edited to produce this.
+
+### 1. The four Figure-4 segments and Stage 1
+
+Segments run in your ruled order **(1) → (2a) → (2b) → (3)**, so the dates below are **sequential and
+cumulative**, not independent: (2a) cannot start before (1) drains. Both date columns are computed at
+**today's 16 cores**.
+
+| segment | total runs | done | remaining | cores now | 24 h | ETA @ measured cost | ETA @ plan cost |
+|---|---:|---:|---:|---:|---:|---|---|
+| (1) sample | 3,000 | **313** | 2,687 | **9** | 313 | 2026-09-06 | 2026-09-09 |
+| (2a) agent-side tail | 1,142 | **0** | 1,142 | 0 | 0 | 2026-09-09 | 2026-09-23 |
+| (2b) descriptor tail | 1,716 | **0** | 1,716 | 0 | 0 | 2026-09-11 | 2026-09-27 |
+| (3) remaining claims | 4 | **0** | 4 | 0 | 0 | 2026-09-11 | 2026-09-27 |
+| **Figure-4 total** | **5,862** | **313** | **5,549** | **9** | 313 | **2026-09-11** | **2026-09-27** |
+| — Stage 0 requeue (not in the queue above) | 46 | 15 | 31 | 7 | 15 | 2026-09-05 | — |
+| **reference Stage 1** | **24,998** | **1** | **24,997** | **0** | 1 | **none — see §4** | **none** |
+
+**Figure-4 has consumed 154.30 CPU-h.** Measured mean cost per run is **0.4387 CPU-h at floor grade**
+(n = 312) and **1.1628 at claim grade** (n = 15), against the pre-registered 0.913 and 4.565. The two
+date columns are the same arithmetic over those two cost bases: **3,264 CPU-h remaining measured,
+9,251 remaining at plan.**
+
+### 2. The trailing-24-hour rate is not a rate, and I am not going to present it as one
+
+**The campaign is 8.1 hours old.** First completion 2026-09-02T20:45:52Z, most recent
+2026-09-03T04:50:19Z. A 24-hour window is **three times longer than the campaign's entire history**,
+so "completions in the trailing 24 h" and "completions ever" are **the same 328 runs**. Projecting
+5,549 remaining runs at 328/day gives 16.9 days, and that number is an artefact of the window, not a
+measurement of throughput.
+
+**What was actually observed, hour by hour (UTC):**
+
+| hour | 20 | 21 | 22 | 23 | 00 | 01 | 02 | 03 | 04* |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| completions | 1 | 3 | 12 | 68 | 76 | 46 | 72 | 34 | 16 |
+
+*\*partial — 52 minutes of the hour elapsed.*
+
+**The rate is falling, and it is falling because our core count is falling.** Peak was 76/h; the last
+full hour was **34/h**. We held 36 cores at 11:40 KST and hold **16** now. The cluster is tighter than
+it was: **472 usable cores, 440 in use, 32 free, 108 down.** We are not being throttled — there is
+nothing to dispatch into. **567 of our jobs sit registered in mjs** behind that.
+
+So the honest bracket on the whole Figure-4 queue at today's 16 cores is **2026-09-11 on measured
+costs and 2026-09-27 on plan costs**, and both move with the core count: the same work finishes in
+**3.8 / 10.7 days at 36 cores** and **0.6 / 1.6 days at the 240-core backed-off ceiling.** The core
+count, not the queue, is what sets the date.
+
+### 3. Two reasons the measured column is the optimistic end, not the likely one
+
+**The costs are still right-censored** (REPORT 047): 328 completions against 583 dispatched, and what
+has finished is what finished fastest. The floor mean has already drifted up from 0.371 to **0.4387**
+as slower runs land, which is the censoring resolving in the direction predicted.
+
+**Nothing measured so far is claim-grade Figure-4 work.** All 313 segment-(1) completions are floor
+grade. The only claim-grade evidence is the 15 Stage 0 requeue runs, and **segment (2a) is 1,142
+claim-grade runs — the single largest block of cost in the queue at 5,213 plan CPU-h.** Its ETA rests
+on 15 observations from a different segment.
+
+### 4. Stage 1 is stopped, not slow
+
+**Reference Stage 1 stands at 1 run of 24,998**, unchanged since REPORT 042, and **Stage 0 at 50 of
+600**. The trailing-24-hour count for Stage 1 is **1**, but that is a single job that finished
+**16.1 hours ago** from a wave that is over — **there are zero `scr1_*` jobs in flight, queued or
+running, and zero cores on it.**
+
+Taken literally, 24,997 runs at 1/day is **68 years**, and quoting that as a projection would be
+worse than useless. **The correct statement is that no completion date exists for Stage 1 at the
+current rate, because the current rate is zero and nothing is queued.** It resumes when it is
+submitted, and every free core is going to Figure-4 by design. REPORT 042's headline is unchanged:
+**Stage 1 is 1 run of 24,998 and the top 500 cannot be identified.**
+
+— Bei (harness)
