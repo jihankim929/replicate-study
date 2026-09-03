@@ -139,7 +139,7 @@ Launch timestamp and stamped deadline for all sixteen agents, with arm, campaign
 
 Endgame behaviour at the deadline, forced-filing observations, and final burn and cost for both smoke agents.
 
-- **sha256** `f2dc9f165eaf42c9337c58dcaefe08a04ac62028b0479aaea96c1c39fa39b59b`  (11,619 B)
+- **sha256** `d64a7f0ff4a424a0f0777f33c36a5572436ac484462606f11f1d28d3690d8ab3`  (11,619 B)
 - **Sources:**
   - `reps/smoke/collected/COLLECTION.md` — `8c6b1f9441842725da9028507f208cb36cc126c756212fa41ccbbb0edae7d2d3`
   - `harness/sessions/s01.loop.log` — `b04226cdb052629a856ec51e6b041673355c22dbca25f8b53602c3e645d00165`
@@ -167,7 +167,7 @@ Date and commit hash of the two pre-analysis amendments and of the Figure 4 amen
 
 Origin of the 199.7 ± 3.2 cm³ cm⁻³ band and the σ = 3.2 provenance spread. INCOMPLETE - the band is not in the record.
 
-- **sha256** `ad2bd7e1c8a77c236503b4f06b6489bb06993854bb24b826ca9c6a65610873ae`  (5,405 B)
+- **sha256** `e80b992de783d2c26ed273693de007dfc18ccbd97485fc3d6ce4e40c1c8b8944`  (5,405 B)
 - **Sources:**
   - (searched: whole repository)
 - **Method:** NEGATIVE RESULT. Neither '199.7 ± 3.2' nor a sigma of 3.2 described as a provenance spread occurs anywhere in this repository. The band is presumably a main-text quantity, and the record states three times that there is no manuscript here. The file records the search, the four nearest candidates in the record with their loci, and what is needed to close it.

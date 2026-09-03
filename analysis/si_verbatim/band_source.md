@@ -47,7 +47,7 @@ are listed so that the band can be identified quickly if it derives from one of 
 > (`2021[Cu][sql]2`, ≈207) is not the comparison** — it is excluded, and measuring against it
 > answers a different question.
 
-— `reports/REPORTS.md:7173`
+— `reports/REPORTS.md:7174`
 
 **Centre ≈ 199.5, half-width ≈ 0.64.** The right structure and roughly the right centre; the
 spread is 5× too small, and its basis is inter-run reproduction, not provenance.
@@ -63,7 +63,7 @@ spread is 5× too small, and its basis is inter-run reproduction, not provenance
 | **Delta over best-admissible** | **+17.9 to +28.8**, midpoint **+23.4** |
 | The ruling's figure | **+22** (177.54 vs **~199**) — inside the measured band |
 
-— `SI_LEDGER.md:1068`
+— `SI_LEDGER.md:1076`
 
 **This is the only place in the record where the figure "~199" appears as a band centre.** Its
 half-width, however, is **±5.5** (195.41–206.37), not ±3.2, and it is a range across structures

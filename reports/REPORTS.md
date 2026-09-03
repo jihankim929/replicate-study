@@ -7637,3 +7637,138 @@ rep01, rep05, rep08, rep09, rep16 — received the pause credit only.** Fleet to
 not the 221.7310 h the ledger alone yields.
 
 — Bei (harness)
+
+---
+
+## 2026-09-03T14:45:33Z (23:45:33 KST) — REPORT 056, **SI verbatim extracts filed at `c9ee50e`.** Ten of twelve. **TABLE S4 AND THE 199.7 ± 3.2 BAND DO NOT EXIST IN THIS REPOSITORY, AND SIX OF THE ELEVEN CHARTER-READ AMBIGUITIES WERE NEVER ANSWERED ANYWHERE IN THE CHARTER.**
+
+> **In one line:** `analysis/si_verbatim/` is committed at
+> **`c9ee50e584030ff32f4ae801fdb7c0cee1b2fd27`** — 12 files, 1,033 insertions, **10 of the 12
+> requested deliverables complete**, each carrying its source path and sha256; **two could not be
+> produced from the record and neither was filled by invention** — `warning_passages.csv` needs
+> main-text Table S4 and there is no manuscript here, and the **199.7 ± 3.2 band and its σ = 3.2
+> provenance spread occur nowhere in the repository**; and building the CHARTER-READ mapping
+> surfaced a finding of its own: **of the eleven logged ambiguities, three produced two charter
+> edits at the seal, one was answered post-seal under another replicate's name, and six were never
+> answered at all.**
+
+Read-only with respect to every record. Nothing was written back into a workspace, a ledger or a
+prereg document; the 56 unrelated working-tree modifications were left untouched and the commit
+contains only `analysis/si_verbatim/`.
+
+### 1. What is filed, and how each was produced
+
+| File | Rows / size | Method |
+|---|---:|---|
+| `charter_v1_common.md` | 141 lines | Rendered, not transcribed — see §2 |
+| `charter_v1_appendixA.md` | 50 lines | Rendered, not transcribed — see §2 |
+| `charter_revisions.csv` | 10 | Rev 12–21; heading and first attribution paragraph verbatim, extracted programmatically |
+| `exclusion_set.csv` | 6 | Sealed final state; φ_He and ρ from the dossier table the disposition was applied to |
+| `defect_ledger.csv` | 20 | SI-001…SI-020 across the six requested aspects, verbatim spans |
+| `charter_read_entries.csv` | 11 | Harvest text verbatim; every edit-mapping checked by git diff — see §4 |
+| `rubric_sealed.md` | 229 lines | Byte-for-byte copy; unchanged since the seal at `c67fff5` |
+| `launch_times.csv` | 16 | `launched_at` / `deadline_kst` as stamped, 8 gated / 8 ungated |
+| `smoke_endgame.md` | 247 lines | Quotation only; every block carries its file and line |
+| `amendments.csv` | 4 | Commit hashes and subjects read from git |
+| `band_source.md` | 112 lines | **Negative result** — see §3 |
+| `warning_passages.csv` | — | **Not produced** — see §3 |
+
+### 2. The two charter documents were rendered through the pipeline, not copied out of the source
+
+`prereg/charter_v0.9.md` is the v1.0 source but is **not** what any replicate received: §1's
+mandate and §4's sub-brute-force paragraph carry `{{smoke=…|main=…}}` spans, and the §4/§5 tables
+carry both phases' rows. Transcribing the source would have produced a document no arm ever read.
+Both files were therefore produced by the same three-stage pipeline `provision.py` and
+`rerender_charter.py` use — `split_charter(render_phase_prose(render_phase_rows(src, 'main'), 'main'), arm)`.
+
+**The unchecked arm's charter *is* the common body.** `split_charter` truncates at the appendix
+marker and drops the trailing separators, so the ungated render ends at §9 and carries neither
+Appendix A nor the REVISION RECORD that follows it. Verified on the output rather than asserted:
+**0 unrendered phase spans in either file, and `APPENDIX A — AUDIT GATES` absent from the common
+body.** That is the SI-008 / SI-016 discipline applied to a deliverable — review the rendered
+artefact, never the source.
+
+### 3. The two that could not be produced, and what would close them
+
+**(a) `warning_passages.csv` — blocked on main-text Table S4.** The request is for each of its rows
+with the full passage and its file and line. **`Table S4` appears nowhere in this repository**; the
+only supplementary table named anywhere is **Table S5**, in REPORT 055. The reason is structural and
+already on the record four times independently — *"There is no manuscript in this repository"*
+(`prereg/rubric_v1.0.md:14`, `STATE.md:1124`, `LOG.md:1857`, `reports/REPORTS.md:5371`). **Give me
+Table S4's rows and the file follows directly**; every candidate passage source is already indexed.
+
+**(b) `band_source.md` — filed as a negative result.** Searched case-insensitively across every
+tracked text file: **`± 3.2` / `+/- 3.2` / `±3.2` → 0 hits; `sigma = 3.2` / `σ = 3.2` → 0 hits;
+`± 3.` in `analysis/`, `reports/`, `prereg/`, `STATE.md`, `LOG.md` → 0 hits; `provenance`
+collocated with a spread or σ → 0 hits.** Every literal `199.7` in the record is a single measured
+value for `2016[Cu][pts]3[ASR]1`, not a band centre.
+
+The file records the search and the four nearest candidates with their loci, none of which is the
+band:
+
+| Candidate | Value | Why it is not it |
+|---|---|---|
+| Figure-4 reference comparison (`REPORTS.md:7174`) | 200.125 ± 0.529; twelve runs spanning **198.85–200.125** | Right structure, centre ≈199.5, but the spread is **5× too small** and its basis is inter-run reproduction |
+| SI-015 open-metal band (`SI_LEDGER.md:1076`) | **195.41–206.37**, midpoint 200.9; ruling figure *"~199"* | The record's **only** "~199" as a band centre, but half-width **±5.5**, and a range across structures rather than a σ |
+| s01's G7 audit (`s01/git-log.txt`, `c2546d5`) | per-run **σ 3.11** against duplicate-pair 2.18 | Nearest σ in the record, but a reproduction σ on the smoke slice, attached to no 199.7 centre |
+| Literal `199.7` occurrences | six per-run values, 199.73–199.79 | Individual measurements |
+
+**A spread across deposition provenances is not computable from what is held here**, and that is
+already established: `analysis/provenance_cu_sql.md` finds **every row of the CoRE metadata is
+`Source = SI`** with **zero CSD-shaped refcodes across all 2,664 rows**, so the `refcode` field
+holds a publisher SI filename token and not a provenance.
+
+### 4. A finding that came out of building `charter_read_entries.csv`
+
+The request was for each entry and the v1.0 edit it produced. **The record contains no such
+mapping**, so each of the eleven was traced individually and every claim checked by
+`git diff prereg/charter_v0.9.md` between the pre-harvest state (`db78835`, Rev 17) and HEAD.
+The result:
+
+| Outcome | Entries | Which |
+|---|---:|---|
+| Produced a charter edit **at the seal** | **3** (→ 2 edits) | s01 `LOG.md:141` → **Rev 18**, G4 rewritten adsorbate-aware; s02 `LOG.md:11` and `LOG.md:276` → **Rev 19 §2**, absolute not excess |
+| Answered **post-seal, credited to someone else** | **1** | s01 `LOG.md:69` (G3 void-fraction method) → **Rev 21(b)**, which the revision record attributes to **rep01's escalations**, not to the smoke entry that raised it first |
+| Answered **post-seal, mid-main-run** | **1** | s02 `LOG.md:269` (§4 vs §3 conflict) → **Rev 24**, ruled on REPORT 006 and not attributed to it |
+| **No charter edit, anywhere** | **6** | s01 `:76` (G3 charge balance on unmodified entries), s01 `:193` (cycle-count floor vs internal triage), s01 `:261` (G7 audit cycle grade), s02 `:19` (energy grids), s02 `:282` (duplicate geometries in §1's N), s02 `:288` (modification permissive not required) |
+
+**SI-015's argument for promoting `[CHARTER-READ]` into §6 was that without it *"every remaining
+under-specified sentence in v1.0 would be resolved twenty times, silently, in twenty different
+directions."* The instrument fired eleven times and six of those sentences went into the main run
+unchanged.** That is not a defect in the instrument — it detected them, and the harvest's own
+closing note flagged §2 as *"the strongest v1.0 candidate"* and got it. It is a gap between
+detection and disposition, and it is measurable only now because the mapping was built. Whether
+the six were judged not to need an edit or were simply not reached is **not recoverable from the
+record**: no ruling exists against any of them.
+
+### 5. One open obligation, and I have not discharged it
+
+`exclusion_set.csv` reads out sealed material. `answer-key/ACCESS_LOG.md` carries the standing rule
+of 2026-08-26 — the directory opens **only on explicit PI instruction**, every opening is logged,
+and *"An unlogged access is a defect even if it was authorised."*
+
+**This access is not logged.** Logging it is a write to `answer-key/`, and the deliverable was
+specified read-only, so I stopped rather than decide that for you. **The instruction to build
+`exclusion_set.csv` is the authority; the entry is the part that is missing.**
+
+The scope read out is **wider than any prior access**, and that is why it should not be logged by
+me in passing. Access 4 read out *"the six excluded structure ids"* and explicitly recorded that
+**"no exclusion-set reasoning, no dossier content, no disposition text"** left the directory. This
+deliverable reads out **the disposition rule, the per-structure grounds verbatim, the net charges,
+φ_He, densities and mechanisms** — i.e. the reasoning access 4 withheld. That is appropriate for an
+SI at publication, and it is exactly the kind of scope change the log exists to record.
+
+**One line from you and I file it as access 5**, with the scope stated the way access 4 stated
+its own.
+
+### 6. Verification
+
+`analysis/si_verbatim/README.md` carries, per file, the **source path and sha256 of every source
+read** and the sha256 of the deliverable, against `HEAD = 597f3db`. Row counts check against the
+request: **10** revisions, **6** exclusions, **20** ledger entries, **11** CHARTER-READ entries,
+**16** launches, **4** amendments. All six CSVs parse with no empty columns. The eleven exclusion-set
+files were cross-checked against `analysis/descriptors.csv`: **every value agrees and each
+coordinate-identical twin shares its group's φ_He and ρ**, which is the independent confirmation
+that the twins are twins.
+
+— Bei (harness)

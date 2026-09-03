@@ -6,7 +6,7 @@ here is paraphrased and nothing is recomputed.*
 
 **Bell: 2026-08-29 09:00:00 KST (`1787961600`).** Launch was 2026-08-26 15:28 KST, so the
 campaign was **65.53 h**, not the nominal 72 h — §5's table says *"3 days"* but sets **T** at
-09:00 KST on the third day (`SI_LEDGER.md:200`).
+09:00 KST on the third day (`SI_LEDGER.md:196`).
 
 ---
 
@@ -80,7 +80,7 @@ is only tested between iterations and neither replicate's invocation had returne
 > were file touches, not model turns. **A halt would have been called on a filesystem
 > timestamp.**
 
-— `LOG.md:2150`
+— `LOG.md:2151`
 
 The last commit in each workspace (`reps/smoke/collected/s0*/git-log.txt`):
 
@@ -102,13 +102,13 @@ The last commit in each workspace (`reps/smoke/collected/s0*/git-log.txt`):
 | Transcript audit (§4 out-of-scope access) | 305 tool calls, **0 findings** | 201 tool calls, **0 findings** |
 | Jobs alive at the bell | 0 | 0 |
 
-— `reps/smoke/collected/COLLECTION.md:36`, `:58`
+— `reps/smoke/collected/COLLECTION.md:37`, `:58`
 
 > **Both arms filed. Neither is a `MISSING_FINAL_REPORT`.** Under the collector as it stood
 > before SI-010 the gated arm's compliant report would have been scored missing; it was
 > collected here by name, and `REPORT_FILENAME_AS_FILED` records which name each used.
 
-— `reps/smoke/collected/COLLECTION.md:47`
+— `reps/smoke/collected/COLLECTION.md:50`
 
 ---
 
@@ -146,7 +146,7 @@ unanswered:
 > **no protocol-grade headline number**, and the proximate cause is an unanswered 10 CPU-h
 > question.
 
-— `SI_LEDGER.md:920`
+— `SI_LEDGER.md:922`
 
 Its own closing note, written before the deadline it did not know was uncontactable:
 
@@ -155,7 +155,7 @@ Its own closing note, written before the deadline it did not know was uncontacta
 >
 > There was. Nothing was authorised, because nothing was read.
 
-— `SI_LEDGER.md:929`
+— `SI_LEDGER.md:926`
 
 **s01 filed early and went quiet**, with no budget pressure of any kind: it closed at 88.5 % of
 the compute cap and 55.2 % of the token cap, and its last act was a self-correction narrowing
@@ -181,7 +181,7 @@ its own claim (`LOG.md:1089`, `LOG.md:1134` — *"s01 has filed and is quiet."*)
 | Jobs submitted / completed | 189 / 189 | 108 / 108 |
 | Jobs alive at the bell | 0 | 0 |
 
-— `reps/smoke/collected/COLLECTION.md:58`
+— `reps/smoke/collected/COLLECTION.md:54`
 
 ### 4.2 Cost, at published list rates
 
@@ -201,7 +201,7 @@ Measured at list price ($5 / $25 per MTok; cache-create 1.25× input, cache-read
 > basis is *input + output + cache_creation*, cache reads excluded — so the 45 M cap bounds the
 > meter, not the spend.
 
-— `harness/LAUNCH_GATE.md:204`
+— `harness/LAUNCH_GATE.md:206`
 
 Cache-read spend decomposition for s01: **$81.97 (60 % of the bill); everything else (fresh
 input, output, cache writes) $54.01. Lifetime total $135.99.**
@@ -215,7 +215,7 @@ input, output, cache writes) $54.01. Lifetime total $135.99.**
 | Active-session span | 40.10 h (61.2 % duty) | **2.02 h (3.1 % duty)** |
 | **Tokens per hour actually worked** | **165.1 k/h** | **647.1 k/h** |
 
-— `SI_LEDGER.md:282`
+— `SI_LEDGER.md:284`
 
 > **The arm that read as low-burn is the high-burn one.** […] On the only basis that forecasts an
 > unattended run — tokens per hour of actual work — **s02 burns 3.9× faster than s01.** Its
@@ -238,10 +238,10 @@ input, output, cache writes) $54.01. Lifetime total $135.99.**
 >    that decreases is not a counter. It is already known to be a floor rather than a total
 >    (SI-001) and is retained only as the evidence for that entry.
 
-— `reps/smoke/collected/COLLECTION.md:73`
+— `reps/smoke/collected/COLLECTION.md:70`
 
 **Contamination note, from SI-006.** The smoke did not compare two working replicates: s02 sat
 at a blocking spend-limit modal for 39.16 h — 59.7 % of the 65.53 h campaign — before its
 2026-08-28 restart. *"Every cross-arm comparison in `STATUS.md`'s divergence panel is
 contaminated, and the panel does not say so. […] The smoke has one usable trajectory, not two."*
-— `SI_LEDGER.md:452`
+— `SI_LEDGER.md:448`
