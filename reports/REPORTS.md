@@ -7191,3 +7191,119 @@ reference. On 1% of the segment that is a progress note and not a result, and I 
 landscape off it.
 
 — Bei (harness)
+
+---
+
+## 2026-09-03T05:50:15Z (14:50:15 KST) — REPORT 052, **READ-ONLY, for the Ethics statement.** Escalations answered, and interventions outside the pre-registered clause. **THERE IS NO DECISION TABLE, AND THERE WERE INTERVENTIONS.**
+
+> **In one line:** **58 escalations** were received and **all 58 were handled exactly as §8
+> pre-registers — logged and read at a collection point** — but §8 is **one clause, not a decision
+> table**, and it pre-registers a *channel*, not a set of answers: **49 of the 58 got an answer that
+> §8 explicitly does not guarantee, and not one of the 58 was resolved by a rule lookup.** And yes —
+> **interventions occurred outside it**, eleven classes of them, three of which changed what
+> replicates did.
+
+Read-only. Nothing was submitted, edited or delivered to produce this.
+
+### 0. Two premises in the question that the record does not support
+
+**(i) There is no pre-registered decision table.** I looked for one and there is no such artifact in
+`prereg/`, in the charter, or in the harness. What exists is **§8 as rewritten 2026-08-29**, and all
+58 escalation rows carry that single text, character-identical, in their `charter_text` field:
+
+> *"logged, and read at collection points; an answer within your campaign is not guaranteed"*
+
+That is a **channel guarantee, not an answer rule**. It commits the study to logging and reading; it
+commits it to nothing about what comes back. So "answered from the pre-registered decision table"
+has no true non-zero value — **the honest count is 58 of 58 handled under the pre-registered clause,
+and 0 of 58 decided by a table, because there is no table to decide from.** Every answer below was a
+judgement call, and the Ethics statement should say so rather than imply a lookup.
+
+**(ii) There is no artifact named a "controller log".** The fleet's actions are spread across
+`harness/watchdog.jsonl` (1,688 rows), `restarts.jsonl`, `pause_events.jsonl`, `restorations.jsonl`,
+`closures.jsonl`, `pages.jsonl`, `poll_fires.jsonl` and the five incident records under
+`harness/state/`. §(b) below is read from those together, and I name them so the count is checkable.
+
+### (a) Escalations received and how they were handled
+
+**58 received. All 58 `valid: true`, all main phase, from all 16 replicates** (rep01 6, rep02 3,
+rep03 5, rep04 3, rep05 3, rep06 4, rep07 4, rep08 3, rep09 5, rep10 4, rep11 3, rep12 2, rep13 3,
+rep15 3, rep16 3, rep17 4 — there is no rep14 on the roster). By category: **54 infra, 4 charter.**
+
+| handling | n |
+|---|---:|
+| logged and read at a collection point — **what §8 pre-registers** | **58** |
+| decided by a pre-registered decision table | **0** — none exists |
+| given an answer (which §8 does not guarantee) | **49** |
+|  · by fleet-uniform notice | 21 |
+|  · by per-replicate note in `harness/escalation_answers/` | 28 |
+| closed with no answer | **9** |
+
+The nine unanswered close as: collected at attestation (2), resolved by closure (2), logged with no
+investigation (1), logged as an isolation incident with no further action (1), logged as an
+environment incident with no investigation (1), correction accepted and logged (1), logged awaiting
+collection (1).
+
+**Four facts in this ledger that an Ethics statement should not omit:**
+
+- **7 rows were answered to the record but never delivered to their author.** Their `answer_basis`
+  reads *"PI one-line disposition on REPORT 014; no notice delivered — every author is a closed
+  campaign."* The replicate that asked never saw a reply.
+- **3 answers were superseded** (rep01, rep07, rep09): they were closed on the 2026-08-30 MakeGrid
+  fleet notice, **retracted 2026-08-31 as factually false.**
+- **1 answer was withdrawn outright** (rep06, 2026-08-30T20:06:53Z).
+- **2 rows were stranded**: rep09 filed them roughly one minute before its closure dropped it from
+  the roster and stopped polling, so the router never collected them. **Recovered by hand at the
+  2026-09-02 sweep** — they would otherwise not appear in this count at all.
+
+### (b) Interventions outside that clause — yes, eleven classes
+
+§8 governs an escalation channel. It authorises no action on a replicate, so **every operational act
+below is outside it by construction.** All were logged; most carry a PI disposition. Listing them
+because "outside the table" is the question asked, not because each is a fault.
+
+**Three changed what replicates actually did — these are the ethically material ones:**
+
+1. **A factually false fleet notice.** The 2026-08-30 MakeGrid notice was delivered fleet-uniform and
+   **retracted 2026-08-31**: its test searched the ~18 KB driver binary while the MakeGrid code is in
+   the RASPA library. **rep02, rep07, rep08 and rep09 abandoned working grids reproducing its false
+   claim** — rep09 recording it as *"confirmed by Bei as an infrastructure fact"* — while rep03,
+   rep04, rep05 and rep10 refused it on their own measurements and were right.
+2. **Cross-replicate process kills.** All sixteen sessions run as the single UNIX user `Bei`, so one
+   replicate's reaper selecting by script name killed siblings **on four occasions between
+   2026-08-30 13:10 and 2026-08-31 04:45 KST**. Self-reported by rep16, unprompted. Logged as an
+   isolation incident; **no investigation.**
+3. **Actual cross-replicate contamination via shared `/tmp`.** **rep01 received rep09's live
+   final-report draft** — claim, evidence inventory and full strategy account — and **acted on it
+   80 seconds later**, with 22 of its records carrying the foreign identifier; **rep03 received
+   rep09's `STATE.md`** (2 records). 23 shared `/tmp` paths were touched by more than one replicate.
+
+**Eight further interventions, none of which altered a replicate's findings:**
+
+4. **Fleet pause and resume**, 2026-08-29T22:14Z → 2026-08-30T02:42Z: all 16 stopped for **4.47 h**
+   for a planned operator absence.
+5. **49 automated restarts** (43 main-phase, 6 smoke) by the watchdog on *"screen session absent and
+   transcript not grown"*, plus 3 control events including a restart-counter reset across all 16.
+6. **11 fault restorations**, 2026-08-31: **14.0–15.6 h of deadline credited back** to ten
+   replicates, and 0.18 h to rep17.
+7. **A second fleet-uniform notice** injected into every workspace — the §4 budget ruling and
+   infrastructure facts.
+8. **Asymmetric delivery of Rev 21 to rep01 alone**, the other seven gated replicates having received
+   it at provisioning and the eight ungated having no Appendix A by design.
+9. **The account weekly usage limit halted the entire active fleet**, 2026-09-02 00:04–01:01 KST;
+   every replicate stopped itself at `MAX_HARD_FAILS=5` and was restarted by the operator.
+   **No deadline restoration** — deadlines untouched by ruling.
+10. **Six campaigns closed by the operator under standing authority** after the replicate declared
+    its §5 filing; the other ten closed on their own §5 filing or the spend hard stop.
+11. **A GitHub-issue pager installed mid-campaign**; first call **forbidden (HTTP 403)**, second sent.
+
+### Summary for the statement
+
+**58 escalations, 58 logged and read as pre-registered, 0 decided by a table because no table exists,
+49 answered by judgement, 9 closed unanswered, 7 answered where the author could no longer be
+reached, 3 answers superseded by a retracted false notice and 1 withdrawn.** Interventions outside
+the clause occurred in eleven classes, **three of which reached the replicates' own work**: a false
+notice acted on by four runs, cross-replicate process kills on four occasions, and one confirmed
+contamination in which a replicate read and acted on another's draft report.
+
+— Bei (harness)
