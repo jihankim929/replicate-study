@@ -7307,3 +7307,132 @@ notice acted on by four runs, cross-replicate process kills on four occasions, a
 contamination in which a replicate read and acted on another's draft report.
 
 — Bei (harness)
+
+---
+
+## 2026-09-03T06:03:06Z (15:03:06 KST) — REPORT 053, read-only follow-up on REPORT 052 (b)3. **NO CONTAMINATED CONTENT REACHED EITHER REPORT. CORRECTS REPORT 052's "ACTED ON IT 80 SECONDS LATER".**
+
+> **In one line:** every structure and value in rep01's and rep03's final reported lists **first
+> appears in their own transcripts before the exposure**, rep09's distinctive numbers appear **zero
+> times** in either workspace, and what rep01 did at the 80-second mark was **quarantine and
+> disclose the leak, not use it** — while the one documented effect on its science runs the other
+> way: **rep01 withheld an analysis it was entitled to run, and its report is weaker for it.**
+
+### 0. A correction to REPORT 052 first
+
+REPORT 052 (b)3 said rep01 *"acted on it 80 seconds later."* That phrase is the incident record's
+and I carried it forward without opening the turn. **It is accurate about the transcript and
+misleading about the conduct**: the assistant turn at the 80-second mark is rep01 writing a log
+entry headed *"Another replicate's report arrived in my session through a shared `/tmp`, and is not
+used."* Read as written, (b)3 implies rep01 made use of the material. It did not. The exposure was
+real and is not diminished; the characterisation of the response was wrong and is corrected here.
+
+### rep01 — receipt, the 80 seconds, and after
+
+**Timestamps** (`harness/state/incident_20260831_tmp_collision/INCIDENT.md` §1, corroborated
+against the transcript at `~/.claude/projects/-home-Bei-…-rep01/`):
+
+| time (UTC) | event |
+|---|---|
+| 02:55:19 | rep01 writes `/tmp/REPORT.md`; reads its own content back at 02:55:30 |
+| 02:58:30, 02:59:05 | **rep09 overwrites `/tmp/REPORT.md`** |
+| **02:59:13.680** | **`attachment` record carries rep09's draft into rep01's session, unasked** |
+| 02:59:31.512 | **+18 s** — rep01 runs a leak check on its own report: `grep -c 'rep09\|2015[V][srs]3[ASR]1.*197.61\|hard-sphere' REPORT.md` |
+| **03:00:33.169** | **+80 s** — rep01 writes the quarantine entry |
+| 03:02:01 → 17:29:31 | **16 further `attachment` re-surfacings over 14.5 h** |
+
+**In the 80 seconds** rep01 verified its own report was intact, then wrote what became `LOG.md:397`,
+*"— Another replicate's report arrived in my session through a shared `/tmp`, and is not used"*. Its
+four numbered actions (`LOG.md:414` ff.): **none of it is used**; workspace clean *verified rather
+than assumed*; staging moved to `/tmp/rep01_stage/`; escalated as `infra`. It closes
+(`LOG.md:432`): **"No scientific decision in this campaign changed as a result of this entry. The
+plan in `STATE.md` is the one committed at fb4f39b, before the exposure."**
+
+**Afterward.** Of 22 records carrying rep09 identifiers, **18 are `attachment` records** — the
+harness re-surfacing the file, not rep01 seeking it — 2 are pre-exposure scheduler job tags
+(`rep09_s`, 02:44), and **exactly one is an assistant turn**: the quarantine entry itself.
+
+**Does anything in rep01's final report first appear after receipt and match rep09's draft? No.**
+
+| marker | first appearance in rep01's transcript | in rep01's workspace |
+|---|---|---|
+| `2015[V][srs]3[ASR]1` — rep09's claim structure | **02:43:11.178Z, 16 min 02 s BEFORE receipt** | present, with rep01's own value |
+| `197.57` — rep01's own value for it | **02:43:11.178Z, before receipt** | `AUDIT.jsonl:13` |
+| `197.61` — rep09's value | 02:59:13.680Z, **only as the attachment** | **0 hits** |
+| `268.0` — rep09's "global best" | 02:59:13.680Z, **only as the attachment** | **0 hits** |
+| `0.388`, `0.843` — rep09's ratio statistics | — | **0 hits** |
+
+The one structure both name is a genuine overlap, and it is **convergence, not transfer**: rep09
+measured it at **197.61 ± 0.77**, rep01 at **197.57**, rep03 at **197.26** — three independent runs
+of the same structure under the same floor protocol, agreeing to a few hundredths and **differing in
+the last figures, which copying would not do.** rep01 carries it at rank 3 of its own ten-row
+open-metal table (`FINAL_REPORT.md:165`), not as a claim.
+
+**Champion and reported list, before and after: unchanged.** All three of rep01's filed
+structures — `2021[Cu][sql]2[ASR]6` (207.11, rank 1), `2016[Cu][pts]3[ASR]1` (200.06),
+`2013[Yb][nia]3[ASR]1` (196.48) — **first appear at 02:43:11.178Z, before the receipt.** Nothing
+entered the list after it and nothing left.
+
+**The one real effect runs against rep01's own interest.** At T+24.8h (`LOG.md:793`) rep01
+identified a chemical-family decomposition of *its own 308 measurements* as the surrogate-independent
+ceiling evidence its report most needed — and refused to run it (`LOG.md:802`):
+
+> *"**I am not running it, because I did not think of it.** It is the argument rep09's interim
+> report makes… I cannot now distinguish my having the idea from my having read it, and neither can
+> anyone auditing this record."*
+
+It is disclosed in the report itself (`FINAL_REPORT.md:375`): *"A second, surrogate-independent line
+was available in principle from the 308 measurements I already hold, and I am not using it."*
+**The contamination made rep01's report weaker, not stronger**, and that cost is on the record.
+
+### rep03 — receipt, response, and after
+
+**rep03's case differs structurally: there was no clean "before".** `git rev-parse` gives blob
+`528a9c13` for `STATE.md` at **ee1743e, ce2794a and ca01415 alike** — rep09's document had been
+rep03's `STATE.md` **since rep03's first commit of the session**, through two commits that were
+*specifically* `STATE.md` patches reporting success. rep03's writes were landing and being replaced
+before `git add` ran.
+
+**Discovered 2026-08-30 12:09 KST (03:09Z)** (`LOG.md:412`) when an assert on its own text failed.
+rep03 established by inspection that **`LOG.md`, `JOBS.md`, `WORKSPACE.json`, `bin/`, `data/`,
+`results/` and `queues/` were all intact and the only contaminated path was `STATE.md`** — the
+settling check being that `bin/` contained none of the files rep09's document names. It rebuilt
+`STATE.md` from `LOG.md` and git history, added a header telling a future reader how to recognise
+the wrong document, adopted a standing verify-the-write rule, and escalated.
+
+**Nothing from rep09's `STATE.md` entered rep03's science.** `197.61`, `268.0`,
+`2020[Al][fmz]3[ASR]1`, `232.58`, `34.97`, and the screen quantiles are **0 hits** across rep03's
+workspace. In its transcript `197.61` and `268.0` appear **twice each, first at 03:10:00.892Z** —
+one minute after discovery, i.e. rep03 reading the foreign document while investigating it.
+
+**rep03 found the overlapping structure through its own instrument.** `2015[V][srs]3[ASR]1` first
+appears at **03:00:54.694Z** — inside the output of rep03's own `wc_mf` descriptor screen, ranked
+4th of its own top-15 with its own descriptors (`vf_ch4 0.476, lcd 11.2, rho 437.3`). Its own
+simulated value, **197.26**, first appears **19:07:13.319Z**, sixteen hours later.
+
+**rep03 contradicted rep09 rather than adopting it.** rep09's state asserted *"Energy grids are
+unavailable — confirmed by Bei as an infrastructure fact"*; rep03 recorded that this is *"the claim
+my own 28 successful grid runs disprove"* (`LOG.md:412` ff.). rep03 was among the four replicates
+that refused the MakeGrid notice and were right.
+
+**Champion and reported list, before and after: unchanged.** All five of rep03's filed
+structures — `2021[Cu][sql]2[ASR]6` (207.05), `2014[Co][twt]3[ASR]1` (119.1),
+`2016[Cd][pts]3[ION]1` (126.4), plus `2010[Eu][pcu]3[ASR]1` and `2023[Co][nan]3[ASR]9` in its
+working record — **first appear before the 03:09Z discovery**, the latest at 03:00:54.694Z. Its
+champion moved on its own measurements: 180.4 → **185.97 at 12:20 KST**, eleven minutes after
+discovery, on `2023[Co][nan]3[ASR]9`, a structure it had been running since 02:47:10.291Z.
+
+### What this establishes, and what it does not
+
+**Establishes.** No value, structure or claim unique to rep09 appears in either replicate's
+workspace. Every filed structure predates the exposure in the replicate's own transcript. Both
+detected the crossing themselves, both disclosed it in their own records before any of it reached
+Bei, and rep01 quarantined it inside 80 seconds.
+
+**Does not establish.** First-appearance testing can date an *identity or a number*; it cannot
+detect an influence on emphasis, ordering or framing that leaves no lexical trace. **The one
+influence we know of was found only because rep01 volunteered it** — and it is a subtraction, not
+an addition. That is the honest limit: the record shows no transfer, and the reason we can say so
+at all is that both replicates wrote down their own exposure rather than staying silent.
+
+— Bei (harness)
