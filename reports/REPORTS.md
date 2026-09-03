@@ -7977,3 +7977,114 @@ Recorded rather than edited; the instrument is committed and REPORT 021 is pushe
 against the files as committed.
 
 — Bei (harness)
+
+---
+
+## 2026-09-03T15:34:33Z (2026-09-04 00:34:33 KST) — REPORT 059, **READ-ONLY.** Did rep01, rep06 and rep09 re-run their champion at claim grade on a second seed before filing? **ALL THREE DID, AND ALL THREE ARE DOCUMENTED IN THEIR OWN GATE RECORDS — BUT THE RASPA RECONSTRUCTION CANNOT CORROBORATE TWO OF THEM, BECAUSE IT NEVER CAPTURED THE TREES THE RUNS ARE IN.**
+
+> **In one line:** **yes for all three** — rep01 seed 5001 → 9001, rep06 seeds 1788062260/1788060427
+> → 1788129510/1788128758, rep09 seed 1 → seed 2 at both pressures — each second run after the first
+> claim-grade result and before filing; but the answer comes from the **replicate-authored** records
+> (`AUDIT.jsonl`, `REPORT.md`, `LOG.md`), because `fig2_jobs.csv` **carries no seed, no value and no
+> job id by construction**, and its sweep captured **no `runs/claim/` tree for rep01 and only 8 files
+> for rep09**.
+
+### 1. What the two evidence bases can and cannot say
+
+**The RASPA reconstruction cannot answer this question at all**, and the reason is structural rather
+than a gap to be filled. `reports/fig2_jobs.csv` carries `job_id` **empty for every row** — RASPA
+output has no PBS id — and carries **no seed field and no working-capacity value**. It can say that
+a claim-grade run of a structure exists; it cannot say which seed it used or what it returned.
+
+**Its coverage is also very uneven, and that matters here more than the missing fields.** Files
+captured, and the subtrees they came from:
+
+| agent | output files | subtrees captured | claim tree present? |
+|---|---:|---|---|
+| rep01 | 235 | `runs/r1` 192, `runs/pilot` 15, `runs/pilot2` 14, `runs/r2` 9, `runs/cgtime` 2, `work/t1-t3` 3 | **no** |
+| rep06 | 603 | **`work/gcmc` 597**, `work/gridbench` 3, `work/smoke` 2, `work/gridtest` 1 | **yes** |
+| rep09 | 8 | `scratch/run_s2_09` 6, `scratch/t0` 1, `scratch/dbg` 1 | **no** |
+
+rep01's claim and reproduction runs live in **`runs/claim/<safe>/`** — named in its own log, *"`run_repro.sh`
+reproduces from the archived `runs/claim/<safe>/` inputs"* — and that subtree is **not in the sweep**.
+rep09's five claim-grade points are in `tables/*.csv`, and only eight of its output files were reached
+at all. **So for rep01 and rep09 the reconstruction shows zero claim-grade champion runs, and that
+absence is an artifact of what was swept, not evidence about what was run.** For rep06 the claim tree
+*is* present and shows **4 claim-grade files on the champion** — two pressures × two runs — which is
+exactly what its record claims.
+
+### 2. rep01 — YES. `2021[Cu][sql]2[ASR]6`
+
+| | grade | seed | job / tag | when (KST) | WC | ± | N(65) | N(5.8) |
+|---|---|---:|---|---|---:|---:|---:|---:|
+| **first claim-grade** | 10,000 + 50,000 | **5001** | tag `claim1`, mjs 3389 → renumbered **`3504 rep01_claim1`**, ppn=1 | **finished 2026-08-31 02:27**, 30,941 s on one core | **207.11** | 0.54 | 243.85 | 36.74 |
+| **second, different seed** | 10,000 + 50,000 | **9001** | tag `g6`, `jobs/g6.qsub` (ppn=1), `run_repro.sh` from archived `runs/claim/<safe>/` | **recorded 2026-08-31 11:50:28** | **207.01** | 0.37 | — | — |
+
+`AUDIT.jsonl`, commit `853cf95`: *"Claim-grade 207.11 +/- 0.54 (seed 5001) reproduced from ARCHIVED
+inputs as 207.01 +/- 0.37 (seed 9001): same frame.cif and same simulation.input, RandomSeed only
+changed. Difference -0.10, combined sigma 0.66, criterion |diff| <= 3 sigma."* Its log records G6
+submitted immediately on `claim1` finishing, into a slot held for it. **Ordering holds:** second run
+after the first, both before the final commit at 2026-09-01 01:34:54.
+
+### 3. rep06 — YES. `2021[Cu][sql]2[ASR]6`
+
+rep06's seeds are **epoch seconds**, so they double as timestamps and the ordering is readable off
+the seed itself:
+
+| | grade | seeds (65 bar / 5.8 bar) | decoded (KST) | WC | N(65) | N(5.8) |
+|---|---|---|---|---:|---:|---:|
+| **first claim-grade** | 10,000 + 50,000 | **1788062260 / 1788060427** | 2026-08-30 12:57:40 / 12:27:07 | **207.073** | 243.867 | 36.794 |
+| **second, different seeds** | 10,000 + 50,000 | **1788129510 / 1788128758** | 2026-08-31 07:38:30 / 07:25:58 | **207.263** | 244.029 | 36.767 |
+
+Deviation **+0.190** against a 3-sigma tolerance of **2.000**. `AUDIT.jsonl` at
+**2026-08-31T19:34:03+09:00**, commit `2b74833`, `audit_outcome: reproduction_passed`,
+`disposition: promoted_to_finalist`. The reproduction seeds are **18.7 h after** the claim seeds, and
+the final commit is 2026-09-01 01:00:31. **Ordering holds.**
+
+**Per-structure PBS ids are not recoverable for rep06.** Its `JOBS.md` is a job × tag ledger with
+counts — `3473737 claim 2`, `3473737 g6 4`, `3473988 claim 3`, `3473988 g6 7`, `3474092 g6 8`,
+`3474243 g6 1`, plus `pre-stamp` rows — so the champion's two runs sit inside those jobs without a
+row naming the structure. The seeds identify the runs; the job ids do not.
+
+### 4. rep09 — YES, and it is the most carefully documented of the three. `2021[Cu][sql]2`
+
+All five points claim-grade (10,000 + 50,000), from `REPORT.md` §1:
+
+| P | file | seed | N (cm³ STP/cm³) | block err | table |
+|---|---|---:|---:|---:|---|
+| 65 bar | 10995 (`2021[Cu][sql]2[FSR]6`) | **1** | 244.21628 | 1.07442 | `tables/s2_00.csv` |
+| 65 bar | 10995 | **2** | 243.94104 | 0.34359 | `tables/s2_02.csv` |
+| 65 bar | 10985 (`2021[Cu][sql]2[ASR]6`) | 1 | 243.65977 | 0.53756 | `tables/s2_01.csv` |
+| 5.8 bar | 10995 | **1** | 36.86270 | 0.33030 | `tables/s2_01.csv` |
+| 5.8 bar | 10995 | **2** | 36.78806 | 0.26041 | `tables/mod_00.csv` |
+
+**A second seed at both pressures**, on the same file. Confirmed at commit **`57227de`,
+2026-09-01 11:05:14 KST** — *"the leading candidate is confirmed at claim grade with two seeds:
+10995 … at 207.25 ± 0.61"* — later widened to the three-run **207.11 ± 0.43** and filed at
+2026-09-02 01:17:18. **Ordering holds.**
+
+**No per-point job ids exist, and rep09 says so itself:** *"per-point provenance is table + row,
+since chunks were resubmitted under successive job ids and `JOBS.md` records them as chunk ranges
+rather than per point."* Its ledger is `mjs 3046-3057`, `s2_00..04`, `3518-3529` and login-node
+batches.
+
+**Two internal discrepancies in rep09's own record, flagged and not resolved here.** (i) Its
+limitations section says *"Two of the five are on file 10985 rather than 10995"*, while the table
+labels **one** row 10985. (ii) Its log records that two 5.8-bar jobs with different wall-times
+(4358.5 s, 4236.5 s) returned 36.78806 identically to eight digits and are *"therefore one
+measurement, and are counted as one in the report"*, while the table carries 36.78806 as the seed-2
+row. Neither affects the answer — the 65-bar pair 244.21628 / 243.94104 and the 5.8-bar pair
+36.86270 / 36.78806 are distinct values from distinct seeds — but a Methods sentence quoting the
+five-row table should not also quote the "two of five" caveat without reconciling them.
+
+### 5. Bearing on REPORT 058's `c1` finding
+
+REPORT 058 flagged that `c1` fires on Appendix A G6's own phrasing, and that **rep01 and rep06 fire
+on nothing else** — leaving open whether their `y` was wording rather than work. **It was work.**
+Both ran the second seed, both recorded it in `AUDIT.jsonl` with values, seeds and a stated
+tolerance, and rep09 — the ungated `y`, which never saw G6 — did the same thing without the
+vocabulary. The `c1` confound is real as a **detection** defect and should still be caveated in
+Table S3, but on these three agents the column is **substantively correct**: it is measuring
+behaviour that happened, not a phrase that was copied.
+
+— Bei (harness)
