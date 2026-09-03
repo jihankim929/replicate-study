@@ -1,36 +1,27 @@
 # `analysis/si_verbatim/` — verbatim SI extracts
 
-*Read-only deliverable. Every file here is copied or extracted from the sealed records without
-paraphrase. Nothing in this directory was written back into any record, workspace or ledger.*
+*Every file here is copied or extracted from the sealed records without paraphrase.*
 
-**Assembled 2026-09-03 against `HEAD = 597f3dba24a741c384e13d17b77a25ae97de4cf8`.**
-Source hashes below are of the working-tree files as read.
+**Assembled 2026-09-03, completed 2026-09-04. Sources read at `HEAD = 597f3db`; this index regenerated at `e890ba0d21c8f21f63917b799aed6d0d90a62194`.**
 
 ---
 
-## Status
+## Status — complete
 
-**10 of 12 requested files are complete. 2 could not be produced from the sealed records:**
+**All twelve requested files are present.** Two carry a disposition worth reading before use:
 
-| File | Status |
+| File | Disposition |
 |---|---|
-| `warning_passages.csv` | **NOT PRODUCED.** Requires the rows of main-text Table S4. There is no manuscript in this repository (`prereg/rubric_v1.0.md:14`, `STATE.md:1124`, `LOG.md:1857`, `reports/REPORTS.md:5371`), and `Table S4` appears nowhere in the record — the only supplementary table named anywhere is Table S5, in REPORT 055. Supply Table S4's rows and the file follows directly. |
-| `band_source.md` | **PRODUCED AS A NEGATIVE RESULT.** The band `199.7 ± 3.2` and a σ of 3.2 described as a provenance spread do not occur anywhere in this repository. The file records the search, the four nearest candidates with their loci, and what is needed to close it. |
+| `band_source.md` | **CLOSED, and nothing in it goes to the SI.** The 199.7 ± 3.2 band was searched for exhaustively and is not in this repository; PI disposition 2026-09-04 is that it originated outside the repository and is **withdrawn from the SI**. The file is retained as the record of the question. Its four candidate quantities are not the band and must not be cited as such. |
+| `warning_passages.csv` | Produced 2026-09-04 from the Table S4 rows supplied by the PI. Table S4 itself is main-text and is not in this repository; the rows were taken as given and every quotation in them was then **verified back into the agents' filed records — 15 of 15**. |
 
-Nothing was invented to fill either gap.
+## Answer-key access — logged
 
----
-
-## Answer-key access
-
-`exclusion_set.csv` reads out sealed material from `answer-key/`, which opens **only on explicit
-PI instruction** (standing rule, 2026-08-26), and every opening must be logged in
-`answer-key/ACCESS_LOG.md` — *"An unlogged access is a defect even if it was authorised."*
-This access is **not yet logged**: logging it is a write to `answer-key/`, and this deliverable
-was specified as read-only. **It needs a log entry before it is closed.** The scope read out is
-wider than any prior access: the six structure ids, their files, net charges, φ_He, densities,
-mechanisms and the disposition rule and grounds — i.e. the exclusion-set reasoning itself, which
-access 4 explicitly withheld.
+`exclusion_set.csv` reads out sealed material from `answer-key/`. That access is **logged as
+access 5** in `answer-key/ACCESS_LOG.md` (2026-09-04, on explicit PI instruction), together with
+the scope stated against access 4 — access 5 reads out the exclusion-set **reasoning**, which
+access 4 explicitly withheld — and with the fact that the entry was written ~21 h after the read
+it records. Nothing else in that directory was read out.
 
 ---
 
@@ -78,7 +69,7 @@ The six excluded structures: file identifiers, metal, topology, net charge under
   - `answer-key/exclusion_set_record.md` — `dcd6e48ca16661000872901eb3cbae6f1437a4000252bb9fbf47b141c1036f34`
   - `answer-key/dossier_sitting_2026-08-29.md` — `bf38b3a686a32a63fc11745ad21c4c06bbdc3ac624cd4654859efeb2e2f53d6d`
   - `analysis/descriptors.csv` — `435f3f3cddc3b9013e0cb643f6e403b950f90a783bcdba30e691954bb7d503e1`
-- **Method:** Structures, files, net and per-metal from FINAL STATE OF THE EXCLUSION SET - SEALED (exclusion_set_record.md:1089); grounds verbatim from the PI dispositions (:948); phi_He and rho from the anomalous-void candidate table (dossier_sitting:89), the values the disposition rule was applied to. Cross-checked against analysis/descriptors.csv: all eleven files agree and each coordinate-identical twin shares its group's values. THIS FILE READS OUT SEALED MATERIAL - see the access note below.
+- **Method:** Structures, files, net and per-metal from FINAL STATE OF THE EXCLUSION SET - SEALED (exclusion_set_record.md:1089); grounds verbatim from the PI dispositions (:948); phi_He and rho from the anomalous-void candidate table (dossier_sitting:89), the values the disposition rule was applied to. Cross-checked against analysis/descriptors.csv: all eleven files agree and each coordinate-identical twin shares its group's values. Reads out sealed material - LOGGED as access 5 in answer-key/ACCESS_LOG.md on 2026-09-04.
 
 ### `defect_ledger.csv`
 
@@ -98,7 +89,30 @@ The eleven smoke-phase CHARTER-READ entries and the v1.0 edit each produced.
   - `reps/smoke/collected/CHARTER_READ_HARVEST.md` — `8ebcd23bb129241a6875dac7cc91c64d719b004b325830cf457a138ae1bfb84d`
   - `prereg/charter_revisions.md` — `8396d50f7fe350827f8d652c234b212ee492a4909b745d2dd12b05f6472bf9fb`
   - `prereg/charter_v0.9.md` — `205d7d8ba8f9e7a6eab6507aa63ea66ccdbd7136fe372462ba9e31cfb52d3f24`
-- **Method:** Entry text extracted verbatim from the harvest. Each mapping to a v1.0 edit was verified against the charter's own revision record and by git diff of prereg/charter_v0.9.md; where no edit followed, the row says 'None' and names the diff that establishes it. Two entries (s01 LOG.md:141 -> Rev 18; s02 LOG.md:11 and :276 -> Rev 19 §2) are attributed in the record itself.
+- **Method:** Entry text extracted verbatim from the harvest. Each mapping to a v1.0 edit was verified against the charter's own revision record and by git diff of prereg/charter_v0.9.md between db78835 (Rev 17) and HEAD; where no edit followed, the row says 'None' and names the diff that establishes it. Three entries are attributed in the record itself (s01 LOG.md:141 -> Rev 18; s02 LOG.md:11 and :276 -> Rev 19 §2).
+
+### `warning_passages.csv`
+
+Every row of main-text Table S4: the full passage as filed, with its file and line location in the agent's workspace.
+
+- **sha256** `b983ccf95f103926d816a1c585c29109f993b7ce2cdc7cb6069d8e0db4f18095`  (13,434 B)
+- **Sources:**
+  - `reps/main/collected/rep01/REPORT.md` — `96103b24777a21af926f3dce70f24fd5ead439db01adc13105336c418e0a0d7c`
+  - `reps/main/collected/rep02/REPORT.md` — `8e994f58c41db7da0a13595f5d59b2428a72d4ab08a70bfa402c51037e914aec`
+  - `reps/main/collected/rep03/REPORT.md` — `2cd6d633074f780bd3eb1b6b35053040d204078b9a0aabd31f09924df00c9f2a`
+  - `reps/main/collected/rep05/REPORT.md` — `cd57c86ffa8c09b5be2507a50c7cfe757231ea8765550caacc817cc4cad6679d`
+  - `reps/main/collected/rep06/REPORT.md` — `baacd24b9804fb060aeda0285125fa50eba58d93f802dcef35be02e19330526d`
+  - `reps/main/collected/rep08/REPORT.md` — `858d0dc5de823f15d39f34e8bec25aaf8ae9d536bab1a2b3aa753cc306d39c2b`
+  - `reps/main/collected/rep11/REPORT.md` — `c6854f10e96afa794d4c43852c4169cbf4febd8345e0d4efc85523282f37e65c`
+  - `reps/main/collected/rep12/REPORT.md` — `507e834ce442dc65b78f1c8d348cd427ba561f3eea688f39cf3ff35e677238a7`
+  - `reps/main/collected/rep16/REPORT.md` — `40a86a0be48455e500c0863d99c5aa2809115a060ad06586229378d3cda2dda9`
+  - `reps/main/collected/rep17/REPORT.md` — `61492553a7d4a54c370f2360290de8f112c3ce05902760d6d3fa543cdfaf40b1`
+  - `reps/main/collected/rep01/LOG.md` — `8761f7ad3515348d44151949eb25162dc0b41562dce697b5466065bddf3d5617`
+  - `reps/main/collected/rep05/LOG.md` — `f52e1bfecb198642cf40c975edec967e36c167e54b04031d9c195b436c92572e`
+  - `reps/main/collected/rep08/LOG.md` — `e733f361eb39c4dc841a5bc846d9c102ff0437038c856790a8d23670b7715c8a`
+  - `reps/main/collected/rep12/LOG.md` — `9f80f5da74da48077c25f15332ab050cc3c80db1f0a8ed6b99f13455322ead5e`
+  - `reps/main/collected/rep17/LOG.md` — `6f25e24195736c50a95666e18862a2d81ce694430ced52714fb2cec7964e6f44`
+- **Method:** 15 rows for 13 Table S4 rows: row 13 names three agents and is emitted as 13a/13b/13c so each passage carries its own locus. full_passage is the complete paragraph containing the quotation, extracted verbatim by line range; quoted_line is the line carrying the Table S4 text and passage_lines the paragraph's bounds. EVERY Table S4 quotation was checked back into its extracted passage after whitespace normalisation: 15 of 15 verified, 0 failed, and the seven numeric assertions (358, 1,255, 0.876, 27,000, 1,132, 1,376, +8) all present. Each row's checked/unchecked group was asserted against harness/config.arm_of: 15 of 15 agree, which independently confirms checked=gated and unchecked=ungated. All ten agents filed as REPORT.md (REPORT_FILENAME_AS_FILED); collected copies are byte-identical to the workspace files at the bell per reps/main/collected/BELL_FINGERPRINT.log.
 
 ### `rubric_sealed.md`
 
@@ -151,7 +165,7 @@ Endgame behaviour at the deadline, forced-filing observations, and final burn an
   - `reps/smoke/collected/s02/git-log.txt` — `39566099b973f34bd1fcf2e02f71fa9dcf8b554d0e2ffaa0df6715f1a37494eb`
   - `reps/smoke/collected/s02/LOG.md` — `60803008be07343db4e054305295a4023d615eaa617a18144e3723954423b0b1`
   - `prereg/context_composition_2026-08-29.md` — `726bd98dca0e6edc4c4c2fe8f9ed92a123f27439f9cf249229512079cd06cca8`
-- **Method:** Quotation only; every block carries its file and line. No forced filing occurred under §5 - the deadline was the terminator. The one filing that was forced was s02 forcing it on itself against a cap the harness was not enforcing.
+- **Method:** Quotation only; every block carries its file and line, and all thirty-two citations were checked line by line against source. No forced filing occurred under §5 - the deadline was the terminator. The one filing that was forced was s02 forcing it on itself against a cap the harness was not enforcing.
 
 ### `amendments.csv`
 
@@ -159,23 +173,16 @@ Date and commit hash of the two pre-analysis amendments and of the Figure 4 amen
 
 - **sha256** `2cc986019dd5c8af96b1770f3aaca1c2c5c8d2e395a3f572c74971339990dcac`  (13,557 B)
 - **Sources:**
-  - `reports/REPORTS.md` — `78d51c7c4d2e08f5000c68c05006ae2fc87c216655c3fb3b6a2a3be4e52ab210`
+  - `reports/REPORTS.md` — `97b4fc42901a08aa7edbd62f831e43e2e6b5df4e0765a5e0cbad1caeb5c53227`
   - `prereg/fig4_order_amendment_2026-09-03.md` — `0c755ef5872945fe9c9e86110400e48e61c1207b037c3d199ea964277838f85e`
 - **Method:** Commit hashes and timestamps read from git; subjects are the commit subjects verbatim. Four rows: the 2026-09-02 pre-analysis amendment (REPORT 021), the 2026-09-03 Figure 4 interim plan filed as a pre-analysis amendment (REPORT 043), and the two Figure-4 amendments of 2026-09-03 (queue order, REPORT 051; milestone posts on request).
 
 ### `band_source.md`
 
-Origin of the 199.7 ± 3.2 cm³ cm⁻³ band and the σ = 3.2 provenance spread. INCOMPLETE - the band is not in the record.
+Origin of the 199.7 ± 3.2 cm³ cm⁻³ band and the σ = 3.2 provenance spread. CLOSED - the band originated outside this repository and is withdrawn from the SI.
 
-- **sha256** `e80b992de783d2c26ed273693de007dfc18ccbd97485fc3d6ce4e40c1c8b8944`  (5,405 B)
+- **sha256** `983a7001f40721c36989d8dc81d4ec3ca1c33e12aa331e2002b31b838d75285c`  (6,245 B)
 - **Sources:**
   - (searched: whole repository)
-- **Method:** NEGATIVE RESULT. Neither '199.7 ± 3.2' nor a sigma of 3.2 described as a provenance spread occurs anywhere in this repository. The band is presumably a main-text quantity, and the record states three times that there is no manuscript here. The file records the search, the four nearest candidates in the record with their loci, and what is needed to close it.
-
-### `warning_passages.csv`
-
-For each row of main-text Table S4, the full passage and its file and line location.
-
-- **NOT PRODUCED.** See Status above.
-- **Blocked on:** the rows of main-text Table S4, which is not in this repository.
+- **Method:** NEGATIVE RESULT, closed by PI disposition 2026-09-04: the band originated outside this repository and is withdrawn from the SI. The file stands as filed with the disposition appended, not rewritten. Its four candidate quantities are NOT the band's origin and must not be cited as such; they are retained only as evidence that the search was exhaustive. No quantity in this file is carried into the SI.
 

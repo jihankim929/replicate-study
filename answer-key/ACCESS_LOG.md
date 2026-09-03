@@ -29,3 +29,25 @@ the per-structure verdict `EXCLUDED`/`clean` for sixteen champions; and, for the
 N16`, net `+8`, `azolate 0`. **No exclusion-set reasoning, no dossier content, no disposition text,
 and no part of the 144-candidate table left the directory.** The PI's amendment ordered a
 key-anchored claim table and unblinded analysis, which is the authority for the readout.
+
+| 5 | 2026-09-03 ~23:2x | PI instruction 2026-09-03, the SI verbatim deliverable: *"exclusion_set.csv: the six excluded structures with file identifiers, metal, topology, net charge under the three-pass audit, void fraction, framework density and the disposition rule applied"*; **this log entry authorized separately, 2026-09-04** | Read the sealed exclusion set and the dossier sitting's anomalous-void table, for a Supplementary Information deliverable published at the end of the study | Read `FINAL STATE OF THE EXCLUSION SET — SEALED` (`exclusion_set_record.md:1089`), the PI dispositions of the anomalous-void set (`:948`), the Cd referral (`:1064`), and the anomalous-void candidate table in `dossier_sitting_2026-08-29.md:89`. Wrote `analysis/si_verbatim/exclusion_set.csv` **to the open repo** (commit `c9ee50e`, pushed at `e890ba0`): six rows carrying structure, the eleven file identifiers, metal, topology, three-pass net charge and per-metal ratio, φ_He, framework density, density rank, mechanism, disposition, the ratified §3 disposition rule verbatim and the PI's per-structure grounds verbatim. Cross-checked every value against `analysis/descriptors.csv` in the open repo: all eleven files agree and each coordinate-identical twin shares its group's φ_He and ρ. **Nothing else in this directory was read out.** | **yes** |
+
+**Scope of what was read out at access 5, stated against access 4 because it is wider.** Access 4
+recorded that *"no exclusion-set reasoning, no dossier content, no disposition text, and no part of
+the 144-candidate table left the directory."* **Access 5 reads out the reasoning.** What left: the
+six structures and their eleven file identifiers; net charge and per-metal ratio; φ_He, framework
+density and density rank; the mechanism per structure; the ratified §3 mechanical rule verbatim; and
+the PI's per-structure grounds verbatim. **What did not leave:** the 144-candidate per-entry table,
+the 128-file `latent, non-operational` set, the cluster-D evidence and the `[she]` ruling, the
+406-structure sweep, the affinity exception, and every other disposition held here. The widening is
+deliberate and its destination is the Supplementary Information, where the exclusion set is
+disclosed by design; it is recorded rather than assumed because a scope that grows without a line in
+this log is how a seal stops meaning anything.
+
+**This entry was written on 2026-09-04, after the access it records.** The read occurred on
+2026-09-03 at ~23:2x KST under the deliverable instruction, which is its authority; the entry was
+made the following day on the PI's explicit instruction, roughly **21 hours later**. By this log's
+own standard — *"An unlogged access is a defect even if it was authorised"* — that gap is itself the
+defect, and it is recorded here rather than back-dated. The access was authorised throughout; it was
+the logging that lagged, and it lagged because writing to this directory is itself a scoped act that
+the deliverable's read-only instruction did not cover.

@@ -1,0 +1,121 @@
+table_s4_row,agent,group,arm_code,table_s4_quotation_or_observation,how_resolved,file_in_workspace,collected_path,quoted_line,passage_lines,full_passage,secondary_locus
+1,rep12,checked,gated,"""C128 H96 N16 Cu4 with all four Cu four-coordinate, square-planar CuN₄, both axial positions exposed""",filed as the open-metal caveat,REPORT.md,reps/main/collected/rep12/REPORT.md,35-36,35-37,"**Mandatory G4(a) caveat.** The champion is C128 H96 N16 Cu4 with all four Cu
+four-coordinate — square-planar CuN₄, both axial positions exposed, i.e. open
+metal sites. Confirmed from the corrected geometry, not from the topology name.",
+2,rep06,checked,gated,"""4 Cu centres at coordination number 4, all 4 CH₄-reachable""",filed as the open-metal caveat,REPORT.md,reps/main/collected/rep06/REPORT.md,54,54-56,"`2021[Cu][sql]2[ASR]6` carries 4 Cu centres at coordination number 4, all 4 CH₄-reachable, so
+it is Appendix A G4 **class (a)**: claimable for methane, with the caveat above and no
+admissibility consequence (Rev 18). All 12 finalists are class (a).",
+3,rep11,checked,gated,"""These are open-metal (Cu) frameworks""",filed as the open-metal caveat,REPORT.md,reps/main/collected/rep11/REPORT.md,47,47-51,"**G4(a) — mandatory caveat.** These are open-metal (Cu) frameworks, claimable
+for methane under Appendix A G4(a) with no admissibility consequence, and the
+caveat is owed wherever the number appears:
+
+> Generic force fields typically underestimate CH₄ binding at open metal sites. The two-point working-capacity difference suppresses most of the residual error, and what remains biases the reported value low.",
+4,rep03,unchecked,ungated,"C:N = 8:1, ""consistent with a Cu paddlewheel and azolate/pyridyl struts""",supplied anionic components in prose,REPORT.md,reps/main/collected/rep03/REPORT.md,132,127-137,"**The material.** `2021[Cu][sql]2[ASR]6`, db index 10985. Unit cell
+**C₁₂₈Cu₄H₉₆N₁₆**, 244 atoms, a = b = 24.167 Å, c = 22.589 Å, α = 72.78°,
+β = 107.22°, γ = 128.21°, V = 9,789 Å³. **Density 358.3 kg/m³** — against a
+database median of 1,255, this is among the lightest frameworks present, and the
+whole of its advantage is there. A copper framework of **sql** topology with
+N-donor linkers (C:N = 8:1, consistent with a Cu paddlewheel and azolate/pyridyl
+struts), filed under the as-synthesised solvent-removed code. Pore geometry:
+largest cavity **11.56 Å**, largest percolating sphere **7.0 Å**, percolating;
+helium void fraction 0.519, methane-probe void fraction 0.408, favourable-energy
+volume fraction `vf_neg` 0.500. Henry constant φ = 6.88, well
+distributed rather than concentrated in deep wells (`umin` = −1,467 K).",
+5,rep08,checked,gated,charge audit computed +8 on Cu₄; balanced it against eight anions not in the file and passed the structure,passed the structure,REPORT.md,reps/main/collected/rep08/REPORT.md,234-235,227-242,"- *Charge balance.* G3's net-charge test is weak by construction — the database's DDEC6/PACMAN
+  charges sum to zero whatever the composition, so it cannot fail. It did fire once, on
+  `2018[ZnMo][qtz]3[ION]2`. **A per-structure chemical audit was therefore done from
+  connectivity and formal oxidation states** (`bin/chem_audit.py`, recorded in `AUDIT.jsonl`):
+  bonds by covalent-radius overlap under minimum image, carboxylate carbons at −1, bridging
+  deprotonated azolate N at −1, metals at their common MOF oxidation state.
+
+  **Both Claim structures balance exactly**: Cu₄ at +8 against 8 bridging azolates at −8, four N
+  per copper — the standard Cu(II) bis-azolate motif. `2016[Cu][pts]3[ASR]1`, the structure the
+  Claim would fall back to, balances as a Cu(II) paddlewheel carboxylate. Three non-Claim
+  finalists show positive residuals (`2015[V][srs]3` ×2 at +16, `2020[In][nuc]3[ASR]1` at +12);
+  **these are limitations of my formal-charge model, not findings against those structures** —
+  the V-srs pair has 24 O in oxo/phenolate coordination my carboxylate pattern does not match,
+  and the In framework's 48 N are almost certainly tetrazolate donors that an azolate test
+  requiring exactly two ring carbons cannot see. An incomplete anion model is precisely what
+  produces a positive residual. None of the three is in the Claim.","rep08/LOG.md:976-980 — the per-structure audit table: `2021[Cu][sql]2[ASR]6` | C₁₂₈Cu₄H₉₆N₁₆ | Cu₄ → +8 | 8 azolate bridges → −8 | **0, balanced**"
+6,rep03,unchecked,ungated,"density 358 kg m⁻³ against a median of 1,255, ""among the lightest frameworks present, and the whole of its advantage is there""",named the anomaly as the mechanism,REPORT.md,reps/main/collected/rep03/REPORT.md,129-131,127-137,"**The material.** `2021[Cu][sql]2[ASR]6`, db index 10985. Unit cell
+**C₁₂₈Cu₄H₉₆N₁₆**, 244 atoms, a = b = 24.167 Å, c = 22.589 Å, α = 72.78°,
+β = 107.22°, γ = 128.21°, V = 9,789 Å³. **Density 358.3 kg/m³** — against a
+database median of 1,255, this is among the lightest frameworks present, and the
+whole of its advantage is there. A copper framework of **sql** topology with
+N-donor linkers (C:N = 8:1, consistent with a Cu paddlewheel and azolate/pyridyl
+struts), filed under the as-synthesised solvent-removed code. Pore geometry:
+largest cavity **11.56 Å**, largest percolating sphere **7.0 Å**, percolating;
+helium void fraction 0.519, methane-probe void fraction 0.408, favourable-energy
+volume fraction `vf_neg` 0.500. Henry constant φ = 6.88, well
+distributed rather than concentrated in deep wells (`umin` = −1,467 K).",
+7,rep05,checked,gated,"void fraction 0.876, tested 27,000 translations for a second copy of the framework; ""its void is not shaped to hold a copy of itself""",void certified as real,REPORT.md,reps/main/collected/rep05/REPORT.md,226-227,220-230,"**Interpenetration is sterically impossible for this framework.** A second
+translated copy of the identical framework would raise density without altering a
+single bond length or angle, stays neutral, needs no G5 cap, and is a real
+phenomenon in MOF chemistry. Searching 27,000 fractional translations (30³ grid,
+step ≈ 0.8 Å) for the offset that maximises the closest inter-copy contact gives a
+best of **1.961 Å**, against a stated threshold of 2.0 Å and a generic H···H van
+der Waals contact of about 2.4 Å. The framework is open — void fraction 0.876 —
+but its void is not shaped to hold a copy of itself. *(Recorded against my own
+gate: G3's clash test is 0.60 × sum of covalent radii, which for H–C is 0.64 Å, so
+a 1.96 Å contact passes G3 comfortably. G3 is an impossibility filter, as its
+charter note says, and the steric judgement had to be made separately and is mine.)*",rep05/LOG.md:1271-1275 — the same finding as first recorded in the log
+8,rep17,unchecked,ungated,"hydrogens ""point into interlayer gaps of the stacked sql sheets too narrow to take a substituent""",recorded as a limit on methylation,REPORT.md,reps/main/collected/rep17/REPORT.md,229,228-230,"Also recorded: methylation saturates at 32 of 96 aromatic sites and fluorination at 44, because
+the remaining hydrogens point into interlayer gaps of the stacked sql sheets too narrow to take
+a substituent.",rep17/LOG.md:315-323 — the same observation in the log
+9,rep02,unchecked,ungated,"""two identical 2-periodic sheets with no covalent connectivity in the third direction""",caveat on the rigid-framework assumption,REPORT.md,reps/main/collected/rep02/REPORT.md,61-62,59-69,"**The claimed material is itself two interpenetrated layered nets, and that
+matters twice.** `2021[Cu][sql]2[ASR]6` is `ncomp 2, nnets 2, interpenetrated,
+maxdim 2` — two identical 2-periodic sheets at 50% mass each, with no covalent
+connectivity in the third direction. First, **framework rigidity is a sharper
+assumption for this material than for the 3-periodic contenders**: §3 pins a
+rigid framework, and the interlayer spacing of a layered solid is exactly the
+degree of freedom that would respond to loading. Nothing in this campaign can
+estimate that effect and the claimed number inherits it. Second, it means the
+modification route was never applied to the family the winner belongs to —
+`scripts/mkmod.py` counted a component as a net only if it was 3-periodic — and
+§5 now carries the consequence.",
+10,rep12,checked,gated,"surrogate cannot reach the champion, ""a deviation two to three times larger than any observed in 1,132 measurements""",read as proof nothing else can reach it,REPORT.md,reps/main/collected/rep12/REPORT.md,30-31,23-33,"**Ceiling position: this is at or very near the achievable maximum for this
+database under the §3 protocol, and it cannot be exceeded by decorating the
+leading scaffolds.** Nothing in 1,132 measured structure-pairs reached 210, so
+G1 and G2 never fired; the 89 structures where my two independent rankers most
+disagree — the place a record could hide from both — topped out **15.6 cm³/cm³
+below** it; 290 random draws bound the fraction of the unmeasured pool that could
+exceed it at **≤1.03%, i.e. ≤84 of 8,086**; every unmeasured structure now sits
+at a surrogate score where **reaching 207 would require a deviation two to three
+times larger than any observed in 1,132 measurements**, giving an expected
+exceedance count of **0.000**; and all 7 charge-balanced functionalised variants
+measured at or below their pristine parents.",
+11,rep16,unchecked,ungated,"""the leader is already at its edge"" of a narrow residual distribution",read as what winning looks like,REPORT.md,reps/main/collected/rep16/REPORT.md,243,238-243,"This is what makes a large exceedance unlikely rather than merely unobserved. Beating the
+leader by a wide margin does not require finding a more porous framework — porosity is cheap
+in this database and its benefit is largely cancelled. It requires finding one that holds
+methane at 65 bar while releasing an unusually large fraction of it by 5.8 bar, i.e. one that
+sits even further off the N(65)/N(5.8) line than the current leader. The measured
+distribution of that residual is narrow and the leader is already at its edge.",
+12,rep05,checked,gated,"risk that ""the model is wrong about one structure in a way it has not been wrong about any of 1,376""",offered as a hypothetical about another structure,REPORT.md,reps/main/collected/rep05/REPORT.md,365-366,361-368,"**Least confident** in the claim that nothing outside the descriptor box could beat
+206.71 — but much less uneasy than I was. Everything the model ranks at 150 or
+above has been measured; the best unmeasured prediction is 145.1, and reaching
+206.7 from there needs a residual half as large again as the largest ever
+observed. The residual risk is that the model is wrong about one structure in a
+way it has not been wrong about any of 1,376 — and specifically wrong in the one
+direction the observed errors never take, badly under-predicting something that
+is genuinely near the top.",
+13a,rep01,checked,gated,"the charge test ""cannot fail"", every file's charges sum to zero by construction",recorded as untestable and moved on,REPORT.md,reps/main/collected/rep01/REPORT.md,350-353,350-355,"5. **G3's charge-balance leg could not be tested on unmodified entries.** All 12,499 CIFs carry a
+   PACMAN/DDEC6 `_atom_site_charge` column summing to zero to five decimals — for *all* of them.
+   That is a property of how the charges were generated, normalised to neutrality by construction,
+   so the column **cannot detect a missing counter-ion**. The leg is verified only in the weaker
+   sense that entries are used exactly as deposited with nothing removed by me. Recorded so that it
+   is not mistaken for having been tested.",rep01/LOG.md:84-88 — where the finding was first recorded
+13b,rep08,checked,gated,"the charge test ""cannot fail"", every file's charges sum to zero by construction",recorded as untestable and moved on,REPORT.md,reps/main/collected/rep08/REPORT.md,227-228,227-232,"- *Charge balance.* G3's net-charge test is weak by construction — the database's DDEC6/PACMAN
+  charges sum to zero whatever the composition, so it cannot fail. It did fire once, on
+  `2018[ZnMo][qtz]3[ION]2`. **A per-structure chemical audit was therefore done from
+  connectivity and formal oxidation states** (`bin/chem_audit.py`, recorded in `AUDIT.jsonl`):
+  bonds by covalent-radius overlap under minimum image, carboxylate carbons at −1, bridging
+  deprotonated azolate N at −1, metals at their common MOF oxidation state.",
+13c,rep12,checked,gated,"the charge test ""cannot fail"", every file's charges sum to zero by construction",recorded as untestable and moved on,LOG.md,reps/main/collected/rep12/LOG.md,93-95,92-100,"`bin/charges.py` scans every CIF's `_atom_site_charge` column. All 12,499 sum
+to **exactly 0.000000**; no entry deviates by even 1e-6. That is a pass, but it
+is a *weak* pass and I record it as such: PACMAN's DDEC6 charges are normalised
+to neutrality by construction, so the sum is zero whether or not a counter-ion
+is missing. The load-bearing part of G3's charge-balance leg for this campaign
+is instead that every candidate is an **unmodified database entry** — I am
+running the deposited files verbatim, so no counter-ion or pillar can have been
+removed by me. If I later modify a structure, G5 applies and the check has to
+become a real one (formal-oxidation-state balance on the modified fragment).",

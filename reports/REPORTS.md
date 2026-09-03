@@ -7772,3 +7772,103 @@ coordinate-identical twin shares its group's φ_He and ρ**, which is the indepe
 that the twins are twins.
 
 — Bei (harness)
+
+---
+
+## 2026-09-03T15:07:01Z (2026-09-04 00:07:01 KST) — REPORT 057, **all three instructions executed.** Access 5 logged, `band_source.md` closed, `warning_passages.csv` built from Table S4. **THE SI DELIVERABLE IS COMPLETE AT 12 OF 12, AND ALL FIFTEEN TABLE S4 QUOTATIONS VERIFY BACK INTO THE AGENTS' OWN FILED RECORDS.**
+
+> **In one line:** the answer-key access behind `exclusion_set.csv` is **logged as access 5**, with
+> its scope stated against access 4 and **its own 21-hour logging lag recorded rather than
+> back-dated**; `band_source.md` is **closed as filed** with your disposition appended and nothing
+> from it carried into the SI; and `warning_passages.csv` is built from the thirteen Table S4 rows
+> you supplied — **15 rows for 13, since row 13 names three agents — with every quotation checked
+> back into the agent's own `REPORT.md` or `LOG.md` after whitespace normalisation: 15 of 15
+> verified, 0 failed**, and all seven numeric assertions present.
+
+### 1. Access 5 — logged, including the part that is not flattering
+
+`answer-key/ACCESS_LOG.md` now carries entry 5 for the `exclusion_set.csv` readout, with the scope
+stated the way access 4 stated its own. **Access 4 recorded that no exclusion-set reasoning, dossier
+content or disposition text left the directory. Access 5 reads out the reasoning** — the six
+structures and eleven file identifiers, net charge and per-metal ratio, φ_He, density and rank, the
+mechanism per structure, the ratified §3 rule verbatim, and your per-structure grounds verbatim.
+What did **not** leave is enumerated too: the 144-candidate table, the 128-file `latent,
+non-operational` set, the cluster-D evidence and the `[she]` ruling, the 406-structure sweep and the
+affinity exception.
+
+**The entry records that it was written after the access it describes.** The read was 2026-09-03 at
+~23:2x KST under the deliverable instruction, which is its authority; the entry was made ~21 hours
+later on your instruction. By this log's own standard — *"An unlogged access is a defect even if it
+was authorised"* — the gap is the defect, so it is written into the entry rather than smoothed by
+back-dating it. The access was authorised throughout; it was the **logging** that lagged, and it
+lagged because writing to that directory is itself a scoped act the read-only instruction did not
+cover.
+
+### 2. `band_source.md` — closed as filed
+
+Your disposition is appended as a dated section; **the body stands unrewritten**, per the same rule
+SI-017's correction followed. Two things are stated explicitly so the file cannot be misread later:
+**the four candidate quantities in §2 are not the band's origin and must not be cited as such** —
+they are retained only as evidence the search was exhaustive — and **no quantity in the file is
+carried into the Supplementary Information.** The negative result in §1 was the right answer rather
+than a failure to look: the band was never derivable from the sealed records because it was never
+in them.
+
+### 3. `warning_passages.csv` — built, and then checked against the record
+
+**13 Table S4 rows → 15 CSV rows.** Row 13 names rep01, rep08 and rep12, so it is emitted as
+**13a/13b/13c** and each passage carries its own locus rather than three agents sharing one line.
+
+Each row gives the Table S4 quotation as you supplied it, how it was resolved, the file **as the
+agent filed it** (all ten filed `REPORT.md`, per `REPORT_FILENAME_AS_FILED`), the line carrying the
+quoted text, the enclosing paragraph's line range, and **the full paragraph verbatim**. Where the
+finding was first recorded in the log before reaching the report, that locus is carried in a
+`secondary_locus` column — rep01, rep05, rep08, rep12 and rep17 all have one.
+
+**Three checks were run on the output, not on the intention:**
+
+| Check | Result |
+|---|---|
+| Each Table S4 quotation present in the passage extracted for it, after whitespace normalisation | **15 / 15**, 0 failed |
+| Numeric assertions in the table found in their passages — 358, 1,255, 0.876, 27,000, 1,132, 1,376, +8 | **7 / 7** |
+| Each row's `checked`/`unchecked` group asserted against `harness/config.arm_of` | **15 / 15 agree** |
+
+The third check was written as a guard and returned a fact: **your checked/unchecked labelling
+matches the sealed `gated`/`ungated` draw on every one of the thirteen rows**, which is an
+independent confirmation of the mapping rather than an assumption I carried in from the charter.
+
+### 4. What the table contains, stated mechanically
+
+Interpretation of arm differences is yours under the 2026-09-02 pre-analysis amendment, so this is
+extraction and counting only.
+
+**13 rows, 8 checked and 5 unchecked, across 10 of the 16 agents** (rep01, rep02, rep03, rep05,
+rep06, rep08, rep11, rep12, rep16, rep17).
+
+**Rows 1–3 are all checked, and structurally could not be otherwise.** All three are the G4(a)
+mandatory open-metal caveat, and **G4(a) is Appendix A text, which the unchecked group never
+received** — the same by-construction asymmetry the smoke's CHARTER-READ harvest recorded. Row 4 is
+the unchecked counterpart: rep03 met the same open-metal fact with no gate to file it under, and
+supplied the missing anionic components in prose instead.
+
+**Row 5 is the one where the record comes closest to the answer.** rep08's own passage states that
+the test it was replacing *"cannot fail"* — G3's net-charge check, since the deposited charges sum
+to zero whatever the composition — builds a per-structure chemical audit to replace it, computes
+**Cu₄ at +8**, and balances it against **8 bridging azolates at −8** in the same sentence. Its
+`LOG.md:976-980` table records the same for both twins as **"0, balanced"**.
+
+**Rows 13a–c are the same finding reached three times independently.** rep01, rep08 and rep12 each
+established that G3's charge-balance leg cannot fail on this database, each recorded it explicitly
+as untestable, and each moved on. Two of the three wrote it into `LOG.md` before it reached the
+report — rep01 at `LOG.md:84-88`, rep12 at `LOG.md:92-100` — and rep01's report files it as
+numbered limitation 5, *"Recorded so that it is not mistaken for having been tested."*
+
+### 5. State of the deliverable
+
+`analysis/si_verbatim/` is **12 files plus its README**, all twelve indexed with source paths and
+sha256, **all twelve hashes re-verified against the files as committed**. The README's status
+section now carries the two dispositions — `band_source.md` closed and excluded from the SI,
+`warning_passages.csv` built from PI-supplied rows and verified back — so a reader of the directory
+alone cannot mistake either for an ordinary extraction.
+
+— Bei (harness)

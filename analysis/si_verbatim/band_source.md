@@ -110,3 +110,22 @@ One of:
    record's provenance metadata (`analysis/provenance_cu_sql.md`) establishes that **every row of
    the CoRE metadata is `Source = SI`** with **no CSD refcode for any structure in the frozen
    world**, so a spread across *deposition* provenances is not computable from what is held here.
+
+---
+
+## 4. CLOSED — PI disposition, 2026-09-04
+
+**Appended, not rewritten. Everything above stands as filed.**
+
+> *"The 199.7 ± 3.2 band originated outside this repository and is withdrawn from the SI; close
+> `band_source.md` as filed."*
+
+— PI, 2026-09-04
+
+**The search recorded in §1 was therefore correct and complete, and its negative result was the
+right answer rather than a failure to look hard enough.** The band was never derivable from the
+sealed records because it was never in them. The four candidates in §2 are **not** its origin and
+must not be cited as such; they are retained only as the evidence that the search was exhaustive.
+
+**No quantity in this file is carried into the Supplementary Information.** The band is withdrawn,
+and this file is closed as a record of the question rather than as an SI deliverable.
