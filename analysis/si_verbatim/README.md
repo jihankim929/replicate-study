@@ -2,18 +2,20 @@
 
 *Every file here is copied or extracted from the sealed records without paraphrase.*
 
-**Assembled 2026-09-03, completed 2026-09-04. Sources read at `HEAD = 597f3db`; this index regenerated at `e890ba0d21c8f21f63917b799aed6d0d90a62194`.**
+**Assembled 2026-09-03, completed 2026-09-04. Sources read at `HEAD = 597f3db`; this index regenerated at `7213a879541ffd71d4785bf725ab4f90ada1209f`.**
 
 ---
 
 ## Status — complete
 
-**All twelve requested files are present.** Two carry a disposition worth reading before use:
+**Twelve files for the original SI request, plus `behavior_rules.csv` for Supplementary
+Table S3 (added 2026-09-04). Thirteen in all.** Three carry a disposition worth reading before use:
 
 | File | Disposition |
 |---|---|
 | `band_source.md` | **CLOSED, and nothing in it goes to the SI.** The 199.7 ± 3.2 band was searched for exhaustively and is not in this repository; PI disposition 2026-09-04 is that it originated outside the repository and is **withdrawn from the SI**. The file is retained as the record of the question. Its four candidate quantities are not the band and must not be cited as such. |
 | `warning_passages.csv` | Produced 2026-09-04 from the Table S4 rows supplied by the PI. Table S4 itself is main-text and is not in this repository; the rows were taken as given and every quotation in them was then **verified back into the agents' filed records — 15 of 15**. |
+| `behavior_rules.csv` | Produced 2026-09-04, read-only. Carries a **measured residual arm confound in column `c1`** found while writing it: c1's `reproduc\w+ from ... archived` branch is near-verbatim Appendix A G6, which only the gated arm received. Removing that branch moves c1 from gated 8/8 vs ungated 1/8 to **6/8 vs 1/8**. Nothing was corrected — the flag is in the file's `design_note` and in REPORT 058. |
 
 ## Answer-key access — logged
 
@@ -113,6 +115,17 @@ Every row of main-text Table S4: the full passage as filed, with its file and li
   - `reps/main/collected/rep12/LOG.md` — `9f80f5da74da48077c25f15332ab050cc3c80db1f0a8ed6b99f13455322ead5e`
   - `reps/main/collected/rep17/LOG.md` — `6f25e24195736c50a95666e18862a2d81ce694430ced52714fb2cec7964e6f44`
 - **Method:** 15 rows for 13 Table S4 rows: row 13 names three agents and is emitted as 13a/13b/13c so each passage carries its own locus. full_passage is the complete paragraph containing the quotation, extracted verbatim by line range; quoted_line is the line carrying the Table S4 text and passage_lines the paragraph's bounds. EVERY Table S4 quotation was checked back into its extracted passage after whitespace normalisation: 15 of 15 verified, 0 failed, and the seven numeric assertions (358, 1,255, 0.876, 27,000, 1,132, 1,376, +8) all present. Each row's checked/unchecked group was asserted against harness/config.arm_of: 15 of 15 agree, which independently confirms checked=gated and unchecked=ungated. All ten agents filed as REPORT.md (REPORT_FILENAME_AS_FILED); collected copies are byte-identical to the workspace files at the bell per reps/main/collected/BELL_FINGERPRINT.log.
+
+### `behavior_rules.csv`
+
+The mechanical rule behind each of the nine behavior columns of `reports/behavioral_counts.csv`, as implemented in `harness/behavioral_extract.py`, with the per-agent y/n values. One row per behavior.
+
+- **sha256** `604e2f1dfc8d02dfe0337c2604a59d1dacacf904e75d7673a108b795c2460bdd`  (9,435 B)
+- **Sources:**
+  - `harness/behavioral_extract.py` — `8fa1f0e2468da5652a96aec5d6fb8b2f65995e6955e12f97fab5059ea50bf2b4`
+  - `reports/behavioral_counts.csv` — `ec037d3f0a95d7b4e208bb87e832a60923ef60e94daca16845da23c6304bbad0`
+  - `prereg/rubric_v1.0.md` — `0d66608d24792e55666f446ad786799f18579fa231d11d5b3cf1cba0009ba5ec`
+- **Method:** 9 rows, 30 columns. Per behavior: the rubric criterion it enumerates, the record read (each agent's whole filed `REPORT.md`), the preprocessing (`normalize()` + `flat()`), the **regex verbatim as implemented**, the match rule, every manual override with its locus verbatim, and the sixteen per-agent values. Read-only: the instrument's `extract()` was imported and called, never `main()`, so neither `reports/behavioral_counts.csv` nor `analysis/claim_table.csv` was rewritten. **All 144 committed cells were re-derived from the instrument and reproduce exactly (0 mismatches)**, and all 144 were then cross-checked between this file and `behavioral_counts.csv` (0 mismatches). Overrides are separated into those that **change** a regex result (5) and those that are **no-ops** confirming it (5). A tenth candidate criterion, "matched control" (G5), is not a column — see the `design_note` on `c1`.
 
 ### `rubric_sealed.md`
 

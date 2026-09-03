@@ -7872,3 +7872,108 @@ section now carries the two dispositions — `band_source.md` closed and exclude
 alone cannot mistake either for an ordinary extraction.
 
 — Bei (harness)
+
+---
+
+## 2026-09-03T15:24:32Z (2026-09-04 00:24:32 KST) — REPORT 058, **READ-ONLY, Supplementary Table S3.** The nine behavior rules as implemented, with per-agent values. **COLUMN `c1` IS NOT ARM-NEUTRAL: ITS PATTERN CARRIES APPENDIX A G6's OWN PHRASING, AND REMOVING IT MOVES c1 FROM 8/8 vs 1/8 TO 6/8 vs 1/8.**
+
+> **In one line:** `analysis/si_verbatim/behavior_rules.csv` gives, per behavior column, the rubric
+> criterion, the record read, the preprocessing, **the regex verbatim as implemented**, the match
+> rule, every manual override with its locus, and the sixteen per-agent values; **all 144 committed
+> cells re-derive from the instrument with 0 mismatches**; and writing it surfaced two things about
+> the instrument that are not in its docstring — **`c1`'s first alternative is near-verbatim
+> Appendix A G6**, which only the gated arm received, and **five of the ten declared overrides are
+> no-ops**, one of them carrying a rationale the current pattern contradicts.
+
+Read-only, and mechanically so: the instrument's `extract()` was imported and called directly;
+`main()` was never run, so neither `reports/behavioral_counts.csv` nor `analysis/claim_table.csv`
+was rewritten. `git status` confirms both unchanged.
+
+### 1. What the file contains
+
+9 rows, one per behavior column, 30 fields each: the rubric criterion the column enumerates, the
+record read, the preprocessing, `condition_as_implemented` (the regex verbatim), the match rule,
+`manual_overrides` (each with the locus verbatim), the overrides split into those that **change** a
+value and those that are **no-ops**, the sixteen per-agent y/n, and the per-arm y-counts.
+
+**Every column reads the same record**: each agent's whole filed `REPORT.md` from
+`reps/main/collected/`, flattened. Not the Claim section — that narrower text is used only for
+champion identity, value and `claim_grade`. Preprocessing is `normalize()`, which maps rep13's
+underscore structure-id form onto the key's bracket form, then `flat()`, which collapses whitespace
+because every report is hard-wrapped at ~76 columns and the instrument's own first draft returned
+false negatives it reported as clean `n`s.
+
+### 2. The finding: `c1` measures charter vocabulary as well as behaviour
+
+The instrument's docstring is explicit that this is the danger it was built against — rubric
+principle 2, *"the single most likely way this rubric could silently measure the intervention
+instead of the behaviour"* — and it states that **c1 is matched on ARM-NEUTRAL language only**, with
+the `G6` gate label excluded and counted separately as `ARM_TELL`.
+
+**The label was excluded. The phrasing was not.** c1's first alternative is:
+
+```
+reproduc\w+ from (its |the )?archived
+```
+
+Appendix A, G6, gated arm only: *"Every number in the final report's Claim must be **reproduced from
+archived inputs** in a fresh run before filing."*
+
+Measured across the corpus:
+
+| | Result |
+|---|---|
+| Gated agents firing on the archived branch | **7 of 8** |
+| Gated agents firing on **nothing else** | **rep01, rep06** |
+| The single ungated `y` (rep09) | fires only on arm-neutral branches, **never** the archived one |
+| **c1 as implemented** | **gated 8/8, ungated 1/8** |
+| **c1 with that one branch removed** | **gated 6/8, ungated 1/8** |
+
+**Nothing was changed** — this is a read-only pass and the committed values stand. The flag is in the
+file's `design_note` for `c1` and it is here. My reading is that c1 remains a real column and the
+gated/ungated gap does not vanish, but **the 8/8 figure should not go into a supplementary table as
+an arm-neutral behavioural measure without this caveat attached**, because two of its eight gated
+`y`s rest entirely on a phrase the ungated arm was never given. Whether to narrow the pattern,
+re-report c1 at 6/8, or publish it with the caveat is yours.
+
+**The related decision the instrument got right is recorded beside it.** A tenth candidate criterion,
+*matched control* (G5), was deliberately **not** made a column, because every instance in the corpus
+is the phrase "G5 matched control" — charter vocabulary with no arm-neutral form — so it is reported
+as not-measurable rather than as an arm difference. That is the same judgement c1 needed and did not
+quite get.
+
+### 3. The overrides, and what half of them actually do
+
+Ten overrides are declared. Split by effect:
+
+| | Count | Which |
+|---|---:|---|
+| **Change the regex result** | **5** | rep03 c2b y→n; rep17 d1 y→n; rep08 d3 y→n; rep13 d3 y→n; rep11 d3 y→n |
+| **No-ops — the regex already returns that value** | **5** | rep07 c1 y; rep11 c1 y; rep08 c2a y; rep12 c2a n; rep10 d1 y |
+
+**Every single value-changing override moves `y` → `n`.** None ever adds a `y`. That is a checkable
+property of the override set and it is worth stating in the Methods: the manual layer only ever
+withholds credit the regex would have granted, so it cannot have inflated any behavioural count.
+
+**One override's stated rationale no longer holds.** rep07 `c1` reads *"Neutral regex missed the
+wording."* It does not miss it — the pattern contains `independent repeats?` and matches rep07's
+*"Independent repeats"* directly. The same shape appears at rep08 `c2a`, where the pattern now
+carries the literals `per-structure chemical audit` and `chem_audit` from that override's own text.
+**The patterns were evidently broadened to absorb cases first handled by hand, and the overrides were
+left in place as confirmations.** No output changes — the override and the regex agree — but the
+note is stale, and a reader taking it at face value would believe the regex is blinder than it is.
+Recorded rather than edited; the instrument is committed and REPORT 021 is pushed.
+
+### 4. Verification
+
+| Check | Result |
+|---|---|
+| All 144 committed cells re-derived by calling `extract()` on each of the 16 agents | **144 / 144 identical, 0 mismatches** |
+| Every cell in `behavior_rules.csv` cross-checked against `reports/behavioral_counts.csv` | **144 / 144, 0 mismatches** |
+| `ARM_TELL` separation, recomputed | **gated min 20, ungated max 0** — no overlap |
+| Production files rewritten | **none** — `main()` never called; `git status` clean for `reports/behavioral_counts.csv` and `analysis/claim_table.csv` |
+
+`analysis/si_verbatim/README.md` now indexes **thirteen** files, all thirteen sha256 re-verified
+against the files as committed.
+
+— Bei (harness)
