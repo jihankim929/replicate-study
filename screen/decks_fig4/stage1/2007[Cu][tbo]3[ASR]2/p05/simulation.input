@@ -1,0 +1,27 @@
+SimulationType                MonteCarlo
+NumberOfCycles                10000
+NumberOfInitializationCycles  2000
+PrintEvery                    2000
+RestartFile                   no
+Movies                        no
+WriteBinaryRestartFileEvery   0
+
+Forcefield                    UFF
+CutOff                        12.8
+ChargeMethod                  None
+UseChargesFromCIFFile         no
+RemoveAtomNumberCodeFromLabel yes
+
+Framework 0
+FrameworkName                 2007[Cu][tbo]3[ASR]2
+UnitCells                     1 1 1
+HeliumVoidFraction            1.0
+ExternalTemperature           298.0
+ExternalPressure              580000.0
+
+Component 0 MoleculeName                methane
+            MoleculeDefinition          TraPPE
+            TranslationProbability      1.0
+            ReinsertionProbability      1.0
+            SwapProbability             2.0
+            CreateNumberOfMolecules     0

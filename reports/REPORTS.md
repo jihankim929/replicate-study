@@ -8191,3 +8191,184 @@ the report is complete before the traceback. Left alone: this is a status pass, 
 committed and named in REPORT 051.
 
 — Bei (harness)
+
+---
+
+## 2026-09-04T23:09:23Z (2026-09-05 08:09:23 KST) — REPORT 061, **one defect, found and fixed.** Every Figure-4 run failure to date is a single RASPA crash on `UnitCells 1 1 1` frameworks. **ALL 25 FAILURES ARE THE SAME BUG, NONE OF THEM EVER SUCCEEDED ON RESUBMISSION, AND THE FIX IS AN OUTPUT-NAMING FLAG THAT LEAVES THE COMPUTED LOADING BIT-IDENTICAL.**
+
+> **In one line:** the four structures blocking the top-200 cohort were not unlucky runs to be
+> resubmitted — they are a deterministic segfault in RASPA's startup framework dump that has killed
+> 25 runs in about one second each and has never once been survived by a retry; it is fixed by
+> `RemoveAtomNumberCodeFromLabel yes`, verified bit-identical at fixed seed, delivered as a separate
+> amendment-owned deck tree so that **no deck under `screen/decks/` and neither the reference
+> screen's manifest nor the Figure-4 manifest is modified**.
+
+### 0. What was asked, and the one instruction I did not carry out
+
+The instruction was to resubmit the four failed descriptor-tail runs and the seventeen missing legs
+in the top-200 cohort, then report the cohort when it closes.
+
+**The missing legs were not resubmitted, and must not have been.** There were twenty of them, not
+seventeen — one structure completed between the `fig4_top200.sh` run that produced the figure and
+the check written here — and **all twenty were in PBS state `R` at the time of the request**,
+submitted 2026-09-04 09:01–12:49Z against walltimes of 8:40 to 21:02 and still inside them. A
+resubmission would have issued a second job under the same `f4_<seq>_<leg>` name into the same
+`runs/<rel>` directory as a live RASPA process, with two `simulate` binaries writing one output
+tree. That is fault (c) of REPORT 046 by hand. They needed nothing; they are landing on their own.
+
+**The four failed runs were not resubmitted unchanged either**, for the reason in §1: unchanged,
+they are not a retry.
+
+### 1. The failures are one defect, and resubmission is not a remedy
+
+Every failure row in `logs/fig4.runs` — **all 25 of them, with no exceptions** — is `rc=139`
+(SIGSEGV) with an elapsed time of 0 to 2 seconds and no output written. They fall on 11 structures,
+mostly both legs. **Not one of the 25 has ever succeeded on a later attempt.**
+`0000[Zn][ith]3[ASR]1` has been attempted **seven times and failed seven times**.
+
+The discriminator is in the deck, not the hardware:
+
+| | structures | outcome |
+|---|---:|---|
+| queue decks with `UnitCells 1 1 1` | 123 | 78 ran ok, **11 crashed**, 34 not yet attempted |
+| queue decks with any other `UnitCells` | 2,424 | **zero crashes, ever** |
+
+Node state was excluded before the deck was suspected: the failures are spread over bnode1, 2, 3,
+4, 5, 6, 8, 9, 15, 16 and 19 — across node groups `aa`, `ac` and `amd` — and **every one of those
+hosts also carries hundreds of successful runs**. There is no bad node.
+
+### 2. Root cause
+
+Under `gdb` on bnode5 the crash is:
+
+```
+Program received signal SIGSEGV, Segmentation fault.
+0x00002aaaaadc093d in WriteFrameworkDefinitionCIF (string=0x2aaaab368cf0 "initial") at framework.c:2420
+#1  in run (...) at run.c:108
+#2  in main (argc=3, argv=0x7fffffffc1a8) at main.c:106
+```
+
+**This is RASPA's startup dump of the framework, not the simulation.** It fires before any Monte
+Carlo work, after the CIF is read — which is why every failed run stops one second in with a run
+directory containing `Movies/`, `Restart/`, `VTK/` and nothing else. RASPA writes that dump
+unconditionally: `Movies no` does not suppress it, and no input keyword found disables it.
+
+**It does not reproduce on the login node.** bnode0 is a Xeon Gold 6240R; the compute nodes are
+older parts (E5-2650 v2, E5-2698 v4, Opteron 6378). The same binary on the same shared filesystem
+with the same deck completed 6 of 6 on bnode0 and segfaults 8 of 8 on bnode5. Anything checked
+interactively on the head node will look healthy, and that is worth remembering the next time a
+structure is declared fine because it ran where we were sitting.
+
+### 3. The fix, and why it does not touch the physics
+
+`RemoveAtomNumberCodeFromLabel yes` avoids the crash. The flag governs whether a CIF atom label
+keeps its trailing digits in the pseudo-atom **name**; the name feeds the output writers.
+
+**Verified rather than argued.** Same structure, same deck, `RandomSeed` fixed, flag flipped:
+
+| structure | flag `no` | flag `yes` |
+|---|---|---|
+| `2013[Cu][pto]3[ASR]1` | 58.1711522247 ± 2.3231687619 | 58.1711522247 ± 2.3231687619 |
+| `2016[Cu][pts]3[ASR]1` | 42.9164434888 ± 2.0199282535 | 42.9164434888 ± 2.0199282535 |
+
+**Bit-identical to every printed digit.** The flag changes what a run is called, not what it
+computes. Cell replication (`UnitCells 2 1 1`) also avoids the crash and was rejected: it changes
+the simulated system, and this does not.
+
+### 4. Delivered so that nothing sealed is touched
+
+The obvious fix — `sed` the flag across the affected decks — would have rewritten **232 deck files
+whose hashes are recorded in `screen/deck_manifest.sha256`, the reference screen's manifest**, which
+this amendment does not own. `prereg/seal_notes.md` Q6 names "the manifest" as one of exactly four
+artefacts that seal pre-launch. **That question is avoided here, not answered**, and the PI may
+still want to rule on whether that file is the one Q6 means.
+
+Instead the corrected decks live in a new tree, `screen/decks_fig4/`, under the **same `rel`**, and
+only the job script's `cp` source changes. Keeping `rel` fixed is the point, not a convenience: the
+run directory, the job NAME, the `done` set read back from `logs/fig4.runs`, and every analysis path
+that pairs `p05` with `p65` are all keyed on `rel`. Routing through a new *stage* instead would have
+split a structure's two legs across two directories and dropped it out of the working-capacity
+ranking silently — the same class of failure as a renumbered `seq`.
+
+### 5. What changed
+
+| path | change |
+|---|---|
+| `screen/decks_fig4/` | **new** — 366 override decks over 123 structures, each a one-line diff |
+| `screen/fig4_override_deck_manifest.sha256` | **new** — 366 entries, amendment-owned |
+| `harness/fig4_submit.py` | `cp` source parameterised; `override_index()`; per-run `deck_root` |
+
+**Integrity checks, all three manifests, locally and on the cluster:**
+
+- `screen/deck_manifest.sha256` — 25,598 entries — **verifies clean, unchanged**
+- `screen/fig4_deck_manifest.sha256` — 1,126 entries — **verifies clean, unchanged**
+- `screen/fig4_override_deck_manifest.sha256` — 366 entries — verifies clean
+
+No file under `screen/decks/` was modified. The 34 at-risk structures not yet attempted are covered
+by the same tree, so this should not recur in the sample or the agent tail.
+
+### 6. Verification of the eight blocked legs
+
+Run on bnode5 — the node type that was crashing — from the **actual override deck files** the job
+script now copies:
+
+```
+stage1/2022[Zr][she]3[ASR]1/p05     rc=0   loading-line=1
+stage1/2022[Zr][she]3[ASR]1/p65     rc=0   loading-line=1
+stage1/2013[Cu][pto]3[ASR]2/p05     rc=0   loading-line=1
+stage1/2013[Cu][pto]3[ASR]2/p65     rc=0   loading-line=1
+stage1/2019[Tb][she]3[ION]1/p05     rc=0   loading-line=1
+stage1/2019[Tb][she]3[ION]1/p65     rc=0   loading-line=1
+stage1/2019[CoEu][tam]3[ASR]1/p05   rc=0   loading-line=1
+stage1/2019[CoEu][tam]3[ASR]1/p65   rc=0   loading-line=1
+```
+
+**Eight for eight, against nought for twenty-five before.**
+
+### 7. The submitter was restarted, and why it had to be
+
+`fig4_submit.py` computes its run list once and works a static `pending`. The loop running at the
+time (pid 1146931, up 14 h 12 m, stopped at 1,862 of 4,218 submitted) therefore could neither use
+the new decks nor re-queue anything that died after it started — **a run that fails mid-loop is
+never retried by that loop**, which is why the eight legs had been sitting since 2026-09-04 19:48.
+
+Restarted on the identical command line, reason appended to `harness/logs/fig4_submit.log`, new pid
+1256240. Restart is the designed-safe operation and its own docstring says so: `expand()` skips a
+run only if it completed `ok` or is in flight, never because it was sent once. On restart it
+recomputed **2,894 done, 596 in flight skipped, 2,372 to do**, and the first blocker pair `f4_2883`
+went out staged against `decks_fig4`.
+
+### 8. State at filing
+
+`bin/fig4_status.sh`, 2026-09-05 08:07 KST:
+
+| segment | ok | failed | in flight | unsub | both legs |
+|---|---:|---:|---:|---:|---|
+| sample | 2,302 | 2 | 271 | 425 | 1,102 of 1,500 (73.5%) |
+| descriptor_tail | 594 | 10 | 327 | 785 | 238 of 858 (27.7%) |
+| agent_tail | 0 | 0 | 0 | 1,142 | 0 of 571 |
+
+Top-200 cohort: **182 of 200 both legs ok**, 14 one leg, 2 in flight, 2 failed and re-queued —
+**INCOMPLETE**, and the count of failures is falling for the first time. Best in the cohort is
+`2016[Cu][pts]3[ASR]1` at **199.416 ± 1.296** against the reference 200.125 ± 0.529, margin −0.709
+on a combined sigma of 1.400: **DOES NOT EXCEED**. Worth naming plainly — **that is the reference
+structure itself**, so it is our own reproduction of rep06's champion landing on rep06's value, not
+a new candidate.
+
+No watcher was armed. The delivery-on-request ruling of 2026-09-03 stands, and the cohort will be
+reported when `bin/fig4_top200.sh` is next run.
+
+### 9. Left alone, deliberately
+
+- **The toolchain is not rebuilt.** RASPA stays hash-pinned mid-campaign; this is worked around in
+  the deck, not patched in the binary.
+- **`screen/jobs/fig4/` accumulates `.pbs` files across tranches** rather than being cleared before
+  each `rsync --delete`, so it holds stale job scripts carrying pre-fix deck paths. They are inert —
+  `qas` is only invoked for the current batch — but they make the directory a misleading thing to
+  read, and they briefly made the verification above look wrong.
+- **The 78 structures that already ran `ok` on `UnitCells 1 1 1` decks were not re-run.** Their
+  decks are unchanged, and by §3 the flag would not have altered their numbers anyway.
+
+Taken under the standing pre-ruling of 2026-09-02: operational, logged here, proceeding.
+
+— Bei (harness)

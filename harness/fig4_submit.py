@@ -103,6 +103,32 @@ PROMOTION_FILE = "analysis/fig4_top100_promotion.json"
 # duplication the PI's dedupe ruling removed. Its FLOOR pair is a different grade and still runs.
 PRODUCED_ELSEWHERE = {("2016[Cu][nbo]3[ASR]23", "claim"): "stage0_requeue"}
 
+# OVERRIDE DECKS. RASPA segfaults in WriteFrameworkDefinitionCIF (framework.c:2420) -- its startup
+# dump of the framework, not the simulation -- for some frameworks whose deck says `UnitCells 1 1 1`.
+# It kills the run in about one second with rc=139 and writes no output. Measured 2026-09-05: all 25
+# failures in logs/fig4.runs are this crash, all 25 are `UnitCells 1 1 1`, no deck with any other
+# UnitCells has ever hit it, and NONE of the 25 has ever succeeded on resubmission -- one structure
+# is 0 for 7. Resubmitting an affected run unchanged is therefore not a retry, it is the same
+# crash again. It does not reproduce on the login node, only on the compute nodes.
+#
+# `RemoveAtomNumberCodeFromLabel yes` avoids it. That flag decides whether the trailing digits of a
+# CIF atom label are kept in the pseudo-atom NAME; it feeds the output writers, not the potential.
+# Verified rather than assumed: same structure, same fixed RandomSeed, flag flipped, loadings
+# bit-identical (2013[Cu][pto]3[ASR]1 58.1711522247, 2016[Cu][pts]3[ASR]1 42.9164434888, both
+# legs of the pair agreeing to every printed digit). It changes what the run is called, not what it
+# computes.
+#
+# THE CORRECTED DECKS ARE A SEPARATE TREE AND `rel` DOES NOT MOVE. screen/decks/ holds decks whose
+# hashes are recorded in screen/deck_manifest.sha256, the REFERENCE SCREEN's manifest, which this
+# amendment does not own and has not touched. So the fix lives in screen/decks_fig4/ under the SAME
+# rel, listed in screen/fig4_override_deck_manifest.sha256, which the amendment does own. Only the
+# job script's `cp` source changes. Keeping `rel` fixed is the point: the run directory, the job
+# NAME, the `done` set read back from logs/fig4.runs and every analysis path that pairs p05 with p65
+# are all keyed on `rel`, and moving a structure to a new stage would have silently split its two
+# legs across two directories and dropped it out of the working-capacity ranking.
+OVERRIDE_DECKS = "decks_fig4"
+OVERRIDE_MANIFEST = "screen/fig4_override_deck_manifest.sha256"
+
 TPL = """#!/bin/bash
 #PBS -N {name}
 #PBS -q long
@@ -115,7 +141,7 @@ export LC_ALL=C
 export RASPA_DIR={root}/raspa_home
 D={root}/runs/{rel}
 mkdir -p "$D" && cd "$D" || exit 1
-cp {root}/decks/{rel}/simulation.input .
+cp {root}/{deck_root}/{rel}/simulation.input .
 S=$(date -u +%s)
 {root}/toolchain/raspa/bin/simulate -i simulation.input > raspa.stdout 2>&1
 RC=$?
@@ -329,6 +355,7 @@ def expand(q, segments, done, deck_index, inflight=frozenset()):
     in the queue. So the skip rule is completion or presence, never "we sent it once".
     """
     runs, skipped = [], {"done": 0, "in_flight": 0, "produced_elsewhere": 0, "no_deck": 0}
+    ovr = override_index()
     for r in q:
         if r["segment"] not in segments:
             continue
@@ -346,8 +373,21 @@ def expand(q, segments, done, deck_index, inflight=frozenset()):
             if f'f4_{r["seq"]}_{leg}' in inflight:
                 skipped["in_flight"] += 1
                 continue
-            runs.append(dict(rel=rel, leg=leg, name=f'f4_{r["seq"]}_{leg}', **r))
+            runs.append(dict(rel=rel, leg=leg, name=f'f4_{r["seq"]}_{leg}',
+                             deck_root=OVERRIDE_DECKS if rel in ovr else "decks", **r))
     return runs, skipped
+
+
+def override_index():
+    """rels served from OVERRIDE_DECKS instead of decks/. Empty file, or no file, means none."""
+    idx = set()
+    p = ROOT / OVERRIDE_MANIFEST
+    if p.exists():
+        for line in p.read_text().splitlines():
+            if line.startswith("#") or "  " not in line:
+                continue
+            idx.add("/".join(line.split("  ", 1)[1].split("/")[:3]))
+    return idx
 
 
 def deck_index():
@@ -383,7 +423,7 @@ def submit(batch, groups, elig, jd):
         r["group"] = order[i % len(order)]
         (jd / f'{r["name"]}.pbs').write_text(TPL.format(
             name=r["name"], group=r["group"], wt=walltime(r["nsim"], r["grade"]),
-            root=SCREEN, rel=r["rel"]))
+            root=SCREEN, rel=r["rel"], deck_root=r.get("deck_root", "decks")))
     subprocess.run(["rsync", "-a", "--delete", f"{jd}/", f"{REMOTE}:{SCREEN}/jobs/fig4/"], check=True)
     remote(f'mkdir -p {SCREEN}/logs {SCREEN}/runs\ncd {SCREEN}/jobs/fig4\n'
            + "".join(f'{QAS} "{r["name"]}.pbs" >/dev/null 2>&1\n' for r in batch), timeout=1800)
