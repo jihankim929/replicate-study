@@ -114,17 +114,49 @@ staged in mjs and not yet dispatched to PBS, and 25 were running.** The staged b
 **211 jobs running and 13 free cores across the 408 eligible** (aa 10, ac 2, amd 1; `ax` excluded by
 policy).
 
-Two things follow, and neither is a defect in this amendment:
+Two things followed, and neither was a defect in this amendment:
 
-1. **Running the submitter changes nothing immediately.** The window is full, so it submits zero
-   runs and waits. The interleave applies to runs submitted *after* that, as slots open one at a
-   time.
+1. **A submitter had been running since 2026-09-03** (pid 916975, all five segments, `--window
+   600`) and had loaded the old module at startup. Python does not reload it, so the amendment
+   governed nothing until that process was restarted.
 2. **Submission order is not execution order while a staged backlog exists.** A tail run submitted
-   now enters mjs behind 575 already-staged sample runs, on a cluster returning ~25 cores to this
-   account. The most porous structures are therefore first *in the order this amendment sets* and
-   not first *to run*, until the backlog ahead of them drains.
+   after the restart would have entered mjs behind the already-staged sample runs, on a cluster
+   returning ~25 cores to this account, so the most porous structures would have been first *in the
+   order this amendment sets* and not first *to run*, for a day or more.
 
-Making the interleave bite sooner would mean removing staged-but-not-running sample jobs from mjs so
-the queue refills in the amended order. **That was not done and is not authorized by this
-amendment.** It is recorded here as the available lever and as the reason the amendment's effect on
-arrival times is delayed rather than immediate.
+## What was done, 2026-09-04T08:5x Z
+
+**Authorised on the day, over and above the order change itself: the staged backlog was drained so
+the queue would refill in the amended order.** Recorded here because it is a cancellation of
+submitted work and therefore belongs in the pre-registration record, not only in the run log.
+
+Sequence, each step verified before the next:
+
+1. **Submitter stopped** (pid 916975), last reporting 1,341 of 4,978 submitted, 3,637 left.
+2. **`--reconcile` run first, before anything was removed**, so no in-flight job could be cancelled
+   while missing from the ledger: 600 in flight, 2,223 already recorded, **+2 rows added**.
+3. **Snapshot and gate.** 581 staged in mjs, 19 running in PBS, **zero overlap between the two
+   listings**; all 581 mapped uniquely to a queue row and all 581 `sample`/`floor`. The drain was
+   conditional on that gate passing.
+4. **`qrm` on 581 explicit ids, never `all`.** `qrm` filters the mjs PENDING list only and is scoped
+   to the calling user, so it cannot reach a job already dispatched to PBS.
+5. **Verified after.** mjs staged **0**; **all 18 then-running jobs still running**; **0 cancel
+   targets found anywhere in PBS**. One job, `f4_1097_p05`, left the running set during the
+   operation by completing normally and wrote its `ok` row.
+6. **Recorded** as 581 rows in `screen/cancelled_runs.csv`, `cput_consumed=none_never_started` —
+   they never dispatched, so they hold no PBS id (`mjs:<id>` instead) and consumed nothing. No
+   `censored_observations.csv` row, on the 2026-09-03 reasoning that an absent cost observation is
+   not a zero one.
+7. **Submitter relaunched** with identical arguments and the amended module.
+
+**Verified live.** The restarted submitter reports **4,218 runs to do** against 3,637 before the
+drain — exactly the 581 returned — and `first 200 runs = 100 sample, 100 descriptor_tail`. Its first
+tranche submitted 118 runs, 60 sample and 60 tail, and **the first 30 tail structures written to the
+ledger are the top 30 by `vf_he` in exact order**, 0.8149 down to 0.6490.
+
+**Nothing was lost.** These 581 never started, so no compute was discarded; `seq` is stable under
+this amendment, so each returns under its identical job name. One consequence recorded and not
+corrected: the submitter writes `attempt=1` on every row it appends, so the ledger now carries a
+second attempt-1 row per returning name rather than an attempt-2 row. That is the submitter's
+existing behaviour, and ruling (1) is that no ledger row is ever edited, so the correction lives in
+`screen/cancelled_runs.csv` where the retry is recorded.
