@@ -51,7 +51,7 @@ across THREE consecutive polls, released after TWO consecutive clear polls, ever
 approximated the three-poll rule with a single poll because it ran once; this loop polls, so it
 implements the rule as written.
 """
-import argparse, csv, json, os, subprocess, sys, time, datetime, pathlib
+import argparse, collections, csv, itertools, json, os, subprocess, sys, time, datetime, pathlib
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 REMOTE = "dirac-bei"
@@ -78,6 +78,23 @@ STAGE_FLOOR = "stage1"
 CANONICAL_ORDER = ["sample", "agent_tail", "descriptor_tail", "claims"]
 # Submission order, PI ruling 2026-09-03. Reorder THIS freely; names do not move.
 SUBMIT_ORDER = ["sample", "descriptor_tail", "promotion", "agent_tail", "claims"]
+
+# Amendment 2026-09-04. Two ITERATION-order changes, and nothing else.
+#
+# (a) WITHIN the descriptor tail, submit in descending helium void fraction, most porous first.
+# (b) The descriptor tail no longer waits for the sample to close: its remaining runs are
+#     interleaved 1:1 with the sample's remaining runs.
+#
+# BOTH ARE ITERATION ORDER ONLY. `seq` is assigned in CANONICAL_ORDER above, before any of this
+# runs, so every job name is unchanged -- verified 2,932 of 2,932 seq assignments unmoved. The
+# alternative, reordering analysis/fig4_descriptor_tail.csv so the enumeration itself changes, is
+# the exact fault the 2026-09-03 amendment exists to prevent: it would renumber the tail's 858
+# structures and shift `claims` behind them, and any tail job in flight at the time would go
+# invisible to the in-flight guard and be resubmitted as a duplicate. The tail has nothing in
+# flight today, so that reordering would happen to be survivable today and would silently stop
+# being survivable the moment it has. Iteration order is survivable always.
+TAIL_ORDER_BY = "vf_he"          # column in analysis/fig4_descriptor_tail.csv, descending
+INTERLEAVE = ("sample", "descriptor_tail")   # 1:1 over REMAINING runs, not over the full segments
 # Written by harness/fig4_milestone.py when (2b)'s floor pass closes. Absent until then.
 PROMOTION_FILE = "analysis/fig4_top100_promotion.json"
 
@@ -200,6 +217,49 @@ def eligible_groups(groups):
 # ---------------------------------------------------------------- the queue
 
 
+def tail_void_fractions():
+    """Helium void fraction per descriptor-tail structure, from the tail's OWN selection file.
+
+    That file is the record of how the tail was chosen (`vf_he` top 1,000 plus every remaining
+    structure over 15 A `d_max`), so its `vf_he` column is the same number the selection used.
+    Reading it here rather than re-deriving from analysis/descriptors.csv keeps the ordering key
+    and the membership rule on one source: if they ever disagree, the tail is wrong, not the order.
+    """
+    out = {}
+    with open(ROOT / "analysis/fig4_descriptor_tail.csv") as fh:
+        first = fh.readline()
+        if not first.startswith("#"):
+            fh.seek(0)
+        for r in csv.DictReader(fh):
+            try:
+                out[r["structure_id"]] = float(r[TAIL_ORDER_BY])
+            except (KeyError, TypeError, ValueError):
+                pass
+    return out
+
+
+def interleave(runs, pair=INTERLEAVE):
+    """1:1 interleave of two segments' REMAINING runs; every other segment keeps its place.
+
+    Applied AFTER expand(), so the ratio is over runs that actually remain rather than over the
+    segments as constructed -- the sample is 54% finished and an interleave computed over its full
+    3,000 runs would not be 1:1 over anything that is still going to be submitted.
+    """
+    a, b = pair
+    A = [r for r in runs if r["segment"] == a]
+    B = [r for r in runs if r["segment"] == b]
+    if not A or not B:
+        return runs                      # nothing to interleave against; leave order untouched
+    rest = [r for r in runs if r["segment"] not in pair]
+    out = []
+    for x, y in itertools.zip_longest(A, B):
+        if x is not None:
+            out.append(x)
+        if y is not None:
+            out.append(y)
+    return out + rest                    # `rest` is every later segment, still in SUBMIT_ORDER
+
+
 def load_queue(meta):
     """Ordered, deduplicated on (structure, grade). Order is the PI's: sample, agent tail,
     descriptor tail, remaining claims."""
@@ -249,8 +309,13 @@ def load_queue(meta):
             seen.add((s, "claim"))
             q.append(annotate(dict(structure_id=s, grade="claim", segment="promotion"), base + j))
 
-    # SUBMISSION order. Stable sort, so order WITHIN a segment is untouched.
-    q.sort(key=lambda r: SUBMIT_ORDER.index(r["segment"]))
+    # SUBMISSION order. Stable sort, so order within a segment is untouched EXCEPT the descriptor
+    # tail, which carries a within-segment key (descending void fraction, amendment 2026-09-04).
+    # This sort runs AFTER seq is fixed above and does not touch it: names are invariant under it.
+    vf = tail_void_fractions()
+    q.sort(key=lambda r: (SUBMIT_ORDER.index(r["segment"]),
+                          -vf.get(r["structure_id"], 0.0)
+                          if r["segment"] == "descriptor_tail" else 0))
     return q
 
 
@@ -415,8 +480,11 @@ def main():
     groups0, _, _, mp0, mm0 = cluster_state()
     inflight0 = set(mp0) | mm0
     runs, skipped = expand(q, segments, done, di, inflight0)
+    runs = interleave(runs)
     print(f"queue        : {len(q):,} structure-grade pairs; segments {sorted(segments)}")
     print(f"runs to do   : {len(runs):,}   skipped: {skipped}")
+    head = collections.Counter(r["segment"] for r in runs[:200])
+    print(f"order        : first 200 runs = " + ", ".join(f"{n} {k}" for k, n in head.most_common()))
     if not runs:
         print("nothing to submit"); return 0
 
