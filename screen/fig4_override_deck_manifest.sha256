@@ -6,6 +6,8 @@
 # UnitCells 1 1 1 frameworks. Every deck listed here has UnitCells 1 1 1.
 # The reference-screen manifests deck_manifest.sha256 and fig4_deck_manifest.sha256
 # are UNCHANGED; no deck under screen/decks/ was modified.
+# PI RULING 2026-09-05 (REPORT 062): deck_manifest.sha256 is a SEALED artefact and this
+# tree is the PERMANENT shape. Do not fold these decks back into screen/decks/.
 f3c29995f96e62ea87db4747d6e88b3e4a52e084f368576fccdcc414ccdf96bc  stage0/2018[CoFe][nan]3[ASR]1/p05/simulation.input
 558aa989f35ce091ce9ce49f1530ff37216b7fee0732e0955f3783dfe90fef15  stage0/2018[CoFe][nan]3[ASR]1/p65/simulation.input
 71e8062ee4dc83909f2213e18214118210886a9705ac20ea4531db4316372557  stage0/2018[RhZr][she]3[ASR]1/p05/simulation.input

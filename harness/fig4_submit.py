@@ -120,7 +120,11 @@ PRODUCED_ELSEWHERE = {("2016[Cu][nbo]3[ASR]23", "claim"): "stage0_requeue"}
 #
 # THE CORRECTED DECKS ARE A SEPARATE TREE AND `rel` DOES NOT MOVE. screen/decks/ holds decks whose
 # hashes are recorded in screen/deck_manifest.sha256, the REFERENCE SCREEN's manifest, which this
-# amendment does not own and has not touched. So the fix lives in screen/decks_fig4/ under the SAME
+# amendment does not own and has not touched. PI RULING 2026-09-05 (REPORT 062): that manifest IS A
+# SEALED ARTEFACT and THIS TREE IS THE PERMANENT SHAPE. It is not a workaround awaiting cleanup and
+# must not be folded back into screen/decks/. Any future deck correction this amendment needs takes
+# the same route -- a deck whose hash is in deck_manifest.sha256 is not editable here for ANY
+# reason, including one as clear-cut as the crash above. So the fix lives in screen/decks_fig4/ under the SAME
 # rel, listed in screen/fig4_override_deck_manifest.sha256, which the amendment does own. Only the
 # job script's `cp` source changes. Keeping `rel` fixed is the point: the run directory, the job
 # NAME, the `done` set read back from logs/fig4.runs and every analysis path that pairs p05 with p65

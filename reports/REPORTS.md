@@ -8372,3 +8372,58 @@ reported when `bin/fig4_top200.sh` is next run.
 Taken under the standing pre-ruling of 2026-09-02: operational, logged here, proceeding.
 
 — Bei (harness)
+
+---
+
+## 2026-09-04T23:13:52Z (2026-09-05 08:13:52 KST) — REPORT 062, **PI ruling recorded.** `screen/deck_manifest.sha256` is a sealed artefact and the override tree is the permanent shape. **CLOSES THE OPEN QUESTION IN REPORT 061 §4. NOT A CORRECTION — 061 STATED THE QUESTION ACCURATELY AND LEFT IT OPEN; THIS ANSWERS IT.**
+
+> **In one line:** the PI has ruled that `screen/deck_manifest.sha256` is one of the sealed
+> artefacts, so `screen/decks_fig4/` is not a temporary workaround pending a decision — it is the
+> permanent route by which this amendment corrects a deck, and the fold-back that REPORT 061 §4
+> held open is now foreclosed.
+
+### 1. The ruling
+
+**`screen/deck_manifest.sha256` is a sealed artefact. The override tree is the permanent shape.**
+
+REPORT 061 §4 recorded that the seal question had been **avoided rather than answered** — the fix
+was routed around `screen/decks/` precisely so that the answer would not be needed in order to
+unblock the cohort, and the report said so rather than implying the point was settled. It is now
+settled, and it is settled in the direction that makes the route taken the only admissible one.
+
+### 2. What this forecloses
+
+REPORT 061 §4 left one door open in its own summary: *if the PI rules it isn't sealed, the override
+tree could later be folded back into `screen/decks/` and simplified away.* **That fold-back is now
+foreclosed.** `screen/decks_fig4/` is permanent. It is not technical debt, it is not awaiting
+cleanup, and a future reader who finds two deck trees and assumes the second is a leftover would be
+wrong. The apparent duplication is the seal being honoured.
+
+### 3. The standing rule this establishes
+
+**Any future correction to a deck this amendment needs takes the same route.** A deck under
+`screen/decks/` whose hash is in `screen/deck_manifest.sha256` is not editable by this amendment
+for any reason, including a defect as clear-cut as the one in REPORT 061 — a crash that destroys
+the run, with a one-word remedy proven bit-identical in output. If that case does not license an
+in-place edit, no case does. The corrected copy goes to `screen/decks_fig4/` under the **same
+`rel`**, is listed in `screen/fig4_override_deck_manifest.sha256`, and the submitter's per-run
+`deck_root` picks it up with no change to job names, run directories or the `done` set.
+
+### 4. Where this is recorded, and why not in §4 itself
+
+This file is append-only by its own header — *entries are never edited after they are pushed* — and
+REPORT 061 was pushed at `aca07e5`. **§4 has therefore not been altered**, and this entry names it
+instead, which is the convention this record already uses (REPORT 039 and REPORT 040 both name
+REPORT 036 §4; REPORT 053 names REPORT 052 (b)3).
+
+Because a reader of the *code* will not find this entry, the ruling is also recorded in the two
+living, amendment-owned places that describe the override tree, where it will be found by whoever
+next reads the mechanism rather than the record:
+
+- `harness/fig4_submit.py` — the `OVERRIDE_DECKS` rationale block
+- `screen/fig4_override_deck_manifest.sha256` — the file header
+
+Neither of those is append-only and neither is sealed. **No sealed artefact was touched by this
+entry, and `screen/deck_manifest.sha256` still verifies at 25,598 entries.**
+
+— Bei (harness)
