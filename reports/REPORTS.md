@@ -8582,3 +8582,300 @@ not reproduced here; say if you want it committed as a CSV under `analysis/`.
 — Bei (harness)
 
 ---
+
+## 2026-09-06T05:26:40Z (14:26:40 KST) — REPORT 064, **four SI queries answered, filed at `da0d83a`.** Descriptor tail accounting, the smoke phase's two launch times and two CPU-h figures, `charter_revisions.csv` through Rev 25, and the revision record at the foot of the charter. **THE REVISION RECORD REACHES ONLY THE GATED ARM — EIGHT GATED CHARTERS CARRY 40 DATED ROWS, EIGHT UNGATED CARRY NONE — AND THE SAME CUT ALSO DROPS §3 COMMON-CORE MATERIAL, WHICH PUTS 9,500 B OF THE 16,666 B ARM GAP OUTSIDE APPENDIX A AND OVERSTATES THE TREATMENT 2.33×.**
+
+> **In one line:** **858 is the count *after* deduplication** (1,007 selected by the tail rule, 149
+> overlapping the random sample), and 1,500 + 858 + 571 + 2 = **2,931** is the only way the export's
+> own denominator closes; the smoke's **14:45 and 15:28 KST are two different events, not a
+> discrepancy** — 15:28:16 is the campaign that produced the record — and **300.741 CPU-h is
+> authoritative** against 304.61 as a scope difference that fully resolves to a single non-GCMC
+> table row, not the s02-shaped 1.65× disagreement SI-001 leaves open; `charter_revisions.csv` now
+> runs **Rev 12 → Rev 25** with seal position and three delivery channels counted separately
+> because for Rev 21–23 **they disagree**; and the revision record the charter header promises sits
+> **after the Appendix A cut**, so **half the delivered charters do not have it**.
+
+**What was written.** Commit **`da0d83a1e63dababd2e9288b21da53b6a47976b5`** (`da0d83a`, on `main`,
+**not pushed**), three files: `analysis/si_verbatim/charter_revisions.csv`,
+`analysis/si_verbatim/si_queries_2026-09-06.md`, `analysis/si_verbatim/README.md`. Items 1, 2 and 4
+were answered read-only; item 3 rewrote one CSV. **No agent file, no charter and no cluster job was
+touched**, and the two source gaps found in §3 were carried through rather than smoothed.
+
+### 1. Descriptor tail — **858 is after deduplication**
+
+| stage | count |
+|---|---:|
+| selected by the tail rule | **1,007** (1,000 by `vf_he` + 7 by `d_max > 15 Å`) |
+| overlap with the 1,500 random sample | **149** |
+| final tail (queued segment) | **858** |
+
+The 149 was recomputed by set-intersecting the two CSVs as they stand, and it reproduces the ruled
+figure exactly. The dedupe is a **separate later step, not part of the tail rule** — proposed at
+`REPORTS.md:6452`, applied at `:6510`. Check: 1,500 + **858** + 571 + 2 = **2,931**, the export's own
+denominator; with 1,007 in place of 858 it does not close.
+
+**One caveat for the SI.** The tail file on disk hashes to `4d90e37e…` where REPORT 041 records the
+rebuild as `65b475ba…`. Membership matches the record, so **cite the count and the rule, not that
+hash**.
+
+### 2. Smoke phase — two events, and two quantities
+
+**14:45 vs 15:28 is not a discrepancy.** `s01.loop.log` carries **three** `iteration 1 starting`
+lines — 05:45:11Z, 06:27:11Z, 06:28:16Z — and only the third has an exit line; its 253,985 s lands
+on **2026-08-29T05:01:21Z to the second**. **14:45 KST is a launch attempt that sat 43 minutes on a
+malformed deny rule**, with the heartbeat reporting health and transcripts silently disabled.
+**15:28:16 KST is the campaign that produced the record**, and it is what 65.53 h, SI-002 and
+SI-001's polling window already use.
+
+**300.741 is authoritative.** The agent filing at 89.6 % is **s01**. Eleven of the twelve rows in its
+own batch table are GCMC batches carrying exactly the **3,620 runs** the meter accounted, summing to
+**300.49** against the meter's **300.741** — **agreement to 0.08 %**. The twelfth row is
+`descriptor / gate passes, all 1,731` at **4.11 CPU-h with no runs** — the `s01_geom` / `s01_oms`
+jobs, real cluster work but not GCMC, so they leave no finished-GCMC record. **The whole 3.87 CPU-h
+gap is that one row.** This is **not** the s02-shaped 1.65× disagreement SI-001 leaves open.
+
+`usage.json:cpu_h` is the authoritative basis for the §4 cap — installed by SI-001, read at
+`watchdog.py:110`, named outright in `compute_meter_RATIFIED.md` §3 — giving **88.5 %, warn**.
+**304.61 is the wider true burn and is not wrong, just a different quantity**, and nothing turns on
+the choice: both sit under the 340 cap and smoke enforcement was log-only. **But the SI should say
+that the authoritative meter's scope is narrower than "compute used" — it misses 1.3 % of this
+agent's burn.**
+
+### 3. `charter_revisions.csv` extended through Rev 25
+
+Rows **Rev 12–21 are byte-unchanged**; `seal_position`, `delivered_to` and `delivered_when` were
+added to all rows, and **Rev 22–25** appended. **Pre-seal: Rev 12–20. Post-seal: Rev 21–25** (seal
+`c67fff5`, 2026-08-29T13:56:43 KST). Delivery counts **three channels separately**, because for
+**Rev 21–23 they disagree** — rep01 held the notices for two days while its `CHARTER.md` did not hold
+the clauses.
+
+Two source gaps were carried through rather than smoothed, and **the two files holding them were
+left untouched**:
+
+- **Rev 24 has no narrative section.** `charter_revisions.md` runs 23 → 25; Rev 22 and Rev 23 got
+  theirs retroactively, Rev 24's was never written.
+- **Rev 25 is uncommitted.** Its charter row and section exist only as working-tree edits, so **the
+  delivered charters carry a revision the committed record does not**.
+
+### 4. The revision record at the foot — **only for the gated arm**
+
+The header line promising a revision record is **common-body text that reaches both arms**. But
+`split_charter` returns everything *before* the Appendix A marker for the ungated arm, and the
+revision record sits *after* Appendix A in `charter_v0.9.md`. So: **the eight gated agents hold 40
+dated rows current through Rev 25; the eight ungated hold none.** Verified by re-rendering both arms
+read-only and confirmed against `charter_v1_common.md`, which ends at §9 with zero hits.
+
+**The same cut also drops "Note on tail corrections"** — **§3 common-core material** carrying the
+evidentiary basis for a pinned setting. **Eight replicates were governed by a §3 that pins tail
+corrections off without holding the paragraph that says why.** This is the same shape as the
+asymmetry Rev 22 was written to repair, and it was missed because **Rev 22 moved a sentence *out of*
+the gate while these sit *after* it**.
+
+**This bites the per-arm cost decomposition.** The revision record and three notes are **9,500 B of
+the 16,666 B gated/ungated gap**, against Appendix A's **7,156 B** — so **attributing the whole
+difference to the treatment overstates it 2.33×**, and **Rev 23 and Rev 25 both justify common-core
+placement on exactly that byte asymmetry**.
+
+### 5. Basis
+
+Item 1 from set-intersecting the tail and sample CSVs as they stand, against the rule and the dedupe
+as recorded at `REPORTS.md:6452` and `:6510`. Item 2 from `s01.loop.log`, s01's own filed batch
+table, `usage.json`, `watchdog.py:110` and `compute_meter_RATIFIED.md` §3. Item 3 from
+`charter_revisions.md` and the per-agent delivery records, three channels read separately. Item 4
+from a **read-only re-render of both arms** through the provisioning pipeline, checked against
+`charter_v1_common.md`. Filed at `da0d83a`; **`da0d83a` and this entry are both unpushed** — say the
+word and they go up together.
+
+— Bei (harness)
+
+---
+
+## 2026-09-06T10:37:51Z (19:37:51 KST) — REPORT 065, **STATUS ONLY, read-only.** The open Figure-4 runs, and the reaper-kill victim list. **THE OPEN COUNT IS 15, NOT 14; ONLY 3 OF THEM ARE RUNNING, AND THE OTHER 12 ARE DEAD JOBS NOTHING IS GOING TO RESTART. AND THE VICTIM LIST DOES NOT EXIST — THE RECORD NAMES AN EXPOSURE SET FOR ONE OF FOUR OCCASIONS AND SAYS SO DELIBERATELY.**
+
+> **In one line:** three Figure-4 runs are genuinely in flight and all three will land inside their
+> walltime, the last of them `2023[Eu][nan]3[FSR]2` at about **2026-09-07 16:04 KST**; but twelve
+> further runs are open because they are *finished and failed* — ten are the REPORT 061 `UnitCells
+> 1 1 1` segfault submitted in the ~2.5 h window before the fixed deck tree existed, and two are
+> **walltime kills that left no line in `logs/fig4.runs` at all**, which is why the status view
+> calls them "unsubmitted"; none of the twelve is queued anywhere, so no completion date can be
+> projected for them from a throughput rate. On the second question: **no agent can be named as
+> having had processes killed**, and the incident record refuses to name any on purpose.
+
+### 0. The premise correction, first
+
+The request says 14 open (3 sample, 11 descriptor tail). **It is 15 — 3 sample and 12 descriptor
+tail.** Read at 2026-09-06 19:34 KST off the cluster clock, `bin/fig4_status.sh` gives sample
+3000 runs / 2997 ok and descriptor tail 1716 / 1704. I reproduced the segment enumeration
+independently from `fig4_submit.load_queue()` against a fresh copy of `logs/fig4.runs` and get the
+same 3 and 12, named individually below. I cannot reconstruct an 11; nothing in the descriptor tail
+has completed today that would have taken it from 11 to 12, so the likelier reading is that the 11
+is one short rather than that a run regressed.
+
+The second correction matters more. **Only 3 of the 15 have an elapsed time, a walltime remaining
+or a live `.data` file.** The other 12 are terminated jobs. Elapsed hours and walltime remaining are
+not defined for them, and their `.data` files, where they exist at all, stopped growing a day ago.
+
+### 1. The three that are actually running
+
+PBS `qstat -f`, reference time **2026-09-06 19:34 KST (cluster clock)**. All three hold a 72:00:00
+walltime. "Running-average working capacity" is the last `avg.` absolute loading printed in the live
+p65 `.data` block minus the **final** p05 value for the same structure — all three p05 legs are `ok`.
+
+| job | structure | seg | elapsed | walltime left | prod cycle | p65 running avg | p05 final | **running-avg WC** |
+|---|---|---|---:|---:|---:|---:|---:|---:|
+| `f4_450_p65` | `2012[Mg][nan]3[ASR]2` | sample | **46.97 h** (46:58:06) | 25.03 h | 6000/10000 | 182.177 | 53.057 ± 0.170 | **129.120** |
+| `f4_2895_p65` | `2023[Eu][nan]3[ASR]2` | desc. tail | **34.14 h** (34:08:16) | 37.86 h | 6000/10000 | 130.491 | 40.014 ± 0.144 | **90.477** |
+| `f4_2896_p65` | `2023[Eu][nan]3[FSR]2` | desc. tail | **33.27 h** (33:16:26) | 38.73 h | 4000/10000 | 126.102 | 41.694 ± 0.325 | **84.408** |
+
+Units are cm³ STP/cm³ framework throughout.
+
+**The working capacities above carry no sigma and must not be quoted as if they did.** RASPA prints
+`±` only in the end-of-run summary; the per-block line gives an average with no error estimate, so
+the p05 uncertainty is the only one available and the difference is a point value. None of the three
+is near the leaderboard in any case — the best of them, 129.120, sits far below the 195.989 that
+`fig4_status.sh` currently has at the top of the sample, itself below the 200.125 agent reference.
+
+### 2. Projected completion, and the one it is projected for
+
+Cycle rate is taken per run from job start to the last `.data` block write, over cycles actually
+completed (2000 init + N production), then applied to the 12,000-cycle total.
+
+| job | s/cycle | cycles left | ETA | h from now | walltime headroom |
+|---|---:|---:|---|---:|---:|
+| `f4_450_p65` | 17.29 | 4000 | 2026-09-07 06:14 KST | 10.7 | +14.4 h |
+| `f4_2895_p65` | 14.52 | 4000 | 2026-09-07 09:50 KST | 14.3 | +23.6 h |
+| `f4_2896_p65` | 16.13 | 6000 | **2026-09-07 16:04 KST** | 20.5 | +18.2 h |
+
+**The last one is `f4_2896_p65` (`2023[Eu][nan]3[FSR]2`) at approximately 2026-09-07 16:04 KST**, and
+it lands with ~18 h of walltime to spare. That is the honest answer to "the last one" *of the runs
+that are running*. It is **not** the last of the fifteen: see §3.
+
+`f4_450_p65` last wrote its `.data` 8.6 h ago and `f4_2896_p65` 6.4 h ago. That is not a stall —
+blocks are 2000 cycles apart and at these rates a block is 9–27 h, so both are mid-block on
+schedule.
+
+### 3. The twelve that are open because they are dead
+
+**Ten are the REPORT 061 defect, and all ten were submitted before the fix existed.**
+
+| job | structure | attempts | last failure (KST) |
+|---|---|---:|---|
+| `f4_1180_p05` / `_p65` | `2019[Zn][nan]3[ASR]4` (sample) | 1 each | 09-05 14:37:58 / 10:07:58 |
+| `f4_2839_p05` / `_p65` | `2021[Zn][rtl]3[ASR]2` | 1 / 3 | 09-05 09:25:24 / 09:25:37 |
+| `f4_2198_p05` | `2010[Zn][rtl]3[ASR]1` | 1 | 09-05 09:55:46 |
+| `f4_2442_p05` / `_p65` | `2015[Zn][ith]3[ASR]4` | 3 / 1 | 09-05 12:03:14 / 12:02:56 |
+| `f4_2441_p05` | `2015[Zn][ith]3[ASR]3` | 1 | 09-05 16:10:04 |
+| `f4_2583_p05` / `_p65` | `2017[Cu][nan]3[ASR]15` | 1 each | 09-05 12:06:57 / 16:40:59 |
+
+All ten are `rc=139`, all died in 0–2 s, all six structures carry `UnitCells 1 1 1`, and the PBS log
+for `f4_2583_p65` reads `Segmentation fault (core dumped)` on the `simulate` line. This is REPORT 061
+unchanged.
+
+**The fix is not in these runs and the timing is the reason.** The override tree
+`screen/decks_fig4/stage1/` contains a corrected deck for **all six** structures. But the run
+directory on the cluster for `2017[Cu][nan]3[ASR]15/p65` holds
+`RemoveAtomNumberCodeFromLabel no` — the old deck — because its job script still copies from
+`screen/decks/`, and it was submitted **2026-09-04T21:36Z = 06:36 KST on 09-05**, against a fix
+delivered at **08:14 KST on 09-05**. Every one of the ten was submitted between 2026-09-04T18:58Z
+and 21:36Z — 03:58 to 06:36 KST on 09-05, all of it in the ~2.5 h before the fixed deck tree
+existed — and then sat in the queue and crashed hours later. **The failures postdate the fix; the
+submissions do not.** These will not heal
+by themselves and have never been retried through `decks_fig4/`.
+
+**Two more are walltime kills that left no trace in the run log.** `fig4_status.sh` reports them as
+"unsubmitted"; they are not.
+
+| job | structure | granted | PBS verdict |
+|---|---|---:|---|
+| `f4_2107_p65` | `2005[Cr][mtn]3[ASR]1` | 15:58:00 | `job killed: walltime 57509 exceeded limit 57480` |
+| `f4_2180_p65` | `2010[Cu][nan]3[ASR]37` | 16:16:00 | `job killed: walltime 58602 exceeded limit 58560` |
+
+Both reached production cycle 6000/10000 before PBS killed them, on 2026-09-05 at 18:04 and 19:31
+KST. Their frozen running averages are 162.229 and 201.047, giving working capacities of **135.583**
+and **160.042** against p05 finals of 26.646 ± 0.273 and 41.006 ± 0.568 — **partial, at 60 % of
+production, and not to be entered anywhere as results.** The second is the more interesting number:
+201.047 would sit above the 200.125 agent reference if it survived to the end, and it is a
+`UnitCells 1 1 1` structure whose walltime was set from `nsim` 3600 at 15:58 and 16:16 when the run
+plainly needs three to four times that.
+
+They also matter for a reason unrelated to Figure 4: their `.data` files are **817 MB and 847 MB**,
+against 3.2 MB for `2012[Mg][nan]3[ASR]2` at the same cycle count. That is ~1.6 GB of partial output
+from two runs, and whatever produces it is a plausible part of why they missed their walltime.
+
+**The failure that matters here is in the accounting, not the physics.** A PBS walltime kill
+pre-empts the epilogue that appends to `logs/fig4.runs`, so a job can consume 16 h of wall clock,
+write 800 MB and die without leaving one line in the run log. The status view then cannot tell it
+apart from a job that was never submitted, and reports it in the column that reads as "no work
+done yet".
+
+### 4. Why there is no projected completion for the fifteenth run
+
+`fig4_status.sh` currently projects the descriptor tail closing at **2026-09-06 20:09 KST**, half an
+hour from now, at the 6 h rate of 23.2 ok/h. **That projection should not be used for these twelve.**
+It divides runs-remaining by a fleet throughput rate, which is correct for work that is queued and
+wrong for work that is not: none of the twelve is in `qstat`, none is staged in `mjs`, and no
+resubmission exists for any of them. Their completion date is set by a decision to resubmit — the
+ten through `decks_fig4/` and the two with a walltime that fits — not by the queue draining.
+
+So: **the last of the three running runs is 2026-09-07 16:04 KST; the last of the fifteen has no
+date, and will not acquire one until the twelve are requeued.**
+
+### 5. The reaper kills — **the list you asked for does not exist, and that is the record's position, not a gap in my search**
+
+`harness/state/incident_20260831_cross_replicate_kills/INCIDENT.md` and the underlying self-report
+at `harness/state/observed_behavior/2026-08-31_cross_replicate_process_kills.md` are explicit:
+**no replicate can be named as having had processes killed.** What is on the record:
+
+- **The reaper is rep16**, self-reported unprompted at **2026-08-31T05:00:55 KST**. Its `bin/reap.sh`
+  matched by script name under the single shared UNIX user `Bei`, so `pkill -f worker.sh` selected
+  fleet-wide.
+- **Four occasions, between 13:10 KST on 2026-08-30 and 04:45 KST on 2026-08-31.** Only the window
+  endpoints are recorded — **the four individual times are not**, in rep16's report or anywhere else.
+- **What was killed:** `worker.sh` and `runbatch.py` processes, by `kill -KILL`. **Agent-host /
+  login-node orchestration only** — PBS jobs on compute nodes were insulated, so no banked
+  simulation result is affected.
+- **Whose:** unknown. rep16 stated it could not reconstruct the count; the incident file states the
+  harness cannot either.
+
+The nearest thing to a list is an **exposure set for one occasion**, and the file is careful that it
+is not a victim list. From the login-node snapshot at **2026-08-30T19:22:09Z (04:22 KST 08-31)**, 23
+minutes before the last reported occasion, processes co-present under each replicate:
+
+| replicate | processes in snapshot |
+|---|---:|
+| rep05 | 50 |
+| **rep16** (the reaper) | 34 |
+| rep10 | 10 |
+| rep08 | 6 |
+
+**Exposure set for the 04:45 occasion only: rep05, rep08, rep10.** The other three occasions have no
+snapshot and no reconstructible set.
+
+I verified the disclaimer rather than repeating it: the snapshot is 106 lines and contains **zero**
+occurrences of `worker.sh` or `runbatch.py` — it enumerates `simulate` processes, which are not what
+the reaper matched. So the table above establishes who had processes on that host at that instant,
+and nothing about which processes died. `kill -KILL` leaves no record on the victim side and no
+process accounting was running.
+
+The incident file's own instruction stands, and I am repeating it because it is the answer to the
+question as asked: **the harm must not be reported as zero, and it must not be reported as three.**
+Disposition on the record is PI, 2026-09-02, on REPORT 014: logged as an isolation incident, no
+sanction, no investigation into the other three occasions; the escalation row is closed with its
+author, rep16's campaign having closed 2026-09-01.
+
+### 6. Basis
+
+Everything above is read-only. §1–§4: one `bin/fig4_status.sh` run and four `ssh` round trips to
+`dirac-bei` running `qstat`, `qstat -f`, `stat`, `ls`, `grep` and `cat` — no submission, no `qdel`,
+no write to the cluster or the repository. Segment membership from
+`fig4_submit.load_queue()` imported locally against a copy of `logs/fig4.runs` taken at
+2026-09-06T10:31Z. Loadings read directly from the `.data` files, live ones from the last printed
+block and completed ones from the `Average loading absolute` summary line. Deck routing from
+`screen/jobs/fig4/*.pbs` and the run directories' own `simulation.input`. Kill verdicts quoted from
+`screen/logs/f4_*.log`. §5 from the two incident files named in it and from
+`harness/state/incident_20260831_login_node/bnode0_ps_20260830T192208Z.txt`, counted directly.
+**This entry is uncommitted and unpushed.**
+
+— Bei (harness)
+
+---
