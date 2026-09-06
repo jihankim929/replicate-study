@@ -4,17 +4,21 @@
 
 **Assembled 2026-09-03, completed 2026-09-04. Sources read at `HEAD = 597f3db`; this index regenerated at `7213a879541ffd71d4785bf725ab4f90ada1209f`.**
 
+**Amended 2026-09-06:** `charter_revisions.csv` extended from Rev 21 through **Rev 25** and given
+three columns — `seal_position`, `delivered_to`, `delivered_when`. No other file changed.
+
 ---
 
 ## Status — complete
 
 **Twelve files for the original SI request, plus `behavior_rules.csv` for Supplementary
-Table S3 (added 2026-09-04). Thirteen in all.** Three carry a disposition worth reading before use:
+Table S3 (added 2026-09-04). Thirteen in all.** Four carry a disposition worth reading before use:
 
 | File | Disposition |
 |---|---|
 | `band_source.md` | **CLOSED, and nothing in it goes to the SI.** The 199.7 ± 3.2 band was searched for exhaustively and is not in this repository; PI disposition 2026-09-04 is that it originated outside the repository and is **withdrawn from the SI**. The file is retained as the record of the question. Its four candidate quantities are not the band and must not be cited as such. |
 | `warning_passages.csv` | Produced 2026-09-04 from the Table S4 rows supplied by the PI. Table S4 itself is main-text and is not in this repository; the rows were taken as given and every quotation in them was then **verified back into the agents' filed records — 15 of 15**. |
+| `charter_revisions.csv` | Extended to Rev 25 on 2026-09-06. **Two gaps in the sources are carried into it rather than smoothed over: Rev 24 has no narrative section anywhere in `prereg/charter_revisions.md`, and Rev 25 exists only as an uncommitted working-tree change** — so the delivered charters carry a revision the committed record does not. See the four dispositions under the file's entry below. |
 | `behavior_rules.csv` | Produced 2026-09-04, read-only. Carries a **measured residual arm confound in column `c1`** found while writing it: c1's `reproduc\w+ from ... archived` branch is near-verbatim Appendix A G6, which only the gated arm received. Removing that branch moves c1 from gated 8/8 vs ungated 1/8 to **6/8 vs 1/8**. Nothing was corrected — the flag is in the file's `design_note` and in REPORT 058. |
 
 ## Answer-key access — logged
@@ -55,12 +59,69 @@ Appendix A — Audit Gates, as rendered for the gated (checked) arm. The span fr
 
 ### `charter_revisions.csv`
 
-One row per revision Rev 12 to Rev 21: date, change summary, triggering record.
+One row per revision **Rev 12 to Rev 25** (extended from Rev 21 on 2026-09-06): date, change
+summary, triggering record, **pre- or post-seal position**, **which agents the revision was
+delivered to**, and **when**.
 
-- **sha256** `d9ce06019163baa5e3f068a8b9430d8b1f08fde3f4139fabe4b77d63499c76ab`  (3,531 B)
+- **sha256** `cbcb800921219cd90e539d2a32331f606745e749c1a2efb9c0ce4c844fd289c1`  (10,303 B)
 - **Sources:**
   - `prereg/charter_revisions.md` — `8396d50f7fe350827f8d652c234b212ee492a4909b745d2dd12b05f6472bf9fb`
-- **Method:** date and change_summary are the revision heading verbatim; triggering_record is the section's first attribution paragraph verbatim, whitespace-normalised only. Extracted programmatically, not transcribed.
+  - `prereg/charter_v0.9.md` — `205d7d8ba8f9e7a6eab6507aa63ea66ccdbd7136fe372462ba9e31cfb52d3f24`
+  - `reports/REPORTS.md` — `637a3bccf37df14698c65cc60be53928e08db4091455a7b5ed2ad549e08352ac`
+  - `STATE.md` — `4c8fcb56a76c4010b0edfa99b7d9043f606fde3b82e1f44aca953b896164fa8a`
+  - `harness/rerender_charter.py` — `b9a4829b8a39e0ece2b9a510b8c29649fcb7287ecb4cab656ee1b59b10dc3c65`
+  - `analysis/si_verbatim/launch_times.csv` — `4b274b740c6818ee19b5e6fec14030683fb40538ade4628095276d6926a55174`
+  - `reps/main/collected/rep*/INBOX.md` — 16 files
+    - `reps/main/collected/rep01/INBOX.md` — `1dd7a78467c958a93edd7df0697741a91276b62a7529c6cca67fa3becc11ec8b`
+    - `reps/main/collected/rep02/INBOX.md` — `416a1647db73bd90e4a640821ab9766b2c7d89f5aa9b30cb357752a33e72ccba`
+    - `reps/main/collected/rep03/INBOX.md` — `fde11a13658a4bc42ea244fdb031a1672f1dd5c6b475abfe26a920868ed466dc`
+    - `reps/main/collected/rep04/INBOX.md` — `324cffe7e087822744c5bac161bc1b63512c5f83b8b2fff8b989bae8a440cf01`
+    - `reps/main/collected/rep05/INBOX.md` — `a82c11422d1730fabaeaf1d9b1fb4b6c6e54c593785a8fe3d68e297a0e68efb7`
+    - `reps/main/collected/rep06/INBOX.md` — `6224fcbdfb42950f3e16d7d6d790f077484742f5cd26fee9e9b49d568ea4c457`
+    - `reps/main/collected/rep07/INBOX.md` — `25d7668c19b0067ff86ec69422789f5e956f414756e4acd8d6a42ca90c71b1d2`
+    - `reps/main/collected/rep08/INBOX.md` — `f11478d407724af2ebefb34683bda3a12e84f6cc45b7b364df7f22652f4625af`
+    - `reps/main/collected/rep09/INBOX.md` — `fae9179fb27c4f469f0135e1613ab34c7f7c67684f004d5c63dc6e549824e2ae`
+    - `reps/main/collected/rep10/INBOX.md` — `d2a1b54729d1ac21ecf6c86afdd46fdad9cfae0cf156fb149597f6e8203c9780`
+    - `reps/main/collected/rep11/INBOX.md` — `7e72bb1cb59e4e5d9d75b36cbb3f6e95464ed71237a7d3f6aabaa92350b639d7`
+    - `reps/main/collected/rep12/INBOX.md` — `261decb5a4b9ebe35fd4590828e00f594e024f1e473e6d8880d12ebf6adfc371`
+    - `reps/main/collected/rep13/INBOX.md` — `3beb59bf634d18ad59dfcfa0890a0be85ef39fa2a5f4d65c9972408f90c3954d`
+    - `reps/main/collected/rep15/INBOX.md` — `fd3c53a13c8ab452db3279e151bce5fa23a9a809d4a69aefa6e1c288d01a8477`
+    - `reps/main/collected/rep16/INBOX.md` — `5118da1c371b0acf016140917f8ae60ae175b05cf82834228f2d1fb261163623`
+    - `reps/main/collected/rep17/INBOX.md` — `59e09b319229bd379c77b5c7c4ecc06ba894631f582f3408c3459c4e13b89083`
+  - `git log` over `prereg/charter_v0.9.md` (commit stamps, KST)
+- **Method:** `date` and `change_summary` are the revision heading verbatim; `triggering_record`
+  is the section's first attribution paragraph verbatim, whitespace-normalised only — extracted
+  programmatically, not transcribed. Rows Rev 12-21 are unchanged from the Rev 12-21 build
+  (`d9ce0601…`); the three new columns and rows Rev 22-25 were added on top of them.
+  `seal_position` is taken from the position of each revision's row relative to the **`Charter
+  sealed at v1.0`** row in the charter's own REVISION RECORD, cross-checked against the seal
+  commit `c67fff5` (2026-08-29T13:56:43 KST): **Rev 12-20 pre-seal, Rev 21-25 post-seal.**
+  `delivered_to` and `delivered_when` are reconstructed from three independent channels and say
+  which one carries each claim — the **provisioning stamps** in `launch_times.csv`
+  (`provisioned_at` / `launched_at`) against each revision's commit stamp; the **re-render
+  record** (`harness/rerender_charter.py` and the REPORT sections that log each run); and the
+  **INBOX notice** actually present in each collected workspace. Where the channels disagree
+  the row says so rather than reconciling them.
+
+**Four dispositions to read before using this file.**
+
+1. **Rev 24 has no narrative section.** `prereg/charter_revisions.md` runs Rev 23 → Rev 25 with
+   nothing between them. The clause itself is real and was delivered — it is `§5 "Endgame and
+   the spend warning"` at `prereg/charter_v0.9.md:102`, with its revision row at `:245` — but
+   the file that carries the *reasoning* for every other revision has no Rev 24 entry, so this
+   row's `triggering_record` is assembled from the charter row plus REPORT 007 §2 and REPORT
+   056 §4 rather than quoted from one place. This is the same gap that Rev 22 and Rev 23 had
+   until they were written up on 2026-08-30; **Rev 24's was never written.**
+2. **Rev 25 is uncommitted.** Both its charter row (`charter_v0.9.md:246`) and its narrative
+   section (`charter_revisions.md:1080`) exist only as working-tree modifications; no commit in
+   this repository carries them. The delivered workspace charters *do* carry Rev 25 — it was
+   rendered from this working tree — so the governing text and the committed record differ.
+3. **`delivered_to` counts CHARTER.md and INBOX separately on purpose**, because for Rev 21-23
+   they differ: rep01 held the notices for two days while its `CHARTER.md` did not hold the
+   clauses. Counting either channel alone misstates what rep01 was governed by.
+4. **rep12's collected `INBOX.md` holds only four rows**, all 2026-09-01/02, so *no* charter
+   notice survives in it for any revision. rep12's delivery is evidenced by the re-render
+   record and by rep12's own `STATE.md:62` quoting Rev 24, not by its inbox.
 
 ### `exclusion_set.csv`
 
@@ -189,6 +250,27 @@ Date and commit hash of the two pre-analysis amendments and of the Figure 4 amen
   - `reports/REPORTS.md` — `97b4fc42901a08aa7edbd62f831e43e2e6b5df4e0765a5e0cbad1caeb5c53227`
   - `prereg/fig4_order_amendment_2026-09-03.md` — `0c755ef5872945fe9c9e86110400e48e61c1207b037c3d199ea964277838f85e`
 - **Method:** Commit hashes and timestamps read from git; subjects are the commit subjects verbatim. Four rows: the 2026-09-02 pre-analysis amendment (REPORT 021), the 2026-09-03 Figure 4 interim plan filed as a pre-analysis amendment (REPORT 043), and the two Figure-4 amendments of 2026-09-03 (queue order, REPORT 051; milestone posts on request).
+
+### `si_queries_2026-09-06.md`
+
+Three SI queries answered read-only on 2026-09-06, alongside the `charter_revisions.csv`
+extension: (1) the descriptor-tail accounting and whether **858** is before or after
+deduplication; (2) the smoke phase's two launch times (**14:45** vs **15:28 KST**) and its two
+compute figures (**304.61** vs **300.741 CPU-h**) for s01, with the authoritative one named;
+(3) whether the delivered charter actually carries the revision record its header promises.
+
+- **sha256** `07a9d5b2c959ed5733ffcd7f0753a74f2764b5d236d696a95c142a241f96a5eb`  (15,034 B)
+- **Sources:** the loci are given inline against every quantity — `analysis/fig4_descriptor_tail.csv`,
+  `analysis/fig4_sample_20260903.csv`, `analysis/fig4_interim.csv`, `reports/REPORTS.md`,
+  `prereg/fig4_order_amendment_2026-09-0{3,4}.md`, `LOG.md`, `SI_LEDGER.md`,
+  `harness/sessions/s0{1,2}.loop.log`, `harness/watchdog.py`, `harness/provision.py`,
+  `prereg/compute_meter_RATIFIED.md`, `prereg/charter_v0.9.md`, and the collected `s01` workspace.
+- **Method:** quotation with line citations, plus three recomputations stated as such — the
+  1,007 / 149 / 858 set arithmetic re-derived from the two CSVs; the s01 batch table re-summed
+  and split into its GCMC and non-GCMC legs; and both charter arms re-rendered through the
+  provisioning pipeline read-only and searched for the revision record. **Three answers, and two
+  of them are findings rather than reconciliations:** the 4.11 CPU-h the authoritative meter
+  cannot see, and the revision record that reaches the gated arm only.
 
 ### `band_source.md`
 
