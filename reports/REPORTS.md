@@ -8427,3 +8427,158 @@ Neither of those is append-only and neither is sealed. **No sealed artefact was 
 entry, and `screen/deck_manifest.sha256` still verifies at 25,598 entries.**
 
 — Bei (harness)
+
+---
+
+## 2026-09-06T03:15:00Z (12:15:00 KST) — REPORT 063, **STATUS ONLY, read-only.** The 174 Figure-4 runs in state `R`, read from their in-progress `.data` files. **FIVE STRUCTURES ARE CURRENTLY OVER 185, BUT FOUR OF THE FIVE ARE RE-MEASUREMENTS OF VALUES ALREADY IN `fig4_interim.csv` AND THEY REPRODUCE THEM TO WITHIN 0.43 — NOTHING IN FLIGHT WOULD CHANGE THE LEADERBOARD.**
+
+> **In one line:** at 11:48:30Z there were **174 legs in state `R`** across **162 structures**, of
+> which **133 are in production and 41 are still initializing**; five structures show a **current**
+> working capacity over 185 — top is **`2013[Yb][nia]3[ASR]1` at 196.44** — but these are
+> **unconverged running means with no uncertainty attached**, four of the five **already have a
+> completed floor-grade measurement in `analysis/fig4_interim.csv`** and the in-flight claim-grade
+> numbers land **within 0.43 of them**, so the only genuinely new value in the whole set is
+> **`2007[Zn][pcu]3[FSR]5` at 190.92** — and **all of it sits below the completed record's top,
+> `2016[Cu][pts]3[ASR]1` at 199.416 ± 1.296.**
+
+Read-only. One `qstat -u Bei` and seeked tail reads of the RASPA `.data` files, plus a whole-file
+re-read of seven of them as a check. **Nothing was submitted, nothing was killed, nothing was
+written on the cluster**, and no file in this repository was modified except this entry.
+
+### 0. What this is, and the one thing to hold on to
+
+This is a snapshot of work **in progress**, not a result. Everything in §2 is a **running mean taken
+from a `Current cycle:` block mid-run**, which is a different object from the
+`Average loading absolute` that a finished run reports: it carries **no `+/-`**, because RASPA emits
+an uncertainty only in its final block. **None of the numbers below has an error bar, and none of
+them is final.** They are reported because they were asked for, and they are useful mostly as a
+check that runs in flight are heading where the completed record already says they should.
+
+### 1. What is running
+
+At **2026-09-06T02:48:30Z (11:48:30 KST)**, `qstat -u Bei` listed **174 jobs in state `R`**, every
+one of them a Figure-4 leg (`f4_*`), one node × one core under the ratified geometry.
+
+| | |
+|---|---|
+| legs in `R` | **174**, across **162 structures** (12 structures have both legs running) |
+| grade | 155 claim (10,000 init → 50,000 production), 19 floor (2,000 → 10,000) |
+| segment | **155 (2a) agent tail**, 16 (2b) descriptor tail, 3 (1) sample |
+| leg | 132 `p65`, 42 `p05` |
+| phase | **133 in production, 41 still in initialization** |
+| elapsed | min 0.04 h, median 3.29 h, **max 39.26 h** (`f4_450_p65`, `2012[Mg][nan]3[ASR]2`) |
+
+Job name → structure was resolved through `fig4_submit.load_queue()`, not through the ledger, so
+the `seq` mapping is the submitter's own and cannot drift from it. All 174 names resolved.
+
+Queue context from `bin/fig4_status.sh` **nineteen minutes later, at 12:07 KST**: 170 running, 430
+staged in mjs, 600 in flight; sample **99.7 %** complete, descriptor tail **97.4 %**, agent tail
+**13.1 %** (75 of 571), claims not started; 41.2 ok/h over the trailing 6 h. **The count moved 174 →
+170 in nineteen minutes**, which is the honest scale of how perishable this snapshot is.
+
+### 2. The five over 185 — and what they are actually worth
+
+Working capacity here is the amendment's definition, `loading(65 bar) − loading(5.8 bar)` in
+cm³ (STP)/cm³. Where one leg is finished its final value is used (marked **done**); where a leg is
+in flight its running mean is used (marked **running**, with the production fraction reached).
+
+| structure | **current WC** | 65 bar | 5.8 bar |
+|---|---:|---|---|
+| `2013[Yb][nia]3[ASR]1` | **196.44** | 242.37 running, 60 % | 45.930 ± 0.319 done |
+| `2007[Zn][pcu]3[FSR]5` | **190.92** | 224.99 running, 20 % | 34.072 ± 0.562 done |
+| `2007[Zn][pcu]3[ASR]3` | **190.44** | 224.60 running, 40 % | 34.152 ± 0.405 done |
+| `2014[Zn][pcu]3[ASR]13` | **188.32** | 224.367 ± 0.660 done | 36.05 running, 80 % |
+| `2005[Cu][lvt]3[ASR]1` | **186.93** | 227.86 running, 80 % | 40.929 ± 0.397 done |
+
+Just under, and worth naming because it is the least settled of the group: `2014[Fe][nan]3[ASR]7` at
+**184.74**, with **both** legs running at 60 % — neither side of that subtraction is fixed.
+
+The running leg of each was re-read whole, not from the seeked tail, and all five reproduced exactly.
+
+### 3. Four of the five are not new, and that is the useful part
+
+**Four of these five structures already have a completed floor-grade pair in
+`analysis/fig4_interim.csv`** (exported this morning, 01:53:47Z). The runs now in flight are their
+**claim-grade** re-measurements at five times the production cycles. The two agree closely:
+
+| structure | completed floor grade, 2k/10k | in-flight claim grade, provisional | Δ |
+|---|---:|---:|---:|
+| `2013[Yb][nia]3[ASR]1` | 196.621 ± 1.499 | 196.44 | **−0.18** |
+| `2007[Zn][pcu]3[ASR]3` | 190.824 ± 1.259 | 190.44 | **−0.38** |
+| `2014[Zn][pcu]3[ASR]13` | 188.336 ± 1.685 | 188.32 | **−0.02** |
+| `2005[Cu][lvt]3[ASR]1` | 186.500 ± 0.680 | 186.93 | **+0.43** |
+| `2014[Fe][nan]3[ASR]7` | 185.449 ± 1.578 | 184.74 | −0.71 |
+
+**Every one of those deltas is inside the completed measurement's own uncertainty.** Read carefully,
+that is a statement about the protocol and not about the structures: **going from 10,000 to 50,000
+production cycles is not moving these values**, and an unconverged claim-grade run at 20–80 % is
+already landing on the floor-grade answer.
+
+**`2007[Zn][pcu]3[FSR]5` at 190.92 is the only genuinely new number in the entire state-`R` set** —
+it has no completed pair in `fig4_interim.csv`; only its 5.8 bar leg is finished. It shares the `2007[Zn][pcu]3` base name with `[ASR]3`, a
+different representative, and the two provisional values agree within 0.5.
+
+**Three of the five were also filed by agents,** and the reconstruction matches those filings too:
+
+| structure | agent filings (`analysis/fig2_claims_long.csv`) | provisional |
+|---|---|---:|
+| `2013[Yb][nia]3[ASR]1` | **eight** runs, 195.07 – 198.30, five of them 196.22 – 196.48 | 196.44 |
+| `2007[Zn][pcu]3[ASR]3` | rep13, 190.09 | 190.44 |
+| `2005[Cu][lvt]3[ASR]1` | rep13, 187.00 | 186.93 |
+
+`2007[Zn][pcu]3[FSR]5` and `2014[Zn][pcu]3[ASR]13` appear in no agent filing.
+
+**Nothing here disturbs the top of the record.** The best completed structure across all segments
+remains **`2016[Cu][pts]3[ASR]1` at 199.416 ± 1.296** — the same structure as rep06's reference
+200.125 ± 0.529, which it reproduces within combined error. The highest provisional value in the
+whole state-`R` set is 196.44, below it. **No run currently in flight would change the leaderboard
+if it finished at its present value.**
+
+### 4. What could not be measured, stated as limits rather than omitted
+
+**(a) 41 legs have no loading at all, and this is not a parse failure.** They are still in
+initialization, and RASPA's `[Init]` blocks carry instantaneous values only — no running means. It
+emits averages only once production starts. There is nothing to extract for these 41.
+
+**(b) The production fraction is a floor, not a measurement.** `PrintEvery` is **10,000** on the
+claim runs — five report points across 50,000 cycles — so a run shown at 20 % is somewhere in
+[20 %, 40 %). Floor runs mostly print every 2,000. Worse, on the claim runs `PrintEvery` equals
+`NumberOfInitializationCycles`, so an initializing run's last print is cycle 0 and **there is no
+visibility into init progress at all**: two of the 41 have been running over 10 h with nothing but
+that cycle-0 line.
+
+**(c) 32 legs show a last production print at cycle 0**, so their "running mean" is effectively an
+instantaneous value. They should not be read as measurements. **None of the five in §2 is among
+them** — those are at 20–80 %.
+
+**(d) Working capacity is computable for only 56 of the 162 structures.** For the other 106 the
+second leg is queued, unsubmitted, or itself still initializing. A single leg is not a capacity, per
+`fig4_milestone.py`'s rule, and none of them is counted as a low value.
+
+**(e) Long gaps between `.data` writes are mostly quantization, not stalls** — with `PrintEvery`
+10,000 a claim run can legitimately go 10 h without writing.
+
+### 5. Three runs that look genuinely slow
+
+These are floor-grade with `PrintEvery` 2,000, so their gaps are informative rather than an artifact:
+
+| job | structure | elapsed | production | last `.data` write |
+|---|---|---:|---|---:|
+| `f4_2896_p65` | `2023[Eu][nan]3[FSR]2` | 25.55 h | **2,000 / 10,000** | 8.1 h ago |
+| `f4_2895_p65` | `2023[Eu][nan]3[ASR]2` | 26.41 h | 4,000 / 10,000 | 3.5 h ago |
+| `f4_450_p65` | `2012[Mg][nan]3[ASR]2` | **39.26 h** | 6,000 / 10,000 | fresh |
+
+All three are inside their 72 h walltime and none is failing. Flagged so that a later walltime kill
+on any of them is not read as a new fault. **No action taken and none proposed** — this is a status
+pass.
+
+### 6. Basis
+
+`qstat -u Bei` at 02:48:30Z; `.data` reads at 02:49:33Z; `bin/fig4_status.sh` at 03:07Z;
+`analysis/fig4_interim.csv` as exported 01:53:47Z; `analysis/fig2_claims_long.csv` as committed.
+Definitions follow `harness/fig4_milestone.py`. The full 174-row table sits behind this entry and is
+not reproduced here; say if you want it committed as a CSV under `analysis/`.
+
+— Bei (harness)
+
+---
