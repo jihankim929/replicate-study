@@ -9205,3 +9205,294 @@ delivered.
 — Bei (harness)
 
 ---
+
+## 2026-09-06T13:30:33Z (22:30:33 KST) — REPORT 068, **READ-ONLY inventory.** Where the raw RASPA decks and `Output/` trees actually are, for the sixteen and for the Figure-4 reference screen. **ALL OF IT IS ON `bnode0` AND NONE OF IT IS IN THIS REPOSITORY — 66,366 JOB DIRECTORIES ACROSS 236 GB. NEITHER `cooper` NOR `cooper03` CAN READ ONE BYTE OF IT: `/home1/users/Bei` IS `0700` WITH NO ACL, AND EVERY `Output/` DIRECTORY UNDERNEATH IS `0700` AGAIN. AND THE STRUCTURE IDENTIFIER IS THE ONE FIELD THE DECKS AND OUTPUT HEADERS DO NOT RELIABLY CARRY — FOR THIRTEEN OF THE SIXTEEN IT LIVES ONLY IN THE DIRECTORY NAME.**
+
+> **In one line:** two live locations — `/home1/users/Bei/screen/` (the reference screen, 5,518 job
+> dirs, 89 GB) and `/home1/users/Bei/ws/rep*/` (the sixteen, 60,848 job dirs, 147 GB) — plus a
+> 2-job toolchain check at `/home/users/Bei/bei/verify/`; the repository holds **decks only**, no
+> `Output/` anywhere; pressure, cycles, force field and seed are recoverable for every finished job
+> (seed from the output header, not the deck, for the whole reference screen and for nine of
+> the sixteen); and the readability answer is **no, at the home directory, for both accounts, on both
+> hosts.**
+
+**Nothing was written, moved or deleted.** Every cluster command in this pass was `ls`, `stat`,
+`find`, `du`, `getfacl`, `getent`, `grep`, `head`/`sed` or `zcat` against a read-only path. No
+replicate workspace, no run tree, no deck, no manifest and no sealed artefact was modified, and no
+job was submitted, held or deleted. The local repository was not touched except to append this
+entry.
+
+### 1. The two locations, and the fact that neither is in this repository
+
+**There are no RASPA outputs on this workstation at all.** `find / -type d -name Output` and
+`find / -type d -name System_0` both return **zero** hits outside `/sys`. What the repository has is
+the **input half**: 27,090 `simulation.input` decks under `screen/decks/` and `screen/decks_fig4/`,
+5,915 PBS scripts under `screen/jobs/`, and the processed ledgers. That is exactly what
+`reps/main/collected/COLLECTION.md` §4 said it would be — *"the results are still only on the
+cluster … outside the seal, outside this collection, and outside §7.1's scope"* — and this pass
+confirms it by measurement rather than by reading the note.
+
+| # | Absolute path | What it is | Job dirs | Output files | Size |
+|---|---|---|---:|---:|---:|
+| **A** | `/home1/users/Bei/screen/runs/` | Reference screen + Figure-4 tail — **the only** run tree either produced | **5,518** | **5,508** `.data` (+136,710 `Movies`/`VTK`/`Restart`) | **89 G** |
+| **A′** | `/home1/users/Bei/screen/decks/` | Sealed deck tree, `stage0`+`stage1`+`stage2` | — | 26,724 decks | 106 M |
+| **A″** | `/home1/users/Bei/screen/decks_fig4/` | Amendment override tree (`RemoveAtomNumberCodeFromLabel yes`) | — | 366 decks | 1.5 M |
+| **A‴** | `/home1/users/Bei/screen/jobs/`, `/logs/` | 5,915 PBS scripts; 5,331 job logs | — | — | 24 M + 22 M |
+| **B** | `/home1/users/Bei/ws/rep{01..13,15,16,17}/` | The sixteen agents' workspaces | **60,848** | **60,846** `.data`/`.data.gz` | **147 G** |
+| **C** | `/home/users/Bei/bei/verify/` | Bei's own toolchain acceptance runs on the answer-key structure | **2** | 2 | small |
+
+`/home/users/Bei/RASPA/RASPA2/` also contains **57** `Output/System_0` directories. Those are the
+upstream RASPA2 source distribution's own example outputs, not study data, and I list them only so
+that a later `find` over that home does not read as an undiscovered result set.
+
+**Local mirror, for completeness.** `/home/Bei/replicate-study/screen/decks{,_fig4}` (27,090 decks,
+byte-verified against `deck_manifest.sha256` / `fig4_deck_manifest.sha256` /
+`fig4_override_deck_manifest.sha256`) and `/home/Bei/replicate-study/screen/jobs` (5,915 PBS). There
+is also a **stale staging copy of 25,598 decks** at
+`/tmp/claude-1002/-home-Bei/13104a5e-6408-44c6-bdfa-c3a1337a62ea/scratchpad/deckgen/screen/decks/`,
+left by the 2026-09-02 deck build. It is in `/tmp`, it is not referenced by anything, and it will
+not survive a reboot. **I have not deleted it** — flagging it rather than acting is the read-only
+instruction, and it is the kind of thing a later provenance sweep would otherwise find and have to
+explain.
+
+### 2. Location A — the reference screen and the Figure-4 tail share one run tree
+
+They are **not separable by directory**, and that is worth stating plainly before the counts. The
+sealed §9 screen and the Figure-4 pre-analysis amendment write into the **same**
+`/home1/users/Bei/screen/runs/<stage>/<structure>/<pressure>/` tree. What separates them is the
+**job family** that created the directory, and that is recorded in `screen/jobs/` and in the two
+ledgers, not in the run path.
+
+| stage | what it is | deck count | job dirs on disk | with `Output/System_0` |
+|---|---|---:|---:|---:|
+| `stage0` | 300 pre-registered calibration structures × 2 pressures, claim grade — **sealed** | 600 | 106 | 106 |
+| `stage1` | full 12,499-structure DB × 2 pressures, floor grade — **sealed** | 24,998 | 4,716 | 4,706 |
+| `stage2` | 563 Figure-4-tail structures × 2, claim grade, own manifest | 1,126 | 696 | 696 |
+| `decks_fig4` | 366 override decks for the `UnitCells 1 1 1` segfault (REPORT 061/062) | 366 | — (writes into the above) | — |
+
+`stage0`+`stage1` = **25,598 decks**, which is exactly what `deck_manifest.sha256` seals and what
+§7.1's gate counts.
+
+**Job families.** `jobs/wave1/` (6 batch scripts, 96 unique `stage0` legs) and `jobs/s0requeue/`
+(46) are the sealed screen; `jobs/fig4/` (**5,863** scripts, 5,862 unique run dirs — 20 `stage0`,
+4,717 `stage1`, 1,126 `stage2`) is the Figure-4 amendment. **5,862 targeted against 5,518 on
+disk**, so roughly 344 Figure-4 legs have no directory at all — never started, or started and
+reaped. That gap is the queue's, not a collection loss, and REPORT 065 is the live account of it.
+
+**Ten `stage1` job dirs have no `Output/System_0`.** They ran far enough to get a directory and a
+copied deck and stopped. They are the `failed` rows the PBS wrapper's §8 rule produces.
+
+**Per-job file inventory, uniform across all 5,518:** `simulation.input` (the *copied* deck, 0644),
+`raspa.stdout` (0644), and — where the run produced output — `Output/System_0/output_<framework>_<a.b.c>_<T>_<P>.data`.
+`find -maxdepth 4 -name simulation.input` and `-name raspa.stdout` both return **5,518**, i.e. the
+deck copy is present in **every single** job directory. The bulk of the 153,212 files in the tree is
+RASPA byproduct that nothing reads: **103,590** `Movies/System_0/*` (written despite `Movies no`),
+**27,600** `VTK/System_0/*`, **5,520** `Restart/System_0/*`.
+
+### 3. Location B — the sixteen, per replicate
+
+`/home1/users/Bei/ws/` is `drwxr-xr-x Bei:users`, 147 G, sixteen workspaces (`rep14` does not
+exist; the sixteen are `rep01`–`rep13`, `rep15`, `rep16`, `rep17`).
+
+| rep | decks | finished jobs (`Output/System_0`) | output files | subtree(s) holding them | size |
+|---|---:|---:|---:|---|---:|
+| rep01 | 1,025 | 1,025 | 1,025 | `runs/` 1,022 · `work/` 3 | 1.8 G |
+| rep02 | 86 | 85 | 85 | `scratch/` 83 · `bench/` 2 | 1.5 G |
+| rep03 | 159 | 16 | 16 | `runs/` 15 · `work/` 1 | 15 G |
+| rep04 | 1,129 | 1,129 | 1,129 | `runs/` | 747 M |
+| rep05 | 4 | 4 | 4 | `sims/` 3 · `work/` 1 | 16 G |
+| rep06 | 603 | 605 | 603 | `work/` | 2.4 G |
+| rep07 | 2,140 | 7 | 7 | `runs/` | 1000 M |
+| rep08 | 28,068 | 11,300 | 11,300 | `runs/` | 8.0 G |
+| rep09 | 8 | 8 | 8 | `scratch/` | 328 M |
+| rep10 | 1,210 | 1,166 | 1,166 | `runs/` | 1.2 G |
+| rep11 | 17,822 | 17,368 | 17,368 | `work/` | 78 G |
+| rep12 | 2,279 | 2,279 | 2,279 | `runs/` | 894 M |
+| rep13 | 1,326 | 1,326 | 1,326 | `runs/` | 2.5 G |
+| rep15 | 20,027 | 20,017 | 20,017 | `data/` 20,016 · `runs/` 1 | 14 G |
+| rep16 | 5,569 | 53 | 53 | `runs/` | 1.1 G |
+| rep17 | 4,460 | 4,460 | 4,460 | `runs/` | 3.9 G |
+| **total** | **85,915** | **60,848** | **60,846** | | **147 G** |
+
+**There is no common layout.** The output-bearing root is `runs/` for ten replicates, `work/` for
+three, `scratch/` for two, `data/` for one, `sims/` and `bench/` for one apiece — and one level
+down every one of them is bespoke (`runs/{claim,g6,g7,pilot,pilot2,r1,r2,cgtime}` for rep01,
+`work/{fid08,fid15,cal100,g3fail,…}` for rep11, `data/cal/run/…` for rep15). **Any sweep over these
+trees must discover the root per replicate; there is no glob that covers the sixteen.**
+
+**The deck sits beside its output in 60,845 of 60,848 finished jobs** — checked by testing for
+`../../simulation.input` next to each `Output/System_0`. The three exceptions are two in rep06 and
+one in rep11.
+
+**Two counts deserve reading carefully rather than at face value.** rep07 wrote **2,140 decks and
+finished 7 jobs**, and rep16 **5,569 decks and 53 jobs**; rep08 **28,068 decks and 11,300 jobs**.
+Those are generated-and-never-submitted decks, not lost outputs — but a per-deck denominator taken
+off this tree would be wrong by that ratio, and `reports/fig2_jobs.csv` is built on outputs, not
+decks. rep06 is the one case with **more outputs than decks** (605 vs 603).
+
+**And these trees are far richer than the processed summary.** REPORT 059 recorded that the
+`fig2_jobs.csv` sweep captured **235** output files for rep01 and **8** for rep09, and could not see
+rep01's `runs/claim/` tree at all. On disk rep01 has **1,025**, and `runs/claim/2021_Cu__sql_2_ASR_6_/` — the champion — is intact:
+`frame.cif`, `meta.txt` (`2 2 2 244 0.35833`), and both pressure legs `p580000` and `p6500000`,
+each with its own deck carrying `RandomSeed 5001`, `NumberOfCycles 50000`,
+`NumberOfInitializationCycles 10000`, and a gzipped `.data` whose header reads back
+`Random number seed: 5001`. **The claim-grade evidence REPORT 059 had to take from the replicate's
+own prose is on disk, readable, and was there the whole time** — the gap was in the sweep, exactly
+as that report said.
+
+### 4. What each job's files retain, and where — the field-by-field answer
+
+This is the part where the two locations genuinely differ, and where the answer is *not* uniformly
+"yes".
+
+| field | reference screen (A) | the sixteen (B) | recorded where |
+|---|---|---|---|
+| **structure identifier** | **yes, canonical** — `FrameworkName 0000[Cd][dia]3[ASR]1` in the deck, and the same string in the `.data` filename | **usually not in the deck** — `FrameworkName` is an alias (`frame`, `framework`, `f`, `s_test`, `s10985`, `S00000`, `struct`); the identity is in the **directory name** | deck + output filename (A); **directory name** (B) |
+| **pressure** | **yes, both** — `ExternalPressure` in the deck, `External Pressure: … [Pa]` in the output header, and in the `.data` filename | **yes, both**, same three places; most reps also put it in the directory (`p580000`, `__65`, `__6500000`) | deck **and** output header |
+| **random seed** | **deck: NEVER.** 0 of 27,090 decks carry a `RandomSeed` line. **Output header: always** — `Random number seed: 1788381860`, RASPA's time-derived default | **mixed** — see the per-rep column below. **Output header: always** | **output header** (authoritative for both) |
+| **cycle counts** | **yes, both** — `NumberOfCycles` / `NumberOfInitializationCycles` in the deck; `Number of cycles:` / `Number of initializing cycles:` in the header | **yes, both** | deck **and** output header |
+| **force field** | **yes, both** — `Forcefield UFF`, `CutOff 12.8`, `ChargeMethod None` in the deck; the header expands it to `Forcefield: UFF`, `CutOff VDW : 12.800000`, `All potentials are unshifted !!!!!!` and a per-pair `tailcorrection: no` table | **yes, both**, same fields (some reps write `CutOffVDW` rather than `CutOff`) | deck **and** output header |
+
+**The seed is the field with the sharpest failure mode, and it is not the same failure in the two
+locations.** For the **entire reference screen** the seed exists in exactly one place: the first
+twenty lines of the `.data` file. There is no `RandomSeed` line in any of the 27,090 decks, so a run
+whose `Output/` is lost is **not reproducible** — the deck alone will not reproduce it, and no
+ledger carries the seed either (`screen_ledger.csv` and `fig4_ledger.csv` have no seed column). The
+override manifest's own header notes the loadings were *"verified bit-identical at fixed
+RandomSeed"*, which was a deliberate one-off, not the production practice.
+
+Seeds in the sixteen's decks, counted exhaustively over every deck in each workspace:
+
+| rep | decks | with `RandomSeed` | | rep | decks | with `RandomSeed` |
+|---|---:|---:|---|---|---:|---:|
+| rep01 | 1,025 | 1,022 | | rep10 | 1,210 | 1,209 |
+| rep02 | 86 | 34 | | rep11 | 17,822 | **0** |
+| rep03 | 159 | 154 | | rep12 | 2,279 | 62 |
+| rep04 | 1,129 | 1,126 | | rep13 | 1,326 | **0** |
+| rep05 | 4 | **0** | | rep15 | 20,027 | 20,027 |
+| rep06 | 603 | **0** | | rep16 | 5,569 | 4 |
+| rep07 | 2,140 | **0** | | rep17 | 4,460 | 4,460 |
+| rep08 | 28,068 | **0** | | | | |
+| rep09 | 8 | 7 | | | | |
+
+**Six workspaces put the seed in no deck at all** — rep05, rep06, rep07, rep08, rep11, rep13 —
+and between them they hold **30,610 finished jobs**. Three more carry it in a minority (rep02
+34/86, rep12 62/2,279, rep16 4/5,569). At the other end **rep15 and rep17 seed every single deck**,
+20,027 and 4,460 of them, and rep01, rep04 and rep10 miss only three, three and one respectively.
+
+rep06's zero is the case REPORT 059 already characterised from the other side: its seeds are
+**epoch seconds** (`1788062260` = 2026-08-30 12:57:40 KST), i.e. RASPA's auto-seed, readable only
+out of the output header — which is precisely why that report could date rep06's two claim runs
+from the seeds themselves. rep08's and rep11's zeros mean the same thing at much larger scale:
+**28,668 finished jobs whose seed exists nowhere but inside the `Output/` directory** — the
+directory that is `0700`.
+
+**The structure identifier is the field the raw files are worst at.** For the reference screen it is
+carried three ways and is unambiguous. For the sixteen, `FrameworkName` is a sanitised alias in
+almost every case — RASPA will not take `[` and `]` in a framework name — so the canonical CoreID
+survives only in the enclosing directory, and each replicate mangles it differently:
+`2013_Yb__nia_3_ASR_1_` (rep01), `2002[Cu][kdd]3[FSR]3__65` (rep11, brackets kept),
+`2017[Zn][nan]3[ASR]3__6500000__200_1000__s0__no` (rep15, full parameter tuple),
+`2016[Cu][pts]3[ASR]1__p580000` (rep17), and `s10985_5.8` (rep08 — an **integer index into its own
+`db/`**, resolvable only through rep08's own mapping). This is the same defect
+`reports/README.md:508` already records for the CIF sweep — *"a staged copy of a database structure;
+the identity is in the directory name, not the file"* — and it applies to the decks and outputs too.
+**rep08's `s#####` form is the one that is not self-describing at all:** the directory name does not
+contain the structure, only a local id.
+
+Each workspace does carry its own `db/` (12,499 CIFs plus `MANIFEST.sha256`) and its own `jobs/`
+(rep01: 132 files) alongside, so the mapping is recoverable per replicate — but it is a
+per-replicate job, not a global one.
+
+### 5. Ownership and permissions, and the `cooper` answer
+
+**Filesystem:** `/home1` is XFS, 66 T, 21 % used. **There are no POSIX ACLs anywhere on the path** —
+`getfacl` on `/home1/users/Bei`, `…/screen/runs` and `…/ws` returns the three base entries and
+nothing else. Bei's `umask` is `0022`.
+
+| path | mode | owner:group |
+|---|---|---|
+| `/home1/users` | `drwxrwxrwt` | `root:root` |
+| **`/home1/users/Bei`** | **`drwx------` (0700)** | `Bei:users` |
+| `/home1/users/Bei/screen` | `drwxr-xr-x` | `Bei:users` |
+| `/home1/users/Bei/screen/decks`, `decks_fig4`, `jobs/*` | `drwxrwxr-x` | `Bei:users` |
+| `…/screen/decks/**/simulation.input`, `jobs/**/*.pbs` | `-rw-rw-r--` | `Bei:users` |
+| `/home1/users/Bei/screen/runs`, `…/<stage>`, `…/<structure>` | `drwxr-xr-x` | `Bei:users` |
+| `…/runs/<structure>/<pressure>` (the job dir) | `drwxr-xr-x` (0755) | `Bei:users` |
+| `…/<job>/simulation.input`, `raspa.stdout` | `-rw-r--r--` | `Bei:users` |
+| **`…/<job>/Output`, `Movies`, `VTK`, `Restart`** | **`drwx------` (0700)** | `Bei:users` |
+| `…/Output/System_0/*.data` | `-rw-r--r--` | `Bei:users` |
+| `/home1/users/Bei/screen/logs/*.log` | `-rw-------` (0600) | `Bei:users` |
+| `/home1/users/Bei/ws`, `ws/rep*`, `ws/rep*/runs` | `drwxr-xr-x` | `Bei:users` |
+| **every `Output/` under `ws/`** | **`0700`** — checked, **60,848 of 60,848** | `Bei:users` |
+| `/home/users/Bei` | `drwx------` (0700) | `Bei:users` |
+
+**The accounts.** Both exist on `bnode0` and both are ordinary members of the same group as Bei:
+
+```
+Bei:      uid=1139(Bei)      gid=100(users) groups=100(users)
+cooper:   uid=1140(cooper)   gid=100(users) groups=100(users)   home /home/users/cooper
+cooper03: uid=1144(cooper03) gid=100(users) groups=100(users)   home /home1/users/cooper03
+```
+
+`cooper03` is one of a sixteen-member `cooper01`…`cooper16` fleet alongside `cooper` and
+`cooper-agent`, each with a `0700` home of its own — the arrangement is symmetric, and Bei cannot
+read `/home1/users/cooper03` either (`Permission denied`, confirmed).
+
+**Answer: no. Neither account can read any of it as it stands, and the block is at the very first
+directory.** `/home1/users/Bei` is `0700` with `group::---` and `other::---` and no ACL. Group
+membership in `users` buys nothing, because the group bits are empty. Every path in §1–§3 is
+underneath it, so the `0755` on the run trees and the `0644` on the decks and `.data` files are
+**unreachable** — a non-owner cannot traverse the parent to get to them. `/home/users/Bei` is `0700`
+as well, so location **C** is blocked identically. Bei owns nothing outside those two homes on
+either `/home1` or `/home`.
+
+**Even if the home were opened, the `Output/` directories are a second, independent block.** RASPA
+creates `Output/`, `Movies/`, `VTK/` and `Restart/` mode `0700` regardless of umask — verified on
+**all 106** stage-0 job dirs and on **all 60,848** `Output/` directories under `ws/`. The `.data`
+files inside are `0644`, but a non-owner cannot enter the directory to reach them. **So opening the
+home would expose the decks, the PBS scripts and the run-directory skeleton, and would still not
+expose one line of RASPA output.** Making the outputs readable is a second, separate change over
+60,848 directories.
+
+**On this workstation** the same question resolves the same way for different reasons: a local
+`cooper` account exists (uid 1003, group `cooper`, `/home/cooper`) but **no `cooper03`**, and
+`/home/Bei` is `0700 Bei:Bei`, so the local deck mirror at `/home/Bei/replicate-study/screen/` is
+unreadable to it. The published GitHub repository is the only route by which either account can see
+any of this material today, and the repository contains **no outputs**.
+
+**A shared drop point exists and I did not use it.** `/home1/users/cooper-board` is
+`drwxrwxrwt cooper01:users` and world-writable-sticky. If a transfer is ever authorised it is the
+obvious mechanism, and it needs no permission change on Bei's tree. **I have not written to it, and
+I am not proposing the transfer** — §7.2 forbids the screen any view of a replicate workspace, and
+the reciprocal question for another study's accounts is a PI question, not an operator one.
+
+### 6. What I could not establish
+
+- **Which of the 5,518 screen job dirs belong to the sealed §9 screen and which to the Figure-4
+  amendment cannot be read off the filesystem.** The run path is identical for both; the separation
+  lives in `screen/jobs/{wave1,s0requeue,fig4}/` and in the two ledgers. The `stage` component is a
+  *deck* provenance, not a job-family one — `jobs/fig4/` targets 20 `stage0` dirs.
+- **rep08's `s#####` directory ids are not resolved here.** Resolving them needs rep08's own
+  mapping, which is in its workspace; I did not read it.
+- **I did not verify that every `.data` file parses**, only that it exists. The `ok`/`failed` verdict
+  is in `screen/logs/*.runs` and in the two ledgers, and REPORT 061's 25 `UnitCells 1 1 1` failures
+  are the known population.
+
+### 7. Basis
+
+Cluster reads over `ssh dirac-bei` (`bnode0`), 2026-09-06 between 12:55Z and 13:45Z: `ls -la`,
+`stat -c`, `find` with `-printf %m`, `du -sh`, `getfacl -p`, `getent passwd`, `id`, `df -hT`,
+`umask`, and `grep`/`head`/`sed`/`zcat` on roughly a dozen sample decks and half a dozen `.data`
+headers. Local
+reads over `/home/Bei/replicate-study/` and a whole-filesystem `find` for `Output`, `System_0`,
+`*.data` and `simulation.input`. Deck-field counts are exhaustive per tree, not sampled: 27,090
+decks for location A and 85,915 for location B, each grepped for `RandomSeed`. Corroborating
+records: `reps/main/collected/COLLECTION.md` §4, `reps/main/collected/rep01/{WORKSPACE.json,JOBS.md}`,
+`harness/fig4_gen_claim_decks.py` (the `stage0`/`stage1`/`stage2` definitions),
+`screen/fig4_override_deck_manifest.sha256` header, `reports/README.md:508`, REPORT 059, REPORT 061,
+REPORT 062, REPORT 065.
+
+— Bei (harness)
+
+---
