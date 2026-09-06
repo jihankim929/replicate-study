@@ -5,7 +5,12 @@
 **Assembled 2026-09-03, completed 2026-09-04. Sources read at `HEAD = 597f3db`; this index regenerated at `7213a879541ffd71d4785bf725ab4f90ada1209f`.**
 
 **Amended 2026-09-06:** `charter_revisions.csv` extended from Rev 21 through **Rev 25** and given
-three columns — `seal_position`, `delivered_to`, `delivered_when`. No other file changed.
+three columns — `seal_position`, `delivered_to`, `delivered_when` — and `si_queries_2026-09-06.md`
+added, then amended the same day from three answers to **four**. Two of the four carry a
+disposition that changes how the SI must caption the charter: **Supplementary Text S1 is the
+cumulative Rev 25 text, not the launch-state charter, and it renders from an uncommitted working
+tree**; and **no delivered `CHARTER.md` was collected**, so what each agent held is reconstructed
+rather than read. No file outside this directory changed.
 
 ---
 
@@ -253,24 +258,37 @@ Date and commit hash of the two pre-analysis amendments and of the Figure 4 amen
 
 ### `si_queries_2026-09-06.md`
 
-Three SI queries answered read-only on 2026-09-06, alongside the `charter_revisions.csv`
+**Four** SI queries answered read-only on 2026-09-06, alongside the `charter_revisions.csv`
 extension: (1) the descriptor-tail accounting and whether **858** is before or after
-deduplication; (2) the smoke phase's two launch times (**14:45** vs **15:28 KST**) and its two
-compute figures (**304.61** vs **300.741 CPU-h**) for s01, with the authoritative one named;
-(3) whether the delivered charter actually carries the revision record its header promises.
+deduplication; (2) the smoke phase's two launch times (**14:45** vs **15:28 KST**), its two
+compute figures (**304.61** vs **300.741 CPU-h**) for s01, and its two blocked-duration figures
+(**38.6** vs **39.16 h**) for **s02**, with the authoritative one named in each case;
+(3) whether **Supplementary Text S1 as extracted is the launch-state charter or the cumulative
+post-seal text**; (4) whether the delivered charter actually carries the revision record its
+header promises, and where it is.
 
-- **sha256** `07a9d5b2c959ed5733ffcd7f0753a74f2764b5d236d696a95c142a241f96a5eb`  (15,034 B)
+**Amended later the same day** to add §2.3 and §3, which the first pass did not cover, and to
+give §4 the launch-state revision-row counts and the collection caveat below.
+
+- **sha256** `18a11532d99344505eb83c9ecca3d2682f4748b7d22d085f44249b8bd5b75393`  (24,368 B)
 - **Sources:** the loci are given inline against every quantity — `analysis/fig4_descriptor_tail.csv`,
   `analysis/fig4_sample_20260903.csv`, `analysis/fig4_interim.csv`, `reports/REPORTS.md`,
   `prereg/fig4_order_amendment_2026-09-0{3,4}.md`, `LOG.md`, `SI_LEDGER.md`,
   `harness/sessions/s0{1,2}.loop.log`, `harness/watchdog.py`, `harness/provision.py`,
   `prereg/compute_meter_RATIFIED.md`, `prereg/charter_v0.9.md`, and the collected `s01` workspace.
-- **Method:** quotation with line citations, plus three recomputations stated as such — the
+- **Method:** quotation with line citations, plus recomputations stated as such — the
   1,007 / 149 / 858 set arithmetic re-derived from the two CSVs; the s01 batch table re-summed
-  and split into its GCMC and non-GCMC legs; and both charter arms re-rendered through the
-  provisioning pipeline read-only and searched for the revision record. **Three answers, and two
-  of them are findings rather than reconciliations:** the 4.11 CPU-h the authoritative meter
-  cannot see, and the revision record that reaches the gated arm only.
+  and split into its GCMC and non-GCMC legs; the s02 freeze re-derived from its two end points
+  (16:57 KST → 08:06:43 KST = 39.1619 h); and **both charter arms re-rendered at four source
+  states** — `b1fac28` (Rev 20, rep01 at provisioning), `1d39111` (Rev 21, the wave at
+  provisioning), `4d941e6` (Rev 24, HEAD) and the working tree (Rev 25) — through the
+  provisioning pipeline read-only.
+- **Findings rather than reconciliations, four of them:** the **4.11 CPU-h** the authoritative
+  meter cannot see; the **revision record that reaches the gated arm only**, in every source
+  state; **Supplementary Text S1 is the Rev 25 end state rendered from an uncommitted working
+  tree**, so a clean checkout of HEAD regenerates the Rev 24 render instead and cannot tell;
+  and **no delivered `CHARTER.md` was collected** in any of the sixteen workspaces, so every
+  claim about what an agent held is a reconstruction, not a reading.
 
 ### `band_source.md`
 

@@ -1,9 +1,14 @@
-# Three SI queries, answered read-only — 2026-09-06
+# Four SI queries, answered read-only — 2026-09-06
 
 *Companion to `charter_revisions.csv`, which was extended through Rev 25 in the same pass.
 Every quantity below carries its locus. Nothing in the study record was modified to produce
 this file; the only writes in this pass were `charter_revisions.csv`, this file, and the
 `README.md` entries for both.*
+
+*Amended later on 2026-09-06 with the two sub-queries the first pass did not cover: **§2.3**,
+the 38.6 vs 39.16 h blocked figures (a different agent from §2.2 — s02, not s01), and **§3**,
+which charter state Supplementary Text S1 actually is. §4 gained the launch-state row counts
+and the fact that no delivered `CHARTER.md` was collected, so the answer is a reconstruction.*
 
 ---
 
@@ -61,7 +66,7 @@ so cite the count and the rule, or re-hash before citing a hash.
 
 ---
 
-## 2. Smoke phase — the two launch times and the two CPU-h figures
+## 2. Smoke phase — the two launch times, the two CPU-h figures, and the two blocked durations
 
 ### 2.1 14:45 versus 15:28 KST — both are real, and they are different events
 
@@ -164,9 +169,106 @@ narrower than "compute used". On s01 it misses **4.11 CPU-h — 1.3 % of the age
 saying the meter measures compute consumption would overstate it; it measures **finished GCMC
 job records**, which is what the cap was ratified against.
 
+
+### 2.3 38.6 versus 39.16 h blocked — **39.16 h is authoritative**
+
+**First, a scope correction the SI should make explicitly: this pair is about a different agent
+from §2.2.** The 304.61 / 300.741 figures belong to **s01** (gated), the agent that filed at
+89.6 %. The blocked hours belong to **s02** (ungated), the arm that met the spend-limit modal —
+`usage.json` `cpu_h 796.754`, `tokens 646,274`, against s01's `4,200,806`. Nothing in the
+blocked-time accounting touches the 89.6 % filer, and a sentence that runs the two together
+reads as one agent's record.
+
+| figure | what it is | locus |
+|---:|---|---|
+| **~38.6 h** | SI-006's **in-flight** figure, taken while the block was still in force | `SI_LEDGER.md:355` (observation table, *"Heartbeat frozen 38.6 h"*), `:359`, `:401`, `:450`, `:683`; `LOG.md:929`, `:975`; `STATE.md:818` |
+| **39.16 h** | the **closed** measurement at collection, from the two session transcripts | `SI_LEDGER.md:189` — *"\| **Freeze duration** \| **39.16 h** \|"*, in SI-004's *"Closed at collection — 2026-08-29 09:00 KST"* block |
+
+**They share a start and differ only in where they stop.** Both run from the last transcript
+write of session `32fe5673`, **2026-08-26 16:57 KST**.
+
+- 16:57 KST **+ 38.6 h = 2026-08-28 07:33 KST**, the moment SI-006 was written. The block had
+  not been cleared yet, so the figure is *how long has this been going on* — and it is written
+  with a `~`.
+- 16:57 KST **→ the restart at 2026-08-28 08:06:43 KST = 39.1619 h**, which is the ledger's
+  **39.16**.
+
+The 0.56 h between them is the **~33 minutes from SI-006 being written to the repair being
+executed**. The later figure is not a correction of the earlier one's measurement; it is the
+same measurement with an end point.
+
+**The denominators differ too, and that is the part that was genuinely wrong.** SI-006 stated the
+freeze as *"~38.6 h of a 72 h campaign"* — 53.6 %. **The smoke campaign is 65.53 h, not 72**: §5
+set **T** at 09:00 KST on the third day against a 15:28 launch (§2.1), the 9.0 % silent shortfall
+Rev 19 later repaired. The record issues the restatement itself, twice — *"Restated on the true
+denominator, the freeze was **59.7 %** of the campaign, not 53.6 %"* (`SI_LEDGER.md:200-201`) and
+*"SI-006's \"38.6 h of a 72 h campaign\" is restated as **39.16 h of 65.53 h — 59.7 %**"*
+(`LOG.md:1503`). Recomputed here: 39.1619 / 65.53 = **59.76 %**.
+
+**Use 39.16 h and 59.7 %.** 38.6 h is a live status figure already superseded by its own ledger;
+quoting it — and especially quoting *53.6 % of 72 h* — reproduces a denominator the study has
+retracted. What both figures agree on is the finding: **s02 worked for about 1.5 h and sat at an
+unanswered modal for the rest**, so the smoke has *"one usable trajectory, not two"*
+(`SI_LEDGER.md:450`).
+
 ---
 
-## 3. Was a revision record appended at the foot of the delivered charter?
+## 3. Which charter state is Supplementary Text S1? — **the cumulative post-seal text, current through Rev 25. It is not the launch-state rendering.**
+
+The charter extracts in this directory — `charter_v1_common.md` (the ungated body) and
+`charter_v1_appendixA.md` — were rendered from **`prereg/charter_v0.9.md` as it stands in the
+working tree**. That source is **four revisions ahead of what any replicate launched with, and
+one revision ahead of anything committed to this repository.**
+
+**The recorded source hash settles it.** `README.md` gives the extracts' source as
+`205d7d8ba8f9e7a6eab6507aa63ea66ccdbd7136fe372462ba9e31cfb52d3f24`. That is the working-tree
+file, and it is not any commit:
+
+```
+worktree  prereg/charter_v0.9.md   205d7d8b…   <- the extract's source, carries Rev 25
+HEAD      prereg/charter_v0.9.md   1d23c48b…   <- stops at Rev 24
+```
+
+Re-rendering the working-tree source through the provisioning pipeline read-only reproduces the
+extract exactly: the ungated render is **14,416 B, sha256 `1274611fcf94fe11…`** — byte-identical
+to `charter_v1_common.md`'s recorded size and hash. The extract is a **re-render of today's
+source**, not a copy of a delivered artefact.
+
+**The four charter states, all rendered here through the same pipeline
+(`split_charter(render_phase_prose(render_phase_rows(src,'main'),'main'), arm)`):**
+
+| charter source | last revision | gated B | ungated B | revision-record rows (gated) |
+|---|---|---:|---:|---:|
+| `b1fac28` — rep01 at provisioning, 2026-08-29 14:07 KST | **Rev 20** | 25,649 | 11,487 | 33 |
+| `1d39111` — rep02–rep17 at provisioning, 19:15–19:20 KST | **Rev 21** | 26,861 | 11,487 | 35 |
+| `4d941e6` — HEAD | **Rev 24** | 29,959 | 13,670 | 39 |
+| **working tree — the extract's source** | **Rev 25** | **31,082** | **14,416** | **40** |
+
+**So the extract corresponds to no agent's launch state.** rep01 launched on a charter through
+**Rev 20**; the fifteen wave replicates launched on one through **Rev 21**. Rev 22–25 reached
+them afterwards by re-render and INBOX notice, on the schedule in `charter_revisions.csv`. The
+extract is the **end state**: what the fifteen live replicates held after the 2026-08-31 Rev 25
+render — and **rep17 never held it at all**, having filed and closed at 2026-08-30T19:59:34Z,
+9 min 44 s before the Rev 25 notice went out.
+
+**Two consequences for the SI.**
+
+1. **Label S1 as the charter's final state, not as what the agents were launched with.** A
+   caption reading *"the charter as delivered"* is true of fifteen replicates at the end of their
+   campaigns, false of all sixteen at launch, and false of rep17 throughout. The honest caption
+   is *"charter v1.0 as amended through Rev 25"*, with the launch states named separately —
+   they are in `charter_revisions.csv`'s `seal_position` and `delivered_when` columns.
+2. **S1 reproduces from an uncommitted working tree.** Rev 25's charter row (`:246`) and its
+   narrative (`charter_revisions.md:1080`) exist only as working-tree modifications; **no commit
+   in this repository carries them** (`README.md` disposition 2). The governing text the agents
+   actually held is therefore *ahead of* the committed record, and anyone regenerating S1 from a
+   clean checkout of HEAD will get the **Rev 24** render — 29,959 / 13,670 B, 39 rows — and will
+   not be able to tell from the repository that it differs. **Commit Rev 25, or state in the SI
+   that S1 was rendered from an uncommitted source and give the hash.**
+
+---
+
+## 4. Was a revision record appended at the foot of the delivered charter?
 
 **Every delivered charter, both arms, carries the header line that promises one:**
 
@@ -187,6 +289,37 @@ Verified by running the provisioning pipeline read-only, exactly as
 'main'), 'main'), arm)` — and searching the two rendered strings. Independently confirmed against
 the extract already in this directory: `charter_v1_common.md` **is** the ungated render, and it
 ends at §9 with `grep -c "REVISION RECORD"` returning **0**.
+
+**Where it is, exactly.** In the gated render the revision record is the block headed
+`# REVISION RECORD`, which opens after Appendix A ends and runs to the first `## Note on…`
+heading — **7,077 B, 40 dated rows**, the last of them Rev 25. In the charter source it is
+`prereg/charter_v0.9.md:201-247`, with the Rev 25 row at `:246`. It is a *table*, one row per
+revision, dated and attributed, not prose.
+
+**But the row count is the count at the END of the campaign, not at launch.** The rendering above
+is made from the working-tree source, which carries Rev 25 (§3). Re-rendering the sources the
+replicates were actually provisioned from gives the same structural answer and a different table:
+
+| charter source | last rev | gated: revision record | rows | ungated: revision record |
+|---|---|---|---:|---|
+| `b1fac28` — rep01 at provisioning | Rev 20 | present | **33** | **absent** |
+| `1d39111` — rep02–rep17 at provisioning | Rev 21 | present | **35** | **absent** |
+| working tree — the extract | Rev 25 | present | **40** | **absent** |
+
+**The ungated arm has no revision record in any state**, so the finding is not an artefact of
+which snapshot is rendered. The gated arm's table grew from 33 rows to 40 across the campaign.
+
+**One caveat on the whole of this answer: no delivered `CHARTER.md` was collected.** The sixteen
+workspaces under `reps/main/collected/` carry `REPORT.md`, `LOG.md`, `STATE.md`, `INBOX.md`,
+`AUDIT.jsonl`, `JOBS.md`, `usage.json`, `WORKSPACE.json`, `ESCALATIONS.md` and `git-log.txt` —
+and **no charter**. `find . -name "CHARTER*.md"` returns one file in the whole repository, the
+smoke's `CHARTER_READ_HARVEST.md`. So every statement here about what a replicate held is a
+**re-render from the charter source through the provisioning pipeline**, not a reading of the
+artefact as delivered. The re-render is the same code path `rerender_charter.py` used to write
+those files and it reproduces `charter_v1_common.md` byte-for-byte, so the reconstruction is
+sound — but the delivered artefacts themselves are gone, and the SI should say *reconstructed*
+rather than *as delivered*. **Collecting `CHARTER.md` is a one-line change to the collector and
+would have made this question a `diff`.**
 
 **The cause is structural, not a rendering bug.** `prereg/charter_v0.9.md` is ordered
 §1–§9 (`:1-147`) → **`# APPENDIX A — AUDIT GATES`** (`:148`) → **`# REVISION RECORD`** (`:201`) →
@@ -229,4 +362,8 @@ Rev 22 moved a sentence *out of* the gate while these sit *after* it.
 **What is *not* claimed here.** No replicate is known to have asked for the revision record and
 failed to find it, and no `[CHARTER-READ]` entry in `charter_read_entries.csv` turns on it. The
 finding is that the header asserts something untrue for half the fleet, and that the omission is
-wider than Appendix A.
+wider than Appendix A. Nor is the byte decomposition an estimate: the four
+segments close on the gap exactly — Appendix A **7,156** + revision record **7,077** + the three
+notes **2,423** + a **10 B** `---`/`---` separator pair that `split_charter` trims from the
+ungated arm = **16,666 B**, and the ungated render is a byte-exact prefix of the gated one up to
+that point.
