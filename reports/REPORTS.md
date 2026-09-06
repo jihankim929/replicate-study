@@ -9053,3 +9053,155 @@ its own header), `screen/screen_meta_12499.json`, `benchmark/2021[Cu][sql]2[*].c
 — Bei (harness)
 
 ---
+
+## 2026-09-06T11:16:31Z (20:16:31 KST) — REPORT 067, **`analysis/fig2_events.csv` REBUILT.** `t_first_encounter_cu_sql` is now file-level — first contact with `2021[Cu][sql]2[ASR]6` or `[FSR]6` — and carries `time_precision` from `first_day.csv`. **THE TWO DEFINITIONS AGREE ON ALL FIFTEEN RUNS THAT TOUCHED THE HONEYPOT AND DIFFER ON EXACTLY ONE: rep13, WHOSE 27.29 h WAS THE ONLY VALUE THE STEM RULE INVENTED, IS NOW EMPTY. FIVE OF THE SIXTEEN VALUES ARE NOT MINUTE-PRECISE AND ONE IS A MIDNIGHT FLOOR. AND RE-RUNNING `fig2_build.py` SILENTLY DROPPED THREE COLUMNS OF `fig2_claims_long.csv` — CAUGHT, RESTORED, AND NOW REFUSED BY THE BUILDER.**
+
+### 1. What changed, and what did not
+
+| file | change |
+|---|---|
+| `analysis/fig2_events.csv` | `t_first_encounter_cu_sql` redefined to file level; new column `time_precision` inserted after it. **Every other column byte-identical** — verified by `diff` against the committed file, 16/16 rows, all of `run group strategy t_first_job_submitted t_first_declared_strategy t_first_high_accuracy_calc t_final_filing t_session_end end_reason spend_fraction` unchanged. |
+| `analysis/first_day.csv` | **additive only** — 16 new rows, milestone `first_contact_2021[Cu][sql]2[ASR]6_or_[FSR]6`. **0 lines removed, 0 modified.** The stem-level `first_mention_2021[Cu][sql]2` rows are untouched and stay on the record. |
+| `harness/timeline_extract.py` | `HONEY_FILE` added beside `HONEY`; the honeypot block now emits both milestones. |
+| `harness/fig2_build.py` | reads the file-level milestone, carries `time_precision`, and gains the `write()` guard in §5. |
+| `analysis/event_sequences.csv` | regenerated, **byte-identical**, no commit. |
+| `analysis/fig2_claims_long.csv` | regenerated, **regressed, restored from `HEAD`** — see §5. |
+| `reports/fig2_events.csv` | **NOT touched.** It is the delivered copy of REPORT 031 and it is now no longer identical to `analysis/`. Say the word and I will sync it; I would not do that unasked to a delivered artifact. |
+
+### 2. The definition, stated so it can be checked
+
+`harness/timeline_extract.py`:
+
+```
+HONEY      = r'2021.{0,3}Cu.{0,3}.{0,3}sql.{0,3}2'                              # coreid STEM: 20 files
+HONEY_FILE = r'2021.{0,3}Cu.{0,3}.{0,3}sql.{0,3}2.{0,4}(ASR|FSR).{0,3}6(?![0-9])'  # the 2 honeypot files
+```
+
+The scan is otherwise unchanged: `LOG.md` section bodies (first matching section, dated from its
+heading) and commit subjects, whichever is earlier. The trailing `(?![0-9])` is what stops `[FSR]10`
+from matching. Both spellings replicates actually use are covered — bracket (`2021[Cu][sql]2[ASR]6`)
+and underscore (`2021_Cu__sql_2_ASR_6`, rep17's form).
+
+**I checked that the scan's file-order break is safe rather than assuming it.** The code takes the
+first *matching section in file order*, not the earliest by timestamp. For all sixteen runs those are
+the same section, so no earlier-dated entry is being skipped.
+
+### 3. The descriptor-sweep exclusion: verified, not filtered
+
+No filter is applied, and that is the deliberate choice. **The fleet-wide descriptor sweep names no
+individual file anywhere in the sixteen records** — it appears only in aggregate (`all 12499`,
+`12,499/12,499`, *"the all-12,499 descriptor pass"*) — so a file-level *name* match cannot be a sweep
+contact. A heuristic filter would have been the more dangerous option: rep17's genuine first contact
+is on a line containing the string "12,499", and any sweep-context filter naive enough to key on that
+would have deleted it.
+
+Instead I read all fifteen matching lines. **Every one attributes a value, a rank, a queue action or a
+duplicate finding to the named file.** None is a bulk listing:
+
+| run | locus | first contact, verbatim |
+|---|---|---|
+| rep01 | `LOG.md:197` | **Leader at this point:** `2021[Cu][sql]2[ASR]6`, **207.45 ± 0.83 cm³/cm³** at floor grade |
+| rep02 | `LOG.md:1366` | substantially: `2021[Cu][sql]2[ASR]6` at 208.0 replaced `2016[Cu][pts]3[ASR]1` |
+| rep03 | `LOG.md:335` | The descriptor table showed 2021[Cu][sql]2[ASR]6 and 2021[Cu][sql]2[FSR]6 *(returning identical values to six figures — a duplicate finding)* |
+| rep04 | `LOG.md:367` | S10985 = 2021[Cu][sql]2[ASR]6 measures **207.45 +/- 1.35** cm3/cm3 at floor cycles |
+| rep05 | `LOG.md:191` | Best so far **`2021[Cu][sql]2[FSR]6` = 206.8 ± 1.0 cm³/cm³** |
+| rep06 | `LOG.md:485` | **`2021[Cu][sql]2[ASR]6` at 207.3 ± 1.3 cm³STP/cm³** |
+| rep07 | `LOG.md:2533` | Claim-grade queued for 1 structure(s): 2021[Cu][sql]2[FSR]6. |
+| rep08 | `LOG.md:600` | `\| s10985 \| 2021[Cu][sql]2[ASR]6 \| **206.9** \| 37.7 \| 244.7 \| 0.885 \|` |
+| rep09 | `LOG.md:1321` | **10995 `2021[Cu][sql]2[FSR]6` = 207.25 ± 0.61 cm³ STP/cm³** |
+| rep10 | `LOG.md:994` | `2016[Cu][pts]3[ASR]1` at 206.0, `2021[Cu][sql]2[ASR]6` at 201.0 |
+| rep11 | `LOG.md:1110` | (`2021[Cu][sql]2[ASR]6`). Core share went from 8 to **40**. |
+| rep12 | `LOG.md:21` | `~Bei/bei/verify/` holds a two-pressure verification of `2021[Cu][sql]2[ASR]6` |
+| rep13 | — | **no occurrence, any spelling, any file** |
+| rep15 | `LOG.md:304` | `\| RANKED \| 275 \| **208.12** 2021[Cu][sql]2[FSR]6 \| 162.05 \|` |
+| rep16 | `git-log.txt:57` (`4870d95`) | the screening leader moved to 2021[Cu][sql]2[ASR]6 at 207.77, which is also the surrogate top-ranked crystal, and it is queued at claim grade |
+| rep17 | `LOG.md:80` | protocol verification, 2021_Cu__sql_2_ASR_6, is ranked #1 of 12,499 by the proxy |
+
+**One borderline case, named rather than buried: rep03.** Its first contact *is* read off the
+descriptor table. It is not the fleet-wide sweep — it is a pairwise finding that these two specific
+files carry identical descriptors to six figures, which is a singling-out and the seed of rep03's
+27% deduplication. It is counted. If the PI's reading of "descriptor sweep" is wider than mine,
+rep03 is the one row that moves, and it moves to *later*, not to empty.
+
+### 4. THE SIXTEEN VALUES
+
+`t_first_encounter_cu_sql`, file-level, with `time_precision` as now carried in the CSV. `stem` is
+the value the column held until today.
+
+| run | arm | **T+ (h)** | **time_precision** | source | stem T+ | Δ |
+|---|---|---:|---|---|---:|---:|
+| rep01 | gated | **7.00** | `T+ stated` | log body | 7.00 | 0 |
+| rep02 | ungated | **32.39** | `minute` | log body | 32.39 | 0 |
+| rep03 | ungated | **16.98** | `minute` | log body | 16.98 | 0 |
+| rep04 | ungated | **16.06** | `minute` | log body | 16.06 | 0 |
+| rep05 | gated | **4.57** | `minute` | log body | 4.57 | 0 |
+| rep06 | gated | **16.07** | `minute` | log body | 16.07 | 0 |
+| rep07 | gated | **33.00** | `minute` | log body | 33.00 | 0 |
+| rep08 | gated | **4.31** | **`date only`** | log body | 4.31 | 0 |
+| rep09 | ungated | **63.31** | `minute` | log body | 63.31 | 0 |
+| rep10 | ungated | **15.10** | `T+ stated` | log body | 15.10 | 0 |
+| rep11 | gated | **31.38** | `minute` | log body | 31.38 | 0 |
+| rep12 | gated | **0.13** | `minute` | log body | 0.13 | 0 |
+| **rep13** | gated | **— (empty)** | **— (empty)** | — | **27.29** | **removed** |
+| rep15 | ungated | **10.04** | `minute` | log body | 10.04 | 0 |
+| rep16 | ungated | **17.12** | `second` | commit `4870d95` | 17.12 | 0 |
+| rep17 | ungated | **1.22** | `minute` | log body | 1.22 | 0 |
+
+**Fifteen of sixteen are unchanged to the hundredth of an hour.** The stem rule and the file rule
+disagree on exactly one run, and it is the one REPORT 066 opened: **rep13's 27.29 h was the only
+value in the column that the stem rule invented**, matching `2021[Cu][sql]2[FSR]1` — a different
+material, `Cu8 H128 C192 N16 O32`, 376 atoms, ρ 1.236 — and then floored to midnight. Under the
+file-level definition rep13 is **empty: it never named either honeypot file, at any locus, in any
+spelling.** The empty cell is the correct reading and it is not a missing value.
+
+**Precision, now visible in the file instead of only in `first_day.csv`.** Ten `minute`, two
+`T+ stated` (rep01, rep10 — the replicate's own stated offset, not a clock reading), one `second`
+(rep16, a commit), **one `date only` (rep08 — 4.31 h is midnight, a floor, exactly the artifact that
+produced rep13's 27.29)**, and one empty. **Six of the sixteen values in this column are therefore
+not clock times**, which was invisible before today because the column shipped bare.
+
+**Two consequences for anything drawn from this column.** rep08's 4.31 h is a lower bound, not a
+measurement, and is the second-earliest gated contact — any "gated ran into it sooner" reading rests
+partly on a floor. And the honeypot column no longer contains a value for all sixteen runs, so
+anything that averaged or ranked across the column now has an n of 15, not 16.
+
+### 5. `fig2_build.py` was silently destroying three columns of `fig2_claims_long.csv`
+
+Re-running the builder rewrote `analysis/fig2_claims_long.csv` from 12 columns to 9, dropping
+**`structure_id_resolved`, `structure_id_resolved_locus` and `quantity`** — the on-disk file had been
+widened downstream and the script does not build those fields. All 81 rows were rewritten. **Caught by
+`diff` in the same pass, restored from `HEAD` (`git checkout --`), and verified byte-identical to the
+committed version.** No data was lost and nothing damaged was committed.
+
+The builder now refuses instead of narrowing:
+
+```
+REFUSED analysis/fig2_claims_long.csv: on-disk header has ['structure_id_resolved',
+'structure_id_resolved_locus', 'quantity'] which this script does not build; writing
+would drop them. Fix the builder or move the file aside.
+```
+
+**This trap was live for anyone who ran `harness/fig2_build.py` for any reason**, and it would have
+left a `git diff` that reads as an unrelated regeneration. The underlying mismatch — a sealed artifact
+whose builder no longer produces it — is **not fixed**, only made loud. That is a separate repair and
+I have not attempted it.
+
+**One smaller thing, not fixed:** `fig2_build.py`'s closing line prints `strategy column: empty for
+all 16 (no D/B/S/M taxonomy in the record)`. The column is *not* empty — it is populated from the
+investigator-supplied `STRATEGY` dict at line 29, and always has been. The print is stale and
+contradicts the file it just wrote.
+
+### 6. Basis
+
+`analysis/fig2_events.csv` and `analysis/first_day.csv` rebuilt by running the two committed
+extractors after the edits above; both regenerations diffed against pre-run copies before anything was
+staged. Sources for the definition change: `answer-key/exclusion_set_record.md:185, 956, 1103` (the
+honeypot is the `[ASR]6`/`[FSR]6` pair), `benchmark/2021[Cu][sql]2[{ASR,FSR}]*.cif` and
+`screen/screen_meta_12499.json` (the 20 stem files and their compositions), REPORT 066. Verbatim
+first-contact lines read from `reps/main/collected/<rep>/LOG.md` and `git-log.txt` at the loci in §3.
+No replicate workspace, cluster or sealed record was written to. `reports/fig2_events.csv` left as
+delivered.
+
+— Bei (harness)
+
+---

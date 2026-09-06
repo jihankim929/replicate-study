@@ -36,10 +36,19 @@ def klass(name):
 def launch(r): return dt.datetime.fromisoformat(json.load(open(B.COLL/r/"WORKSPACE.json"))["launched_at"])
 def hrs(ts, L0): return f"{(ts-L0).total_seconds()/3600:.2f}"
 
+# The honeypot column is FILE-LEVEL: first contact with 2021[Cu][sql]2[ASR]6 or [FSR]6, which are
+# the two honeypot files, and not with the other 18 files sharing the coreid stem. The stem-level
+# value this column carried until 2026-09-06 is still built and still in first_day.csv under
+# `first_mention_2021[Cu][sql]2`; it is not what this column reports any more. The fleet-wide
+# descriptor sweep is excluded -- see the note at timeline_extract.py:HONEY_FILE for why that needs
+# no filter. REPORT 067.
+HONEY_MILESTONE = "first_contact_2021[Cu][sql]2[ASR]6_or_[FSR]6"
+
 def events():
-    ms = {}
+    ms, prec = {}, {}
     for row in csv.DictReader(open(ROOT/"analysis/first_day.csv")):
         ms[(row["rep"], row["milestone"])] = row["t_plus_hours"]
+        prec[(row["rep"], row["milestone"])] = row["time_precision"]
     out=[]
     for r in B.REPS:
         L0 = launch(r); u = json.load(open(B.COLL/r/"usage.json"))
@@ -56,7 +65,10 @@ def events():
             t_first_job_submitted=ms.get((r,"first_job_submitted"),""),
             t_first_declared_strategy=ms.get((r,"first_stated_strategy"),""),
             t_first_high_accuracy_calc=ms.get((r,"first_claim_grade"),""),
-            t_first_encounter_cu_sql=ms.get((r,"first_mention_2021[Cu][sql]2"),""),
+            t_first_encounter_cu_sql=ms.get((r,HONEY_MILESTONE),""),
+            # precision OF t_first_encounter_cu_sql, carried verbatim from first_day.csv so a
+            # date-only floor is never read as a measurement. "" means no contact was found.
+            time_precision=prec.get((r,HONEY_MILESTONE),""),
             t_final_filing=hrs(mt,L0), t_session_end=hrs(last,L0), end_reason=end,
             spend_fraction=f"{sf:.3f}"))
     return out
@@ -94,6 +106,17 @@ RANKED={r["rep"] for r in csv.DictReader(open(ROOT/"analysis/leaderboards.csv"))
 
 def write(name, cols, rows):
     p=ROOT/"analysis"/name
+    # REFUSE TO NARROW AN ARTIFACT THAT HAS BEEN WIDENED SINCE IT WAS BUILT. `fig2_claims_long.csv`
+    # on disk carries `structure_id_resolved`, `structure_id_resolved_locus` and `quantity`, which
+    # this script does not produce -- it was extended downstream. Re-running used to drop those three
+    # columns silently. Found 2026-09-06 while rebuilding the honeypot column; REPORT 067.
+    if p.exists():
+        have=next(csv.reader(open(p)),[])
+        lost=[c for c in have if c not in cols]
+        if lost:
+            print(f"  REFUSED analysis/{name}: on-disk header has {lost} which this script does not "
+                  f"build; writing would drop them. Fix the builder or move the file aside.")
+            return
     with p.open("w",newline="") as fh:
         w=csv.DictWriter(fh,fieldnames=cols,extrasaction="ignore"); w.writeheader()
         for r in rows: w.writerow(r)
@@ -103,7 +126,7 @@ if __name__=="__main__":
     e=events(); c=claims()
     write("fig2_events.csv",["run","group","strategy","t_first_job_submitted",
         "t_first_declared_strategy","t_first_high_accuracy_calc","t_first_encounter_cu_sql",
-        "t_final_filing","t_session_end","end_reason","spend_fraction"], e)
+        "time_precision","t_final_filing","t_session_end","end_reason","spend_fraction"], e)
     write("fig2_claims_long.csv",["run","group","structure_id","rank_in_run","reported_value",
         "reported_uncertainty","accuracy_tier","structure_class","reported_how"], c)
     import collections
